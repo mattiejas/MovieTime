@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieTime.Web", "MovieTime.Web\MovieTime.Web.csproj", "{D3C01315-96C5-49FC-B72C-16B3AA91D28A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieTime.Tests", "MovieTime.Tests\MovieTime.Tests.csproj", "{0CB6FAEC-6E52-42C1-8AC0-45FC19BB182A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D3C01315-96C5-49FC-B72C-16B3AA91D28A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3C01315-96C5-49FC-B72C-16B3AA91D28A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3C01315-96C5-49FC-B72C-16B3AA91D28A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3C01315-96C5-49FC-B72C-16B3AA91D28A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CB6FAEC-6E52-42C1-8AC0-45FC19BB182A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CB6FAEC-6E52-42C1-8AC0-45FC19BB182A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CB6FAEC-6E52-42C1-8AC0-45FC19BB182A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CB6FAEC-6E52-42C1-8AC0-45FC19BB182A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A43D09FF-C106-4304-B95F-F86822376EFF}
+	EndGlobalSection
+EndGlobal
