@@ -34,7 +34,7 @@ namespace MovieTime.Web.MovieDetails
         [HttpGet("{id}")]
         public MovieDetailsModel Get(int id)
         {
-            return "value";
+            return null; //todo temp null
         }
 
         // POST api/values
