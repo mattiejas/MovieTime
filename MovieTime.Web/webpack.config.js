@@ -9,6 +9,9 @@ module.exports = (env) => {
 
     const cssDev = [
         {
+            loader: 'style-loader'
+        },
+        {
             loader: 'css-loader',
             options: {
                 modules: true,
@@ -27,7 +30,8 @@ module.exports = (env) => {
         {
             loader: 'sass-loader',
             options: {
-                sourceMap: true
+                sourceMap: true,
+                includePaths: ['ClientApp/styles']
             }
         }
     ];
@@ -48,13 +52,14 @@ module.exports = (env) => {
                 loader: 'postcss-loader'
             },
             {
-                loader: 'sass-loader'
+                loader: 'sass-loader',
+                includePaths: ['ClientApp/styles']
             },
         ]
     });
-    
+
     const cssLoader = isDevBuild ? cssDev : cssProd;
-    
+
     return [{
         stats: {modules: false},
         entry: {'main': './ClientApp/boot.jsx'},

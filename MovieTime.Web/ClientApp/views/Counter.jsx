@@ -22,7 +22,8 @@ export class Counter extends React.Component {
                 }}>Increment
                 </button>
                 
-                <div className={styles.test}>
+                <div className={styles["test-red"]}>
+                    <span className={styles.jeffrey}>Hoi Jeffrey</span>
                     Hello, world!
                 </div>
             </div>
