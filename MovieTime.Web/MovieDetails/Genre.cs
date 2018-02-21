@@ -1,10 +1,9 @@
 ﻿using System;
+
 namespace MovieTime.Web.MovieDetails
 {
-    public class Genres
+    public class Genre
     {
-        public Genres()
-        {
-        }
+        public String Name { get; set; }
     }
 }
