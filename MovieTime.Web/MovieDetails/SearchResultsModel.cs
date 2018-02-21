@@ -20,6 +20,6 @@ namespace MovieTime.Web.Models
         [JsonProperty("totalResults")]
         public int TotalResults { get; set; }
         [JsonProperty("Response")]
-        public bool Response { get; set; }
+        public bool ResultsFound { get; set; }
     }
 }
