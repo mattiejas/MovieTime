@@ -27,7 +27,7 @@ renderApp();
 // Allow Hot Module Replacement
 if (module.hot) {
   module.hot.accept('./routes', () => {
-    routes = require('./routes');
+    routes = require('./routes'); // eslint-disable-line global-require
     renderApp();
   });
 }

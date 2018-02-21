@@ -91,7 +91,7 @@ module.exports = (env) => {
       plugins: [
         new webpack.DllReferencePlugin({
           context: __dirname,
-          manifest: require('./wwwroot/dist/vendor-manifest.json'),
+          manifest: require('./wwwroot/dist/vendor-manifest.json'), // eslint-disable-line global-require
         }),
       ].concat(isDevBuild
         ? [
