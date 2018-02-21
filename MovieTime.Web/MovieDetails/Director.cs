@@ -3,7 +3,7 @@ namespace MovieTime.Web.MovieDetails
 {
     public class Director
     {
-        public String Name { get; set; }
+        public string Name { get; set; }
         
         public Director()
         {

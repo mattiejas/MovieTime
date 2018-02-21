@@ -15,7 +15,8 @@ namespace MovieTime.Web.MovieDetails
         
         // GET: api/all_movies
         [HttpGet]
-        public IEnumerable<string> GetMovies()
+        
+        public IEnumerable<MovieModel> GetMovies()
         {
 //            var client = new RestClient
             return null;
@@ -31,7 +32,7 @@ namespace MovieTime.Web.MovieDetails
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public MovieDetailsModel Get(int id)
         {
             return "value";
         }

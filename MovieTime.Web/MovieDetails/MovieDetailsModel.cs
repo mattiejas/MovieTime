@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Server.Kestrel.Internal.System.Collections.Sequences;
 
 namespace MovieTime.Web.MovieDetails
 {
     public class MovieDetailsModel
     {
-        private ArrayList<Actor> actors;
-        private ArrayList<Genre> genres;
+        private ICollection<Actor> actors;
+        private ICollection<Genre> genres;
 
         public string Title { get; set; }
         public string AverageRating { get; set; }
@@ -14,10 +15,5 @@ namespace MovieTime.Web.MovieDetails
         public DateTime ReleaseDate { get; set; }
         public string Summary { get; set; }
         public int DurationInMinutes { get; set; }
-        
-        public MovieDetailsModel(String title)
-        {
-            
-        }
     }
 }
