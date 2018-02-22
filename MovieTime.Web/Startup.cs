@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MovieTime.Web.SharedKernel;
 
 namespace MovieTime.Web
 {
@@ -41,6 +42,8 @@ namespace MovieTime.Web
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            app.UseMiddleware<SerilogMiddleware>();
 
             app.UseStaticFiles();
 
