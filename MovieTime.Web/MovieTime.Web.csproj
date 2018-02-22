@@ -61,4 +61,5 @@
       </ResolvedFileToPublish>
     </ItemGroup>
   </Target>
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JSONSchema="Ap" /></VisualStudio></ProjectExtensions>
 </Project>
