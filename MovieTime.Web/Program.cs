@@ -24,8 +24,6 @@ namespace MovieTime.Web
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(Configuration)
                 .WriteTo
-                    .ApplicationInsightsTraces("a7e4d631-a16c-4006-afb1-1f689f37d431") //TODO remove this line or the next one
-                .WriteTo
                     .ApplicationInsightsEvents("a7e4d631-a16c-4006-afb1-1f689f37d431")
                 .CreateLogger();
 
@@ -46,6 +44,7 @@ namespace MovieTime.Web
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseApplicationInsights()
                 .UseStartup<Startup>()
                 .UseSerilog()
                 .Build();
