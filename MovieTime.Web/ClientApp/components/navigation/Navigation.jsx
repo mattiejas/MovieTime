@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import classnames from 'classnames';
+import cn from 'classnames';
 
 import {Button} from '../button/Button';
 import styles from './Navigation.scss';
@@ -11,25 +11,37 @@ export class Navigation extends Component {
     super();
 
     this.state = {
-      menuIsVisible: true,
+      mobileMenuIsVisible: true,
+      inTransition: false,
     };
   }
 
   toggleMenu() {
     this.setState({
-      menuIsVisible: !this.state.menuIsVisible,
+      mobileMenuIsVisible: !this.state.mobileMenuIsVisible,
+      inTransition: true,
     });
+
+    setTimeout(() => {
+      this.setState({
+        inTransition: false,
+      });
+    }, 200);
   }
 
   render() {
     return (
-      <div className={classnames(styles.navigation)}>
+      <div className={cn(styles.navigation)}>
         <div className={styles.title}>Movie<span>Time</span></div>
         <button onClick={() => this.toggleMenu()}><Icon type="bars" /></button>
-        <ul className={this.state.menuIsVisible ? '' : styles['navigation--hidden']}>
-          <li><NavLink exact activeClassName={styles['navigation__item--active']} to="/">Home</NavLink></li>
-          <li><NavLink activeClassName={styles['navigation__item--active']} to="/some">Some</NavLink></li>
-          <li><NavLink activeClassName={styles['navigation__item--active']} to="/sample-data">Sample Data</NavLink></li>
+        <ul className={cn(
+          this.state.mobileMenuIsVisible ? '' : styles['navigation--hidden'],
+          this.state.inTransition ? styles['navigation--transistion'] : '',
+        )}
+        >
+          <li><NavLink exact activeClassName={styles['navigation__item--active']} to="/" onClick={() => this.toggleMenu()}>Home</NavLink></li>
+          <li><NavLink activeClassName={styles['navigation__item--active']} to="/some" onClick={() => this.toggleMenu()}>Some</NavLink></li>
+          <li><NavLink activeClassName={styles['navigation__item--active']} to="/sample-data" onClick={() => this.toggleMenu()}>Sample Data</NavLink></li>
         </ul>
       </div>
     );

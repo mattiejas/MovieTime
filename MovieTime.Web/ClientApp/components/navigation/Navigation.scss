@@ -2,6 +2,7 @@
 
 .navigation {
   display: flex;
+  position: sticky;
   justify-content: space-between;
   background-color: $secondary-color;
   width: 100%;
@@ -15,6 +16,7 @@
     vertical-align: top;
     margin: 0 0 0 20px;
     padding: 10px 0 0 0;
+    z-index: 10;
     span {
       vertical-align: top;
       font-weight: 400;
@@ -24,16 +26,24 @@
   button {
     background: none;
     border: none;
+    z-index: 10;
   }
 
   ul {
-    z-index: 9;
+    z-index: 1;
     position: absolute;
-    transition: top 0.25s ease-in-out;
+    transition: top 0.1s ease-out;
     top: 50px;
+    &.navigation--transistion {
+      li a {
+        color: $secondary-color;
+        &:hover, &.navigation__item--active {
+          background-color: $secondary-color;
+        }
+      }
+    }
     &.navigation--hidden {
-      top: -1000px;
-      color: $secondary-color;
+      top: -500px;
     }
     width: 100%;
     display: flex;
@@ -72,13 +82,21 @@
     ul {
       position: absolute;
       top: 0;
+      opacity: 1;
       &.navigation--hidden {
         top: 0;
         color: #FFFFFF;
       }
+      &.navigation--transistion {
+        li a {
+          color: #FFFFFF;
+          &:hover, &.navigation__item--active {
+            background-color: $secondary-dark-color;
+          }
+        }
+      }
       transition: top 0s ease-in-out;
       background: none;
-      display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: center;
