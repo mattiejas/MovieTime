@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
-export const Icon = ({ type }) => (
+const Icon = ({ type }) => (
   <i className={cn('fa', `fa-${type}`)} />
 );
 
