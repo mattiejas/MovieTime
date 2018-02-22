@@ -24,7 +24,7 @@ namespace MovieTime.Tests.Movie
         public void GetMoviesByTitleTest()
         {
             var searchResultsModel = MovieService.GetMoviesByTitle("Ring");
-            // 688 results for Ring, can change in the future
+            // 635 results for Ring, can change in the future
             Assert.Equal(635, searchResultsModel.TotalResults);
             // 10 results on a page, can change in the future
             Assert.Equal(10, searchResultsModel.Movies.Count);
