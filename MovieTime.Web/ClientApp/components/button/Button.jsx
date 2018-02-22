@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './Button.scss';
+import { Icon } from '../icon/Icon';
 
 export const Button = props => (
   <div
@@ -14,12 +15,19 @@ export const Button = props => (
     onKeyPress={props.onKeyPress}
     onKeyUp={props.onKeyUp}
   >
-    {props.children}
+    <div className={styles.button__inner}>
+      {
+        props.icon !== '' &&
+        <Icon type={props.icon} />
+      }
+      {props.children}
+    </div>
   </div>
 );
 
 Button.propTypes = {
   children: PropTypes.string.isRequired,
+  icon: PropTypes.string,
   onClick: PropTypes.func,
   onFocus: PropTypes.func,
   onKeyDown: PropTypes.func,
@@ -28,6 +36,7 @@ Button.propTypes = {
 };
 
 Button.defaultProps = {
+  icon: '',
   onClick: () => {},
   onFocus: () => {},
   onKeyDown: () => {},
