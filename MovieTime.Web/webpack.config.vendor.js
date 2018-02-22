@@ -19,9 +19,7 @@ module.exports = (env) => {
           },
           {
             test: /\.css(\?|$)/,
-            use: extractCSS.extract([
-              isDevBuild ? 'css-loader' : 'css-loader?minimize',
-            ]),
+            use: extractCSS.extract([isDevBuild ? 'css-loader' : 'css-loader?minimize']),
           },
         ],
       },
@@ -45,18 +43,11 @@ module.exports = (env) => {
         extractCSS,
         new webpack.ProvidePlugin({ $: 'jquery', jQuery: 'jquery' }), // Maps these identifiers to the jQuery package (because Bootstrap expects it to be a global variable)
         new webpack.DllPlugin({
-          path: path.join(
-            __dirname,
-            'wwwroot',
-            'dist',
-            '[name]-manifest.json',
-          ),
+          path: path.join(__dirname, 'wwwroot', 'dist', '[name]-manifest.json'),
           name: '[name]_[hash]',
         }),
         new webpack.DefinePlugin({
-          'process.env.NODE_ENV': isDevBuild
-            ? '"development"'
-            : '"production"',
+          'process.env.NODE_ENV': isDevBuild ? '"development"' : '"production"',
         }),
       ].concat(isDevBuild ? [] : [new webpack.optimize.UglifyJsPlugin()]),
     },
