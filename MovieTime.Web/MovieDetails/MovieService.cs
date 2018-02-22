@@ -1,11 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.IdentityModel.Protocols;
 using MovieTime.Web.Models;
 using RestSharp;
 
 namespace MovieTime.Web.MovieDetails
 {
-    public class MovieService
+    public interface IMovieService
+    {
+        OmdbMovieModel GetMovieById(string id);
+        OmdbMovieModel GetMovieByTitle(string title);
+        SearchResultsModel GetMoviesByTitle(string title);
+    }
+    
+    public class MovieService : IMovieService
     {
         private static readonly string BASE_URL = "http://www.omdbapi.com";
         private static readonly string API_KEY_ARG = "apikey";
@@ -16,33 +24,34 @@ namespace MovieTime.Web.MovieDetails
         private static readonly string MOVIE_SEARCH_ARG = "s";
         private static readonly string TYPE_ARG = "type";
 
-        public static MovieModel GetMovieById(string id)
+
+        public OmdbMovieModel GetMovieById(string id)
         {
             var client = CreateClient();
             var request = CreateRequest("", Method.GET);
             
             request.AddParameter(MOVIE_ID_ARG, id);
 
-            var response = client.Execute<MovieModel>(request);
+            var response = client.Execute<OmdbMovieModel>(request);
             if (response.Data == null) throw new Exception("Empty response");
             
             return response.Data;
         }
 
-        public static MovieModel GetMovieByTitle(string title)
+        public OmdbMovieModel GetMovieByTitle(string title)
         {
             var client = CreateClient();
             var request = CreateRequest("", Method.GET);
             
             request.AddParameter(MOVIE_TITLE_ARG, title);
 
-            var response = client.Execute<MovieModel>(request);
+            var response = client.Execute<OmdbMovieModel>(request);
             if (response.Data == null) throw new Exception("Empty response");
             
             return response.Data;
         }
         
-        public static SearchResultsModel GetMoviesByTitle(string title)
+        public SearchResultsModel GetMoviesByTitle(string title)
         {
             var client = CreateClient();
             var request = CreateRequest("", Method.GET);

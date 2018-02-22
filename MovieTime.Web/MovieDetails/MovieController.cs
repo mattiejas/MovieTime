@@ -13,13 +13,20 @@ namespace MovieTime.Web.MovieDetails
     [Route("api/[controller]")]
     public class MovieController : Controller
     {
+        private readonly IMovieService _movieService;
+        
+        public MovieController(IMovieService movieService)
+        {
+            _movieService = movieService;
+        }
+        
         [HttpGet("search/{title}")]
-        public SearchResultsModel GetMovies(string title) => MovieService.GetMoviesByTitle(title);
+        public SearchResultsModel GetMovies(string title) => _movieService.GetMoviesByTitle(title);
 
         [HttpGet("{id}")]
-        public MovieModel Get(string id) => MovieService.GetMovieById(id);
+        public OmdbMovieModel Get(string id) => _movieService.GetMovieById(id);
 
         [HttpGet("title/{title}")]
-        public MovieModel GetByTitle(string title) => MovieService.GetMovieByTitle(title);
+        public OmdbMovieModel GetByTitle(string title) => _movieService.GetMovieByTitle(title);
     }
 }
