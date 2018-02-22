@@ -2,7 +2,7 @@
 
 .navigation {
   display: flex;
-  position: sticky;
+  position: fixed;
   justify-content: space-between;
   align-items: center;
   background-color: $secondary-color;
@@ -61,7 +61,10 @@
       color: #FFFFFF;
       line-height: 50px;
       padding: 0 0 0 20px;
-      &:hover, &.navigation__item--active {
+      &:hover {
+        background-color: lighten($secondary-dark-color, 5);
+      }
+      &.navigation__item--active {
         background-color: $secondary-dark-color;
       }
     }
