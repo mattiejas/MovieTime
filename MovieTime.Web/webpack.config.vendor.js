@@ -35,6 +35,7 @@ module.exports = (env) => {
           'react-dom',
           'react-router-dom',
           'jquery',
+          'font-awesome/css/font-awesome.css',
         ],
       },
       output: {
@@ -51,7 +52,7 @@ module.exports = (env) => {
             __dirname,
             'wwwroot',
             'dist',
-            '[name]-manifest.json',
+            '[name]-manifest.json'
           ),
           name: '[name]_[hash]',
         }),
