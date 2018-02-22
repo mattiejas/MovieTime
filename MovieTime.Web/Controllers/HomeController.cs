@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 //test
 
@@ -13,6 +14,7 @@ namespace MovieTime.Web.Controllers
     {
         public IActionResult Index()
         {
+            Log.Information("This is how you call the Serilog Logger");
             return View();
         }
 
