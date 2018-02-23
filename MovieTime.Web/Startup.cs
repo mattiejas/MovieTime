@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
@@ -25,6 +26,7 @@ namespace MovieTime.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddAutoMapper();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "MovieTime API", Version = "v1" });
