@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
-//test
-
 namespace MovieTime.Web.Controllers
 {   
     public class HomeController : Controller
