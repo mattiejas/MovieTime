@@ -31,6 +31,20 @@
 }
 .view__content__heading { }
 
+.view__content__involved {
+  margin-top: 20px;
+  tbody {
+    th {
+      min-width: 80px;
+      vertical-align: top;
+    }
+    th, td {
+      padding: 5px 0;
+      text-align: left;
+    }
+  }
+}
+
 @media (min-width: $grid-sm) {
   .view {
     .mobile {

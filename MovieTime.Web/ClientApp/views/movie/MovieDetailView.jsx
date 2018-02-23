@@ -58,11 +58,22 @@ class MovieDetailView extends React.Component {
                   <MovieAttributes rating={6} time={runTime} genres={genre} />
                 </div>
               </div>
-              <ul>
-                <li><b>Director:</b> {director}</li>
-                <li><b>Writers:</b> {writer}</li>
-                <li><b>Actors:</b> {actors}</li>
-              </ul>
+              <table className={styles.view__content__involved}>
+                <tbody>
+                  <tr>
+                    <th>Director:</th>
+                    <td>{director}</td>
+                  </tr>
+                  <tr>
+                    <th>Writers:</th>
+                    <td>{writer}</td>
+                  </tr>
+                  <tr>
+                    <th>Actors:</th>
+                    <td>{actors}</td>
+                  </tr>
+                </tbody>
+              </table>
               <p>{plot}</p>
             </div>
           </div>
