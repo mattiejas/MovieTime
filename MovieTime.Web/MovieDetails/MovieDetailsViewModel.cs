@@ -10,7 +10,6 @@ namespace MovieTime.Web.MovieDetails
         public string Year { get; set; }
         public string Rated { get; set; }
         public string Poster { get; set; }
-        public string Summary { get; set; }
         public string RunTime { get; set; }
         public string Genre { get; set; }
         public string Director { get; set; }
