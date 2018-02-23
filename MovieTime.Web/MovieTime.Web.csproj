@@ -4,9 +4,20 @@
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <IsPackable>false</IsPackable>
+    <ApplicationInsightsResourceId>/subscriptions/cdfa919e-6fd2-4a01-8d38-e6763d469065/resourcegroups/VS-devops-student2-Group/providers/microsoft.insights/components/mvtime</ApplicationInsightsResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/cdfa919e-6fd2-4a01-8d38-e6763d469065/resourcegroups/VS-devops-student2-Group/providers/microsoft.insights/components/mvtime</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
+    <PackageReference Include="AutoMapper" Version="6.2.2" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+    <PackageReference Include="RestSharp" Version="106.2.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="1.2.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="2.1.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="2.5.0" />
+    <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="2.5.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
@@ -14,6 +25,15 @@
   <ItemGroup>
     <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
     <Content Remove="ClientApp\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MovieDetails\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="MovieDetails\EmptyClass.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">
     <!-- Ensure Node.js is installed -->
@@ -41,4 +61,5 @@
       </ResolvedFileToPublish>
     </ItemGroup>
   </Target>
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JSONSchema="Ap" /></VisualStudio></ProjectExtensions>
 </Project>
