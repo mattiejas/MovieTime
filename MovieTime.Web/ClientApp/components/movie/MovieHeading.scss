@@ -1,5 +1,15 @@
 .movie-heading {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  color: #fff;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  margin: 15px 0;
+}
+.movie-heading__title {
+  margin: 0 15px 0 0;
+  font-size: 1.4em;
+  font-weight: 400;
+}
+.movie-heading__year {
+  font-weight: 300;
 }

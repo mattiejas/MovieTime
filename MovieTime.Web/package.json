@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "vendor": "webpack --config webpack.config.vendor.js"
+    "vendor": "webpack --config webpack.config.vendor.js && webpack --config webpack.config.js"
   },
   "devDependencies": {
     "aspnet-webpack": "^2.0.1",

@@ -5,4 +5,9 @@
     background: $background-color;
     padding-top: 50px;
   }
+  .image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
 }
