@@ -12,7 +12,7 @@ const MovieHeading = props => (
 
 MovieHeading.propTypes = {
   title: PropTypes.string.isRequired,
-  year: PropTypes.number.isRequired,
+  year: PropTypes.string.isRequired,
 };
 
 export default MovieHeading;

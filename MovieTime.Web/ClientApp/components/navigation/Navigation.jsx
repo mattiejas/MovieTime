@@ -40,9 +40,8 @@ export class Navigation extends Component {
         )}
         >
           <li><NavLink exact activeClassName={styles['navigation__item--active']} to="/" onClick={() => this.toggleMenu()}>Home</NavLink></li>
-          <li><NavLink activeClassName={styles['navigation__item--active']} to="/some" onClick={() => this.toggleMenu()}>Some</NavLink></li>
-          <li><NavLink activeClassName={styles['navigation__item--active']} to="/sample-data" onClick={() => this.toggleMenu()}>Sample Data</NavLink></li>
-          <li><NavLink activeClassName={styles['navigation__item--active']} to="/movie/detail" onClick={() => this.toggleMenu()}>Movie Detail</NavLink></li>
+          <li><NavLink activeClassName={styles['navigation__item--active']} to="/404" onClick={() => this.toggleMenu()}>404</NavLink></li>
+          <li><NavLink activeClassName={styles['navigation__item--active']} to="/movie/detail/ferris bueller's day off" onClick={() => this.toggleMenu()}>Movie Detail</NavLink></li>
         </ul>
       </div>
     );

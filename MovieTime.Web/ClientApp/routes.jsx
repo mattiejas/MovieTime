@@ -10,7 +10,7 @@ export const routes = (
   <Layout>
     <Switch>
       <Route exact path="/" component={Home} />
-      <Route path="/movie/detail" component={MovieDetailView} />
+      <Route path="/movie/detail/:title" component={MovieDetailView} />
       <Route component={NotFoundView} />
     </Switch>
   </Layout>
