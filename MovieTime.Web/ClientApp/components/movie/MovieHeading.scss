@@ -16,6 +16,15 @@
   font-weight: 300;
 }
 
+@media (min-width: $grid-sm) {
+  .movie-heading {
+    margin: 0 0 10px 0;
+  }
+  .movie-heading__title {
+    font-size: 1.8em;
+  }
+}
+
 @media (min-width: $grid-md) {
   .movie-heading {
     margin-top: 0px;
