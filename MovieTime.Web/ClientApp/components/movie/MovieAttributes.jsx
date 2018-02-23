@@ -13,9 +13,9 @@ const MovieAttributes = props => (
 );
 
 MovieAttributes.propTypes = {
-  ranking: PropTypes.string.isRequired,
+  ranking: PropTypes.number.isRequired,
   time: PropTypes.string.isRequired,
-  genres: PropTypes.arrayOf(PropTypes.string).isRequired,
+  genres: PropTypes.string.isRequired,
 };
 
 export default MovieAttributes;
