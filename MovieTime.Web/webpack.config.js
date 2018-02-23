@@ -31,7 +31,6 @@ module.exports = (env) => {
       loader: 'sass-loader',
       options: {
         sourceMap: true,
-        includePaths: [path.join(__dirname, 'ClientApp/styles')],
       },
     },
   ];
@@ -53,7 +52,6 @@ module.exports = (env) => {
       },
       {
         loader: 'sass-loader',
-        includePaths: [path.join(__dirname, 'ClientApp/styles')],
       },
     ],
   });
