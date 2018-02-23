@@ -1,11 +1,13 @@
+@import "../../styles/core";
+
 .movie-attributes {
   font-size: 0.8em;
-  margin: 0px;
+  margin: 0;
   padding: 15px 15px 5px 15px;
   list-style: none;
   color: #ABABAB;
   background-color: #fff;
-  border-radius: 0px 0px 5px 5px;
+  border-radius: 0 0 5px 5px;
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.10);
 
   li {
@@ -14,5 +16,23 @@
   span {
     display: inline-block;
     margin-left: 15px;
+  }
+}
+
+@media (min-width: $grid-sm) {
+  .movie-attributes {
+    font-size: 1em;
+    background: transparent;
+    padding: 0;
+    box-shadow: none;
+    display: flex;
+    margin: 0 -15px;
+    color: #fff;
+    li {
+      margin: 0 15px;
+    }
+    span {
+      margin-left: 0;
+    }
   }
 }

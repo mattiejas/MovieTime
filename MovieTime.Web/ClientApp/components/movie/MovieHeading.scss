@@ -1,3 +1,5 @@
+@import "../../styles/core";
+
 .movie-heading {
   color: #fff;
   display: flex;
@@ -12,4 +14,13 @@
 }
 .movie-heading__year {
   font-weight: 300;
+}
+
+@media (min-width: $grid-md) {
+  .movie-heading {
+    margin-top: 0px;
+  }
+  .movie-heading__title {
+    font-size: 2.0em;
+  }
 }

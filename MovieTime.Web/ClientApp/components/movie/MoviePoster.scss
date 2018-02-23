@@ -1,4 +1,13 @@
+@import "../../styles/core";
+
 .movie-poster {
   border-radius: 5px 5px 0 0;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.20);
   overflow: hidden;
+}
+
+@media (min-width: $grid-sm) {
+  .movie-poster {
+    border-radius: 5px;
+  }
 }
