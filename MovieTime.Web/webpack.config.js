@@ -35,28 +35,30 @@ module.exports = (env) => {
     },
   ];
 
-  const cssProd = ExtractTextPlugin.extract({
-    fallback: 'style-loader',
-    use: [
-      {
-        loader: 'css-loader',
-        options: {
-          modules: true,
-          camelCase: true,
-          importLoaders: 2,
-          localIdentName: '[name]__[local]___[hash:base64:5]',
-        },
-      },
-      {
-        loader: 'postcss-loader',
-      },
-      {
-        loader: 'sass-loader',
-      },
-    ],
-  });
+  // const cssProd = ExtractTextPlugin.extract({
+  //   use: [
+  //     {
+  //       loader: 'style-loader',
+  //     },
+  //     {
+  //       loader: 'css-loader',
+  //       options: {
+  //         modules: true,
+  //         camelCase: true,
+  //         importLoaders: 2,
+  //         localIdentName: '[name]__[local]___[hash:base64:5]',
+  //       },
+  //     },
+  //     {
+  //       loader: 'postcss-loader',
+  //     },
+  //     {
+  //       loader: 'sass-loader',
+  //     },
+  //   ],
+  // });
 
-  const cssLoader = isDevBuild ? cssDev : cssProd;
+  const cssLoader = isDevBuild ? cssDev : cssDev;
 
   return [
     {
@@ -103,7 +105,7 @@ module.exports = (env) => {
         : [
           // Plugins that apply in production builds only
           new webpack.optimize.UglifyJsPlugin(),
-          new ExtractTextPlugin('[name].[contenthash].css'),
+          // new ExtractTextPlugin('site.css'),
         ]),
     },
   ];
