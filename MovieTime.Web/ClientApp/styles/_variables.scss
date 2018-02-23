@@ -1,10 +1,18 @@
-$secondary-color: #313B46;
+// Theme colors
+$secondary-color: #313B46; 
 $secondary-dark-color: #222830;
 
+// Default settings
 $background-color: #F3F3F3;
-
 $button-default-color: #ECECEC;
-$font-color-light: #ABABAB;
 
+// Font settings
 $font: 'Roboto', sans-serif;
+$font-color-light: #ABABAB;
 $font-color: #525252;
+
+// Grid settings
+$grid-xs: "480px";
+$grid-sm: "768px";
+$grid-md: "992px";
+$grid-lg: "1200px";
