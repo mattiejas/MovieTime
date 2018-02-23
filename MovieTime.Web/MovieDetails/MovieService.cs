@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AutoMapper;
 using Microsoft.IdentityModel.Protocols;
 using MovieTime.Web.Models;
 using RestSharp;
@@ -8,8 +9,8 @@ namespace MovieTime.Web.MovieDetails
 {
     public interface IMovieService
     {
-        OmdbMovieModel GetMovieById(string id);
-        OmdbMovieModel GetMovieByTitle(string title);
+        MovieDetailsViewModel GetMovieById(string id);
+        MovieDetailsViewModel GetMovieByTitle(string title);
         SearchResultsModel GetMoviesByTitle(string title);
     }
     
@@ -23,9 +24,16 @@ namespace MovieTime.Web.MovieDetails
         private static readonly string MOVIE_TITLE_ARG = "t";
         private static readonly string MOVIE_SEARCH_ARG = "s";
         private static readonly string TYPE_ARG = "type";
+        
+        private readonly IMapper _mapper;
+
+        public MovieService(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
 
 
-        public OmdbMovieModel GetMovieById(string id)
+        public MovieDetailsViewModel GetMovieById(string id)
         {
             var client = CreateClient();
             var request = CreateRequest("", Method.GET);
@@ -35,10 +43,11 @@ namespace MovieTime.Web.MovieDetails
             var response = client.Execute<OmdbMovieModel>(request);
             if (response.Data == null) throw new Exception("Empty response");
             
-            return response.Data;
+            var movieDetailsModel =_mapper.Map<OmdbMovieModel, MovieDetailsViewModel>(response.Data);
+            return movieDetailsModel;
         }
 
-        public OmdbMovieModel GetMovieByTitle(string title)
+        public MovieDetailsViewModel GetMovieByTitle(string title)
         {
             var client = CreateClient();
             var request = CreateRequest("", Method.GET);
@@ -47,8 +56,9 @@ namespace MovieTime.Web.MovieDetails
 
             var response = client.Execute<OmdbMovieModel>(request);
             if (response.Data == null) throw new Exception("Empty response");
-            
-            return response.Data;
+
+            var movieDetailsModel =_mapper.Map<OmdbMovieModel, MovieDetailsViewModel>(response.Data);
+            return movieDetailsModel;
         }
         
         public SearchResultsModel GetMoviesByTitle(string title)
