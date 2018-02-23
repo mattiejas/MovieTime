@@ -1,9 +1,13 @@
 using System;
+using System.Diagnostics;
 using AutoMapper;
 using AutoMapper.Configuration;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Logging;
 using MovieTime.Web.Models;
 using MovieTime.Web.MovieDetails;
 using Xunit;
+using Serilog;
 
 namespace MovieTime.Tests.Movie
 {
@@ -18,6 +22,25 @@ namespace MovieTime.Tests.Movie
             var mapperConfig = new MapperConfiguration(baseMappings);
             
             _movieService = new MovieService(new Mapper(mapperConfig));
+        }
+        
+        [Fact]
+        public void OmdbPerformanceTest()
+        {
+            var searchResultsModel = _movieService.GetMoviesByTitle("Ring");
+            // 10 results on a page, can change in the future
+            Assert.Equal(10, searchResultsModel.Movies.Count);
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            foreach (var movie in searchResultsModel.Movies)
+            {
+                _movieService.GetMoviesByTitle(movie.Title);
+            }
+            stopwatch.Stop();
+            
+            Log.Debug(stopwatch.Elapsed.Seconds.ToString());
+            Assert.True(stopwatch.Elapsed.Seconds < 2);
         }
         
         [Fact]
