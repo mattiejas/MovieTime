@@ -23,14 +23,14 @@ namespace MovieTime.Tests.Movie
         [Fact]
         public void GetMovieByIdTest()
         {
-            var movieModel = _movieService.GetMovieById("tt0112529");
+            var movieModel = _movieService.GetMovieDetailsById("tt0112529");
             Assert.Equal("Blood Ring 2", movieModel.Title);
         }
         
         [Fact]
         public void GetMovieByTitleTest()
         {
-            var movieModel = _movieService.GetMovieByTitle("Blood Ring 2");
+            var movieModel = _movieService.GetMovieDetailsByTitle("Blood Ring 2");
             Assert.Equal("tt0112529", movieModel.ImdbId);
         }
         
