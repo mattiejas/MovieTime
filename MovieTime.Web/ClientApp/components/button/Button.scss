@@ -6,17 +6,18 @@
       padding: 2px 7px 0 0;
     }
     display: flex;
-    padding: 2px 0 0 0;
-    align-content: center;
+    padding: 3px 0 0 0;
+    align-items: baseline;
     text-transform: uppercase;
   }
+  cursor: pointer;
   font-size: 14px;
   display: inline-block;
   height: 35px;
   width: auto;
   padding: 5px 10px;
   background-color: $button-default-color;
-  color: $light-text-color;
+  color: $font-color-light;
   font-weight: 400;
   border-radius: 5px;
   box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.10);
