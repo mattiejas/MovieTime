@@ -1,0 +1,45 @@
+@import "../../styles/core";
+
+.background {
+    position: absolute;
+    top: 0px;
+    left: 0;
+    background-color: $secondary-dark-color;
+    height: 40vh;
+    width: 100%;
+    z-index: 1;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.20);
+}
+
+.notfound {
+    z-index: 2;
+    margin: 20px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.10);
+    position: relative;
+    overflow: hidden;
+    height: calc(100vh - 50px - 40px);
+
+    h1 {
+        margin: 10px 0 5px 0;
+    }
+
+    .link {
+        position: relative;
+        transform: scaleX(-1);        
+    }
+}
+
+@media all and (min-width: $grid-sm) {
+    .notfound {
+        .link {
+            min-height: 100%;
+            max-height: 150%;
+            position: absolute;
+            top: -10%;
+            right: -10%;
+        }
+    }
+}
