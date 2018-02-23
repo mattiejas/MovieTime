@@ -11,7 +11,7 @@ export class Navigation extends Component {
     super();
 
     this.state = {
-      mobileMenuIsVisible: true,
+      mobileMenuIsVisible: false,
       inTransition: false,
     };
   }
