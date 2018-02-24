@@ -13,9 +13,9 @@ namespace MovieTime.Web.MovieDetails
     [Route("api/[controller]")]
     public class MovieController : Controller
     {
-        private readonly IMovieService _movieService;
+        private readonly IMovieRepository _movieService;
         
-        public MovieController(IMovieService movieService)
+        public MovieController(IMovieRepository movieService)
         {
             _movieService = movieService;
         }

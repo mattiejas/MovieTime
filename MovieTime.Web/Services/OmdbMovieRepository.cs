@@ -7,14 +7,7 @@ using RestSharp;
 
 namespace MovieTime.Web.MovieDetails
 {
-    public interface IMovieService
-    {
-        MovieDetailsViewModel GetMovieDetailsById(string id);
-        MovieDetailsViewModel GetMovieDetailsByTitle(string title);
-        SearchResultsModel GetMoviesByTitle(string title);
-    }
-
-    public class MovieService : IMovieService
+    public class OmdbMovieRepository : IMovieRepository
     {
         private static readonly string BASE_URL = "http://www.omdbapi.com";
         private static readonly string API_KEY_ARG = "apikey";
@@ -28,7 +21,7 @@ namespace MovieTime.Web.MovieDetails
 
         private readonly IMapper _mapper;
 
-        public MovieService(IMapper mapper)
+        public OmdbMovieRepository(IMapper mapper)
         {
             _mapper = mapper;
         }
@@ -44,7 +37,7 @@ namespace MovieTime.Web.MovieDetails
             
             var client = CreateClient();
             var request = CreateRequest("", Method.GET);
-
+            
             if (title != null) request.AddParameter(MOVIE_TITLE_ARG, title);
             if (id != null) request.AddParameter(MOVIE_ID_ARG, id);
             
@@ -103,6 +96,31 @@ namespace MovieTime.Web.MovieDetails
             client.AddHandler("*+json", Serialization.NewtonsoftJsonSerializer.Default);
 
             return client;
+        }
+
+        public IEnumerable<MovieDetailsViewModel> GetMovies(int page = 0)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MovieDetailsViewModel GetMovieById(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MovieDetailsViewModel GetMoviesByTitle(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddMovie(DbMovie movie)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteMovie(Guid id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

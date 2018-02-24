@@ -32,7 +32,7 @@ namespace MovieTime.Web
             {
                 c.SwaggerDoc("v1", new Info { Title = "MovieTime API", Version = "v1" });
             });
-            services.AddTransient<IMovieService, MovieService>();
+            services.AddTransient<IMovieService, OmdbMovieRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
