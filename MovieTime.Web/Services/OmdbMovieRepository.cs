@@ -7,7 +7,7 @@ using RestSharp;
 
 namespace MovieTime.Web.MovieDetails
 {
-    public class OmdbMovieRepository : IMovieRepository
+    public class OmdbMovieRepository
     {
         private static readonly string BASE_URL = "http://www.omdbapi.com";
         private static readonly string API_KEY_ARG = "apikey";
@@ -108,10 +108,10 @@ namespace MovieTime.Web.MovieDetails
             throw new NotImplementedException();
         }
 
-        public MovieDetailsViewModel GetMoviesByTitle(string id)
-        {
-            throw new NotImplementedException();
-        }
+//        public MovieDetailsViewModel GetMoviesByTitle(string id)
+//        {
+//            throw new NotImplementedException();
+//        }
 
         public void AddMovie(DbMovie movie)
         {

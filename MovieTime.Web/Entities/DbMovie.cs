@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography.X509Certificates;
+using MovieTime.Web.Entities;
 
 namespace MovieTime.Web.MovieDetails
 {
@@ -24,32 +25,31 @@ namespace MovieTime.Web.MovieDetails
         public double Rated { get; set; }
 
         [Required]
-        public ICollection<Genre> Genres { get; set; }
-        
+        public ICollection<DbMovieGenre> Genres { get; set; }
+
         [Required]
         public string Poster { get; set; }
-        
+
         [Required]
         [MinLength(1), MaxLength(1440)]
         public int RunTimeInMinutes { get; set; }
-     
+
         [Required]
         [MaxLength(200)]
         public string Director { get; set; }
-        
+
         [Required]
         [MaxLength(200)]
         public string Writer { get; set; }
-        
+
         [Required]
         [MaxLength(200)]
         public string Actors { get; set; }
-        
+
         [Required]
         [MaxLength(600)]
         public string Plot { get; set; }
-        
-        
+
         public string ImdbId { get; set; }
     }
 }

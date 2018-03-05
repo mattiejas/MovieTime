@@ -18,6 +18,9 @@
     <PackageReference Include="Serilog.Settings.Configuration" Version="2.5.0" />
     <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="2.5.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.1" />
+  <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
@@ -28,9 +31,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="MovieDetails\" />
+    <Folder Include="Genres\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="MovieDetails\EmptyClass.cs" />
+    <Compile Remove="MovieDetails\AuthorDto.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services" />
@@ -55,7 +60,7 @@
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
       <DistFiles Include="wwwroot\dist\**; ClientApp\dist\**" />
-      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+      <ResolvedFileToPublish Include="@(DistFiles-&gt;'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>%(DistFiles.Identity)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </ResolvedFileToPublish>
