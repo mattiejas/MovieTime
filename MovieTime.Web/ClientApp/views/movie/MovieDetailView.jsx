@@ -15,7 +15,7 @@ class MovieDetailView extends React.Component {
     super(props);
     this.state = {
       movie: {},
-      backgroundColor: 'rgb(0, 0, 0)',
+      backgroundColor: undefined,
     };
   }
 
@@ -51,7 +51,10 @@ class MovieDetailView extends React.Component {
       <div className={styles.view}>
         <div
           className={styles.view__background}
-          style={{ background: this.state.backgroundColor }}
+          style={this.state.backgroundColor ? {
+            transition: 'background-color .5s ease-in',
+            background: this.state.backgroundColor,
+          } : {}}
         />
         <div className={styles.view__content}>
           <div className={styles.view__content__container}>

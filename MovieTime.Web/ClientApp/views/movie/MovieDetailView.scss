@@ -54,6 +54,10 @@
       display: inline-block;
     }
   }
+
+  .view__background {
+    border-top: 10px solid $secondary-dark-color;
+  }
   
   .view__content__container {
     padding: 0 30px;
