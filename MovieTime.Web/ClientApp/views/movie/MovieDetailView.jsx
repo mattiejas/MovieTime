@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Vibrant from 'node-vibrant';
 
 import MoviePoster from '../../components/movie/MoviePoster';
 import MovieHeading from '../../components/movie/MovieHeading';
@@ -14,15 +15,26 @@ class MovieDetailView extends React.Component {
     super(props);
     this.state = {
       movie: {},
+      backgroundColor: 'rgb(0, 0, 0)',
     };
   }
+
   componentDidMount() {
     fetch(API + this.props.match.params.title).then((response) => response.json()).then((data) => {
       this.setState({
         movie: data,
       });
+      this.setBackgroundColor(data.poster);
     });
   }
+
+  setBackgroundColor(poster) {
+    Vibrant.from(poster).getPalette()
+      .then(palette => this.setState({
+        backgroundColor: `rgb(${palette.Vibrant.r}, ${palette.Vibrant.g}, ${palette.Vibrant.b})`,
+      }));
+  }
+
   render() {
     const {
       title = '',
@@ -37,7 +49,10 @@ class MovieDetailView extends React.Component {
     } = this.state.movie;
     return (
       <div className={styles.view}>
-        <div className={styles.view__background} />
+        <div
+          className={styles.view__background}
+          style={{ background: this.state.backgroundColor }}
+        />
         <div className={styles.view__content}>
           <div className={styles.view__content__container}>
             <div className="*column">
@@ -60,18 +75,18 @@ class MovieDetailView extends React.Component {
               </div>
               <table className={styles.view__content__involved}>
                 <tbody>
-                  <tr>
-                    <th>Director:</th>
-                    <td>{director}</td>
-                  </tr>
-                  <tr>
-                    <th>Writers:</th>
-                    <td>{writer}</td>
-                  </tr>
-                  <tr>
-                    <th>Actors:</th>
-                    <td>{actors}</td>
-                  </tr>
+                <tr>
+                  <th>Director:</th>
+                  <td>{director}</td>
+                </tr>
+                <tr>
+                  <th>Writers:</th>
+                  <td>{writer}</td>
+                </tr>
+                <tr>
+                  <th>Actors:</th>
+                  <td>{actors}</td>
+                </tr>
                 </tbody>
               </table>
               <p>{plot}</p>
