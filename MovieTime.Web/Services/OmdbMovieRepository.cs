@@ -7,7 +7,14 @@ using RestSharp;
 
 namespace MovieTime.Web.MovieDetails
 {
-    public class OmdbMovieRepository
+    public interface IMovieRepositoryTemporary
+    {
+        MovieDetailsViewModel GetMovieDetailsById(string id);
+        MovieDetailsViewModel GetMovieDetailsByTitle(string id);
+        SearchResultsModel GetMoviesByTitle(string title);
+    }
+    
+    public class OmdbMovieRepository : IMovieRepositoryTemporary
     {
         private static readonly string BASE_URL = "http://www.omdbapi.com";
         private static readonly string API_KEY_ARG = "apikey";

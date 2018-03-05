@@ -55,7 +55,7 @@ namespace MovieTime.Web
                 connectionString = Configuration.GetConnectionString("Postgresql_DATABASE_URL");
                 services.AddDbContext<MovieContext>(options => options.UseNpgsql(connectionString));
             }
-            services.AddScoped<IMovieRepository, MovieRepository>();
+            services.AddScoped<IMovieRepositoryTemporary, OmdbMovieRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
