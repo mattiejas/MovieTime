@@ -30,20 +30,31 @@ namespace MovieTime.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(setupAction => {
+            services.AddMvc(setupAction =>
+            {
                 setupAction.ReturnHttpNotAcceptable = true; // do not send default media type if unsupported is requested
                 setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
             });
+
             services.AddAutoMapper();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "MovieTime API", Version = "v1" });
             });
-//            services.AddTransient<IMovieService, OmdbMovieRepository>();
-
-            var connectionString = Configuration["connectionStrings:movieDbConnectionString"];
-            services.AddDbContext<MovieContext>(o => o.UseSqlServer(connectionString));
-
+            
+            // Exec: dotnet ef migrations add "<migration_name>", to add a new migration.
+            // Exec: dotnet ef database update, to update the database according to the migrations. 
+            var connectionString = Configuration.GetConnectionString("movieDbConnectionString");
+            var mode = Configuration.GetConnectionString("Use_SQLServer");
+            if (string.IsNullOrWhiteSpace(mode) || mode.ToLower() == "true")
+            {
+                services.AddDbContext<MovieContext>(options => options.UseSqlServer(connectionString));
+            }
+            else
+            {
+                connectionString = Configuration.GetConnectionString("Postgresql_DATABASE_URL");
+                services.AddDbContext<MovieContext>(options => options.UseNpgsql(connectionString));
+            }
             services.AddScoped<IMovieRepository, MovieRepository>();
         }
 
@@ -58,7 +69,7 @@ namespace MovieTime.Web
                     HotModuleReplacement = true,
                     ReactHotModuleReplacement = true
                 });
-                
+
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
@@ -70,8 +81,10 @@ namespace MovieTime.Web
             else
             {
                 //app.UseExceptionHandler("/Home/Error");
-                app.UseExceptionHandler(appBuilder => {
-                    appBuilder.Run(async context => {
+                app.UseExceptionHandler(appBuilder =>
+                {
+                    appBuilder.Run(async context =>
+                    {
                         context.Response.StatusCode = 500;
                         await context.Response.WriteAsync("An unexpected fault happened. Try again later.");
                     });
