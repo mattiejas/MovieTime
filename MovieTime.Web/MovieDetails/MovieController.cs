@@ -10,23 +10,23 @@ using RestSharp;
 
 namespace MovieTime.Web.MovieDetails
 {
-    [Route("api/[controller]")]
+        [Route("api/[controller]")]
     public class MovieController : Controller
     {
-        private readonly IMovieService _movieService;
+        private readonly IMovieRepository _movieService;
         
-        public MovieController(IMovieService movieService)
+        public MovieController(IMovieRepository movieService)
         {
             _movieService = movieService;
         }
         
-        [HttpGet("search/{title}")]
-        public SearchResultsModel GetMovies(string title) => _movieService.GetMoviesByTitle(title);
-
-        [HttpGet("{id}")]
-        public MovieDetailsViewModel Get(string id) => _movieService.GetMovieDetailsById(id);
-
-        [HttpGet("title/{title}")]
-        public MovieDetailsViewModel GetByTitle(string title) => _movieService.GetMovieDetailsByTitle(title);
+//        [HttpGet("search/{title}")]
+//        public SearchResultsModel GetMovies(string title) => _movieService.GetMoviesByTitle(title);
+//
+//        [HttpGet("{id}")]
+//        public MovieDetailsViewModel Get(string id) => _movieService.GetMovieDetailsById(id);
+//
+//        [HttpGet("title/{title}")]
+//        public MovieDetailsViewModel GetByTitle(string title) => _movieService.GetMovieDetailsByTitle(title);
     }
 }
