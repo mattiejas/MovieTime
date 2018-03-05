@@ -27,7 +27,7 @@ namespace MovieTime.Tests.Movie
         [Fact]
         public void OmdbPerformanceTest()
         {
-            var searchResultsModel = _movieService.GetMoviesByTitle("Ring");
+            var searchResultsModel = _omdbMovieRepository.GetMoviesByTitle("Ring");
             // 10 results on a page, can change in the future
             Assert.Equal(10, searchResultsModel.Movies.Count);
 
@@ -35,7 +35,7 @@ namespace MovieTime.Tests.Movie
             stopwatch.Start();
             foreach (var movie in searchResultsModel.Movies)
             {
-                _movieService.GetMoviesByTitle(movie.Title);
+                _omdbMovieRepository.GetMoviesByTitle(movie.Title);
             }
             stopwatch.Stop();
             
