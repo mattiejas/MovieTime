@@ -1,11 +1,14 @@
 @import "../../styles/core";
 
 .movie-poster {
+  background-color: $light-color;
   border-radius: 5px 5px 0 0;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.10);
   overflow: hidden;
+  min-height: 350px;
   img {
     width: 100%;
+    opacity: 0;
   }
 }
 

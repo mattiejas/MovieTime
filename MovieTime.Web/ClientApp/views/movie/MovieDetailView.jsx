@@ -5,6 +5,8 @@ import Vibrant from 'node-vibrant';
 import MoviePoster from '../../components/movie/MoviePoster';
 import MovieHeading from '../../components/movie/MovieHeading';
 import MovieAttributes from '../../components/movie/MovieAttributes';
+import Placeholder from '../../components/placeholder/Placeholder';
+import ParagraphPlaceholder from '../../components/placeholder/ParagraphPlaceholder';
 
 import styles from './MovieDetailView.scss';
 
@@ -16,14 +18,16 @@ class MovieDetailView extends React.Component {
     this.state = {
       movie: {},
       backgroundColor: null,
+      isLoading: true,
     };
   }
 
   componentDidMount() {
     fetch(API + this.props.match.params.title).then(response => response.json()).then((data) => {
-      this.setState({
+      setTimeout(() => this.setState({
         movie: data,
-      });
+        isLoading: false,
+      }), 200);
       this.setBackgroundColor(data.poster);
     });
   }
@@ -60,39 +64,58 @@ class MovieDetailView extends React.Component {
           <div className={styles.view__content__container}>
             <div className="*column">
               <div className={styles.mobile}>
-                <MovieHeading title={title} year={year} />
+                <Placeholder isReady={!this.state.isLoading}>
+                  <MovieHeading title={title} year={year} />
+                </Placeholder>
               </div>
-              {
-                poster &&
-                <MoviePoster source={poster} alt={`${title} poster`} />
-              }
+              <MoviePoster source={poster} alt={`${title} poster`} />
             </div>
             <div className="*column">
               <div className={styles.view__content__heading}>
                 <div className="*flex-child">
                   <div className={styles.desktop}>
-                    <MovieHeading title={title} year={year} />
+                    <Placeholder isReady={!this.state.isLoading}>
+                      <MovieHeading title={title} year={year} />
+                    </Placeholder>
                   </div>
-                  <MovieAttributes rating={6} time={runTime} genres={genre} />
+                  <Placeholder isReady={!this.state.isLoading}>
+                    <MovieAttributes rating={6} time={runTime} genres={genre} />
+                  </Placeholder>
                 </div>
               </div>
-              <table className={styles.view__content__involved}>
-                <tbody>
-                  <tr>
-                    <th>Director:</th>
-                    <td>{director}</td>
-                  </tr>
-                  <tr>
-                    <th>Writers:</th>
-                    <td>{writer}</td>
-                  </tr>
-                  <tr>
-                    <th>Actors:</th>
-                    <td>{actors}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <p>{plot}</p>
+              <ParagraphPlaceholder
+                isReady={!this.state.isLoading}
+                width={300}
+                height={20}
+                lineHeight={1.8}
+                lines={3}
+              >
+                <table className={styles.view__content__involved}>
+                  <tbody>
+                    <tr>
+                      <th>Director:</th>
+                      <td>{director}</td>
+                    </tr>
+                    <tr>
+                      <th>Writers:</th>
+                      <td>{writer}</td>
+                    </tr>
+                    <tr>
+                      <th>Actors:</th>
+                      <td>{actors}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </ParagraphPlaceholder>
+              <ParagraphPlaceholder
+                isReady={!this.state.isLoading}
+                width={500}
+                height={20}
+                lineHeight={1.5}
+                lines={5}
+              >
+                <p>{plot}</p>
+              </ParagraphPlaceholder>
             </div>
           </div>
         </div>
