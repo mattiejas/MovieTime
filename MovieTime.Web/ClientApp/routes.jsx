@@ -5,13 +5,16 @@ import Layout from './components/layout/Layout';
 import Home from './views/Home';
 import MovieDetailView from './views/movie/MovieDetailView';
 import NotFoundView from './views/notfound/NotFoundView';
+import RegistrationForm from './views/RegistrationForm/RegistrationForm';
 
 export const routes = (
   <Layout>
     <Switch>
       <Route exact path="/" component={Home} />
-      <Route path="/movie/detail/:title" component={MovieDetailView} />
-      <Route component={NotFoundView} />
+            <Route path="/movie/detail/:title" component={MovieDetailView} />
+            <Route path="/register" component={RegistrationForm} />
+            <Route component={NotFoundView} />
+     
     </Switch>
   </Layout>
 );
