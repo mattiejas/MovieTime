@@ -15,12 +15,12 @@ class MovieDetailView extends React.Component {
     super(props);
     this.state = {
       movie: {},
-      backgroundColor: undefined,
+      backgroundColor: null,
     };
   }
 
   componentDidMount() {
-    fetch(API + this.props.match.params.title).then((response) => response.json()).then((data) => {
+    fetch(API + this.props.match.params.title).then(response => response.json()).then((data) => {
       this.setState({
         movie: data,
       });
@@ -78,18 +78,18 @@ class MovieDetailView extends React.Component {
               </div>
               <table className={styles.view__content__involved}>
                 <tbody>
-                <tr>
-                  <th>Director:</th>
-                  <td>{director}</td>
-                </tr>
-                <tr>
-                  <th>Writers:</th>
-                  <td>{writer}</td>
-                </tr>
-                <tr>
-                  <th>Actors:</th>
-                  <td>{actors}</td>
-                </tr>
+                  <tr>
+                    <th>Director:</th>
+                    <td>{director}</td>
+                  </tr>
+                  <tr>
+                    <th>Writers:</th>
+                    <td>{writer}</td>
+                  </tr>
+                  <tr>
+                    <th>Actors:</th>
+                    <td>{actors}</td>
+                  </tr>
                 </tbody>
               </table>
               <p>{plot}</p>
