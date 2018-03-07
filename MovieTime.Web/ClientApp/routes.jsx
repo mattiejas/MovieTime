@@ -10,24 +10,25 @@ import RegistrationForm from './views/RegistrationForm/RegistrationForm';
 import Protected from './views/Protected';
 import Login from './views/login/Login';
 
-const PrivateRoute = ({ component: Component, authUser, ...rest }) => {
-  console.log('bla');
-  console.log(authUser);
-
+const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={props =>
-        authUser ? (
-          <Component {...props} />
-        ) : (
-          <Redirect
-            to={{
-              pathname: "/login",
-              state: { from: props.location }
-            }}
-          />
-        )
+      render={props => isAuthenticated === true
+        ? <Component {...props} />
+        : <Redirect to={{pathname: "/login", state: { from: props.location }}} />
+      }
+    />
+  )
+};
+
+const PublicRoute = ({ component: Component, isAuthenticated, ...rest }) => {
+  return (
+    <Route
+      {...rest}
+      render={props => isAuthenticated === false
+        ? <Component {...props} />
+        : <Redirect to="/" />
       }
     />
   )
@@ -38,29 +39,29 @@ class Router extends React.Component {
     super(props);
 
     this.state = {
-      authUser: null,
+      isAuthenticated: false,
     };
   }
 
   componentDidMount() {
-    console.log('mounting');
     auth.onAuthStateChanged((user) => {
       if (user) {
-        this.setState({ authUser: user });
+        this.setState({ isAuthenticated: true });
+      } else {
+        this.setState({ isAuthenticated: false })
       }
     });
   }
 
   render() {
-    console.log('render');
     return (
-      <Layout authUser={this.state.authUser}>
+      <Layout isAuthenticated={this.state.isAuthenticated}>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path="/movie/detail/:title" component={MovieDetailView} />
-          <Route path="/register" component={RegistrationForm} />
-          <Route path="/login" render={() => ( <Login authUser={this.state.authUser} /> )} />
-          <PrivateRoute path="/protected" authUser={this.state.authUser} component={Protected} />
+          <PublicRoute path="/movie/detail/:title" isAuthenticated={this.state.isAuthenticated} component={MovieDetailView} />
+          <PublicRoute path="/register" isAuthenticated={this.state.isAuthenticated} component={RegistrationForm} />
+          <PublicRoute path="/login" isAuthenticated={this.state.isAuthenticated} component={Login} />
+          <PrivateRoute path="/protected" isAuthenticated={this.state.isAuthenticated} component={Protected} />
           <Route component={NotFoundView} />
         </Switch>
       </Layout>

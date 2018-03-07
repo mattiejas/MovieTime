@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 
-import { auth } from '../../firebase';
+import { login } from '../../utils/auth';
 
 class Login extends Component {
   constructor(props) {
@@ -20,7 +20,7 @@ class Login extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    auth.signInWithEmailAndPassword(this.state.email, this.state.password)
+    login(this.state.email, this.state.password)
       .catch((err) => {
         this.setState({ error: err.message });
       });
@@ -37,12 +37,6 @@ class Login extends Component {
   }
 
   render() {
-    if (this.props.authUser) {
-      return (
-        <Redirect to={{ pathname: "/protected", state: { from: this.props.location }}} />
-      );
-    }
-
     return (
       <div>
         <h2>Login</h2>

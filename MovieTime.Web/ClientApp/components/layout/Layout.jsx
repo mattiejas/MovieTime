@@ -5,7 +5,7 @@ import { Navigation } from '../navigation/Navigation';
 
 const Layout = props => (
   <div>
-    <Navigation authUser={props.authUser} />
+    <Navigation isAuthenticated={props.isAuthenticated} />
     {props.children}
   </div>
 );

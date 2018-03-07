@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import cn from 'classnames';
 import isEmail from 'validator/lib/isEmail';
 import isLength from 'validator/lib/isLength';
-import { auth } from '../../firebase';
+import { register } from '../../utils/auth';
 import Field from './Field'
 
 export class RegistrationForm extends React.Component {
@@ -59,14 +59,15 @@ export class RegistrationForm extends React.Component {
 
     registerUserWithFireBase = (person) => {
         console.log('inside registerUserWithFireBase function' );
-        auth.createUserWithEmailAndPassword(person.email, person.password).catch(function (error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            // ...
-            console.log(errorCode);
-            console.log(errorMessage);
-        });
+        register(person.email, person.password)
+            .catch(function (error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // ...
+                console.log(errorCode);
+                console.log(errorMessage);
+            });
     };
 
 
@@ -95,7 +96,7 @@ export class RegistrationForm extends React.Component {
                         onChange={this.onInputChange}
                         validate={(val) => (val? false:'Password Required'  )}
                     />
-    
+
                     <br />
 
                     <input
