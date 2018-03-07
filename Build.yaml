@@ -5,14 +5,14 @@ steps:
   displayName: Restore NuGet Packages
   inputs:
     command: restore
-    projects: ./
+    projects: 
     
 # Compile
 - task: DotNetCoreCLI@2
   displayName: Compile
   inputs:
     command: build
-    projects: ./
+    projects:
 
 # Run unit tests
 - task: DotNetCoreCLI@2
