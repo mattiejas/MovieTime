@@ -1,14 +1,9 @@
 ﻿using System.Collections.Generic;
+using MovieTime.Web.Movie.Persistance.Omdb;
 using Newtonsoft.Json;
 
 namespace MovieTime.Web.MovieDetails
 {
-    public class Rating
-    {
-        public string Source { get; set; }
-        public string Value { get; set; }
-    }
-
     public class OmdbMovieModel
     {
         public string Title { get; set; }
