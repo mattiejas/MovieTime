@@ -1,7 +1,8 @@
-﻿using MovieTime.Web.Models;
-using MovieTime.Web.MovieDetails;
+﻿using MovieTime.Web.Movie.Persistance.Database;
+using MovieTime.Web.Movie.Persistance.Omdb;
+using MovieTime.Web.Movie.Persistance.ViewModels;
 
-namespace MovieTime.Web.Services
+namespace MovieTime.Web.Movie.Services
 {
     public interface IMovieService
     {

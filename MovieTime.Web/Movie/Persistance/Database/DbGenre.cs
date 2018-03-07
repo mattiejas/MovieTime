@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using MovieTime.Web.MovieDetails;
 
-namespace MovieTime.Web.Entities
+namespace MovieTime.Web.Movie.Persistance.Database
 {
     public class DbGenre
     {

@@ -1,5 +1,4 @@
-﻿using System;
-namespace MovieTime.Web.Genres
+﻿namespace MovieTime.Web.Movie.Persistance.Database
 {
     public class GenreForCreationDto
     {

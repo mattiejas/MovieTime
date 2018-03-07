@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace MovieTime.Web.MovieDetails
+﻿namespace MovieTime.Web.Movie.Persistance.Database
 {
     public class Genre
     {

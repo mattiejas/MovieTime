@@ -1,10 +1,11 @@
 ﻿using System;
 using AutoMapper;
-using MovieTime.Web.Entities;
-using MovieTime.Web.Models;
-using MovieTime.Web.MovieDetails;
+using MovieTime.Web.Movie.Persistance.Database;
+using MovieTime.Web.Movie.Persistance.Omdb;
+using MovieTime.Web.Movie.Persistance.ViewModels;
+using MovieTime.Web.Movie.Repositories;
 
-namespace MovieTime.Web.Services
+namespace MovieTime.Web.Movie.Services
 {
     public class MovieService : IMovieService
     {

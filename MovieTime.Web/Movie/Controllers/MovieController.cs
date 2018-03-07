@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using MovieTime.Web.Models;
-using MovieTime.Web.Services;
-using RestSharp;
+﻿using Microsoft.AspNetCore.Mvc;
+using MovieTime.Web.Movie.Persistance.Omdb;
+using MovieTime.Web.Movie.Persistance.ViewModels;
+using MovieTime.Web.Movie.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace MovieTime.Web.MovieDetails
+namespace MovieTime.Web.Movie.Controllers
 {
         [Route("api/[controller]")]
     public class MovieController : Controller

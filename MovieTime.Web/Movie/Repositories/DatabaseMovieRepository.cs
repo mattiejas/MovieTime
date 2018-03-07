@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MovieTime.Web.Entities;
-using MovieTime.Web.Services;
+using MovieTime.Web.Movie.Persistance;
+using MovieTime.Web.Movie.Persistance.Database;
 
-namespace MovieTime.Web.MovieDetails
+namespace MovieTime.Web.Movie.Repositories
 {
     public class DatabaseMovieRepository : IDatabaseMovieRespository
     {

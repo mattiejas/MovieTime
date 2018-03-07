@@ -4,8 +4,8 @@ using AutoMapper;
 using AutoMapper.Configuration;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
-using MovieTime.Web.Models;
-using MovieTime.Web.MovieDetails;
+using MovieTime.Web.Movie.Repositories;
+using MovieTime.Web.Utilities;
 using Xunit;
 using Serilog;
 

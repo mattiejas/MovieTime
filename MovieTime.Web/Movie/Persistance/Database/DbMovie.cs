@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Security.Cryptography.X509Certificates;
-using MovieTime.Web.Entities;
 
-namespace MovieTime.Web.MovieDetails
+namespace MovieTime.Web.Movie.Persistance.Database
 {
     public class DbMovie
     {
@@ -22,7 +20,10 @@ namespace MovieTime.Web.MovieDetails
 
         [Required]
         [Range(0.0, 10.0)]
-        public double Rated { get; set; }
+        public double Rating { get; set; }
+        
+        [Required]
+        public string Rated { get; set; }
 
         [Required]
         public ICollection<DbMovieGenre> Genres { get; set; }

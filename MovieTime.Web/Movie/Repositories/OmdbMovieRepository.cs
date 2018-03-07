@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
-using Microsoft.IdentityModel.Protocols;
-using MovieTime.Web.Models;
+using MovieTime.Web.Movie.Persistance.Database;
+using MovieTime.Web.Movie.Persistance.Omdb;
+using MovieTime.Web.Utilities;
 using RestSharp;
 
-namespace MovieTime.Web.MovieDetails
+namespace MovieTime.Web.Movie.Repositories
 {
     public class OmdbMovieRepository : IMovieRepository
     {

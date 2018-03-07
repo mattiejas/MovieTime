@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using MovieTime.Web.Services;
+using MovieTime.Web.Movie.Persistance.Database;
+using MovieTime.Web.Movie.Services;
 
-namespace MovieTime.Web.MovieDetails
+namespace MovieTime.Web.Movie.Controllers
 {
     [Route("api/moviedetails")]
     public class MovieDetailsController : Controller

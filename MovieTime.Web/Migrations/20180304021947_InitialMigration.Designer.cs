@@ -5,8 +5,8 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
-using MovieTime.Web.Entities;
 using System;
+using MovieTime.Web.Movie.Persistance;
 
 namespace MovieTime.Web.Migrations
 {

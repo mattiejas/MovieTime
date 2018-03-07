@@ -1,6 +1,6 @@
-﻿using MovieTime.Web.MovieDetails;
+﻿using MovieTime.Web.Movie.Persistance.Database;
 
-namespace MovieTime.Web.Services
+namespace MovieTime.Web.Movie.Repositories
 {
     public interface IDatabaseMovieRespository : IMovieRepository
     {

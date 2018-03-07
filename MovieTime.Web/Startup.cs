@@ -9,13 +9,13 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MovieTime.Web.Entities;
-using MovieTime.Web.SharedKernel;
-using MovieTime.Web.MovieDetails;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using MovieTime.Web.Services;
+using MovieTime.Web.Movie.Persistance;
+using MovieTime.Web.Movie.Repositories;
+using MovieTime.Web.Movie.Services;
+using MovieTime.Web.Utilities;
 
 namespace MovieTime.Web
 {

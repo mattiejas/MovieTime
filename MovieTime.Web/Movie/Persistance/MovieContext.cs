@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MovieTime.Web.MovieDetails;
+using MovieTime.Web.Movie.Persistance.Database;
 
-namespace MovieTime.Web.Entities
+namespace MovieTime.Web.Movie.Persistance
 {
     public class MovieContext : DbContext
     {

@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using MovieTime.Web.Movie.Persistance.Omdb;
 using Newtonsoft.Json;
 
-namespace MovieTime.Web.MovieDetails
+namespace MovieTime.Web.Movie.Persistance.Omdb
 {
     public class OmdbMovieModel
     {

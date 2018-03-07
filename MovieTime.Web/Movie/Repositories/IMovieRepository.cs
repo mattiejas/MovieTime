@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using MovieTime.Web.Movie.Persistance.Database;
 
-namespace MovieTime.Web.MovieDetails
+namespace MovieTime.Web.Movie.Repositories
 {
     public interface IMovieRepository
     {

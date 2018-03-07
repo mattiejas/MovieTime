@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using MovieTime.Web.MovieDetails;
+using MovieTime.Web.Movie.Persistance.Database;
 
-namespace MovieTime.Web.Entities
+namespace MovieTime.Web.Movie.Persistance
 {
     public static class MovieContextExtensions
     {
@@ -64,7 +64,7 @@ namespace MovieTime.Web.Entities
                     Director = "Peter",
                     Plot = "Long time ago, the legend of ORA was born. One day Little ORA decided to...",
                     Poster = "https://en.wikipedia.org/wiki/Potato#/media/File:Patates.jpg",
-                    Rated = 3.0,
+                    Rating = 3.0,
                     RunTimeInMinutes = 120,
                     Writer = "Super Saiyan",
                     Year = DateTime.Now,
@@ -78,7 +78,7 @@ namespace MovieTime.Web.Entities
                     Director = "Peter 2",
                     Plot = "Long time ago 2, the legend of ORA was born. One day Little ORA decided to...",
                     Poster = "https://en.wikipedia.org/wiki/Potato#/media/File:Patates.jpg",
-                    Rated = 6.0,
+                    Rating = 6.0,
                     RunTimeInMinutes = 118,
                     Writer = "Super Saiyan Instinct",
                     Year = DateTime.Now,
@@ -92,7 +92,7 @@ namespace MovieTime.Web.Entities
                     Director = "Bravo John",
                     Plot = "The panda, which learned his kung fu from....",
                     Poster = "http://www.imdb.com/title/tt0441773/mediaviewer/rm2261620224?ref_=tt_ov_i",
-                    Rated = 7.6,
+                    Rating = 7.6,
                     RunTimeInMinutes = 92,
                     Writer = "Jonathan Aibel",
                     Year = new DateTime(2008, 6, 6),
