@@ -25,16 +25,14 @@ namespace MovieTime.Web.MovieDetails
             throw new NotImplementedException();
         }
 
-        public DbMovie GetDatabaseMovieById(Guid movieGuid)
+        public DbMovie GetMovieById(string movieId)
         {
-            var movieByGuid = _context.Movies.FirstOrDefault(x => x.Id == movieGuid);
-            return movieByGuid;
+            return _context.Movies.FirstOrDefault(x => x.Id == movieId);
         }
 
-        public DbMovie GetDatabaseMovieByTitle(string title)
+        public DbMovie GetMovieByTitle(string title)
         {
-            var movieByTitle = _context.Movies.FirstOrDefault(x => x.Title == title);
-            return movieByTitle;
+            return _context.Movies.FirstOrDefault(x => x.Title == title);
         }
 
         public void DeleteMovieById(Guid id)

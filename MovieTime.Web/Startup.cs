@@ -15,6 +15,7 @@ using MovieTime.Web.MovieDetails;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using MovieTime.Web.Services;
 
 namespace MovieTime.Web
 {
@@ -55,7 +56,8 @@ namespace MovieTime.Web
                 connectionString = Configuration.GetConnectionString("Postgresql_DATABASE_URL");
                 services.AddDbContext<MovieContext>(options => options.UseNpgsql(connectionString));
             }
-            services.AddScoped<IMovieRepositoryTemporary, OmdbMovieRepository>();
+            services.AddScoped<IMovieService, MovieService>();
+            //services.AddScoped<IMovieRepository, OmdbMovieRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

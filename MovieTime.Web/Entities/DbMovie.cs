@@ -9,7 +9,7 @@ namespace MovieTime.Web.MovieDetails
     public class DbMovie
     {
         [Key]
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         [Required]
         [MinLength(1), MaxLength(40)]
@@ -49,7 +49,5 @@ namespace MovieTime.Web.MovieDetails
         [Required]
         [MaxLength(600)]
         public string Plot { get; set; }
-
-        public string ImdbId { get; set; }
     }
 }

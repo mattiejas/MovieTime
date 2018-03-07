@@ -15,14 +15,12 @@ namespace MovieTime.Web.MovieDetails
 //
 //        void DeleteMovie(Guid id);
 
-        IEnumerable<DbMovie> GetDatabaseMovies();
-        IEnumerable<DbMovie> GetDatabaseMoviesByPage(int page = 0);
-        DbMovie GetDatabaseMovieById(Guid movieGuid);
-        DbMovie GetDatabaseMovieByTitle(string title);
-        void DeleteMovieById(Guid id);
+        //IEnumerable<DbMovie> GetDatabaseMovies();
+        //IEnumerable<DbMovie> GetDatabaseMoviesByPage(int page = 0);
+        DbMovie GetMovieById(string id);
+        DbMovie GetMovieByTitle(string title);
+        void DeleteMovieById(string id);
         void DeleteMovieByTitle(string title);
         void AddMovie(DbMovie movie);
-        bool MovieExist(Guid guid);
-        bool SaveChanges();
     }
 }

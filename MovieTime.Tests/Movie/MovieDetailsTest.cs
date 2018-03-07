@@ -46,15 +46,15 @@ namespace MovieTime.Tests.Movie
         [Fact]
         public void GetMovieByIdTest()
         {
-            var movieModel = _omdbMovieRepository.GetMovieDetailsById("tt0112529");
+            var movieModel = _omdbMovieRepository.GetMovieById("tt0112529");
             Assert.Equal("Blood Ring 2", movieModel.Title);
         }
         
         [Fact]
         public void GetMovieByTitleTest()
         {
-            var movieModel = _omdbMovieRepository.GetMovieDetailsByTitle("Blood Ring 2");
-            Assert.Equal("tt0112529", movieModel.ImdbId);
+            var movieModel = _omdbMovieRepository.GetMovieByTitle("Blood Ring 2");
+            Assert.Equal("tt0112529", movieModel.Id);
         }
         
         [Fact]
@@ -70,9 +70,11 @@ namespace MovieTime.Tests.Movie
         [Fact]
         public void GetMoviesByTitleControllerTest()
         {
-          //  var controller = new MovieController(_omdbMovieRepository);
-          //  var searchResultsModel = controller.GetMovies("ring");
-         //   Assert.Equal(635, searchResultsModel.TotalResults);
+            //var controller = new MovieController(_omdbMovieRepository);
+            //var searchResultsModel = controller.GetMovies("ring");
+            //Assert.Equal(635, searchResultsModel.TotalResults);
         }
+
+        public void 
     }
 }

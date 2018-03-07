@@ -7,14 +7,8 @@ using RestSharp;
 
 namespace MovieTime.Web.MovieDetails
 {
-    public interface IMovieRepositoryTemporary
-    {
-        MovieDetailsViewModel GetMovieDetailsById(string id);
-        MovieDetailsViewModel GetMovieDetailsByTitle(string id);
-        SearchResultsModel GetMoviesByTitle(string title);
-    }
-    
-    public class OmdbMovieRepository : IMovieRepositoryTemporary
+
+    public class OmdbMovieRepository : IMovieRepository
     {
         private static readonly string BASE_URL = "http://www.omdbapi.com";
         private static readonly string API_KEY_ARG = "apikey";
@@ -33,27 +27,27 @@ namespace MovieTime.Web.MovieDetails
             _mapper = mapper;
         }
 
-        public MovieDetailsViewModel GetMovieDetailsById(string id) => GetMovieDetailsByArg(null, id);
+        public DbMovie GetMovieById(string id) => GetMovieByArg(null, id);
 
-        public MovieDetailsViewModel GetMovieDetailsByTitle(string title) => GetMovieDetailsByArg(title);
+        public DbMovie GetMovieByTitle(string title) => GetMovieByArg(title);
 
-        private MovieDetailsViewModel GetMovieDetailsByArg(string title, string id = null)
+        private DbMovie GetMovieByArg(string title, string id = null)
         {
             if (string.IsNullOrEmpty(title) && string.IsNullOrEmpty(id)) throw new Exception("Title and Id can't both be null.");
             if (title != null && id != null) throw new Exception("Title and Id can't both be filled.");
-            
+
             var client = CreateClient();
             var request = CreateRequest("", Method.GET);
-            
+
             if (title != null) request.AddParameter(MOVIE_TITLE_ARG, title);
             if (id != null) request.AddParameter(MOVIE_ID_ARG, id);
-            
+
             request.AddParameter(MOVIE_PLOT_ARG, "full");
 
             var response = client.Execute<OmdbMovieModel>(request);
             if (response.Data == null) throw new Exception("Empty response");
 
-            var movieDetailsModel = _mapper.Map<OmdbMovieModel, MovieDetailsViewModel>(response.Data);
+            var movieDetailsModel = _mapper.Map<OmdbMovieModel, DbMovie>(response.Data);
             return movieDetailsModel;
         }
 
@@ -105,27 +99,17 @@ namespace MovieTime.Web.MovieDetails
             return client;
         }
 
-        public IEnumerable<MovieDetailsViewModel> GetMovies(int page = 0)
+        public void DeleteMovieById(string id)
         {
             throw new NotImplementedException();
         }
 
-        public MovieDetailsViewModel GetMovieById(string id)
+        public void DeleteMovieByTitle(string title)
         {
             throw new NotImplementedException();
         }
-
-//        public MovieDetailsViewModel GetMoviesByTitle(string id)
-//        {
-//            throw new NotImplementedException();
-//        }
 
         public void AddMovie(DbMovie movie)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteMovie(Guid id)
         {
             throw new NotImplementedException();
         }
