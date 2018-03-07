@@ -1,0 +1,37 @@
+@import "../../styles/core";
+
+.modal__background {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10000;
+  display: flex;
+  align-items: flex-start;
+  .modal {
+    max-width: 1200px;
+    width: 100%;
+    background-color: #fff;
+    padding: 40px;
+    margin: 70px 10px;
+    border-radius: 5px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    h1 {
+      margin: 0;
+    }
+  }
+}
+
+@media (min-width: $grid-sm) {
+  .modal__background {
+    align-items: center;
+    .modal {
+      min-width: 600px;
+      min-height: 300px;
+      width: unset;
+      margin: 0 auto;
+    }
+  }
+}

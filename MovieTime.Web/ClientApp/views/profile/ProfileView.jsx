@@ -5,12 +5,14 @@ import Button from '../../components/button/Button';
 import ProfilePicture from '../../components/profile/ProfilePicture';
 
 import styles from './ProfileView.scss';
+import Modal from "../../components/modal/Modal";
 
 class ProfileView extends React.Component {
   constructor() {
     super();
     this.state = {
       user: null,
+      isEditing: false,
     };
   }
 
@@ -20,10 +22,28 @@ class ProfileView extends React.Component {
     });
   }
 
+  onEdit() {
+    this.setState({
+      isEditing: true,
+    });
+  }
+
+  onDiscard() {
+    this.setState({
+      isEditing: false,
+    });
+  }
+
   render() {
     const {id} = this.props.match.params;
     return (
       <div className={styles.view}>
+        {
+          this.state.isEditing &&
+            <Modal title="Edit Profile" hideModal={() => this.onDiscard()}>
+              Pls edit me.
+            </Modal>
+        }
         <div className={styles.view__background} />
         <div className={styles.view__header}>
           <div className={styles.header}>
@@ -39,7 +59,7 @@ class ProfileView extends React.Component {
           </div>
           <div className={styles.buttons__container}>
             <div className={styles.buttons}>
-              <Button dark icon="pencil">Edit</Button>
+              <Button dark icon="pencil" onClick={() => this.onEdit()}>Edit</Button>
               <Button dark icon="user">Follow</Button>
             </div>
           </div>
