@@ -134,8 +134,8 @@ namespace MovieTime.Web.Movie.Persistance
             };
 
             context.Movies.AddRange(movies);
-//            context.Genres.AddRange(genres);
-//            context.MovieGenre.AddRange(movieGenre);
+            context.Genres.AddRange(genres);
+            context.MovieGenre.AddRange(movieGenre);
             context.SaveChanges();
         }
     }

@@ -9,6 +9,5 @@ namespace MovieTime.Web.Movie.Repositories
         //IEnumerable<DbMovie> GetDatabaseMoviesByPage(int page = 0);
         DbMovie GetMovieById(string id);
         DbMovie GetMovieByTitle(string title);
-       
     }
 }
