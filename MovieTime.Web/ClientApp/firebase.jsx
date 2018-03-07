@@ -1,13 +1,12 @@
 ﻿import * as firebase from 'firebase';
 
-
 const config = {
-    apiKey: "AIzaSyDNDwcEH5OgSWvPl4mNuxgwprJmvJV79xA",
-    authDomain: "movietime-hhs.firebaseapp.com",
-    databaseURL: "https://movietime-hhs.firebaseio.com",
-    projectId: "movietime-hhs",
-    storageBucket: "movietime-hhs.appspot.com",
-    messagingSenderId: "886263986044"
+    apiKey: "AIzaSyBwd4udqmlGAPCe5EFTI4jCxWlN1-0_4Ks",
+    authDomain: "movietime-hhs-c73b9.firebaseapp.com",
+    databaseURL: "https://movietime-hhs-c73b9.firebaseio.com",
+    projectId: "movietime-hhs-c73b9",
+    storageBucket: "",
+    messagingSenderId: "473517215049"
 };
 
 firebase.initializeApp(config);

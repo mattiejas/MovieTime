@@ -24,19 +24,20 @@ export class Field extends Component {
         const name = this.props.name;
         const value = evt.target.value;
         let error = this.props.validate ? this.props.validate(value) : false;
-        if (!error && name === 'password') {
-            checkPassword(value)
-                .then((result) => {
-                    console.log('onChange, checkPassword, Then> Result=', result);
-                    if (result > 0) error = 'This password has been pwned!';
-                    this.setState({ value, error });
-                    this.props.onChange({ name, value, error });
-                });
-        } else {
-
+        /*
+            if (!error && name === 'password') {
+                checkPassword(value)
+                    .then((result) => {
+                        console.log('onChange, checkPassword, Then> Result=', result);
+                        if (result > 0) error = 'This password has been pwned!';
+                        this.setState({ value, error });
+                        this.props.onChange({ name, value, error });
+                    });
+            } else {
+        */
             this.setState({ value, error });
             this.props.onChange({ name, value, error });
-        }
+        // }
 
     };
 
