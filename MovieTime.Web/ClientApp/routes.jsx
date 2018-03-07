@@ -9,6 +9,7 @@ import NotFoundView from './views/notfound/NotFoundView';
 import RegistrationForm from './views/RegistrationForm/RegistrationForm';
 import Protected from './views/Protected';
 import Login from './views/login/Login';
+import { SecretDataView } from './views/SecretDataView';
 
 const PrivateRoute = ({ component: Component, authUser, ...rest }) => {
   console.log('bla');
@@ -61,6 +62,7 @@ class Router extends React.Component {
           <Route path="/register" component={RegistrationForm} />
           <Route path="/login" render={() => ( <Login authUser={this.state.authUser} /> )} />
           <PrivateRoute path="/protected" authUser={this.state.authUser} component={Protected} />
+          <Route path="/secretdata"  component={SecretDataView} />
           <Route component={NotFoundView} />
         </Switch>
       </Layout>
