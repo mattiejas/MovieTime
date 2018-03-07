@@ -29,13 +29,15 @@ export class Field extends Component {
                 .then((result) => {
                     console.log('onChange, checkPassword, Then> Result=', result);
                     if (result > 0) error = 'This password has been pwned!';
-                    this.setState({ value, error }); 
+                    this.setState({ value, error });
                     this.props.onChange({ name, value, error });
                 });
-        }
-        this.setState({ value, error });
+        } else {
 
-        this.props.onChange({name, value, error});
+            this.setState({ value, error });
+            this.props.onChange({ name, value, error });
+        }
+
     };
 
     render() {
