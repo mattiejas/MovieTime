@@ -3,7 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "vendor": "webpack --config webpack.config.vendor.js && webpack --config webpack.config.js"
+    "vendor": "webpack --config webpack.config.vendor.js && webpack --config webpack.config.js",
+    "start": "export ASPNETCORE_ENVIRONMENT=Development && dotnet run"
   },
   "devDependencies": {
     "aspnet-webpack": "^2.0.1",
@@ -12,6 +13,8 @@
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-es2015-destructuring": "^6.23.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "css-loader": "^0.28.9",

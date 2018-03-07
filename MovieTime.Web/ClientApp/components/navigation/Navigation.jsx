@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import cn from 'classnames';
@@ -30,8 +29,6 @@ export class Navigation extends Component {
   }
 
   render() {
-    console.log('this navigation', this.props);
-
     return (
       <div className={cn(styles.navigation)}>
         <div className={styles.title}>Movie<span>Time</span></div>
@@ -45,7 +42,9 @@ export class Navigation extends Component {
           <li><NavLink activeClassName={styles['navigation__item--active']} to="/404" onClick={() => this.toggleMenu()}>404</NavLink></li>
           <li><NavLink activeClassName={styles['navigation__item--active']} to="/movie/detail/ferris bueller's day off" onClick={() => this.toggleMenu()}>Movie Detail</NavLink></li>
           <li><NavLink activeClassName={styles['navigation__item--active']} to="/register" onClick={() => this.toggleMenu()}>Register</NavLink></li>
-          <li><NavLink activeClassName={styles['navigation__item--active']} to="/test" onClick={() => this.toggleMenu()}>Test</NavLink></li>
+          {this.props.authUser &&
+            <li><NavLink activeClassName={styles['navigation__item--active']} to="/protected" onClick={() => this.toggleMenu()}>Protected</NavLink></li>
+          }
         </ul>
       </div>
     );
