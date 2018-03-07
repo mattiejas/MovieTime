@@ -39,7 +39,7 @@ namespace MovieTime.Web.Movie.Services
 
             if (movieModel == null)
             {
-                movieModel = _movieRepository.GetMovieById(title);
+                movieModel = _movieRepository.GetMovieByTitle(title);
             }
 
             var movieDetailsVm = _mapper.Map<DbMovie, MovieDetailsViewModel>(movieModel); //todo test null
