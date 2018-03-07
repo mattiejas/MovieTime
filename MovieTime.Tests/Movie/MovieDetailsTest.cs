@@ -11,6 +11,7 @@ using Serilog;
 
 namespace MovieTime.Tests.Movie
 {
+    
     public class MovieDetailsTest
     {
         private readonly MovieService _movieService;
