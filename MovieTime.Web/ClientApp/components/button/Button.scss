@@ -3,11 +3,14 @@
 .button {
   .button__inner {
     i {
-      padding: 2px 7px 0 0;
+      padding: 0 8px 0 0;
+      font-size: 1.3em;
+      color: $font-color-light;
     }
+    height: 100%;
+    width: 100%;
     display: flex;
-    padding: 3px 0 0 0;
-    align-items: baseline;
+    align-items: center;
     text-transform: uppercase;
   }
   cursor: pointer;
@@ -20,11 +23,31 @@
   color: $font-color-light;
   font-weight: 400;
   border-radius: 5px;
-  box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.10);
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.20);
   &:hover {
     background-color: darken($button-default-color, 3);
   }
   &:active {
     background-color: darken($button-default-color, 5);
+  }
+  &.dark {
+    background-color: $secondary-dark-color;
+    color: $light-color;
+    i {
+      color: $light-color;
+    }
+    &:hover {
+      background-color: $secondary-color;
+    }
+    &:active {
+      background-color: darken($secondary-dark-color, 20);
+    }
+  }
+  margin: 0 10px;
+  &:first-child {
+    margin-left: 0;
+  }
+  &:last-child {
+    margin-right: 0;
   }
 }

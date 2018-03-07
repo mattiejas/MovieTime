@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
 
 import styles from './Button.scss';
 import Icon from '../icon/Icon';
@@ -7,7 +8,7 @@ import Icon from '../icon/Icon';
 const Button = props => (
   <div
     role="button"
-    className={styles.button}
+    className={cn(styles.button, props.dark ? styles.dark : '')}
     tabIndex={0}
     onFocus={props.onFocus}
     onClick={props.onClick}
@@ -33,6 +34,7 @@ Button.propTypes = {
   onKeyDown: PropTypes.func,
   onKeyUp: PropTypes.func,
   onKeyPress: PropTypes.func,
+  dark: PropTypes.bool,
 };
 
 Button.defaultProps = {
@@ -42,6 +44,7 @@ Button.defaultProps = {
   onKeyDown: () => {},
   onKeyUp: () => {},
   onKeyPress: () => {},
+  dark: false,
 };
 
 export default Button;

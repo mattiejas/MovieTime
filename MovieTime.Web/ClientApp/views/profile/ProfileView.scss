@@ -1,0 +1,171 @@
+@import "../../styles/core";
+
+.view { }
+.view__background {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  background-color: $secondary-dark-color;
+  height: 30vh;
+  width: 100%;
+  z-index: 1;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.10);
+}
+
+.view__header {
+  position: absolute;
+  top: 50px;
+  z-index: 2;
+}
+
+.header {
+  width: 100%;
+  padding: 0 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-column-gap: 25px;
+  grid-template-columns: 25% 1fr;
+}
+
+.header__content {
+}
+
+.header__picture {
+  display: flex;
+  align-items: center;
+  height: 30vh;
+  .picture {
+    height: auto;
+    width: 100%;
+  }
+}
+
+.name {
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  h1 {
+    font-size: 1.4em;
+    color: #fff;
+    margin: 0;
+  }
+  h3 {
+    font-size: 1rem;
+    font-weight: 300;
+    font-style: italic;
+    color: #fff;
+    margin: 0;
+  }
+}
+
+.buttons__container {
+  .buttons {
+    background-color: $secondary-dark-color;
+    width: 100%;
+    margin-top: -25px;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 20px;
+    padding-bottom: 20px;
+  }
+}
+
+.content {
+  max-width: 1200px;
+  margin: 10px auto 0 auto;
+  padding: 10px;
+}
+
+@media (min-width: $grid-sm) {
+  .view__background {
+    border-top: 10px solid $secondary-dark-color;
+  }
+
+  .header {
+    grid-template-columns: 240px 1fr;
+    padding: 0 20px;
+    margin-top: 50px;
+    display: grid;
+    grid-column-gap: 25px;
+  }
+
+  .buttons__container {
+    grid-template-columns: 240px 1fr;
+    grid-template-areas: ". buttons";
+    .buttons {
+      display: block;
+      grid-area: buttons;
+      width: auto;
+      background-color: transparent;
+      padding: 0;
+      margin: -70px 0 0 285px;
+    }
+  }
+
+  .header__content {
+    display: block;
+    height: 30vh;
+    padding: 0 0 25px 0;
+    margin-top: -60px;
+  }
+
+  .content {
+    margin-top: 100px;
+    padding: 20px;
+  }
+
+  .header__picture {
+    margin-top: 40px;
+  }
+
+  .name {
+    justify-content: flex-end;
+    h1 {
+      font-size: 1.8em;
+      margin-bottom: 10px;
+    }
+    h3 {
+      font-size: 1em;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+@media (min-width: $grid-md) {
+  .view {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .buttons__container {
+    grid-template-columns: 340px 1fr;
+    grid-template-areas: ". buttons";
+    max-width: 1200px;
+    margin: 0 auto;
+    .buttons {
+      display: block;
+      grid-area: buttons;
+      width: auto;
+      background-color: transparent;
+      padding: 0;
+      margin: -70px 0 0 400px;
+    }
+  }
+  .header {
+    grid-template-columns: 340px 1fr;
+    grid-column-gap: 40px;
+  }
+  .header__content {
+    margin-top: -60px;
+  }
+  .name {
+    h1 {
+      font-size: 2.0em;
+    }
+  }
+  .content {
+    margin-top: 120px;
+    padding: 20px;
+  }
+}
