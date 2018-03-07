@@ -18,9 +18,9 @@ namespace MovieTime.Web.MovieDetails
         }
 
         [HttpGet("{id}", Name = "GetMovieDetails")]
-        public IActionResult GetMovieDetails(Guid id)
+        public IActionResult GetMovieDetails(string id)
         {
-            var movie = _movieRepository.GetDatabaseMovieById(id);
+            var movie = _movieRepository.GetMovieById(id);
 
             if (movie == null) return NotFound();
 
@@ -48,9 +48,9 @@ namespace MovieTime.Web.MovieDetails
 
             var movieEntity = _mapper.Map<DbMovie>(movie);
             _movieRepository.AddMovie(movieEntity);
-            bool success = _movieRepository.SaveChanges();
+            //bool success = _movieRepository.SaveChanges();
 
-            if (!success) throw new Exception("Creating an author failed on save.");
+            //if (!success) throw new Exception("Creating an author failed on save.");
 
             var movieToReturn = _mapper.Map<MovieDetailDto>(movieEntity);
             var routeName = "GetMovieDetails";

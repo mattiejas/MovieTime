@@ -74,7 +74,5 @@ namespace MovieTime.Tests.Movie
             //var searchResultsModel = controller.GetMovies("ring");
             //Assert.Equal(635, searchResultsModel.TotalResults);
         }
-
-        public void 
     }
 }

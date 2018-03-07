@@ -5,7 +5,7 @@ namespace MovieTime.Web.Entities
 {
     public class DbMovieGenre
     {
-        public Guid DbMovieId { get; set; }
+        public string DbMovieId { get; set; }
         public DbMovie Movie { get; set; }
 
         public string DbGenreId { get; set; }

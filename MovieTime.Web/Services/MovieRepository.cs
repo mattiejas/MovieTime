@@ -35,7 +35,7 @@ namespace MovieTime.Web.MovieDetails
             return _context.Movies.FirstOrDefault(x => x.Title == title);
         }
 
-        public void DeleteMovieById(Guid id)
+        public void DeleteMovieById(string id)
         {
             throw new NotImplementedException();
         }
@@ -47,18 +47,7 @@ namespace MovieTime.Web.MovieDetails
 
         public void AddMovie(DbMovie movie)
         {
-            movie.Id = Guid.NewGuid();
             _context.Movies.Add(movie);
-        }
-
-        public bool MovieExist(Guid guid)
-        {
-            return _context.Movies.Any(x => x.Id == guid);
-        }
-
-        public bool SaveChanges()
-        {
-            return _context.SaveChanges() >= 0;
         }
     }
 }

@@ -58,13 +58,12 @@ namespace MovieTime.Web.Entities
             {
                 new DbMovie()
                 {
-                    Id = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bd3"),
+                    Id = "25320c5e-f58a-4b1f-b63a-8ee07a840bd3",
                     Title = "The legend of ORA, the potato",
                     Actors = "John, Maco, Sphent",
                     Director = "Peter",
                     Plot = "Long time ago, the legend of ORA was born. One day Little ORA decided to...",
                     Poster = "https://en.wikipedia.org/wiki/Potato#/media/File:Patates.jpg",
-                    ImdbId = "1",
                     Rated = 3.0,
                     RunTimeInMinutes = 120,
                     Writer = "Super Saiyan",
@@ -73,13 +72,12 @@ namespace MovieTime.Web.Entities
 
                 new DbMovie()
                 {
-                    Id = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bdf"),
+                    Id = "25320c5e-f58a-4b1f-b63a-8ee07a840bdf",
                     Title = "The legend of ORA, the potato 2",
                     Actors = "John 2, Maco 2, Sphent 2",
                     Director = "Peter 2",
                     Plot = "Long time ago 2, the legend of ORA was born. One day Little ORA decided to...",
                     Poster = "https://en.wikipedia.org/wiki/Potato#/media/File:Patates.jpg",
-                    ImdbId = "2",
                     Rated = 6.0,
                     RunTimeInMinutes = 118,
                     Writer = "Super Saiyan Instinct",
@@ -88,13 +86,12 @@ namespace MovieTime.Web.Entities
 
                 new DbMovie()
                 {
-                    Id = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bd1"),
+                    Id = "25320c5e-f58a-4b1f-b63a-8ee07a840bd1",
                     Title = "Kungfu panda",
                     Actors = "Johny bravo",
                     Director = "Bravo John",
                     Plot = "The panda, which learned his kung fu from....",
                     Poster = "http://www.imdb.com/title/tt0441773/mediaviewer/rm2261620224?ref_=tt_ov_i",
-                    ImdbId = "tt0441773",
                     Rated = 7.6,
                     RunTimeInMinutes = 92,
                     Writer = "Jonathan Aibel",
