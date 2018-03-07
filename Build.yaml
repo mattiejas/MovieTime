@@ -1,0 +1,38 @@
+steps:
+
+# Restore NuGet packages
+- task: DotNetCoreCLI@2
+  displayName: Restore NuGet Packages
+  inputs:
+    command: restore
+    projects: ./
+    
+# Compile
+- task: DotNetCoreCLI@2
+  displayName: Compile
+  inputs:
+    command: build
+    projects: ./
+
+# Run unit tests
+- task: DotNetCoreCLI@2
+  displayName: Run Unit Tests
+  inputs:
+    command: test
+    projects: ./MovieTime.Tests
+
+# Prepare publish files
+- task: DotNetCoreCLI@2
+  displayName: Prepare Publish Files
+  inputs:
+    command: publish
+    projects: ./
+    arguments: --output $(Build.ArtifactStagingDirectory)
+
+# Publish the artifacts
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifacts
+  inputs:
+    pathToPublish: $(Build.ArtifactStagingDirectory)
+    artifactName: deploy
+artifactType: container
