@@ -21,13 +21,13 @@ const Button = props => (
         props.icon !== '' &&
         <Icon type={props.icon} />
       }
-      {props.children}
+      <span className={props.children !== '' && props.icon !== '' ? styles.spacing : ''} />{props.children}
     </div>
   </div>
 );
 
 Button.propTypes = {
-  children: PropTypes.string.isRequired,
+  children: PropTypes.string,
   icon: PropTypes.string,
   onClick: PropTypes.func,
   onFocus: PropTypes.func,
@@ -38,6 +38,7 @@ Button.propTypes = {
 };
 
 Button.defaultProps = {
+  children: '',
   icon: '',
   onClick: () => {},
   onFocus: () => {},

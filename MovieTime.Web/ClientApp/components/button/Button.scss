@@ -3,9 +3,12 @@
 .button {
   .button__inner {
     i {
-      padding: 0 8px 0 0;
+      padding: 0 2px 0 1px;
       font-size: 1.3em;
       color: $font-color-light;
+    }
+    .spacing {
+      padding-left: 8px;
     }
     height: 100%;
     width: 100%;
@@ -14,6 +17,7 @@
     text-transform: uppercase;
   }
   cursor: pointer;
+  white-space: nowrap;
   font-size: 14px;
   display: inline-block;
   height: 35px;
@@ -49,5 +53,39 @@
   }
   &:last-child {
     margin-right: 0;
+  }
+}
+
+.group {
+  display: flex;
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.20);
+
+  .button {
+    border-radius: 0;
+    margin: 0;
+    box-shadow: none;
+
+    &:first-child {
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+    }
+    &:nth-child(n) {
+      border-right: 2px solid $light-color;
+    }
+    &.dark {
+      &:nth-child(n) {
+        border-right: 2px solid $secondary-color;
+      }
+    }
+    &:last-child {
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+      border: none;
+    }
+    &.dark {
+      &:last-child {
+        border: none;
+      }
+    }
   }
 }

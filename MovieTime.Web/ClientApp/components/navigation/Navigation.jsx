@@ -6,6 +6,7 @@ import cn from 'classnames';
 import styles from './Navigation.scss';
 import Icon from '../icon/Icon';
 import Button from "../button/Button";
+import ButtonGroup from "../button/ButtonGroup";
 
 export class Navigation extends Component {
   constructor() {
@@ -48,6 +49,10 @@ export class Navigation extends Component {
           </ul>
           <div className={styles.buttons}>
             <Button icon="user">Login</Button>
+            <ButtonGroup>
+              <Button icon="user">Eddie Brock</Button>
+              <Button icon="power-off" />
+            </ButtonGroup>
           </div>
         </div>
       </div>
