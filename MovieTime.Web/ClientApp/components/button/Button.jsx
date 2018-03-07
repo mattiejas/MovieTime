@@ -8,7 +8,7 @@ import Icon from '../icon/Icon';
 const Button = props => (
   <div
     role="button"
-    className={cn(styles.button, props.dark ? styles.dark : '')}
+    className={cn(styles.button, props.dark ? styles.dark : '', props.danger ? styles.danger : '', props.className)}
     tabIndex={0}
     onFocus={props.onFocus}
     onClick={props.onClick}
@@ -35,6 +35,8 @@ Button.propTypes = {
   onKeyUp: PropTypes.func,
   onKeyPress: PropTypes.func,
   dark: PropTypes.bool,
+  danger: PropTypes.bool,
+  className: PropTypes.string,
 };
 
 Button.defaultProps = {
@@ -46,6 +48,8 @@ Button.defaultProps = {
   onKeyUp: () => {},
   onKeyPress: () => {},
   dark: false,
+  danger: false,
+  className: '',
 };
 
 export default Button;

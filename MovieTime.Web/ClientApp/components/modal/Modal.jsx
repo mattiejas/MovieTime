@@ -40,7 +40,9 @@ class Modal extends React.Component {
               <hr />
             </div>
           }
-          {this.props.children}
+          <div className={styles.content}>
+            {this.props.children}
+          </div>
         </div>
       </div>
     );

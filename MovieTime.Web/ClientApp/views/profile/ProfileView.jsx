@@ -3,9 +3,37 @@ import PropTypes from 'prop-types';
 
 import Button from '../../components/button/Button';
 import ProfilePicture from '../../components/profile/ProfilePicture';
+import Input from '../../components/input/Input';
+import Modal from '../../components/modal/Modal';
 
 import styles from './ProfileView.scss';
-import Modal from "../../components/modal/Modal";
+
+const EditProfileModal = props => (
+  <Modal title="Edit Profile" hideModal={props.hideModal}>
+    <div className={styles.edit}>
+      <div className={styles.group}>
+        <Input label="First Name" />
+        <Input label="Last Name" />
+      </div>
+      <div className={styles.group}>
+        <Input label="E-mail" />
+      </div>
+      <hr style={{ marginTop: '20px' }} />
+      <div className={styles.group}>
+        <Input label="Old Password" />
+      </div>
+      <div className={styles.group}>
+        <Input label="New Password" />
+        <Input label="Repeat Password" />
+      </div>
+      <hr style={{ marginTop: '20px' }} />
+      <div className={styles.buttons}>
+        <Button className={styles.button} danger onClick={props.hideModal}>Cancel</Button>
+        <Button className={styles.button} dark>Update</Button>
+      </div>
+    </div>
+  </Modal>
+);
 
 class ProfileView extends React.Component {
   constructor() {
@@ -35,14 +63,12 @@ class ProfileView extends React.Component {
   }
 
   render() {
-    const {id} = this.props.match.params;
+    const { id } = this.props.match.params;
     return (
       <div className={styles.view}>
         {
           this.state.isEditing &&
-            <Modal title="Edit Profile" hideModal={() => this.onDiscard()}>
-              Pls edit me.
-            </Modal>
+            <EditProfileModal hideModal={() => this.onDiscard()} />
         }
         <div className={styles.view__background} />
         <div className={styles.view__header}>
