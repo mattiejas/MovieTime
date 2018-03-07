@@ -4,21 +4,33 @@ using System.Collections.Generic;
 
 namespace MovieTime.Web.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Genres",
+                columns: table => new
+                {
+                    Name = table.Column<string>(nullable: false),
+                    CustomField = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Genres", x => x.Name);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Movies",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<string>(nullable: false),
                     Actors = table.Column<string>(maxLength: 200, nullable: false),
                     Director = table.Column<string>(maxLength: 200, nullable: false),
-                    ImdbId = table.Column<string>(nullable: true),
                     Plot = table.Column<string>(maxLength: 600, nullable: false),
                     Poster = table.Column<string>(nullable: false),
-                    Rated = table.Column<double>(nullable: false),
+                    Rated = table.Column<string>(nullable: false),
+                    Rating = table.Column<double>(nullable: false),
                     RunTimeInMinutes = table.Column<int>(maxLength: 1440, nullable: false),
                     Title = table.Column<string>(maxLength: 40, nullable: false),
                     Writer = table.Column<string>(maxLength: 200, nullable: false),
@@ -30,32 +42,40 @@ namespace MovieTime.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Genres",
+                name: "MovieGenre",
                 columns: table => new
                 {
-                    Name = table.Column<string>(nullable: false),
-                    CustomField = table.Column<bool>(nullable: false),
-                    DbMovieId = table.Column<Guid>(nullable: true)
+                    DbMovieId = table.Column<string>(nullable: false),
+                    DbGenreId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Genres", x => x.Name);
+                    table.PrimaryKey("PK_MovieGenre", x => new { x.DbMovieId, x.DbGenreId });
                     table.ForeignKey(
-                        name: "FK_Genres_Movies_DbMovieId",
+                        name: "FK_MovieGenre_Genres_DbGenreId",
+                        column: x => x.DbGenreId,
+                        principalTable: "Genres",
+                        principalColumn: "Name",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MovieGenre_Movies_DbMovieId",
                         column: x => x.DbMovieId,
                         principalTable: "Movies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Genres_DbMovieId",
-                table: "Genres",
-                column: "DbMovieId");
+                name: "IX_MovieGenre_DbGenreId",
+                table: "MovieGenre",
+                column: "DbGenreId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "MovieGenre");
+
             migrationBuilder.DropTable(
                 name: "Genres");
 

@@ -9,11 +9,12 @@ namespace MovieTime.Web.Movie.Persistance
         public static void EnsureSeedDataForContext(this MovieContext context)
         {
             // Clear the database. Don't do this for production environment(s)
+            context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
-            context.Movies.RemoveRange(context.Movies);
-            context.Genres.RemoveRange(context.Genres);
-            context.MovieGenre.RemoveRange(context.MovieGenre);
-            context.SaveChanges();
+//            context.Movies.RemoveRange(context.Movies);
+//            context.Genres.RemoveRange(context.Genres);
+//            context.MovieGenre.RemoveRange(context.MovieGenre);
+//            context.SaveChanges();
 
             // INIT SEED DATA
 
@@ -65,6 +66,7 @@ namespace MovieTime.Web.Movie.Persistance
                     Plot = "Long time ago, the legend of ORA was born. One day Little ORA decided to...",
                     Poster = "https://en.wikipedia.org/wiki/Potato#/media/File:Patates.jpg",
                     Rating = 3.0,
+                    Rated = "PG-13",
                     RunTimeInMinutes = 120,
                     Writer = "Super Saiyan",
                     Year = DateTime.Now,
@@ -79,6 +81,7 @@ namespace MovieTime.Web.Movie.Persistance
                     Plot = "Long time ago 2, the legend of ORA was born. One day Little ORA decided to...",
                     Poster = "https://en.wikipedia.org/wiki/Potato#/media/File:Patates.jpg",
                     Rating = 6.0,
+                    Rated = "PG-13",
                     RunTimeInMinutes = 118,
                     Writer = "Super Saiyan Instinct",
                     Year = DateTime.Now,
@@ -93,6 +96,7 @@ namespace MovieTime.Web.Movie.Persistance
                     Plot = "The panda, which learned his kung fu from....",
                     Poster = "http://www.imdb.com/title/tt0441773/mediaviewer/rm2261620224?ref_=tt_ov_i",
                     Rating = 7.6,
+                    Rated = "PG-13",
                     RunTimeInMinutes = 92,
                     Writer = "Jonathan Aibel",
                     Year = new DateTime(2008, 6, 6),
@@ -130,8 +134,8 @@ namespace MovieTime.Web.Movie.Persistance
             };
 
             context.Movies.AddRange(movies);
-            context.Genres.AddRange(genres);
-            context.MovieGenre.AddRange(movieGenre);
+//            context.Genres.AddRange(genres);
+//            context.MovieGenre.AddRange(movieGenre);
             context.SaveChanges();
         }
     }

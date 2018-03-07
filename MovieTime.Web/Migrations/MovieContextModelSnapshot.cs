@@ -5,8 +5,8 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
-using System;
 using MovieTime.Web.Movie.Persistance;
+using System;
 
 namespace MovieTime.Web.Migrations
 {
@@ -20,7 +20,7 @@ namespace MovieTime.Web.Migrations
                 .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("MovieTime.Web.Entities.DbGenre", b =>
+            modelBuilder.Entity("MovieTime.Web.Movie.Persistance.Database.DbGenre", b =>
                 {
                     b.Property<string>("Name")
                         .ValueGeneratedOnAdd();
@@ -32,22 +32,9 @@ namespace MovieTime.Web.Migrations
                     b.ToTable("Genres");
                 });
 
-            modelBuilder.Entity("MovieTime.Web.Entities.DbMovieGenre", b =>
+            modelBuilder.Entity("MovieTime.Web.Movie.Persistance.Database.DbMovie", b =>
                 {
-                    b.Property<Guid>("DbMovieId");
-
-                    b.Property<string>("DbGenreId");
-
-                    b.HasKey("DbMovieId", "DbGenreId");
-
-                    b.HasIndex("DbGenreId");
-
-                    b.ToTable("MovieGenre");
-                });
-
-            modelBuilder.Entity("MovieTime.Web.MovieDetails.DbMovie", b =>
-                {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Actors")
@@ -58,8 +45,6 @@ namespace MovieTime.Web.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
-                    b.Property<string>("ImdbId");
-
                     b.Property<string>("Plot")
                         .IsRequired()
                         .HasMaxLength(600);
@@ -67,7 +52,10 @@ namespace MovieTime.Web.Migrations
                     b.Property<string>("Poster")
                         .IsRequired();
 
-                    b.Property<double>("Rated");
+                    b.Property<string>("Rated")
+                        .IsRequired();
+
+                    b.Property<double>("Rating");
 
                     b.Property<int>("RunTimeInMinutes")
                         .HasMaxLength(1440);
@@ -87,14 +75,27 @@ namespace MovieTime.Web.Migrations
                     b.ToTable("Movies");
                 });
 
-            modelBuilder.Entity("MovieTime.Web.Entities.DbMovieGenre", b =>
+            modelBuilder.Entity("MovieTime.Web.Movie.Persistance.Database.DbMovieGenre", b =>
                 {
-                    b.HasOne("MovieTime.Web.Entities.DbGenre", "Genre")
+                    b.Property<string>("DbMovieId");
+
+                    b.Property<string>("DbGenreId");
+
+                    b.HasKey("DbMovieId", "DbGenreId");
+
+                    b.HasIndex("DbGenreId");
+
+                    b.ToTable("MovieGenre");
+                });
+
+            modelBuilder.Entity("MovieTime.Web.Movie.Persistance.Database.DbMovieGenre", b =>
+                {
+                    b.HasOne("MovieTime.Web.Movie.Persistance.Database.DbGenre", "Genre")
                         .WithMany("Movies")
                         .HasForeignKey("DbGenreId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("MovieTime.Web.MovieDetails.DbMovie", "Movie")
+                    b.HasOne("MovieTime.Web.Movie.Persistance.Database.DbMovie", "Movie")
                         .WithMany("Genres")
                         .HasForeignKey("DbMovieId")
                         .OnDelete(DeleteBehavior.Cascade);
