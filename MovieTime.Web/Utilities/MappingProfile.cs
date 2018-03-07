@@ -8,8 +8,9 @@ namespace MovieTime.Web.Models
         public MappingProfile()
         {
             // Add as many of these lines as you need to map your objects
-            CreateMap<OmdbMovieModel, MovieDetailsViewModel>();
-            CreateMap<MovieDetailsViewModel, OmdbMovieModel>();
+            CreateMap<OmdbMovieModel, DbMovie>();
+            CreateMap<DbMovie, MovieDetailsViewModel>();
+            
             CreateMap<DbMovie, MovieDetailDto>()
                 .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Year.ToString()));
             CreateMap<MovieForCreationDto, DbMovie>();

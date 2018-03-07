@@ -57,7 +57,10 @@ namespace MovieTime.Web
                 services.AddDbContext<MovieContext>(options => options.UseNpgsql(connectionString));
             }
             services.AddScoped<IMovieService, MovieService>();
-            //services.AddScoped<IMovieRepository, OmdbMovieRepository>();
+            
+            services.AddScoped<IDatabaseMovieRespository, DatabaseMovieRepository>();
+            // For now decide here if we use omdb or tmdb as movie repository.
+            services.AddScoped<IMovieRepository, OmdbMovieRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

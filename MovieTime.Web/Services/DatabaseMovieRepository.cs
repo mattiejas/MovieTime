@@ -2,25 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using MovieTime.Web.Entities;
+using MovieTime.Web.Services;
 
 namespace MovieTime.Web.MovieDetails
 {
-    public class MovieRepository : IMovieRepository
+    public class DatabaseMovieRepository : IDatabaseMovieRespository
     {
         private readonly MovieContext _context;
 
-        public MovieRepository(MovieContext context)
+        public DatabaseMovieRepository(MovieContext context)
         {
             _context = context;
         }
 
-
-        public IEnumerable<DbMovie> GetDatabaseMovies()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<DbMovie> GetDatabaseMoviesByPage(int page = 0)
+        public IEnumerable<DbMovie> GetMoviesByTitleSearch(string title)
         {
             throw new NotImplementedException();
         }
@@ -42,7 +37,7 @@ namespace MovieTime.Web.MovieDetails
 
         public void DeleteMovieByTitle(string title)
         {
-
+            throw new NotImplementedException();
         }
 
         public void AddMovie(DbMovie movie)

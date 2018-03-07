@@ -7,7 +7,6 @@ using RestSharp;
 
 namespace MovieTime.Web.MovieDetails
 {
-
     public class OmdbMovieRepository : IMovieRepository
     {
         private static readonly string BASE_URL = "http://www.omdbapi.com";
@@ -26,14 +25,15 @@ namespace MovieTime.Web.MovieDetails
         {
             _mapper = mapper;
         }
-
+       
         public DbMovie GetMovieById(string id) => GetMovieByArg(null, id);
 
         public DbMovie GetMovieByTitle(string title) => GetMovieByArg(title);
 
         private DbMovie GetMovieByArg(string title, string id = null)
         {
-            if (string.IsNullOrEmpty(title) && string.IsNullOrEmpty(id)) throw new Exception("Title and Id can't both be null.");
+            if (string.IsNullOrEmpty(title) && string.IsNullOrEmpty(id))
+                throw new Exception("Title and Id can't both be null.");
             if (title != null && id != null) throw new Exception("Title and Id can't both be filled.");
 
             var client = CreateClient();
@@ -51,17 +51,18 @@ namespace MovieTime.Web.MovieDetails
             return movieDetailsModel;
         }
 
-        public SearchResultsModel GetMoviesByTitle(string title)
+        public IEnumerable<DbMovie> GetMoviesByTitleSearch(string title)
         {
-            var client = CreateClient();
-            var request = CreateRequest("", Method.GET);
-
-            request.AddParameter(MOVIE_SEARCH_ARG, title);
-
-            var response = client.Execute<SearchResultsModel>(request);
-            if (response.Data == null) throw new Exception("Empty response");
-
-            return response.Data;
+            // var client = CreateClient();
+            // var request = CreateRequest("", Method.GET);
+            //
+            // request.AddParameter(MOVIE_SEARCH_ARG, title);
+            //
+            // var response = client.Execute<SearchResultsModel>(request);
+            // if (response.Data == null) throw new Exception("Empty response");
+            //
+            // return response.Data;
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -97,21 +98,6 @@ namespace MovieTime.Web.MovieDetails
             client.AddHandler("*+json", Serialization.NewtonsoftJsonSerializer.Default);
 
             return client;
-        }
-
-        public void DeleteMovieById(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteMovieByTitle(string title)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddMovie(DbMovie movie)
-        {
-            throw new NotImplementedException();
         }
     }
 }

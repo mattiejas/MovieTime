@@ -9,44 +9,49 @@ namespace MovieTime.Web.Services
     public class MovieService : IMovieService
     {
         private readonly IMapper _mapper;
-        private readonly MovieContext _context;
+        private readonly IMovieRepository _movieRepository;
+        private readonly IDatabaseMovieRespository _databaseMovieRespository;
 
-        public MovieService(IMapper mapper, MovieContext context)
+        public MovieService(IMapper mapper, IMovieRepository movieRepository, IDatabaseMovieRespository databaseMovieRespository)
         {
             _mapper = mapper;
-            _context = context;
+            _movieRepository = movieRepository;
+            _databaseMovieRespository = databaseMovieRespository;
         }
 
         public MovieDetailsViewModel GetMovieDetailsById(string id)
         {
-            MovieRepository localRepository = new MovieRepository(_context);
-            var movieModel = localRepository.GetMovieById(id);
-
-            if(movieModel == null){
-                var omdbRepository = new OmdbMovieRepository(_mapper);
-                movieModel = omdbRepository.GetMovieById(id);
+            var movieModel = _databaseMovieRespository.GetMovieById(id);
+            if (movieModel == null)
+            {
+                movieModel = _movieRepository.GetMovieById(id);
             }
-            var movieDetailsVM = _mapper.Map<DbMovie, MovieDetailsViewModel>(movieModel);
 
-            return movieDetailsVM;
+            var movieDetailsVm = _mapper.Map<DbMovie, MovieDetailsViewModel>(movieModel);
+
+            return movieDetailsVm;
         }
 
         public MovieDetailsViewModel GetMovieDetailsByTitle(string title)
         {
-            MovieRepository localRepository = new MovieRepository(_context);
-            var movieModel = localRepository.GetMovieByTitle(title);
+            var movieModel = _databaseMovieRespository.GetMovieByTitle(title);
 
             if (movieModel == null)
             {
-                var omdbRepository = new OmdbMovieRepository(_mapper);
-                movieModel = omdbRepository.GetMovieById(title);
+                movieModel = _movieRepository.GetMovieById(title);
             }
-            var movieDetailsVM = _mapper.Map<DbMovie, MovieDetailsViewModel>(movieModel); //todo test null
 
-            return movieDetailsVM;
+            var movieDetailsVm = _mapper.Map<DbMovie, MovieDetailsViewModel>(movieModel); //todo test null
+
+            return movieDetailsVm;
         }
 
         public SearchResultsModel GetMoviesByTitle(string title)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddMovie(MovieForCreationDto movie)
         {
             throw new NotImplementedException();
         }
