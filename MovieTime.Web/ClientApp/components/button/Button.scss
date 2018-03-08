@@ -3,14 +3,22 @@
 .button {
   .button__inner {
     i {
-      padding: 2px 7px 0 0;
+      padding: 0 2px 0 1px;
+      font-size: 1.3em;
+      color: $font-color-light;
     }
+    .spacing {
+      padding-left: 8px;
+    }
+    height: 100%;
+    width: 100%;
     display: flex;
-    padding: 3px 0 0 0;
-    align-items: baseline;
+    text-align: center;
+    align-items: center;
     text-transform: uppercase;
   }
   cursor: pointer;
+  white-space: nowrap;
   font-size: 14px;
   display: inline-block;
   height: 35px;
@@ -20,11 +28,88 @@
   color: $font-color-light;
   font-weight: 400;
   border-radius: 5px;
-  box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.10);
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.20);
   &:hover {
     background-color: darken($button-default-color, 3);
   }
   &:active {
     background-color: darken($button-default-color, 5);
+  }
+  &.dark {
+    background-color: $secondary-dark-color;
+    color: $light-color;
+    i {
+      color: $light-color;
+    }
+    &:hover {
+      background-color: $secondary-color;
+    }
+    &:active {
+      background-color: darken($secondary-dark-color, 20);
+    }
+  }
+  &.danger {
+    background-color: $danger-color;
+    color: $light-color;
+    i {
+      color: $light-color;
+    }
+    &:hover {
+      background-color: lighten($danger-color, 10);
+    }
+    &:active {
+      background-color: darken($danger-color, 20);
+    }
+  }
+  margin: 0 10px;
+  &:first-child {
+    margin-left: 0;
+  }
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.group {
+  display: flex;
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.20);
+
+  .button {
+    border-radius: 0;
+    margin: 0;
+    box-shadow: none;
+
+    &:first-child {
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+    }
+    &:nth-child(n) {
+      border-right: 2px solid $light-color;
+    }
+    &.dark {
+      &:nth-child(n) {
+        border-right: 2px solid $secondary-color;
+      }
+    }
+    &.danger {
+      &:nth-child(n) {
+        border-right: 2px solid lighten($danger-color, 10);
+      }
+    }
+    &:last-child {
+      border: none;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+    &.dark {
+      &:last-child {
+        border: none;
+      }
+    }
+    &.danger {
+      &:last-child {
+        border: none;
+      }
+    }
   }
 }

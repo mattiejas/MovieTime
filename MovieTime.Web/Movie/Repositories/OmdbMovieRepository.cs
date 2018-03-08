@@ -1,20 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
-using Microsoft.IdentityModel.Protocols;
-using MovieTime.Web.Models;
+using MovieTime.Web.Movie.Persistance.Database;
+using MovieTime.Web.Movie.Persistance.Omdb;
+using MovieTime.Web.Utilities;
 using RestSharp;
 
-namespace MovieTime.Web.MovieDetails
+namespace MovieTime.Web.Movie.Repositories
 {
-    public interface IMovieService
-    {
-        MovieDetailsViewModel GetMovieDetailsById(string id);
-        MovieDetailsViewModel GetMovieDetailsByTitle(string title);
-        SearchResultsModel GetMoviesByTitle(string title);
-    }
-
-    public class MovieService : IMovieService
+    public class OmdbMovieRepository : IMovieRepository
     {
         private static readonly string BASE_URL = "http://www.omdbapi.com";
         private static readonly string API_KEY_ARG = "apikey";
@@ -28,46 +22,48 @@ namespace MovieTime.Web.MovieDetails
 
         private readonly IMapper _mapper;
 
-        public MovieService(IMapper mapper)
+        public OmdbMovieRepository(IMapper mapper)
         {
             _mapper = mapper;
         }
+       
+        public DbMovie GetMovieById(string id) => GetMovieByArg(null, id);
 
-        public MovieDetailsViewModel GetMovieDetailsById(string id) => GetMovieDetailsByArg(null, id);
+        public DbMovie GetMovieByTitle(string title) => GetMovieByArg(title);
 
-        public MovieDetailsViewModel GetMovieDetailsByTitle(string title) => GetMovieDetailsByArg(title);
-
-        private MovieDetailsViewModel GetMovieDetailsByArg(string title, string id = null)
+        private DbMovie GetMovieByArg(string title, string id = null)
         {
-            if (string.IsNullOrEmpty(title) && string.IsNullOrEmpty(id)) throw new Exception("Title and Id can't both be null.");
+            if (string.IsNullOrEmpty(title) && string.IsNullOrEmpty(id))
+                throw new Exception("Title and Id can't both be null.");
             if (title != null && id != null) throw new Exception("Title and Id can't both be filled.");
-            
+
             var client = CreateClient();
             var request = CreateRequest("", Method.GET);
 
             if (title != null) request.AddParameter(MOVIE_TITLE_ARG, title);
             if (id != null) request.AddParameter(MOVIE_ID_ARG, id);
-            
+
             request.AddParameter(MOVIE_PLOT_ARG, "full");
 
             var response = client.Execute<OmdbMovieModel>(request);
             if (response.Data == null) throw new Exception("Empty response");
 
-            var movieDetailsModel = _mapper.Map<OmdbMovieModel, MovieDetailsViewModel>(response.Data);
+            var movieDetailsModel = _mapper.Map<OmdbMovieModel, DbMovie>(response.Data);
             return movieDetailsModel;
         }
 
-        public SearchResultsModel GetMoviesByTitle(string title)
+        public IEnumerable<DbMovie> GetMoviesByTitleSearch(string title)
         {
-            var client = CreateClient();
-            var request = CreateRequest("", Method.GET);
-
-            request.AddParameter(MOVIE_SEARCH_ARG, title);
-
-            var response = client.Execute<SearchResultsModel>(request);
-            if (response.Data == null) throw new Exception("Empty response");
-
-            return response.Data;
+            // var client = CreateClient();
+            // var request = CreateRequest("", Method.GET);
+            //
+            // request.AddParameter(MOVIE_SEARCH_ARG, title);
+            //
+            // var response = client.Execute<SearchResultsModel>(request);
+            // if (response.Data == null) throw new Exception("Empty response");
+            //
+            // return response.Data;
+            throw new NotImplementedException();
         }
 
         /// <summary>

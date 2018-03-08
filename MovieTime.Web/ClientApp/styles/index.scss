@@ -12,8 +12,9 @@
   }
   hr {
     height: 1px;
-    background-color: $font-color-light;
-    color: $font-color-light;
+    background-color: $light-color;
+    color: $light-color;
+    margin-bottom: 20px;
     border: none;
   }
 }
