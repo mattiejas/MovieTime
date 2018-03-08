@@ -3,7 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "vendor": "webpack --config webpack.config.vendor.js && webpack --config webpack.config.js"
+    "vendor": "webpack --config webpack.config.vendor.js && webpack --config webpack.config.js",
+    "start": "export ASPNETCORE_ENVIRONMENT=Development && dotnet run"
   },
   "devDependencies": {
     "aspnet-webpack": "^2.0.1",
@@ -11,6 +12,7 @@
     "autoprefixer": "^8.0.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "css-loader": "^0.28.9",
@@ -37,6 +39,7 @@
     "bootstrap": "3.3.7",
     "classnames": "^2.2.5",
     "font-awesome": "^4.7.0",
+    "node-vibrant": "^3.0.0",
     "prop-types": "^15.6.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",

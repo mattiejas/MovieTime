@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using MovieTime.Web.Movie.Persistance;
 using MovieTime.Web.Movie.Repositories;
 using MovieTime.Web.Movie.Services;
+using MovieTime.Web.Users;
 using MovieTime.Web.Utilities;
 
 namespace MovieTime.Web
@@ -56,11 +57,15 @@ namespace MovieTime.Web
                 connectionString = Configuration.GetConnectionString("Postgresql_DATABASE_URL");
                 services.AddDbContext<MovieContext>(options => options.UseNpgsql(connectionString));
             }
-            services.AddScoped<IMovieService, MovieService>();
             
+            services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IDatabaseMovieRespository, DatabaseMovieRepository>();
             // For now decide here if we use omdb or tmdb as movie repository.
             services.AddScoped<IMovieRepository, OmdbMovieRepository>();
+            
+            services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IUsersRepository, UsersRepository>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,14 +79,6 @@ namespace MovieTime.Web
                     HotModuleReplacement = true,
                     ReactHotModuleReplacement = true
                 });
-
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "MovieTime API V1");
-                });
-
-
             }
             else
             {
@@ -101,6 +98,17 @@ namespace MovieTime.Web
             app.UseStaticFiles();
 
             movieContext.EnsureSeedDataForContext();
+
+            app.UseSwagger();
+
+            if (env.IsDevelopment())
+            {
+               
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "MovieTime API V1");
+                });
+            }
 
             app.UseMvc(routes =>
             {

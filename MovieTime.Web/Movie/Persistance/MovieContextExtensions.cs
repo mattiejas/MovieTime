@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using MovieTime.Web.Movie.Persistance.Database;
+using MovieTime.Web.Users;
 
 namespace MovieTime.Web.Movie.Persistance
 {
@@ -137,10 +138,20 @@ namespace MovieTime.Web.Movie.Persistance
                     DbGenreId = genres[2].Name
                 },
             };
+            
+            var users = new List<UserModel>
+            {
+                new UserModel { FirstName = "Peter", LastName = "Parker", Email = "p_parker@outlook.com" },
+                new UserModel { FirstName = "Eddie", LastName = "Brock", Email = "e_brock@outlook.com" },
+                new UserModel { FirstName = "MJ", LastName = "Watson", Email = "mj_watson@outlook.com" },
+                new UserModel { FirstName = "Gwen", LastName = "Stacy", Email = "g_stacy@outlook.com" },
+                new UserModel { FirstName = "Harry", LastName = "Osborn", Email = "h_osborn@outlook.com" }
+            };
 
             context.Movies.AddRange(movies);
-            context.Genres.AddRange(genres);
-            context.MovieGenre.AddRange(movieGenre);
+            //context.Genres.AddRange(genres);
+            //context.MovieGenre.AddRange(movieGenre);
+            context.Users.AddRange(users);
             context.SaveChanges();
         }
     }

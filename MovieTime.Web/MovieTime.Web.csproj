@@ -32,6 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="MovieDetails\" />
+    <Folder Include="wwwroot\assets\users" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="MovieDetails\EmptyClass.cs" />

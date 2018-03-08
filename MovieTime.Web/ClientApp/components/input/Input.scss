@@ -1,0 +1,29 @@
+@import "../../styles/core";
+
+.wrapper {
+  padding: 10px 0;
+  width: 100%;
+  margin-right: 30px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  .label {
+    display: block;
+    font-weight: 300;
+    font-style: italic;
+    font-size: 1em;
+    margin-bottom: 6px;
+  }
+
+  .input {
+    padding: 10px 8px;
+    border: none;
+    border-radius: 5px;
+    background-color: $light-color;
+    width: 100%;
+    color: $font-color;
+    margin-right: 20px;
+  }
+}
