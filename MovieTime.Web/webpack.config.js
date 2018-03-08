@@ -2,111 +2,54 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const bundleOutputDir = './wwwroot/dist';
-
 module.exports = (env) => {
-  const isDevBuild = !(env && env.prod);
-
-  const cssDev = [
-    {
-      loader: 'style-loader',
+  return {
+    entry: { main: './ClientApp/boot.jsx' },
+    devtool: 'inline-source-map',
+    resolve: { extensions: ['.js', '.jsx'] },
+    module: {
+      rules: [
+        {
+          test: /\.(js|jsx)$/,
+          include: /ClientApp/,
+          exclude: /(node_modules|bower_components)/,
+          use: [
+            {
+              loader: 'babel-loader',
+              options: {
+                babelrc: false,
+                presets: ['env', 'react'],
+                plugins: ['transform-class-properties', 'transform-es2015-destructuring', 'transform-object-rest-spread'],
+              },
+            },
+          ],
+        },
+        {
+          test: /\.(png|jpg|jpeg|gif|svg)$/,
+          include: /ClientApp/,
+          use: 'url-loader?limit=25000',
+        },
+        {
+          test: /\.scss$/,
+          include: /ClientApp/,
+          use: ExtractTextPlugin.extract({
+            fallback: 'style-loader',
+            loader: 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader!sass-loader',
+          }),
+        },
+      ],
     },
-    {
-      loader: 'css-loader',
-      options: {
-        modules: true,
-        camelCase: true,
-        importLoaders: 2,
-        localIdentName: '[name]__[local]___[hash:base64:5]',
-        sourceMap: true,
-      },
+    plugins: [
+      new webpack.DllReferencePlugin({
+        context: __dirname,
+        manifest: require('./wwwroot/dist/vendor-manifest.json'), // eslint-disable-line global-require
+      }),
+      new ExtractTextPlugin('site.css'),
+    ],
+    output: {
+      path: path.resolve(__dirname, 'wwwroot', 'dist'),
+      filename: '[name].js',
+      publicPath: 'dist/',
     },
-    {
-      loader: 'postcss-loader',
-      options: {
-        sourceMap: true,
-      },
-    },
-    {
-      loader: 'sass-loader',
-      options: {
-        sourceMap: true,
-      },
-    },
-  ];
-
-  // const cssProd = ExtractTextPlugin.extract({
-  //   use: [
-  //     {
-  //       loader: 'style-loader',
-  //     },
-  //     {
-  //       loader: 'css-loader',
-  //       options: {
-  //         modules: true,
-  //         camelCase: true,
-  //         importLoaders: 2,
-  //         localIdentName: '[name]__[local]___[hash:base64:5]',
-  //       },
-  //     },
-  //     {
-  //       loader: 'postcss-loader',
-  //     },
-  //     {
-  //       loader: 'sass-loader',
-  //     },
-  //   ],
-  // });
-
-  const cssLoader = isDevBuild ? cssDev : cssDev;
-
-  return [
-    {
-      stats: { modules: false },
-      entry: { main: './ClientApp/boot.jsx' },
-      resolve: { extensions: ['.js', '.jsx'] },
-      output: {
-        path: path.join(__dirname, bundleOutputDir),
-        filename: '[name].js',
-        publicPath: 'dist/',
-      },
-      module: {
-        rules: [
-          {
-            test: /\.jsx?$/,
-            include: /ClientApp/,
-            use: 'babel-loader',
-          },
-          {
-            test: /\.(png|jpg|jpeg|gif|svg)$/,
-            use: 'url-loader?limit=25000',
-          },
-          {
-            test: /\.scss$/,
-            include: /ClientApp/,
-            use: cssLoader,
-          },
-        ],
-      },
-      plugins: [
-        new webpack.DllReferencePlugin({
-          context: __dirname,
-          manifest: require('./wwwroot/dist/vendor-manifest.json'), // eslint-disable-line global-require
-        }),
-      ].concat(isDevBuild
-        ? [
-          //   Plugins that apply in development builds only
-          //   new webpack.SourceMapDevToolPlugin({
-          //       filename: '[file].map', // Remove this line if you prefer inline source maps
-          //       moduleFilenameTemplate: path.relative(bundleOutputDir, '[resourcePath]')
-          //   Point sourcemap entries to the original file locations on disk
-          //   })
-        ]
-        : [
-          // Plugins that apply in production builds only
-          new webpack.optimize.UglifyJsPlugin(),
-          // new ExtractTextPlugin('site.css'),
-        ]),
-    },
-  ];
+  };
 };
