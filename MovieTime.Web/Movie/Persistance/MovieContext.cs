@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieTime.Web.Movie.Persistance.Database;
+using MovieTime.Web.Users;
 
 namespace MovieTime.Web.Movie.Persistance
 {
@@ -8,6 +9,8 @@ namespace MovieTime.Web.Movie.Persistance
         public DbSet<DbMovie> Movies { get; set; }
         public DbSet<DbGenre> Genres { get; set; }
         public DbSet<DbMovieGenre> MovieGenre { get; set; }
+        
+        public DbSet<UserModel> Users { get; set; }
 
         public MovieContext(DbContextOptions<MovieContext> options) : base(options) { }
 

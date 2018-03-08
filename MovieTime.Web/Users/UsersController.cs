@@ -1,34 +1,29 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MovieTime.Web.Users
 {
     public class UsersController : Controller
     {
-        [Route("api/[controller]")]
-        public string Get()
+        private readonly IUsersService _usersService;
+        
+        public UsersController(IUsersService usersService)
         {
-            return "All users and do some pagination";
+            _usersService = usersService;
         }
+
+        [Route("api/[controller]")]
+        public ICollection<UserViewModel> GetAllUsers() => _usersService.GetAllUsers();
 
         [Route("api/[controller]/{id}")]
-        public UserViewModel GetUser(int id)
-        {
-            if (id == 1)
-            {
-                return new UserViewModel
-                {
-                    Email = "peterp@outlook.com",
-                    FirstName = "Peter",
-                    LastName = "Parker"
-                };
-            }
+        public UserViewModel GetUser(int id) => _usersService.GetUser(id);
 
-            return new UserViewModel
-            {
-                Email = "eddieb@outlook.com",
-                FirstName = "Eddie",
-                LastName = "Brock"
-            };
-        }
+        [HttpPost]
+        [Route("api/[controller]")]
+        public void CreateUser(UserCreateDto user) => _usersService.CreateUser(user);
+
+        [HttpPut]
+        [Route("api/[controller]")]
+        public void UpdateUser(UserUpdateDto user) => _usersService.UpdateUser(user);
     }
 }

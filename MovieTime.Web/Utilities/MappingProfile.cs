@@ -3,6 +3,7 @@ using AutoMapper;
 using MovieTime.Web.Movie.Persistance.Database;
 using MovieTime.Web.Movie.Persistance.Omdb;
 using MovieTime.Web.Movie.Persistance.ViewModels;
+using MovieTime.Web.Users;
 
 namespace MovieTime.Web.Utilities
 {
@@ -22,6 +23,12 @@ namespace MovieTime.Web.Utilities
                 .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Year.Year.ToString()));
             
             CreateMap<MovieForCreationDto, DbMovie>();
+
+
+            CreateMap<UserCreateDto, UserModel>();
+            CreateMap<UserUpdateDto, UserModel>();
+            CreateMap<UserViewModel, UserModel>();
+            CreateMap<UserModel, UserViewModel>();
         }
     }
 }
