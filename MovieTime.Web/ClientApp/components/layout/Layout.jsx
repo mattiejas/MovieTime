@@ -3,16 +3,15 @@ import PropTypes from 'prop-types';
 
 import { Navigation } from '../navigation/Navigation';
 
-import styles from './Layout.scss';
-
 const Layout = props => (
   <div>
-    <Navigation />
+    <Navigation isAuthenticated={props.isAuthenticated} />
     {props.children}
   </div>
 );
 
 Layout.propTypes = {
+  authUser: PropTypes.object,
   children: PropTypes.node.isRequired,
 };
 

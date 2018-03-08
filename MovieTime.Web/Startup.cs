@@ -11,6 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 using MovieTime.Web.SharedKernel;
 using MovieTime.Web.MovieDetails;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace MovieTime.Web
 {
@@ -26,6 +29,21 @@ namespace MovieTime.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+						services.AddAuthentication( JwtBearerDefaults.AuthenticationScheme)
+								.AddJwtBearer( options => {
+										options.TokenValidationParameters = new TokenValidationParameters
+										{
+												ValidateIssuer= true, 
+												ValidateAudience = true,
+												ValidateIssuerSigningKey = true,
+												ValidIssuer = "movietime-hhs-c73b9.firebaseapp.com",
+												ValidAudience= "movietime-hhs-c73b9.firebase.com",
+												IssuerSigningKey= new SymmetricSecurityKey(
+																Encoding.UTF8.GetBytes(Configuration["firebaseKey"]))
+
+										};
+								} );
+
             services.AddMvc();
             services.AddAutoMapper();
             services.AddSwaggerGen(c =>
@@ -58,6 +76,17 @@ namespace MovieTime.Web
 
             app.UseStaticFiles();
 
+            app.UseSwagger();
+
+            if (env.IsDevelopment())
+            {
+               
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "MovieTime API V1");
+                });
+            }
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -68,15 +97,6 @@ namespace MovieTime.Web
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
-
-            if (env.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "MovieTime API V1");
-                });
-            }
         }
     }
 }
