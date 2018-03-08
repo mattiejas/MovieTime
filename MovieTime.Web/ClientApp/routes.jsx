@@ -27,7 +27,11 @@ const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
 PrivateRoute.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
   component: PropTypes.func.isRequired,
-  location: PropTypes.object,
+  location: PropTypes.objectOf(PropTypes.any),
+};
+
+PrivateRoute.defaultProps = {
+  location: undefined,
 };
 
 const PublicRoute = ({ component: Component, isAuthenticated, ...rest }) => (
@@ -40,7 +44,17 @@ const PublicRoute = ({ component: Component, isAuthenticated, ...rest }) => (
   />
 );
 
-class Router extends React.Component {
+PublicRoute.propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired,
+  component: PropTypes.func.isRequired,
+  location: PropTypes.objectOf(PropTypes.any),
+};
+
+PublicRoute.defaultProps = {
+  location: undefined,
+};
+
+export default class Router extends React.Component {
   constructor(props) {
     super(props);
 
@@ -83,5 +97,3 @@ class Router extends React.Component {
 export const routes = (
   <Router />
 );
-
-// export default routes;
