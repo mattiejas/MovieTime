@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import cn from 'classnames';
 
 import { logout } from '../../utils/auth';
@@ -9,7 +10,7 @@ import Icon from '../icon/Icon';
 
 import styles from './Navigation.scss';
 
-export class Navigation extends Component {
+export default class Navigation extends Component {
   constructor() {
     super();
 
@@ -84,4 +85,7 @@ export class Navigation extends Component {
   }
 }
 
-export default Navigation;
+Navigation.propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired,
+};
+
