@@ -20,10 +20,10 @@ namespace MovieTime.Web.Users
 
         [HttpPost]
         [Route("api/[controller]")]
-        public void CreateUser(UserCreateDto user) => _usersService.CreateUser(user);
+        public bool CreateUser([FromBody]UserCreateDto user) => _usersService.CreateUser(user);
 
         [HttpPut]
         [Route("api/[controller]")]
-        public void UpdateUser(UserUpdateDto user) => _usersService.UpdateUser(user);
+        public bool UpdateUser([FromBody]UserUpdateDto user) => _usersService.UpdateUser(user);
     }
 }
