@@ -1,8 +1,10 @@
-import * as React from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
 import { auth } from './firebase';
 import Layout from './components/layout/Layout';
+
 import Home from './views/Home';
 import MovieDetailView from './views/movie/MovieDetailView';
 import ProfileView from './views/profile/ProfileView';
@@ -12,36 +14,38 @@ import Protected from './views/Protected';
 import Login from './views/login/Login';
 import SecretDataView from './views/SecretDataView';
 
-const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
-  return (
-    <Route
-      {...rest}
-      render={props => isAuthenticated === true
-        ? <Component {...props} />
-        : <Redirect to={{pathname: "/login", state: { from: props.location }}} />
-      }
-    />
-  )
+const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
+  <Route
+    {...rest}
+    render={props => (isAuthenticated === true
+      ? <Component {...props} />
+      : <Redirect to={{ pathname: '/login', state: { from: props.location } }} />)
+    }
+  />
+);
+
+PrivateRoute.propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired,
+  component: PropTypes.func.isRequired,
+  location: PropTypes.object,
 };
 
-const PublicRoute = ({ component: Component, isAuthenticated, ...rest }) => {
-  return (
-    <Route
-      {...rest}
-      render={props => isAuthenticated === false
+const PublicRoute = ({ component: Component, isAuthenticated, ...rest }) => (
+  <Route
+    {...rest}
+    render={props => (isAuthenticated === false
         ? <Component {...props} />
-        : <Redirect to="/" />
+        : <Redirect to="/" />)
       }
-    />
-  )
-};
+  />
+);
 
 class Router extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      isAuthenticated: false,
+      isAuthenticated: null,
     };
   }
 
@@ -50,12 +54,15 @@ class Router extends React.Component {
       if (user) {
         this.setState({ isAuthenticated: true });
       } else {
-        this.setState({ isAuthenticated: false })
+        this.setState({ isAuthenticated: false });
       }
     });
   }
 
   render() {
+    if (this.state.isAuthenticated === null) {
+      return null;
+    }
     return (
       <Layout isAuthenticated={this.state.isAuthenticated}>
         <Switch>
