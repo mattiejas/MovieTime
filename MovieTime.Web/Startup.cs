@@ -76,6 +76,17 @@ namespace MovieTime.Web
 
             app.UseStaticFiles();
 
+            app.UseSwagger();
+
+            if (env.IsDevelopment())
+            {
+               
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "MovieTime API V1");
+                });
+            }
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -86,15 +97,6 @@ namespace MovieTime.Web
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
-
-            if (env.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "MovieTime API V1");
-                });
-            }
         }
     }
 }

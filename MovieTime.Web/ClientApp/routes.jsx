@@ -5,6 +5,7 @@ import { auth } from './firebase';
 import Layout from './components/layout/Layout';
 import Home from './views/Home';
 import MovieDetailView from './views/movie/MovieDetailView';
+import ProfileView from './views/profile/ProfileView';
 import NotFoundView from './views/notfound/NotFoundView';
 import RegistrationForm from './views/RegistrationForm/RegistrationForm';
 import Protected from './views/Protected';
@@ -63,6 +64,7 @@ class Router extends React.Component {
           <PublicRoute path="/register" isAuthenticated={this.state.isAuthenticated} component={RegistrationForm} />
           <PublicRoute path="/login" isAuthenticated={this.state.isAuthenticated} component={Login} />
           <PrivateRoute path="/protected" isAuthenticated={this.state.isAuthenticated} component={Protected} />
+          <Route path="/users/:id" component={ProfileView} />
           <PrivateRoute path="/secretdata" isAuthenticated={this.state.isAuthenticated} component={SecretDataView} />
           <Route component={NotFoundView} />
         </Switch>
