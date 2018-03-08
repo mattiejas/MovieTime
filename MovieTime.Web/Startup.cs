@@ -97,7 +97,7 @@ namespace MovieTime.Web
 
             app.UseStaticFiles();
 
-            //movieContext.EnsureSeedDataForContext();
+            movieContext.EnsureSeedDataForContext();
 
             app.UseSwagger();
 
