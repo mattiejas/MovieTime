@@ -14,21 +14,26 @@ const API = '/api/users/';
 class EditProfileModal extends React.Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      user: {},
+    };
   }
   onChange(event) {
+    const { name, value } = event.target;
     this.setState({
-      [event.target.name]: event.target.value,
+      user: {
+        ...this.state.user,
+        [name]: value,
+      },
     });
   }
   render() {
-    console.log(this.state);
     const { hideModal, onUpdate } = this.props;
     const {
       firstName = this.props.user.firstName,
       lastName = this.props.user.lastName,
       email = this.props.user.email,
-    } = this.state;
+    } = this.state.user;
     return (
       <Modal title="Edit Profile" hideModal={hideModal}>
         <div className={styles.edit}>
@@ -53,7 +58,7 @@ class EditProfileModal extends React.Component {
             <Button
               dark
               className={styles.button}
-              onClick={() => onUpdate(this.props.user.id, this.state)}
+              onClick={() => { onUpdate({ ...this.props.user, ...this.state.user }); hideModal(); }}
             >
               Update
             </Button>
@@ -105,27 +110,30 @@ class ProfileView extends React.Component {
     });
   }
 
-  updateUserData(id, user) {
-    console.log(id, user);
+  updateUserData(user) {
     fetch(API, {
-      method: 'POST',
-      body: { id, ...user },
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'PUT',
+      body: JSON.stringify(user),
     }).then(response => response)
-      .then(response => {
-        console.log(response);
+      .then(() => {
+        this.fetchUserData(user.id);
       });
   }
 
   render() {
-    const {firstName = '', lastName = ''} = this.state.user;
-    const {id} = this.props.match.params;
+    const { firstName = '', lastName = '' } = this.state.user;
+    const { id } = this.props.match.params;
     return (
       <div className={styles.view}>
         {
           this.state.isEditing &&
           <EditProfileModal
             hideModal={() => this.onDiscard()}
-            onUpdate={() => this.updateUserData()}
+            onUpdate={user => this.updateUserData(user)}
             user={this.state.user}
           />
         }
@@ -133,7 +141,7 @@ class ProfileView extends React.Component {
         <div className={styles.view__header}>
           <div className={styles.header}>
             <div className={styles.header__picture}>
-              <ProfilePicture className={styles.picture} source={`/assets/users/${id}.png`}/>
+              <ProfilePicture className={styles.picture} source={`/assets/users/${id}.png`} />
             </div>
             <div className={styles.header__content}>
               <div className={styles.name}>
