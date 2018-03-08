@@ -1,14 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
-using Serilog;
-using Serilog.Events;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Serilog;
+using Serilog.Events;
 
-namespace MovieTime.Web.SharedKernel
+namespace MovieTime.Web.Utilities
 {
     //https://github.com/datalust/serilog-middleware-example/blob/master/src/Datalust.SerilogMiddlewareExample/Diagnostics/SerilogMiddleware.cs
     class SerilogMiddleware

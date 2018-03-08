@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using RestSharp.Deserializers;
 using RestSharp.Serializers;
 
-namespace MovieTime.Web.Models
+namespace MovieTime.Web.Utilities
 {
     /// <summary>
     /// Implementation of the NewtonsoftJsonSerializer so RestSharp can properly deserialize json attributes.
