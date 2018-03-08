@@ -24,7 +24,6 @@ class MovieDetailView extends React.Component {
     });
   }
   render() {
-    console.log('whyyyyy???');
     const {
       title = '',
       year = '',

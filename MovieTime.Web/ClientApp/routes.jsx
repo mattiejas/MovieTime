@@ -9,7 +9,7 @@ import NotFoundView from './views/notfound/NotFoundView';
 import RegistrationForm from './views/RegistrationForm/RegistrationForm';
 import Protected from './views/Protected';
 import Login from './views/login/Login';
-import { SecretDataView } from './views/SecretDataView';
+import SecretDataView from './views/SecretDataView';
 
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
   return (
@@ -59,11 +59,11 @@ class Router extends React.Component {
       <Layout isAuthenticated={this.state.isAuthenticated}>
         <Switch>
           <Route exact path="/" component={Home} />
-          <PublicRoute path="/movie/detail/:title" isAuthenticated={this.state.isAuthenticated} component={MovieDetailView} />
+          <PrivateRoute path="/movie/detail/:title" isAuthenticated={this.state.isAuthenticated} component={MovieDetailView} />
           <PublicRoute path="/register" isAuthenticated={this.state.isAuthenticated} component={RegistrationForm} />
           <PublicRoute path="/login" isAuthenticated={this.state.isAuthenticated} component={Login} />
           <PrivateRoute path="/protected" isAuthenticated={this.state.isAuthenticated} component={Protected} />
-          <PublicRoute path="/secretdata"  component={SecretDataView} />
+          <PrivateRoute path="/secretdata" isAuthenticated={this.state.isAuthenticated} component={SecretDataView} />
           <Route component={NotFoundView} />
         </Switch>
       </Layout>
