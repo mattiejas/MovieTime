@@ -14,6 +14,7 @@ function renderApp() {
   const baseUrl = document
     .getElementsByTagName('base')[0]
     .getAttribute('href');
+
   ReactDOM.render(
     <AppContainer>
       <BrowserRouter basename={baseUrl}>{routes}</BrowserRouter>
@@ -24,10 +25,10 @@ function renderApp() {
 
 renderApp();
 
-// Allow Hot Module Replacement
-if (module.hot) {
-  module.hot.accept('./routes', () => {
-    routes = require('./routes'); // eslint-disable-line global-require
-    renderApp();
-  });
-}
+// // Allow Hot Module Replacement
+// if (module.hot) {
+//   module.hot.accept('./routes', () => {
+//     routes = require('./routes'); // eslint-disable-line global-require
+//     renderApp();
+//   });
+// }
