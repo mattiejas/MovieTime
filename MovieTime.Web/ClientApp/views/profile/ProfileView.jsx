@@ -8,6 +8,8 @@ import Modal from '../../components/modal/Modal';
 
 import styles from './ProfileView.scss';
 
+const API = '/api/users/';
+
 const EditProfileModal = props => (
   <Modal title="Edit Profile" hideModal={props.hideModal}>
     <div className={styles.edit}>
@@ -39,15 +41,13 @@ class ProfileView extends React.Component {
   constructor() {
     super();
     this.state = {
-      user: null,
+      user: {},
       isEditing: false,
     };
   }
-
-  fetchUserData(id) {
-    this.setState({
-      user: id, // some API call
-    });
+  
+  componentDidMount() {
+    this.fetchUserData(this.props.match.params.id);
   }
 
   onEdit() {
@@ -62,8 +62,16 @@ class ProfileView extends React.Component {
     });
   }
 
+  fetchUserData(id) {
+    fetch(API + id).then(response => response.json()).then((data) => {
+      setTimeout(() => this.setState({
+        user: data,
+      }), 0);
+    });
+  }
+
   render() {
-    const { id } = this.props.match.params;
+    const { firstName = '', lastName = '', email = ''} = this.state.user;
     return (
       <div className={styles.view}>
         {
@@ -78,7 +86,7 @@ class ProfileView extends React.Component {
             </div>
             <div className={styles.header__content}>
               <div className={styles.name}>
-                <h1>Peter Parker</h1>
+                <h1>{`${firstName} ${lastName}`}</h1>
                 <h3>has watched 42 movies worthy of 66 hours and 420 minutes.</h3>
               </div>
             </div>
