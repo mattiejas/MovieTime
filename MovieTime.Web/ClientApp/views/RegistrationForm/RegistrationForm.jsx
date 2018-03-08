@@ -27,7 +27,6 @@ export class RegistrationForm extends React.Component {
         if (errMessages.length) return true;
     };
 
-
     onFormSubmit = (evt) => {
         console.log('inside onformsubmit');
 
@@ -56,7 +55,6 @@ export class RegistrationForm extends React.Component {
         this.setState({fields, fieldErrors});
     };
 
-
     registerUserWithFireBase = (person) => {
         console.log('inside registerUserWithFireBase function' );
         register(person.email, person.password)
@@ -69,8 +67,6 @@ export class RegistrationForm extends React.Component {
                 console.log(errorMessage);
             });
     };
-
-
 
     render() {
         console.log('hello render');

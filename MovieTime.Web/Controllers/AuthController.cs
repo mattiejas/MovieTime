@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace MovieTime.Web.Controllers
 {
-		//[Authorize]
+		[Authorize]
 		[Route("/auth")]
 		public class AuthController : Controller
     {
 				[HttpGet("/secretdata")]
 				public ActionResult SecretData()
 				{
-						return Ok("Secret Data from Backend AuthController!");
+						return Json("Secret Data from Backend AuthController!");
 				}
 		}
 }
