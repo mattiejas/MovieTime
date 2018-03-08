@@ -51,6 +51,11 @@ namespace MovieTime.Web.Movie.Persistance
                 {
                     CustomField = false,
                     Name = "Thriller"
+                },
+                new DbGenre()
+                {
+                    CustomField = false,
+                    Name = "Drama"
                 }
             };
 

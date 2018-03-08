@@ -7,5 +7,6 @@ namespace MovieTime.Web.Movie.Repositories
         void DeleteMovieById(string id);
         void DeleteMovieByTitle(string title);
         void AddMovie(DbMovie movie);
+        void Save();
     }
 }
