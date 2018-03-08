@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { NavLink, Redirect } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import cn from 'classnames';
 
 import { logout } from '../../utils/auth';
 import Button from '../button/Button';
-import ButtonGroup from "../button/ButtonGroup";
+import ButtonGroup from '../button/ButtonGroup';
 import Icon from '../icon/Icon';
 
 import styles from './Navigation.scss';
@@ -43,7 +43,7 @@ export class Navigation extends Component {
               <ul className={
                 cn(
                   this.state.mobileMenuIsVisible ? '' : styles['navigation--hidden'],
-                  this.state.inTransition ? styles['navigation--transistion'] : ''
+                  this.state.inTransition ? styles['navigation--transistion'] : '',
                 )
               }
               >
@@ -55,8 +55,8 @@ export class Navigation extends Component {
               </ul>
               <div className={styles.buttons}>
                 <ButtonGroup>
-                  <Button icon="user">Eddie Brock</Button>
-                  <Button icon="power-off" />
+                  <Button icon="user" to="/users/2">Eddie Brock</Button>
+                  <Button icon="power-off" onClick={() => logout()} />
                 </ButtonGroup>
               </div>
             </div>
@@ -66,7 +66,7 @@ export class Navigation extends Component {
               <button onClick={() => this.toggleMenu()}><Icon type="bars" /></button>
               <ul className={cn(
                 this.state.mobileMenuIsVisible ? '' : styles['navigation--hidden'],
-                this.state.inTransition ? styles['navigation--transistion'] : ''
+                this.state.inTransition ? styles['navigation--transistion'] : '',
               )}
               >
                 <li><NavLink exact activeClassName={styles['navigation__item--active']} to="/" onClick={() => this.toggleMenu()}>Home</NavLink></li>
@@ -74,7 +74,7 @@ export class Navigation extends Component {
                 <li><NavLink activeClassName={styles['navigation__item--active']} to="/register" onClick={() => this.toggleMenu()}>Register</NavLink></li>
               </ul>
               <div className={styles.buttons}>
-                <Button icon="user">Login</Button>
+                <Button icon="user" to="/login">Login</Button>
               </div>
             </div>
           )
