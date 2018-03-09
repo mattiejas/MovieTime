@@ -1,4 +1,5 @@
 ﻿import React, { Component } from 'react';
+import { getUser, getRequestHeaderForCurrentUser } from '../utils/auth';
 
 const API = '/auth/secretdata/';
 
@@ -11,22 +12,23 @@ class SecretDataView extends Component {
   }
   
   componentDidMount() {
-    fetch(API)
-      .then((data) => {
-        console.log('response from json', data);
-        this.setState({ secretData: data });
+    getRequestHeaderForCurrentUser()
+      .then(requestHeaders => {
+          fetch(API, { method: 'get', headers: requestHeaders })
+            .then(result => result.json() )
+            .then(data => this.setState({ secretData: data.secret }));
       })
       .catch((err) => {
-        console.log('my error', err);
+        this.setState({ secretData: "You are not logged in! Please log in to view the secret!" });
+        console.log('err', err);
       });
   }
 
   render() {
     const mySecret = this.state.secretData;
-    console.log('my secret', mySecret);
     return (
       <div>
-        <h2>Can you keep my story a secret?</h2>
+        <h2> Hello: {mySecret}</h2>
       </div>
     );
   }

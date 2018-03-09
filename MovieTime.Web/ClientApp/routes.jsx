@@ -63,7 +63,7 @@ class Router extends React.Component {
           <PublicRoute path="/register" isAuthenticated={this.state.isAuthenticated} component={RegistrationForm} />
           <PublicRoute path="/login" isAuthenticated={this.state.isAuthenticated} component={Login} />
           <PrivateRoute path="/protected" isAuthenticated={this.state.isAuthenticated} component={Protected} />
-          <PrivateRoute path="/secretdata" isAuthenticated={this.state.isAuthenticated} component={SecretDataView} />
+          <Route path="/secretdata" isAuthenticated={this.state.isAuthenticated} component={SecretDataView} />
           <Route component={NotFoundView} />
         </Switch>
       </Layout>
