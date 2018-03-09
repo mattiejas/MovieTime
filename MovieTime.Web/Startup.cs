@@ -71,7 +71,7 @@ namespace MovieTime.Web
             }
 
             app.UseAuthentication();
-            app.UseMiddleware<SerilogMiddleware>();
+          //  app.UseMiddleware<SerilogMiddleware>();
 
             app.UseStaticFiles();
 

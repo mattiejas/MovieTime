@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MovieTime.Web.Auth;
+using Serilog;
 
 namespace MovieTime.Web.Controllers
 {
@@ -15,28 +16,15 @@ namespace MovieTime.Web.Controllers
     [Route("/Auth")]
     public class AuthController : Controller
     {
-
-
         [HttpPost("register")]
-        public ActionResult Register(/* userModel*/){
+        public ActionResult Register( [FromBody] AuthUser userModel){
             var userIdFromToken = this.User.GetUserId();
             if (userIdFromToken == null)
                 return BadRequest("User is not authenticated");           
-         //   if (/*userIdFromToken != userModel.Id*/) return BadRequest("The token claims do not match with the submitted userInfo");
-
+                
+            Log.Information($"This user is registered with our SQL DB = : {userModel.Email}");
             //userRepository.Add(userModel);
             return Ok();
         }
-
-        [HttpGet("secretdata")]
-        public Model SecretData()
-        {
-            return new Model();
-        }
-    }
-
-    public class Model
-    {
-        public string Secret = "secretttt";
     }
 }
