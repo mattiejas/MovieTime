@@ -24,7 +24,7 @@ namespace MovieTime.Web
         {
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(Configuration)
-                .WriteTo.Slack("https://hooks.slack.com/services/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", null, Serilog.Events.LogEventLevel.Information)
+                .WriteTo.Slack("https://hooks.slack.com/services/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", null, Serilog.Events.LogEventLevel.Information)
                 .CreateLogger();
 
             try
