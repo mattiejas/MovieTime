@@ -7,7 +7,13 @@ const Icon = ({ type }) => (
 );
 
 Icon.propTypes = {
-  type: PropTypes.string.isRequired,
+  // TODO: look into error
+  // type: PropTypes.string.isRequired,
+  type: PropTypes.string,
+};
+
+Icon.defaultProps = {
+  type: '',
 };
 
 export default Icon;

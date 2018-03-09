@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 
 import { login } from '../../utils/auth';
 
-class Login extends Component {
+export default class Login extends Component {
   constructor(props) {
     super(props);
 
@@ -27,12 +26,12 @@ class Login extends Component {
   }
 
   handleInputChange(event) {
-    const target = event.target;
+    const target = { event };
+    const name = { target };
     const value = target.type === 'checkbox' ? target.checked : target.value;
-    const name = target.name;
 
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
@@ -56,5 +55,3 @@ class Login extends Component {
     );
   }
 }
-
-export default Login;
