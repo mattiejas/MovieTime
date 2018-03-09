@@ -10,6 +10,16 @@ module.exports = (env) => {
         module: {
             rules: [
                 {
+                    enforce: "pre",
+                    test: /\.(js|jsx)$/,
+                    exclude: /node_modules/,
+                    loader: 'eslint-loader',
+                    options: {
+                        fix: true,
+                        emitWarning: true
+                    }
+                },
+                {
                     test: /\.(js|jsx)$/,
                     include: /ClientApp/,
                     exclude: /(node_modules|bower_components)/,
