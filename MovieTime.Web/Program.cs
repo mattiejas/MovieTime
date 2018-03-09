@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Sinks.Slack.Core;
 
 namespace MovieTime.Web
 {
@@ -23,6 +24,7 @@ namespace MovieTime.Web
         {
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(Configuration)
+                .WriteTo.Slack("https://hooks.slack.com/services/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", null, Serilog.Events.LogEventLevel.Information)
                 .CreateLogger();
 
             try

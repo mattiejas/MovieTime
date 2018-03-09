@@ -50,7 +50,7 @@ namespace MovieTime.Web
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseMiddleware<SerilogMiddleware>();
+           // app.UseMiddleware<SerilogMiddleware>();
 
             app.UseStaticFiles();
 
