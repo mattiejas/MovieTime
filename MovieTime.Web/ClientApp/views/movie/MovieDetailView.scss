@@ -54,9 +54,14 @@
       display: inline-block;
     }
   }
+
+  .view__background {
+    border-top: 10px solid $secondary-dark-color;
+  }
   
   .view__content__container {
-    margin-top: 15px;
+    padding: 0 30px;
+    margin-top: 50px;
     display: grid;
     grid-column-gap: 25px;
     grid-template-columns: 240px 1fr;
@@ -66,13 +71,12 @@
     align-items: flex-end;
     height: 28vh;
     padding: 0 0 25px 0;
-    margin-top: -15px;
+    margin-top: -50px;
   }
 }
 
 @media (min-width: $grid-md) {
   .view__content__container {
-    margin-top: 40px;
     grid-column-gap: 40px;
     grid-template-columns: 340px 1fr;
   }
