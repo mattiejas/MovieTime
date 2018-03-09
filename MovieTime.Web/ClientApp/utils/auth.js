@@ -32,3 +32,8 @@ export function getRequestHeaderForCurrentUser() {
     }
   });
 }
+
+export async function  GetUser(){
+  let user = await auth.currentUser();
+  return user;
+}
