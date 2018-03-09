@@ -11,6 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 using MovieTime.Web.SharedKernel;
 using MovieTime.Web.MovieDetails;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace MovieTime.Web
 {
@@ -26,6 +29,19 @@ namespace MovieTime.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+				services.AddAuthentication( JwtBearerDefaults.AuthenticationScheme)
+				.AddJwtBearer( options => {
+                options.Authority = "https://securetoken.google.com/movietime-hhs-c73b9";
+						options.TokenValidationParameters = new TokenValidationParameters
+						{
+								ValidateIssuer= true,
+                                ValidIssuer = "https://securetoken.google.com/movietime-hhs-c73b9",
+                                ValidateAudience = true,
+								ValidAudience= "movietime-hhs-c73b9",
+                                ValidateLifetime= true
+						};
+				});
+
             services.AddMvc();
             services.AddAutoMapper();
             services.AddSwaggerGen(c =>
@@ -54,7 +70,8 @@ namespace MovieTime.Web
                 app.UseExceptionHandler("/Home/Error");
             }
 
-           // app.UseMiddleware<SerilogMiddleware>();
+            app.UseAuthentication();
+          //  app.UseMiddleware<SerilogMiddleware>();
 
             app.UseStaticFiles();
 
