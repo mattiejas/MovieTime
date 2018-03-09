@@ -9,7 +9,7 @@ namespace MovieTime.Web.MovieDetails
         public string Value { get; set; }
     }
 
-    public class MovieModel
+    public class OmdbMovieModel
     {
         public string Title { get; set; }
         public string Year { get; set; }

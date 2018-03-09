@@ -1,0 +1,19 @@
+@import "core";
+
+:global {
+  body {
+    background: $background-color;
+    padding-top: 50px;
+  }
+  .image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+  hr {
+    height: 1px;
+    background-color: $font-color-light;
+    color: $font-color-light;
+    border: none;
+  }
+}
