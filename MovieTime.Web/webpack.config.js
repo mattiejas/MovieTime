@@ -33,8 +33,27 @@ module.exports = (env) => {
                     test: /\.scss$/,
                     include: /ClientApp/,
                     use: ExtractTextPlugin.extract({
-                        fallback: 'style-loader',
-                        loader: 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader!sass-loader',
+                        use: [{
+                            loader: "css-loader",
+                            options: {
+                                modules: true,
+                                localIdentName: '[name]__[local]___[hash:base64:5]',
+                                importLoaders: 2,
+                                sourceMap: true
+                            }
+                        }, {
+                            loader: "postcss-loader",
+                            options: {
+                                sourceMap: true
+                            }
+                        }, {
+                            loader: "sass-loader",
+                            options: {
+                                sourceMap: true
+                            }
+                        }],
+                        // use style-loader in development
+                        fallback: "style-loader"
                     }),
                 },
             ],
