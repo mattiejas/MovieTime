@@ -31,7 +31,6 @@
     <Content Remove="ClientApp\**" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MovieDetails\" />
     <Folder Include="wwwroot\assets\users" />
   </ItemGroup>
   <ItemGroup>
@@ -68,5 +67,9 @@
       </ResolvedFileToPublish>
     </ItemGroup>
   </Target>
-  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JSONSchema="Ap" /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties appsettings_1json__JSONSchema="Ap" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>
