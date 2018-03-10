@@ -24,7 +24,8 @@ namespace MovieTime.Web
         {
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(Configuration)
-                .WriteTo.Slack("https://hooks.slack.com/services/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", null, Serilog.Events.LogEventLevel.Information)
+                .WriteTo.Slack("https://hooks.slack.com/services/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", null, Serilog.Events.LogEventLevel.Warning)
+                .WriteTo.ApplicationInsightsEvents("a7e4d631-a16c-4006-afb1-1f689f37d431")
                 .CreateLogger();
 
             try
@@ -44,6 +45,7 @@ namespace MovieTime.Web
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseApplicationInsights()
                 .UseStartup<Startup>()
                 .UseSerilog()
                 .Build();
