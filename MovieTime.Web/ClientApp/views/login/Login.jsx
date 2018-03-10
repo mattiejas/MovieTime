@@ -7,8 +7,8 @@ export default class Login extends Component {
     super(props);
 
     this.state = {
-      email: 'email@outlook.com',
-      password: 'password',
+      email: '',
+      password: '',
       error: null,
     };
 
@@ -26,8 +26,8 @@ export default class Login extends Component {
   }
 
   handleInputChange(event) {
-    const target = { event };
-    const name = { target };
+    const { target } = event;
+    const { name } = target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
 
     this.setState({
