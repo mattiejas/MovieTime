@@ -9,7 +9,7 @@ const config = {
   messagingSenderId: '473517215049',
 };
 
-firebase.initializeApp(config);
+const fireapp =firebase.initializeApp(config);
 // const facebookProvider = new firebase.auth.FacebookAuthProvider();
 
 export const auth = firebase.auth();
