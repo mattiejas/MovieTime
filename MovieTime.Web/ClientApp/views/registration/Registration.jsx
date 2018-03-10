@@ -4,7 +4,7 @@ import { register } from '../../utils/auth';
 import Field from './Field';
 import checkPassword from 'hibp-checker';
 
-export class RegistrationForm extends React.Component {
+export default class Registration extends React.Component {
   static async registerUserWithFireBase(person) {
     await register(person);
   }
@@ -93,5 +93,3 @@ export class RegistrationForm extends React.Component {
     );
   }
 }
-
-export default RegistrationForm;
