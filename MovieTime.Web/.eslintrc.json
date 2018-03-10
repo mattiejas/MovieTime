@@ -1,6 +1,14 @@
 {
-  "extends": "airbnb",
-  "env": {
-    "browser": true
-  }
+    "extends": "airbnb",
+    "env": {
+        "browser": true,
+        "es6": true
+    },
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true,
+            "experimentalObjectRestSpread": true,
+            "restParams": true
+        }
+    }
 }

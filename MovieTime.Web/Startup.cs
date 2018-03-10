@@ -10,6 +10,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using MovieTime.Web.Movie.Persistance;
@@ -32,6 +35,21 @@ namespace MovieTime.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+						services.AddAuthentication( JwtBearerDefaults.AuthenticationScheme)
+								.AddJwtBearer( options => {
+										options.TokenValidationParameters = new TokenValidationParameters
+										{
+												ValidateIssuer= true, 
+												ValidateAudience = true,
+												ValidateIssuerSigningKey = true,
+												ValidIssuer = "movietime-hhs-c73b9.firebaseapp.com",
+												ValidAudience= "movietime-hhs-c73b9.firebase.com",
+												IssuerSigningKey= new SymmetricSecurityKey(
+																Encoding.UTF8.GetBytes(Configuration["firebaseKey"]))
+
+										};
+								} );
+
             services.AddMvc(setupAction =>
             {
                 setupAction.ReturnHttpNotAcceptable = true; // do not send default media type if unsupported is requested
