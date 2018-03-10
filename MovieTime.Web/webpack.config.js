@@ -4,7 +4,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = (env) => {
     return {
-        entry: { main: './ClientApp/boot.jsx' },
+        entry: { main: ['babel-polyfill', './ClientApp/boot.jsx'] },
         devtool: 'inline-source-map',
         resolve: { extensions: ['.js', '.jsx'] },
         module: {
@@ -29,7 +29,7 @@ module.exports = (env) => {
                             options: {
                                 babelrc: false,
                                 presets: ['env', 'react'],
-                                plugins: ['transform-class-properties', 'transform-es2015-destructuring', 'transform-object-rest-spread'],
+                                plugins: ['transform-class-properties', 'transform-es2015-destructuring', 'transform-object-rest-spread', 'transform-async-to-generator'],
                             },
                         },
                     ],

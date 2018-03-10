@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 
 import './styles/index.scss';
-import App from "./app";
+import App from './app';
 
 function renderApp() {
   // This code starts up the React app when it runs in a browser. It sets up the routing

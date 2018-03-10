@@ -9,10 +9,9 @@ import Home from './views/Home';
 import MovieDetailView from './views/movie/MovieDetailView';
 import ProfileView from './views/profile/ProfileView';
 import NotFoundView from './views/notfound/NotFoundView';
-import RegistrationForm from './views/RegistrationForm/RegistrationForm';
+import RegistrationForm from './views/registration/Registration';
 import Protected from './views/Protected';
 import Login from './views/login/Login';
-import SecretDataView from './views/SecretDataView';
 
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
   <Route
@@ -86,7 +85,6 @@ export default class Router extends React.Component {
           <PublicRoute path="/login" isAuthenticated={this.state.isAuthenticated} component={Login} />
           <PrivateRoute path="/protected" isAuthenticated={this.state.isAuthenticated} component={Protected} />
           <Route path="/users/:id" component={ProfileView} />
-          <PrivateRoute path="/secretdata" isAuthenticated={this.state.isAuthenticated} component={SecretDataView} />
           <Route component={NotFoundView} />
         </Switch>
       </Layout>
