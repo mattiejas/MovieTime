@@ -22,8 +22,20 @@ namespace MovieTime.Web.Controllers
             if (userIdFromToken == null)
                 return BadRequest("User is not authenticated");           
                 
-            Log.Information($"This user is registered with our SQL DB = : {userModel.Email}");
+            Log.Information($"This user is registered with our DB: {userModel.Email}");
             //userRepository.Add(userModel);
+            return Ok();
+        }
+
+        [HttpPost("unregister")]
+        public ActionResult Unregister([FromBody] AuthUser userModel)
+        {
+            var userIdFromToken = this.User.GetUserId();
+            if (userIdFromToken == null)
+                return BadRequest("User is unknown");
+
+            Log.Information($"User removed from our DB: {userModel.Email}" );
+            //userRepository.Remove(userModel);
             return Ok();
         }
     }
