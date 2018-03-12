@@ -8,7 +8,9 @@ using RestSharp;
 
 namespace MovieTime.Web.Movie.Repositories
 {
-    public class OmdbMovieRepository : IMovieRepository
+    public interface IOmdbMovieRepository : IMovieRepository { }
+    
+    public class OmdbMovieRepository : IOmdbMovieRepository
     {
         private static readonly string BASE_URL = "http://www.omdbapi.com";
         private static readonly string API_KEY_ARG = "apikey";

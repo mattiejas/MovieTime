@@ -26,6 +26,10 @@ namespace MovieTime.Web.Movie.Services
             if (movieModel == null)
             {
                 movieModel = _movieRepository.GetMovieById(id);
+
+                // Cache the movie in our database to improve robustness
+                _databaseMovieRespository.AddMovie(movieModel);
+                _databaseMovieRespository.Save();
             }
 
             var movieDetailsVm = _mapper.Map<DbMovie, MovieDetailsViewModel>(movieModel);
@@ -40,6 +44,10 @@ namespace MovieTime.Web.Movie.Services
             if (movieModel == null)
             {
                 movieModel = _movieRepository.GetMovieByTitle(title);
+
+                // Cache the movie in our database to improve robustness
+                _databaseMovieRespository.AddMovie(movieModel);
+                _databaseMovieRespository.Save();
             }
 
             var movieDetailsVm = _mapper.Map<DbMovie, MovieDetailsViewModel>(movieModel); //todo test null

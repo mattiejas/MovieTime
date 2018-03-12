@@ -44,5 +44,10 @@ namespace MovieTime.Web.Movie.Repositories
         {
             _context.Movies.Add(movie);
         }
+
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
     }
 }
