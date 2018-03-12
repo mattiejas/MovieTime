@@ -50,13 +50,13 @@ namespace MovieTime.Tests.Movie
             Assert.Equal("Blood Ring 2", movieModel.Title);
         }
         
-        [Fact]
-        public void GetMovieByTitleTest()
-        {
+       // [Fact]
+       // public void GetMovieByTitleTest()
+       // {
             //var movieModel = _omdbMovieRepository.GetMovieByTitle("Blood Ring 2");
             //Assert.Equal("tt0112529", movieModel.Id);
             //TODO Id property is null
-        }
+      //  }
         
         [Fact]
         public void GetMoviesByTitleTest()
