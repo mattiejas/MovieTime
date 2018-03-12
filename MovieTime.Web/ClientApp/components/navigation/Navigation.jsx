@@ -9,6 +9,7 @@ import ButtonGroup from '../button/ButtonGroup';
 import Icon from '../icon/Icon';
 
 import styles from './Navigation.scss';
+import SearchInput from '../input/SearchInput';
 
 export default class Navigation extends Component {
   constructor() {
@@ -53,6 +54,7 @@ export default class Navigation extends Component {
                 <li><NavLink activeClassName={styles['navigation__item--active']} to="/movie/detail/ferris bueller's day off" onClick={() => this.toggleMenu()}>Movie Detail</NavLink></li>
                 <li><NavLink activeClassName={styles['navigation__item--active']} to="/protected" onClick={() => this.toggleMenu()}>Protected</NavLink></li>
               </ul>
+              <SearchInput />
               <div className={styles.buttons}>
                 <ButtonGroup>
                   <Button icon="user" to="/users/2">Eddie Brock</Button>
