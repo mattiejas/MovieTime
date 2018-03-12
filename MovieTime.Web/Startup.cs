@@ -35,20 +35,18 @@ namespace MovieTime.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-						services.AddAuthentication( JwtBearerDefaults.AuthenticationScheme)
-								.AddJwtBearer( options => {
-										options.TokenValidationParameters = new TokenValidationParameters
-										{
-												ValidateIssuer= true, 
-												ValidateAudience = true,
-												ValidateIssuerSigningKey = true,
-												ValidIssuer = "movietime-hhs-c73b9.firebaseapp.com",
-												ValidAudience= "movietime-hhs-c73b9.firebase.com",
-												IssuerSigningKey= new SymmetricSecurityKey(
-																Encoding.UTF8.GetBytes(Configuration["firebaseKey"]))
-
-										};
-								} );
+				services.AddAuthentication( JwtBearerDefaults.AuthenticationScheme)
+				.AddJwtBearer( options => {
+                options.Authority = "https://securetoken.google.com/movietime-hhs-c73b9";
+						options.TokenValidationParameters = new TokenValidationParameters
+						{
+								ValidateIssuer= true,
+                                ValidIssuer = "https://securetoken.google.com/movietime-hhs-c73b9",
+                                ValidateAudience = true,
+								ValidAudience= "movietime-hhs-c73b9",
+                                ValidateLifetime= true
+						};
+				});
 
             services.AddMvc(setupAction =>
             {
@@ -64,7 +62,7 @@ namespace MovieTime.Web
             
             // Exec: dotnet ef migrations add "<migration_name>", to add a new migration.
             // Exec: dotnet ef database update, to update the database according to the migrations. 
-            var connectionString = Configuration.GetConnectionString("movieDbConnectionString");
+            var connectionString = Configuration.GetConnectionString("defaultConnection");
             var mode = Configuration.GetConnectionString("Use_SQLServer");
             if (string.IsNullOrWhiteSpace(mode) || mode.ToLower() == "true")
             {
@@ -111,7 +109,8 @@ namespace MovieTime.Web
                 });
             }
 
-            app.UseMiddleware<SerilogMiddleware>();
+            app.UseAuthentication();
+          //  app.UseMiddleware<SerilogMiddleware>();
 
             app.UseStaticFiles();
 
