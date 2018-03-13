@@ -160,7 +160,7 @@ class ProfileView extends React.Component {
             </div>
           </div>
           <div className={styles.content}>
-            <ListWidget movies={['Thor: Ragnarok', 'Thor: Ragnarok']} history={this.props.history} />
+            <ListWidget movies={['Thor: Ragnarok', 'Thor: Ragnarok', 'Thor: Ragnarok', 'Thor: Ragnarok', 'Thor: Ragnarok']} history={this.props.history} />
           </div>
         </div>
       </div>

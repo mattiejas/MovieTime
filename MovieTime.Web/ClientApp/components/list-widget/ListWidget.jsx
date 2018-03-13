@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import cn from 'classnames';
 
 import * as movieUtils from '../../utils/movie';
 
@@ -23,9 +24,20 @@ class ListWidget extends React.Component {
   fetchMovies(props) {
     this.setState({
       movies: [],
+      lastPosterIsViewAll: false,
     });
-    const arraySize = props.movies.length > 4 ? 4 : props.movies.length;
-    props.movies.slice(0, arraySize).forEach((movie) => {
+
+    let movieCount;
+    if (props.movies.length > 4) {
+      movieCount = 4;
+      this.setState({
+        lastPosterIsViewAll: true,
+      });
+    } else {
+      movieCount = props.movies.length;
+    }
+
+    props.movies.slice(0, movieCount).forEach((movie) => {
       movieUtils.getMovieByTitle(movie).then((data) => {
         this.setState({
           movies: [...this.state.movies, data],
@@ -38,18 +50,24 @@ class ListWidget extends React.Component {
     return (
       <div className={styles['list-widget']}>
         {
-          _.map(this.state.movies.slice(0, -1), movie =>
+          _.map(
+            this.state.movies.slice(
+              0,
+              this.state.lastPosterIsViewAll ? -1 : this.state.movies.length,
+            ),
+            movie =>
             (<MoviePoster
               className={styles.poster}
               source={movie.poster}
               alt={`${movie.title} poster`}
               onClick={() => this.onClick(`/movies/${movie.title}`)}
-            />))
+            />),
+          )
         }
         {
-          this.state.movies.length > 0 &&
+          this.state.movies.length > 0 && this.state.lastPosterIsViewAll &&
           <MoviePoster
-            className={styles.poster}
+            className={cn(styles.poster, styles['last-poster'])}
             source={this.state.movies[this.state.movies.length - 1].poster}
             alt={`${this.state.movies[this.state.movies.length - 1].title} poster`}
             onClick={() => this.onClick('/list')}
