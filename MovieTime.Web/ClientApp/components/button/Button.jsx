@@ -6,20 +6,23 @@ import cn from 'classnames';
 import styles from './Button.scss';
 import Icon from '../icon/Icon';
 
-const Button = (props) => {
-  if (props.to) {
+const Button = ({
+  to, dark, danger, className, children, icon, ...rest
+}) => {
+  if (to) {
     return (
       <Link
-        className={cn(styles.button, props.dark ? styles.dark : '', props.danger ? styles.danger : '', props.className)}
-        to={props.to}
-        href={props.to}
+        className={cn(styles.button, dark ? styles.dark : '', danger ? styles.danger : '', className)}
+        to={to}
+        href={to}
+        {...rest}
       >
         <div className={styles.button__inner}>
           {
-            props.icon !== '' &&
-            <Icon type={props.icon} />
+            icon !== '' &&
+            <Icon type={icon} />
           }
-          <span className={props.children !== '' && props.icon !== '' ? styles.spacing : ''} />{props.children}
+          <span className={children !== '' && icon !== '' ? styles.spacing : ''} />{children}
         </div>
       </Link>
     );
@@ -27,20 +30,16 @@ const Button = (props) => {
   return (
     <div
       role="button"
-      className={cn(styles.button, props.dark ? styles.dark : '', props.danger ? styles.danger : '', props.className)}
+      className={cn(styles.button, dark ? styles.dark : '', danger ? styles.danger : '', className)}
       tabIndex={0}
-      onFocus={props.onFocus}
-      onClick={props.onClick}
-      onKeyDown={props.onKeyDown}
-      onKeyPress={props.onKeyPress}
-      onKeyUp={props.onKeyUp}
+      {...rest}
     >
       <div className={styles.button__inner}>
         {
-          props.icon !== '' &&
-          <Icon type={props.icon} />
+          icon !== '' &&
+          <Icon type={icon} />
         }
-        <span className={props.children !== '' && props.icon !== '' ? styles.spacing : ''} />{props.children}
+        <span className={children !== '' && icon !== '' ? styles.spacing : ''} />{children}
       </div>
     </div>
   );

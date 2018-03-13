@@ -11,7 +11,7 @@
     height: auto;
   }
   hr {
-    height: 1px;
+    height: 1px !important;
     background-color: $light-color;
     color: $light-color;
     margin-bottom: 20px;
