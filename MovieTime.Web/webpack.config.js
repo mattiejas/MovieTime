@@ -1,11 +1,34 @@
+require('babel-polyfill');
+
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const bundleOutputDir = './wwwroot/dist';
-
 module.exports = (env) => {
-  const isDevBuild = !(env && env.prod);
+  const isDevBuild = (env && env.dev) || (env && !env.prod) || true;
+
+  const cssProd = ExtractTextPlugin.extract({
+    use: [{
+      loader: 'css-loader',
+      options: {
+        modules: true,
+        localIdentName: '[name]__[local]___[hash:base64:5]',
+        camelCase: true,
+        importLoaders: 2,
+        sourceMap: false,
+      },
+    }, {
+      loader: 'postcss-loader',
+      options: {
+        sourceMap: false,
+      },
+    }, {
+      loader: 'sass-loader',
+      options: {
+        sourceMap: false,
+      },
+    }],
+  });
 
   const cssDev = [
     {
@@ -35,78 +58,65 @@ module.exports = (env) => {
     },
   ];
 
-  // const cssProd = ExtractTextPlugin.extract({
-  //   use: [
-  //     {
-  //       loader: 'style-loader',
-  //     },
-  //     {
-  //       loader: 'css-loader',
-  //       options: {
-  //         modules: true,
-  //         camelCase: true,
-  //         importLoaders: 2,
-  //         localIdentName: '[name]__[local]___[hash:base64:5]',
-  //       },
-  //     },
-  //     {
-  //       loader: 'postcss-loader',
-  //     },
-  //     {
-  //       loader: 'sass-loader',
-  //     },
-  //   ],
-  // });
-
-  const cssLoader = isDevBuild ? cssDev : cssDev;
-
-  return [
-    {
-      stats: { modules: false },
-      entry: { main: './ClientApp/boot.jsx' },
-      resolve: { extensions: ['.js', '.jsx'] },
-      output: {
-        path: path.join(__dirname, bundleOutputDir),
-        filename: '[name].js',
-        publicPath: 'dist/',
-      },
-      module: {
-        rules: [
-          {
-            test: /\.jsx?$/,
-            include: /ClientApp/,
-            use: 'babel-loader',
-          },
-          {
-            test: /\.(png|jpg|jpeg|gif|svg)$/,
-            use: 'url-loader?limit=25000',
-          },
-          {
-            test: /\.scss$/,
-            include: /ClientApp/,
-            use: cssLoader,
-          },
-        ],
-      },
-      plugins: [
-        new webpack.DllReferencePlugin({
-          context: __dirname,
-          manifest: require('./wwwroot/dist/vendor-manifest.json'), // eslint-disable-line global-require
-        }),
-      ].concat(isDevBuild
-        ? [
-          //   Plugins that apply in development builds only
-          //   new webpack.SourceMapDevToolPlugin({
-          //       filename: '[file].map', // Remove this line if you prefer inline source maps
-          //       moduleFilenameTemplate: path.relative(bundleOutputDir, '[resourcePath]')
-          //   Point sourcemap entries to the original file locations on disk
-          //   })
-        ]
-        : [
-          // Plugins that apply in production builds only
-          new webpack.optimize.UglifyJsPlugin(),
-          // new ExtractTextPlugin('site.css'),
-        ]),
+  return {
+    entry: { main: ['babel-polyfill', './ClientApp/boot.jsx'] },
+    devtool: 'inline-source-map',
+    resolve: { extensions: ['.js', '.jsx'] },
+    node: {
+      fs: 'empty',
+      net: 'empty',
+      tls: 'empty',
+      child_process: 'empty',
     },
-  ];
+    module: {
+      rules: [
+        {
+          enforce: 'pre',
+          test: /\.(js|jsx)$/,
+          exclude: /node_modules/,
+          loader: 'eslint-loader',
+          options: {
+            fix: true,
+            emitWarning: true,
+          },
+        },
+        {
+          test: /\.(js|jsx)$/,
+          include: /ClientApp/,
+          exclude: /(node_modules|bower_components)/,
+          use: [
+            {
+              loader: 'babel-loader',
+              options: {
+                babelrc: false,
+                presets: ['env', 'react'],
+                plugins: ['transform-class-properties', 'transform-es2015-destructuring', 'transform-object-rest-spread', 'transform-async-to-generator'],
+              },
+            },
+          ],
+        },
+        {
+          test: /\.scss$/,
+          include: /ClientApp/,
+          use: isDevBuild ? cssDev : cssProd,
+        }, {
+          test: /\.(png|jpg|jpeg|gif|svg)$/,
+          include: /ClientApp/,
+          use: 'url-loader?limit=25000',
+        },
+      ],
+    },
+    plugins: [
+      new webpack.DllReferencePlugin({
+        context: __dirname,
+        manifest: require('./wwwroot/dist/vendor-manifest.json'), // eslint-disable-line global-require
+      }),
+      new ExtractTextPlugin('site.css'),
+    ],
+    output: {
+      path: path.resolve(__dirname, 'wwwroot', 'dist'),
+      filename: '[name].js',
+      publicPath: 'dist/',
+    },
+  };
 };
