@@ -35,18 +35,19 @@ namespace MovieTime.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-				services.AddAuthentication( JwtBearerDefaults.AuthenticationScheme)
-				.AddJwtBearer( options => {
-                options.Authority = "https://securetoken.google.com/movietime-hhs-c73b9";
-						options.TokenValidationParameters = new TokenValidationParameters
-						{
-								ValidateIssuer= true,
-                                ValidIssuer = "https://securetoken.google.com/movietime-hhs-c73b9",
-                                ValidateAudience = true,
-								ValidAudience= "movietime-hhs-c73b9",
-                                ValidateLifetime= true
-						};
-				});
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = "https://securetoken.google.com/movietime-hhs-c73b9";
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = "https://securetoken.google.com/movietime-hhs-c73b9",
+                        ValidateAudience = true,
+                        ValidAudience = "movietime-hhs-c73b9",
+                        ValidateLifetime = true
+                    };
+                });
 
             services.AddMvc(setupAction =>
             {
@@ -55,11 +56,8 @@ namespace MovieTime.Web
             });
 
             services.AddAutoMapper();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info { Title = "MovieTime API", Version = "v1" });
-            });
-            
+            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info {Title = "MovieTime API", Version = "v1"}); });
+
             // Exec: dotnet ef migrations add "<migration_name>", to add a new migration.
             // Exec: dotnet ef database update, to update the database according to the migrations. 
             var connectionString = Configuration.GetConnectionString("defaultConnection");
@@ -73,15 +71,14 @@ namespace MovieTime.Web
                 connectionString = Configuration.GetConnectionString("Postgresql_DATABASE_URL");
                 services.AddDbContext<MovieContext>(options => options.UseNpgsql(connectionString));
             }
-            
+
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IDatabaseMovieRespository, DatabaseMovieRepository>();
             // For now decide here if we use omdb or tmdb as movie repository.
             services.AddScoped<IMovieRepository, OmdbMovieRepository>();
-            
+
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IUsersRepository, UsersRepository>();
-            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -110,7 +107,7 @@ namespace MovieTime.Web
             }
 
             app.UseAuthentication();
-          //  app.UseMiddleware<SerilogMiddleware>();
+            //  app.UseMiddleware<SerilogMiddleware>();
 
             app.UseStaticFiles();
 
@@ -120,11 +117,7 @@ namespace MovieTime.Web
 
             if (env.IsDevelopment())
             {
-               
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "MovieTime API V1");
-                });
+                app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "MovieTime API V1"); });
             }
 
             app.UseMvc(routes =>
@@ -135,7 +128,7 @@ namespace MovieTime.Web
 
                 routes.MapSpaFallbackRoute(
                     name: "spa-fallback",
-                    defaults: new { controller = "Home", action = "Index" });
+                    defaults: new {controller = "Home", action = "Index"});
             });
         }
     }
