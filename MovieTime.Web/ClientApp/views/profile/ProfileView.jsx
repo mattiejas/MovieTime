@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import ListWidget from '../../components/list-widget/ListWidget';
 import Placeholder from '../../components/placeholder/Placeholder';
 import Button from '../../components/button/Button';
 import ProfilePicture from '../../components/profile/ProfilePicture';
@@ -159,8 +160,7 @@ class ProfileView extends React.Component {
             </div>
           </div>
           <div className={styles.content}>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus architecto, deleniti dolorem earum
-            excepturi explicabo labore nostrum nulla porro qui quo rem similique tempora veniam vero vitae! Aut, optio.
+            <ListWidget movies={['Thor: Ragnarok', 'Thor: Ragnarok']} history={this.props.history} />
           </div>
         </div>
       </div>
@@ -170,6 +170,7 @@ class ProfileView extends React.Component {
 
 ProfileView.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default ProfileView;
