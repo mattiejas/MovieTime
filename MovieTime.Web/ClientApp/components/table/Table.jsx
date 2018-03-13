@@ -10,7 +10,7 @@ const Table = ({ headers, rows }) => (
       <thead>
         <tr>
           {
-            _.map(headers, heading => (<th>{heading}</th>))
+            _.map(headers, (heading, i) => (<th key={i}>{heading}</th>))
           }
         </tr>
       </thead>
@@ -19,7 +19,7 @@ const Table = ({ headers, rows }) => (
           _.map(rows, row => (
             <tr>
               {
-                _.map(row, item => <td>{item}</td>)
+                _.map(row, (item, i) => <td key={i}>{item}</td>)
               }
             </tr>))
         }

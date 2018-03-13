@@ -55,8 +55,9 @@ class ListWidget extends React.Component {
               0,
               this.state.lastPosterIsViewAll ? -1 : this.state.movies.length,
             ),
-            movie =>
+            (movie, i) =>
             (<MoviePoster
+              key={i}
               className={styles.poster}
               source={movie.poster}
               alt={`${movie.title} poster`}
