@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using MovieTime.Web.Movie.Persistance;
 using MovieTime.Web.Movie.Repositories;
+using MovieTime.Web.Movie.Review;
 using MovieTime.Web.Movie.Services;
 using MovieTime.Web.Users;
 using MovieTime.Web.Utilities;
@@ -65,7 +66,9 @@ namespace MovieTime.Web
             
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IUsersRepository, UsersRepository>();
-            
+
+            services.AddScoped<IReviewService, ReviewService>();
+            services.AddScoped<IReviewRepository, ReviewRepository>(); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
