@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-
-const API = '/api/movie/title/';
+import { Redirect } from 'react-router-dom';
 
 class SearchInput extends Component {
   constructor() {
@@ -9,6 +8,7 @@ class SearchInput extends Component {
     this.state = {
       searchQuery: '',
       searchResults: {},
+      redirectTo: '',
     };
   }
 
@@ -19,33 +19,27 @@ class SearchInput extends Component {
     });
   }
 
-  onSubmit(val) {
-    console.log('onSubmit', this.state.searchQuery);
+  onSubmit(e) {
+    e.preventDefault();
     if (this.state.searchQuery && this.state.searchQuery.length > 1) {
-      if (this.state.searchQuery.length % 2 === 0) {
-        this.getSearchResults();
-      }
+      this.setState({
+        redirectTo: `/movie/detail/${this.state.searchQuery}`,
+      });
     }
   }
 
-  getSearchResults() {
-    console.log('fetching search results, for', this.state.searchQuery);
-    fetch(API + this.state.searchQuery).then(response => response.json()).then((data) => {
-      this.setState({
-        searchResults: data,
-      });
-      console.log(data);
-    });
-  }
-
   render() {
+    if (this.state.redirectTo) {
+      console.log('hello', this.state.redirectTo);
+      return (<Redirect to={this.state.redirectTo} />);
+    }
+
     return (
-      <form>
+      <form onSubmit={e => this.onSubmit(e)}>
         <input
           placeholder="Search..."
           ref={input => this.SearchInput = input}
           onChange={e => this.onChange(e.target.value)}
-          onSubmit={e => this.onSubmit(e)}
         />
         <p>{this.state.searchResults.title}</p>
       </form>
