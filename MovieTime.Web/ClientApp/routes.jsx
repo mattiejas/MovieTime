@@ -9,7 +9,7 @@ import Home from './views/Home';
 import MovieDetailView from './views/movie/MovieDetailView';
 import ProfileView from './views/profile/ProfileView';
 import NotFoundView from './views/notfound/NotFoundView';
-import RegistrationForm from './views/RegistrationForm/RegistrationForm';
+import RegistrationForm from './views/registration/Registration';
 import Protected from './views/Protected';
 import Login from './views/login/Login';
 

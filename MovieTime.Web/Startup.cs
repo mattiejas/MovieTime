@@ -62,7 +62,7 @@ namespace MovieTime.Web
             
             // Exec: dotnet ef migrations add "<migration_name>", to add a new migration.
             // Exec: dotnet ef database update, to update the database according to the migrations. 
-            var connectionString = Configuration.GetConnectionString("movieDbConnectionString");
+            var connectionString = Configuration.GetConnectionString("defaultConnection");
             var mode = Configuration.GetConnectionString("Use_SQLServer");
             if (string.IsNullOrWhiteSpace(mode) || mode.ToLower() == "true")
             {
