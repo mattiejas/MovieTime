@@ -3,46 +3,46 @@
 .search-form {
   display: flex;
   align-content: center;
-
   background-color: white;
-
   border-radius: 5px;
   font-size: 0.8em;
   width: calc(100% - 40px);
   height: 35px;
-  padding-left: 10px;
-  margin-right: 20px;
-  margin-left: 20px;
-  margin-bottom: 10px;
-
+  margin: 20px;
+  padding: 0 15px;
 
   .search-input {
-    color: grey;
+    color: $font-color;
     background-color: white;
-
     width:100%;
     height: 35px;
-
     padding-right: 6px;
     border: 0;
     &:focus {
       outline: none;
     }
-
+    &::placeholder {
+      font-style: italic;
+      font-weight: 200;
+      color: $font-color-light;
+    }
   }
 
   .search-icon {
-    color: grey;
+    display: block;
+    color: $secondary-color;
     background-color: white;
-
-    width: 20px;
-    height: 20px;
-
-    font-size: 1em;
-    padding-right: 20px;
-
+    height: 35px;
+    font-size: 1.4em;
     border-radius: 5px;
     line-height: 35px;
+    cursor: pointer;
+    &:hover {
+      color: darken($secondary-color, 10);
+    }
+    &:active {
+      color: darken($secondary-dark-color, 10);
+    }
   }
 }
 
