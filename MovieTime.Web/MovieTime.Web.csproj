@@ -31,11 +31,7 @@
   </ItemGroup>
   <ItemGroup>
     <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
-    <Compile Remove="Movie\MovieDetails\**" />
     <Content Remove="ClientApp\**" />
-    <Content Remove="Movie\MovieDetails\**" />
-    <EmbeddedResource Remove="Movie\MovieDetails\**" />
-    <None Remove="Movie\MovieDetails\**" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\assets\users" />

@@ -1,18 +1,18 @@
-﻿using System;
+﻿using MovieTime.Web.Database;
+using MovieTime.Web.Movies.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using MovieTime.Web.Movie.Persistance;
-using MovieTime.Web.Movie.Persistance.Database;
 
-namespace MovieTime.Web.Movie.Repositories
+namespace MovieTime.Web.Movies
 {
-    public class DatabaseMovieRepository :  GenericRepository<Persistance.Database.Movie>, IDatabaseMovieRespository
+    public class MovieRepository :  GenericRepository<Movie>, IMovieRespository
     {
 
-        public DatabaseMovieRepository(MovieContext context):base(context)
+        public MovieRepository(MovieContext context):base(context)
         {}
 
-        public IEnumerable<Persistance.Database.Movie> GetMoviesByTitleSearch(string title)
+        public IEnumerable<Movie> GetMoviesByTitleSearch(string title)
         {
             throw new NotImplementedException();
         }
@@ -37,7 +37,7 @@ namespace MovieTime.Web.Movie.Repositories
             throw new NotImplementedException();
         }
 
-        public void AddMovie(Persistance.Database.Movie movie)
+        public void AddMovie(Movie movie)
         {
             _context.Movies.Add(movie);
         }

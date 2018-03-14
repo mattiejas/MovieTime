@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MovieTime.Web.Movie.Persistance.Database;
 using MovieTime.Web.Users;
+using MovieTime.Web.Movies.Models;
+using MovieTime.Web.Genres;
 
-namespace MovieTime.Web.Movie.Persistance
+namespace MovieTime.Web.Database
 {
     public class MovieContext : DbContext
     {
-        public virtual DbSet<Database.Movie> Movies { get; set; }
+        public virtual DbSet<Movie> Movies { get; set; }
         public virtual DbSet<Genre> Genres { get; set; }
         public virtual DbSet<MovieGenre> MovieGenre { get; set; }
         

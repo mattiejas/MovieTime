@@ -15,12 +15,13 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using MovieTime.Web.Movie.Persistance;
-using MovieTime.Web.Movie.Repositories;
-using MovieTime.Web.Movie.Review;
-using MovieTime.Web.Movie.Services;
 using MovieTime.Web.Users;
 using MovieTime.Web.Utilities;
+using MovieTime.Web.Database;
+using MovieTime.Web.Movies;
+using MovieTime.Web.ThirdPartyServices;
+using MovieTime.Web.ThirdPartyServices.OMDB.Movies;
+using MovieTime.Web.Reviews;
 
 namespace MovieTime.Web
 {
@@ -76,9 +77,9 @@ namespace MovieTime.Web
             }
             
             services.AddScoped<IMovieService, MovieService>();
-            services.AddScoped<IDatabaseMovieRespository, DatabaseMovieRepository>();
+            services.AddScoped<IMovieRespository, MovieRepository>();
             // For now decide here if we use omdb or tmdb as movie repository.
-            services.AddScoped<IMovieRepository, OmdbMovieRepository>();
+            services.AddScoped<IThirdPartyMovieRepository, OmdbMovieRepository>();
             
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserRepository, UserRepository>();

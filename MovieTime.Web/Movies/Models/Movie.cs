@@ -1,8 +1,12 @@
-﻿using System;
+﻿using MovieTime.Web.Genres;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace MovieTime.Web.Movie.Persistance.Database
+namespace MovieTime.Web.Movies.Models
 {
     public class Movie
     {
@@ -21,7 +25,7 @@ namespace MovieTime.Web.Movie.Persistance.Database
         [Required]
         [Range(0.0, 10.0)]
         public double Rating { get; set; }
-        
+
         [Required]
         public string Rated { get; set; }
 

@@ -1,26 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoMapper.Configuration;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using MovieTime.Web.Movie.Repositories;
+using MovieTime.Web.ThirdPartyServices;
+using MovieTime.Web.ThirdPartyServices.OMDB.Movies;
 using MovieTime.Web.Utilities;
 using Xunit;
-using Serilog;
-using Moq;
-using MovieTime.Web.Movie.Persistance;
-using MovieTime.Web.Movie.Persistance.Database;
 
-namespace MovieTime.Tests.Movie
+namespace MovieTime.Tests.Movies
 {
 
     public class OmdbIntegrationTests
     {
-        private readonly IMovieRepository _movieRepository;
+        private readonly IThirdPartyMovieRepository _movieRepository;
         
         public OmdbIntegrationTests()
         {

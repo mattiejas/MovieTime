@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using MovieTime.Web.Movie.Persistance.Database;
+using MovieTime.Web.Genres;
+using MovieTime.Web.Movies.Models;
 using MovieTime.Web.Users;
 
-namespace MovieTime.Web.Movie.Persistance
+namespace MovieTime.Web.Database
 {
     public static class MovieContextExtensions
     {
@@ -54,9 +55,9 @@ namespace MovieTime.Web.Movie.Persistance
             };
 
             // ** Movies **
-            var movies = new List<Database.Movie>()
+            var movies = new List<Movie>()
             {
-                new Database.Movie()
+                new Movie()
                 {
                     Id = "25320c5e-f58a-4b1f-b63a-8ee07a840bd3",
                     Title = "The legend of ORA, the potato",
@@ -71,7 +72,7 @@ namespace MovieTime.Web.Movie.Persistance
                     Year = DateTime.Now,
                 },
 
-                new Database.Movie()
+                new Movie()
                 {
                     Id = "25320c5e-f58a-4b1f-b63a-8ee07a840bdf",
                     Title = "The legend of ORA, the potato 2",
@@ -86,7 +87,7 @@ namespace MovieTime.Web.Movie.Persistance
                     Year = DateTime.Now,
                 },
 
-                new Database.Movie()
+                new Movie()
                 {
                     Id = "25320c5e-f58a-4b1f-b63a-8ee07a840bd1",
                     Title = "Kungfu panda",

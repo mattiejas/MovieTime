@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-using MovieTime.Web.Movie.Repositories;
+﻿using MovieTime.Web.Database;
+using System.Threading.Tasks;
 
-namespace MovieTime.Web.Movie.Review
+namespace MovieTime.Web.Reviews
 {
     public interface IReviewRepository : IGenericRepository<Review>
     {

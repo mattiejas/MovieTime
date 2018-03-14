@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using MovieTime.Web.Movie.Persistance;
+using MovieTime.Web.Database;
 
-namespace MovieTime.Web.Movie.Review
+namespace MovieTime.Web.Reviews
 {
     // Resource: https://codereview.stackexchange.com/questions/175468/c-entity-framework-repository-pattern-unit-of-work-pattern
     public class UnitOfWork : IUnitOfWork

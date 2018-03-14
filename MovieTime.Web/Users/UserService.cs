@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using MovieTime.Web.Movie.Persistance;
 
 namespace MovieTime.Web.Users
 {

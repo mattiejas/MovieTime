@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MovieTime.Web.Movie.Review
+namespace MovieTime.Web.Reviews
 {
     public interface IReviewService
     {

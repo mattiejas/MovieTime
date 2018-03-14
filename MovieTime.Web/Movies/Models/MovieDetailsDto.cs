@@ -1,4 +1,4 @@
-﻿namespace MovieTime.Web.Movie.Persistance.ViewModels
+﻿namespace MovieTime.Web.Movies.Models
 {
     public class MovieDetailsDto
     {

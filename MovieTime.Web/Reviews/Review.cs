@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace MovieTime.Web.Movie.Review
+namespace MovieTime.Web.Reviews
 {
     public class Review
     {

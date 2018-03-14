@@ -1,4 +1,4 @@
-﻿namespace MovieTime.Web.Movie.Review
+﻿namespace MovieTime.Web.Reviews
 {
     public class UserReview
     {

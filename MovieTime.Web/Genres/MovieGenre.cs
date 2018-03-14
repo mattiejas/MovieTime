@@ -1,4 +1,6 @@
-﻿namespace MovieTime.Web.Movie.Persistance.Database
+﻿using MovieTime.Web.Movies.Models;
+
+namespace MovieTime.Web.Genres
 {
     public class MovieGenre
     {

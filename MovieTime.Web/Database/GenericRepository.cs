@@ -4,9 +4,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using MovieTime.Web.Movie.Persistance;
 
-namespace MovieTime.Web.Movie.Repositories
+namespace MovieTime.Web.Database
 {
     public abstract class GenericRepository<T> : IGenericRepository<T> where T : class
     {

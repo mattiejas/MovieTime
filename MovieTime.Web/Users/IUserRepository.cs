@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using MovieTime.Web.Movie.Repositories;
+using MovieTime.Web.Database;
 
 namespace MovieTime.Web.Users
 {

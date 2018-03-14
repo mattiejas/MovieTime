@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace MovieTime.Web.Movie.Persistance.Omdb
+namespace MovieTime.Web.ThirdPartyServices.OMDB.MovieList
 {
     public class ShortMovieModel
     {

@@ -1,4 +1,4 @@
-﻿namespace MovieTime.Web.Movie.Persistance.Omdb
+﻿namespace MovieTime.Web.ThirdPartyServices.OMDB.Movies
 {
     public class Rating
     {

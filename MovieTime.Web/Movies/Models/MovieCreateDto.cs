@@ -1,7 +1,8 @@
-﻿using System;
+﻿using MovieTime.Web.Genres;
+using System;
 using System.Collections.Generic;
 
-namespace MovieTime.Web.Movie.Persistance.Database
+namespace MovieTime.Web.Movies.Models
 {
     public class MovieCreateDto
     {

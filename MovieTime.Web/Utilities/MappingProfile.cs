@@ -1,8 +1,7 @@
 ﻿using System;
 using AutoMapper;
-using MovieTime.Web.Movie.Persistance.Database;
-using MovieTime.Web.Movie.Persistance.Omdb;
-using MovieTime.Web.Movie.Persistance.ViewModels;
+using MovieTime.Web.Movies.Models;
+using MovieTime.Web.ThirdPartyServices.OMDB.Movies;
 using MovieTime.Web.Users;
 
 namespace MovieTime.Web.Utilities

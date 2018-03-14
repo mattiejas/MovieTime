@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MovieTime.Web.Movie.Persistance.Omdb;
-using MovieTime.Web.Movie.Persistance.ViewModels;
-using MovieTime.Web.Movie.Services;
+using MovieTime.Web.Movies.Models;
+using MovieTime.Web.ThirdPartyServices.OMDB.MovieList;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace MovieTime.Web.Movie.Controllers
+namespace MovieTime.Web.Movies
 {
         [Route("api/[controller]")]
     public class MovieController : Controller

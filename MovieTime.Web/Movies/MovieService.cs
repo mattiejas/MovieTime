@@ -1,35 +1,34 @@
 ﻿using System;
 using AutoMapper;
-using MovieTime.Web.Movie.Persistance.Database;
-using MovieTime.Web.Movie.Persistance.Omdb;
-using MovieTime.Web.Movie.Persistance.ViewModels;
-using MovieTime.Web.Movie.Repositories;
+using MovieTime.Web.Movies.Models;
+using MovieTime.Web.ThirdPartyServices;
+using MovieTime.Web.ThirdPartyServices.OMDB.MovieList;
 
-namespace MovieTime.Web.Movie.Services
+namespace MovieTime.Web.Movies
 {
     public class MovieService : IMovieService
     {
         private readonly IMapper _mapper;
-        private readonly IMovieRepository _movieRepository;
-        private readonly IDatabaseMovieRespository _databaseMovieRespository;
+        private readonly IThirdPartyMovieRepository _thirdPartyMovieRepository;
+        private readonly IMovieRespository _movieRespository;
 
-        public MovieService(IMapper mapper, IMovieRepository movieRepository, IDatabaseMovieRespository databaseMovieRespository)
+        public MovieService(IMapper mapper, IThirdPartyMovieRepository thirdPartyMovieRepository, IMovieRespository databaseMovieRespository)
         {
             _mapper = mapper;
-            _movieRepository = movieRepository;
-            _databaseMovieRespository = databaseMovieRespository;
+            _thirdPartyMovieRepository = thirdPartyMovieRepository;
+            _movieRespository = databaseMovieRespository;
         }
 
         public MovieDetailsDto GetMovieDetailsById(string id)
         {
-            var movieModel = _databaseMovieRespository.GetMovieById(id);
+            var movieModel = _movieRespository.GetMovieById(id);
             if (movieModel == null)
             {
-                movieModel = _movieRepository.GetMovieById(id);
+                movieModel = _thirdPartyMovieRepository.GetMovieById(id);
 
                 // Cache the movie in our database to improve robustness
-                _databaseMovieRespository.AddMovie(movieModel);
-                _databaseMovieRespository.Save();
+                _movieRespository.AddMovie(movieModel);
+                _movieRespository.Save();
             }
 
             var movieDetailsVm = _mapper.Map<Movie, MovieDetailsDto>(movieModel);
@@ -39,15 +38,15 @@ namespace MovieTime.Web.Movie.Services
 
         public MovieDetailsDto GetMovieDetailsByTitle(string title)
         {
-            var movieModel = _databaseMovieRespository.GetMovieByTitle(title);
+            var movieModel = _movieRespository.GetMovieByTitle(title);
 
             if (movieModel == null)
             {
-                movieModel = _movieRepository.GetMovieByTitle(title);
+                movieModel = _thirdPartyMovieRepository.GetMovieByTitle(title);
 
                 // Cache the movie in our database to improve robustness
-                _databaseMovieRespository.AddMovie(movieModel);
-                _databaseMovieRespository.Save();
+                _movieRespository.AddMovie(movieModel);
+                _movieRespository.Save();
             }
 
             var movieDetailsVm = _mapper.Map<Movie, MovieDetailsDto>(movieModel); //todo test null

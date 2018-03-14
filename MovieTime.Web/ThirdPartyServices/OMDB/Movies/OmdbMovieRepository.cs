@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
-using MovieTime.Web.Movie.Persistance.Database;
-using MovieTime.Web.Movie.Persistance.Omdb;
 using MovieTime.Web.Utilities;
 using RestSharp;
+using MovieTime.Web.ThirdPartyServices;
+using MovieTime.Web.Movies.Models;
 
-namespace MovieTime.Web.Movie.Repositories
+namespace MovieTime.Web.ThirdPartyServices.OMDB.Movies
 {
-    public interface IOmdbMovieRepository : IMovieRepository { }
     
-    public class OmdbMovieRepository : IOmdbMovieRepository
+    public class OmdbMovieRepository :   IThirdPartyMovieRepository
     {
         private static readonly string BASE_URL = "http://www.omdbapi.com";
         private static readonly string API_KEY_ARG = "apikey";
@@ -54,7 +53,7 @@ namespace MovieTime.Web.Movie.Repositories
             return movieDetailsModel;
         }
 
-        public IEnumerable<Persistance.Database.Movie> GetMoviesByTitleSearch(string title)
+        public IEnumerable<Movie> GetMoviesByTitleSearch(string title)
         {
             // var client = CreateClient();
             // var request = CreateRequest("", Method.GET);
@@ -101,6 +100,21 @@ namespace MovieTime.Web.Movie.Repositories
             client.AddHandler("*+json", Serialization.NewtonsoftJsonSerializer.Default);
 
             return client;
+        }
+
+        IEnumerable<Movie> IThirdPartyMovieRepository.GetMoviesByTitleSearch(string title)
+        {
+            throw new NotImplementedException();
+        }
+
+        Movie IThirdPartyMovieRepository.GetMovieById(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        Movie IThirdPartyMovieRepository.GetMovieByTitle(string title)
+        {
+            throw new NotImplementedException();
         }
     }
 }

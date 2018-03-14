@@ -1,21 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+using Moq;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using AutoMapper;
-using AutoMapper.Configuration;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using MovieTime.Web.Movie.Repositories;
-using MovieTime.Web.Utilities;
 using Xunit;
-using Serilog;
-using Moq;
-using MovieTime.Web.Movie.Persistance;
-using MovieTime.Web.Movie.Persistance.Database;
+using MovieTime.Web.Movies.Models;
+using MovieTime.Web.Database;
+using MovieTime.Web.Movies;
 
-namespace MovieTime.Tests.Movie
+namespace MovieTime.Tests.Movies
 {
     public class MovieTests
     {
@@ -47,7 +40,7 @@ namespace MovieTime.Tests.Movie
                 }
             }.AsQueryable();
 
-            var mockSet = new Mock<DbSet<Web.Movie.Persistance.Database.Movie>>(); 
+            var mockSet = new Mock<DbSet<Movie>>(); 
             mockSet.As<IQueryable<Movie>>().Setup(m => m.Provider).Returns(movies.Provider); 
             mockSet.As<IQueryable<Movie>>().Setup(m => m.Expression).Returns(movies.Expression); 
             mockSet.As<IQueryable<Movie>>().Setup(m => m.ElementType).Returns(movies.ElementType); 
@@ -56,7 +49,7 @@ namespace MovieTime.Tests.Movie
             var mockContext = new Mock<MovieContext>(); 
             mockContext.Setup(c => c.Movies).Returns(mockSet.Object); 
  
-            var service = new DatabaseMovieRepository(mockContext.Object); 
+            var service = new MovieRepository(mockContext.Object); 
             
             var movieById = service.GetMovieById("1asd"); 
             Assert.Equal("1asd", movieById.Id); 

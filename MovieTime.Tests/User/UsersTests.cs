@@ -3,8 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using MovieTime.Web.Movie.Persistance;
-using MovieTime.Web.Movie.Persistance.Database;
+using MovieTime.Web.Database;
+using MovieTime.Web.Movies.Models;
 using MovieTime.Web.Users;
 using Xunit;
 

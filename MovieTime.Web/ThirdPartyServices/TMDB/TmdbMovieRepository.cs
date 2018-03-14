@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using MovieTime.Web.Movie.Persistance.Database;
+﻿using MovieTime.Web.Movies.Models;
+using System;
+using System.Collections.Generic;
 
-namespace MovieTime.Web.Movie.Repositories
-{
-    public interface ITmdbMovieRepository : IMovieRepository { }
-    
-    public class TmdbMovieRepository: ITmdbMovieRepository
+namespace MovieTime.Web.ThirdPartyServices.TMDB
+{   
+    public class TmdbMovieRepository: IThirdPartyMovieRepository
     {
-        public IEnumerable<Persistance.Database.Movie> GetMoviesByTitleSearch(string title)
+        public IEnumerable<Movie> GetMoviesByTitleSearch(string title)
         {
             throw new System.NotImplementedException();
         }
@@ -18,6 +17,21 @@ namespace MovieTime.Web.Movie.Repositories
         }
 
         public Movie GetMovieByTitle(string title)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        IEnumerable<Movie> IThirdPartyMovieRepository.GetMoviesByTitleSearch(string title)
+        {
+            throw new NotImplementedException();
+        }
+
+        Movie IThirdPartyMovieRepository.GetMovieById(string id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        Movie IThirdPartyMovieRepository.GetMovieByTitle(string title)
         {
             throw new System.NotImplementedException();
         }

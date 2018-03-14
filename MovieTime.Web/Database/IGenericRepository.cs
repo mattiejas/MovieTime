@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace MovieTime.Web.Movie.Repositories
+namespace MovieTime.Web.Database
 {
     // Resource: https://www.c-sharpcorner.com/article/net-entity-framework-core-generic-async-operations-with-unit-of-work-generic-re/
     public interface IGenericRepository<T> where T : class
