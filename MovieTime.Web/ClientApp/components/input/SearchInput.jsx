@@ -36,7 +36,7 @@ class SearchInput extends Component {
         redirectTo: `/movie/detail/${this.state.searchQuery}`,
       }, () => {
         history.push(this.state.redirectTo);
-        history.go(); // todo implement proper routing/refreshing
+        // history.go(); // todo implement proper routing/refreshing
       });
     }
   }

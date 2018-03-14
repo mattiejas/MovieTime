@@ -28,20 +28,18 @@ class MovieDetailView extends React.Component {
       setTimeout(() => this.setState({
         movie: data,
         isLoading: false,
-      }), 200);
+      }), 100);
       this.setBackgroundColor(data.poster);
     });
   }
 
   componentWillReceiveProps(props) {
-    console.log('props', props);
-    console.log('this.props.match.title !== props.match.params.title ', this.props.match.params.title, ' !== ', props.match.params.title);
     if (this.props.match.params.title !== props.match.params.title) {
-      fetch(API + this.props.match.params.title).then(response => response.json()).then((data) => {
+      fetch(API + props.match.params.title).then(response => response.json()).then((data) => {
         setTimeout(() => this.setState({
           movie: data,
           isLoading: false,
-        }), 200);
+        }), 100);
         this.setBackgroundColor(data.poster);
       });
     }
