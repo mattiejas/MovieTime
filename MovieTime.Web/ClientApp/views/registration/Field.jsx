@@ -1,15 +1,7 @@
-﻿import React, { Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 export class Field extends Component {
-  static propTypes = {
-    placeholder: PropTypes.string,
-    name: PropTypes.string.isRequired,
-    value: PropTypes.string,
-    validate: PropTypes.func,
-    onChange: PropTypes.func.isRequired,
-  };
-
   state = {
     value: this.props.value,
     error: false,
@@ -19,10 +11,10 @@ export class Field extends Component {
     this.setState({ value: update.value });
   }
 
-  onChange =async  (evt) => {
-    const name = this.props.name;
-    const value = evt.target.value;
-    let error = this.props.validate ? this.props.validate(value) : false;
+  onChange = async (evt) => {
+    const { name } = this.props;
+    const { value } = evt.target;
+    const error = this.props.validate ? this.props.validate(value) : false;
     this.setState({ value, error });
     this.props.onChange({ name, value, error });
   };
@@ -40,5 +32,13 @@ export class Field extends Component {
     );
   }
 }
+
+Field.propTypes = {
+  placeholder: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  value: PropTypes.string,
+  validate: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
+};
 
 export default Field;
