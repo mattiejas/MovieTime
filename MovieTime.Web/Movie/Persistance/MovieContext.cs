@@ -10,7 +10,7 @@ namespace MovieTime.Web.Movie.Persistance
         public virtual DbSet<DbGenre> Genres { get; set; }
         public virtual DbSet<DbMovieGenre> MovieGenre { get; set; }
         
-        public virtual DbSet<UserModel> Users { get; set; }
+        public virtual DbSet<User> Users { get; set; }
 
         public MovieContext(DbContextOptions<MovieContext> options) : base(options) { }
 

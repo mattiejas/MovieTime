@@ -12,24 +12,44 @@ namespace MovieTime.Web.Movie.Review
             _reviewRepository = reviewRepository;
         }
         
+//        public Review GetReview(int id)
+//        {
+//            return _reviewRepository.Get(id);
+//        }
+// 
+//        public async Task<Review> GetReviewAsync(int id)
+//        {
+//            return await _reviewRepository.GetAsync(id);
+//        }
+//
+//        public ICollection<Review> GetMovieReviews(string movieId)
+//        {
+//            return _reviewRepository.FindAll(x => x.MovieId == movieId);
+//        }
+//
+//        public async Task<ICollection<Review>> getMovieReviewsAsync(string movieId)
+//        {
+//            return await _reviewRepository.FindAllAsync(x => x.MovieId == movieId);
+//        }
+
         public Review GetReview(int id)
         {
-            return _reviewRepository.Get(id);
+            throw new System.NotImplementedException();
         }
- 
-        public async Task<Review> GetReviewAsync(int id)
+
+        public Task<Review> GetReviewAsync(int id)
         {
-            return await _reviewRepository.GetAsync(id);
+            throw new System.NotImplementedException();
         }
 
         public ICollection<Review> GetMovieReviews(string movieId)
         {
-            return _reviewRepository.FindAll(x => x.MovieId == movieId);
+            throw new System.NotImplementedException();
         }
 
-        public async Task<ICollection<Review>> getMovieReviewsAsync(string movieId)
+        public Task<ICollection<Review>> getMovieReviewsAsync(string movieId)
         {
-            return await _reviewRepository.FindAllAsync(x => x.MovieId == movieId);
+            throw new System.NotImplementedException();
         }
 
         public ICollection<Review> GetUserReviews(string userId)

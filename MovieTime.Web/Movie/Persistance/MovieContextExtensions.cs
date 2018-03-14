@@ -139,13 +139,13 @@ namespace MovieTime.Web.Movie.Persistance
                 },
             };
             
-            var users = new List<UserModel>
+            var users = new List<User>
             {
-                new UserModel {  FirstName = "Peter", LastName = "Parker", Email = "p_parker@outlook.com" },
-                new UserModel {  FirstName = "Eddie", LastName = "Brock", Email = "e_brock@outlook.com" },
-                new UserModel {  FirstName = "MJ", LastName = "Watson", Email = "mj_watson@outlook.com" },
-                new UserModel {  FirstName = "Gwen", LastName = "Stacy", Email = "g_stacy@outlook.com" },
-                new UserModel {  FirstName = "Harry", LastName = "Osborn", Email = "h_osborn@outlook.com" }
+                new User {  FirstName = "Peter", LastName = "Parker", Email = "p_parker@outlook.com" },
+                new User {  FirstName = "Eddie", LastName = "Brock", Email = "e_brock@outlook.com" },
+                new User {  FirstName = "MJ", LastName = "Watson", Email = "mj_watson@outlook.com" },
+                new User {  FirstName = "Gwen", LastName = "Stacy", Email = "g_stacy@outlook.com" },
+                new User {  FirstName = "Harry", LastName = "Osborn", Email = "h_osborn@outlook.com" }
             };
 
             context.Movies.AddRange(movies);

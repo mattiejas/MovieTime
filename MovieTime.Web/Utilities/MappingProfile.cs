@@ -25,10 +25,10 @@ namespace MovieTime.Web.Utilities
             CreateMap<MovieForCreationDto, DbMovie>();
 
 
-            CreateMap<UserCreateDto, UserModel>();
-            CreateMap<UserUpdateDto, UserModel>();
-            CreateMap<UserViewModel, UserModel>();
-            CreateMap<UserModel, UserViewModel>();
+            CreateMap<UserCreateDto, User>();
+            CreateMap<UserUpdateDto, User>();
+            CreateMap<UserDto, User>();
+            CreateMap<User, UserDto>();
         }
     }
 }

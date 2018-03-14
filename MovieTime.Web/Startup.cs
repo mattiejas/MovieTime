@@ -80,8 +80,8 @@ namespace MovieTime.Web
             // For now decide here if we use omdb or tmdb as movie repository.
             services.AddScoped<IMovieRepository, OmdbMovieRepository>();
             
-            services.AddScoped<IUsersService, UsersService>();
-            services.AddScoped<IUsersRepository, UsersRepository>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddScoped<IReviewService, ReviewService>();
             services.AddScoped<IReviewRepository, ReviewRepository>(); 

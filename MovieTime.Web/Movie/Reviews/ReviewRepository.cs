@@ -13,22 +13,31 @@ namespace MovieTime.Web.Movie.Review
         }
 
 
+//        public Review GetNewestReview(string movieId)
+//        {
+//            var newestDate = GetAll().Max(x => x.AddedDateTime);
+//            var newestReview = GetAll()
+//                .FirstOrDefault(x => x.AddedDateTime == newestDate);
+//
+//            return newestReview;
+//        }
+//
+//        public async Task<Review> GetNewestReviewAsync(string movieId)
+//        {
+//            var newestDate = GetAll().Max(x => x.AddedDateTime);
+//            var newestReview = await GetAll()
+//                .FirstOrDefaultAsync(x => x.AddedDateTime == newestDate);
+//
+//            return newestReview;
+//        }
         public Review GetNewestReview(string movieId)
         {
-            var newestDate = GetAll().Max(x => x.AddedDateTime);
-            var newestReview = GetAll()
-                .FirstOrDefault(x => x.AddedDateTime == newestDate);
-
-            return newestReview;
+            throw new System.NotImplementedException();
         }
 
-        public async Task<Review> GetNewestReviewAsync(string movieId)
+        public Task<Review> GetNewestReviewAsync(string movieId)
         {
-            var newestDate = GetAll().Max(x => x.AddedDateTime);
-            var newestReview = await GetAll()
-                .FirstOrDefaultAsync(x => x.AddedDateTime == newestDate);
-
-            return newestReview;
+            throw new System.NotImplementedException();
         }
     }
 }

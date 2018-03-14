@@ -19,36 +19,36 @@ namespace MovieTime.Tests.User
         [Fact]
         public void DatabaseMovieRepositoryTest()
         {
-            var users = new List<UserModel>()
+            var users = new List<Web.Users.User>()
             {
-                new UserModel()
+                new Web.Users.User()
                 {
                     Id = 1,
                     FirstName = "Henk",
                 },
-                new UserModel()
+                new Web.Users.User()
                 {
                     Id = 2,
                     FirstName = "Tom",
                 },
-                new UserModel()
+                new Web.Users.User()
                 {
                     Id = 3,
                     FirstName = "Peter",
                 }
             }.AsQueryable();
 
-            var mockSet = new Mock<DbSet<UserModel>>(); 
-            mockSet.As<IQueryable<UserModel>>().Setup(m => m.Provider).Returns(users.Provider); 
+            var mockSet = new Mock<DbSet<Web.Users.User>>(); 
+            mockSet.As<IQueryable<Web.Users.User>>().Setup(m => m.Provider).Returns(users.Provider); 
             mockSet.As<IQueryable<DbMovie>>().Setup(m => m.Expression).Returns(users.Expression); 
-            mockSet.As<IQueryable<UserModel>>().Setup(m => m.ElementType).Returns(users.ElementType); 
-            mockSet.As<IQueryable<UserModel>>().Setup(m => m.GetEnumerator()).Returns(users.GetEnumerator()); 
+            mockSet.As<IQueryable<Web.Users.User>>().Setup(m => m.ElementType).Returns(users.ElementType); 
+            mockSet.As<IQueryable<Web.Users.User>>().Setup(m => m.GetEnumerator()).Returns(users.GetEnumerator()); 
  
             var mockContext = new Mock<MovieContext>(); 
             mockContext.Setup(c => c.Users).Returns(mockSet.Object);
             
-            var service = new UsersRepository(mockContext.Object); 
-            UserModel userById = service.GetUser(1);
+            var service = new UserRepository(mockContext.Object); 
+            Web.Users.User userById = service.GetUser(1);
             int totalUsers = service.GetAllUsers().Count();
             
             Assert.Equal(1, userById.Id); 
