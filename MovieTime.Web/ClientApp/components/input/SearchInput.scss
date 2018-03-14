@@ -1,0 +1,13 @@
+@import "../../styles/core";
+
+.search-input{
+  color: pink;
+  background-color: red;
+  width: 100px;
+}
+
+@media (min-width: $grid-sm) {
+  .search-input{
+
+  }
+}

@@ -136,6 +136,9 @@
               box-shadow: 0 -10px 40px 0 rgba(0, 0, 0, 0.5);
             }
           }
+          &.search-mobile {
+            display: none;
+          }
         }
       }
     }

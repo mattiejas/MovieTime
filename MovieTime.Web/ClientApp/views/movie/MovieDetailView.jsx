@@ -22,6 +22,7 @@ class MovieDetailView extends React.Component {
     };
   }
 
+
   componentDidMount() {
     fetch(API + this.props.match.params.title).then(response => response.json()).then((data) => {
       setTimeout(() => this.setState({
@@ -30,6 +31,22 @@ class MovieDetailView extends React.Component {
       }), 200);
       this.setBackgroundColor(data.poster);
     });
+  }
+
+  componentWillReceiveProps(props) {
+    console.log('props', props);
+    console.log('this.props', this.props);
+    console.log('this.state', this.state);
+    console.log('this.props.match.title !== props.match.params.title ', this.props.match.params.title, ' !== ', props.match.params.title);
+    if (this.props.match.params.title !== props.match.params.title) {
+      fetch(API + this.props.match.params.title).then(response => response.json()).then((data) => {
+        setTimeout(() => this.setState({
+          movie: data,
+          isLoading: false,
+        }), 200);
+        this.setBackgroundColor(data.poster);
+      });
+    }
   }
 
   setBackgroundColor(poster) {
