@@ -29,7 +29,6 @@
 
     .buttons {
       display: none;
-      padding-right: 20px;
     }
 
     button {
@@ -99,6 +98,9 @@
       .buttons {
         display: flex;
         flex: 1;
+        padding-right: 20px;
+        height: 50px;
+        align-items: center;
       }
       .title {
         flex: 1;

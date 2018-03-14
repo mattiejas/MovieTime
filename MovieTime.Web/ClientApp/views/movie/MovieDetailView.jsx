@@ -35,8 +35,6 @@ class MovieDetailView extends React.Component {
 
   componentWillReceiveProps(props) {
     console.log('props', props);
-    console.log('this.props', this.props);
-    console.log('this.state', this.state);
     console.log('this.props.match.title !== props.match.params.title ', this.props.match.params.title, ' !== ', props.match.params.title);
     if (this.props.match.params.title !== props.match.params.title) {
       fetch(API + this.props.match.params.title).then(response => response.json()).then((data) => {

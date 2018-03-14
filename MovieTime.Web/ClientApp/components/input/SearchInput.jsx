@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import styles from './SearchInput.scss';
-import MoviePoster from '../movie/MoviePoster';
 import PropTypes from 'prop-types';
+import styles from './SearchInput.scss';
 import history from '../../utils/history';
+import Icon from '../icon/Icon';
 
 class SearchInput extends Component {
   static propTypes = {
@@ -44,14 +44,14 @@ class SearchInput extends Component {
 
   render() {
     return (
-      <form onSubmit={e => this.onSubmit(e)}>
+      <form className={styles['search-form']} onSubmit={e => this.onSubmit(e)}>
         <input
           className={styles['search-input']}
           placeholder="Search..."
           ref={input => this.SearchInput = input}
           onChange={e => this.onChange(e.target.value)}
         />
-        <p>{this.state.searchResults.title}</p>
+        <Icon className={styles['search-icon']} type="search" />
       </form>
     );
   }

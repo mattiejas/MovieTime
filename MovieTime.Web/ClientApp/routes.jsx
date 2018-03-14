@@ -73,7 +73,6 @@ export default class Router extends React.Component {
   }
 
   render() {
-    console.log(this.props.history);
     if (this.state.isAuthenticated === null) {
       return null;
     }
