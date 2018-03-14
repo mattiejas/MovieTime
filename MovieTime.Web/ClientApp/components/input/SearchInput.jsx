@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
-import { Redirect, Router } from 'react-router-dom';
 import styles from './SearchInput.scss';
 import MoviePoster from '../movie/MoviePoster';
 import PropTypes from 'prop-types';
+import history from '../../utils/history';
 
 class SearchInput extends Component {
-
   static propTypes = {
-      history: propTypes.any,
+    history: PropTypes.any,
+  }
+
+  static defaultProps = {
+    history: {},
   }
 
   constructor(props) {
@@ -32,23 +35,14 @@ class SearchInput extends Component {
     if (this.state.searchQuery && this.state.searchQuery.length > 1) {
       this.setState({
         redirectTo: `/movie/detail/${this.state.searchQuery}`,
+      }, () => {
+        history.push(this.state.redirectTo);
+        history.go();
       });
     }
   }
 
-  componentWillUnmount() {
-    console.log('herrrroooo');
-  }
-
   render() {
-    if (this.state.redirectTo) {
-      console.log('1223345456');
-      return (<Redirect to={this.state.redirectTo} />);
-      // this.setState({
-      //   redirectTo: `/movie/detail/${this.state.searchQuery}`,
-      // });
-    }
-
     return (
       <form onSubmit={e => this.onSubmit(e)}>
         <input
