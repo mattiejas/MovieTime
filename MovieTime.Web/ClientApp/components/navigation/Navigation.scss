@@ -69,21 +69,41 @@
       padding: 0;
       color: #FFFFFF;
       background-color: $secondary-color;
-      li a {
-        height: 50px;
-        width: 100%;
-        display: block;
-        text-decoration: none;
-        color: #FFFFFF;
-        line-height: 50px;
-        padding: 0 0 0 20px;
-        font-weight: 200;
-        font-size: 16px;
-        &:hover {
-          background-color: lighten($secondary-dark-color, 5);
+      li {
+        &.search-mobile {
         }
-        &.navigation__item--active {
-          background-color: $secondary-dark-color;
+        &.login-mobile, &.logout-mobile {
+          height: 35px;
+          margin: 20px;
+          div {
+            box-shadow: none;
+          }
+          a {
+            box-shadow: none;
+            color: $secondary-color;
+            height: 35px;
+            &:hover {
+              background-color: darken($button-default-color, 3);
+              color: $secondary-color;
+            }
+          }
+        }
+        a {
+          height: 50px;
+          width: 100%;
+          display: block;
+          text-decoration: none;
+          color: #FFFFFF;
+          line-height: 50px;
+          padding: 0 0 0 20px;
+          font-weight: 200;
+          font-size: 16px;
+          &:hover {
+            background-color: lighten($secondary-dark-color, 5);
+          }
+          &.navigation__item--active {
+            background-color: $secondary-dark-color;
+          }
         }
       }
     }
@@ -111,6 +131,12 @@
       ul {
         position: static;
         opacity: 1;
+        transition: top 0s ease-in-out;
+        background: none;
+        flex-direction: row;
+        align-items: center;
+        margin-left: 20px;
+        padding-left: 20px;
         &.navigation--hidden {
           top: 0;
           color: #FFFFFF;
@@ -123,11 +149,6 @@
             }
           }
         }
-        transition: top 0s ease-in-out;
-        background: none;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
         li {
           margin: 0 5px;
           a {
@@ -139,6 +160,12 @@
             }
           }
           &.search-mobile {
+            display: none;
+          }
+          &.login-mobile {
+            display: none;
+          }
+          &.logout-mobile {
             display: none;
           }
         }
