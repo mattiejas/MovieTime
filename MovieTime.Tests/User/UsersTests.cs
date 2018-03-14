@@ -17,7 +17,36 @@ namespace MovieTime.Tests.User
     public class UsersTests
     {
         [Fact]
-        public void DatabaseMovieRepositoryTest()
+        public async void DatabaseMovieRepositoryTest()
+        {
+            //Arrange
+            var users = getUsers();
+            var mockContext = GetMovieContext(users);
+            var service = new UserRepository(mockContext);
+            //Act
+            Web.Users.User userById = await service.Get(1);
+            var totalUsers = await service.GetAll();
+            var count = totalUsers.Count();
+            //Assert
+            Assert.Equal(1, userById.Id); 
+            Assert.Equal("Henk", userById.FirstName); 
+            Assert.Equal(users.Count(), count); 
+        }
+
+        private MovieContext GetMovieContext( IQueryable<Web.Users.User> users)
+        {
+            var mockSet = new Mock<DbSet<Web.Users.User>>();
+            mockSet.As<IQueryable<Web.Users.User>>().Setup(m => m.Provider).Returns(users.Provider);
+            mockSet.As<IQueryable<DbMovie>>().Setup(m => m.Expression).Returns(users.Expression);
+            mockSet.As<IQueryable<Web.Users.User>>().Setup(m => m.ElementType).Returns(users.ElementType);
+            mockSet.As<IQueryable<Web.Users.User>>().Setup(m => m.GetEnumerator()).Returns(users.GetEnumerator());
+            var mockContext = new Mock<MovieContext>();
+            mockContext.Setup(c => c.Users).Returns(mockSet.Object);
+
+            return mockContext.Object;
+        }
+
+        private IQueryable<Web.Users.User> getUsers()
         {
             var users = new List<Web.Users.User>()
             {
@@ -38,22 +67,7 @@ namespace MovieTime.Tests.User
                 }
             }.AsQueryable();
 
-            var mockSet = new Mock<DbSet<Web.Users.User>>(); 
-            mockSet.As<IQueryable<Web.Users.User>>().Setup(m => m.Provider).Returns(users.Provider); 
-            mockSet.As<IQueryable<DbMovie>>().Setup(m => m.Expression).Returns(users.Expression); 
-            mockSet.As<IQueryable<Web.Users.User>>().Setup(m => m.ElementType).Returns(users.ElementType); 
-            mockSet.As<IQueryable<Web.Users.User>>().Setup(m => m.GetEnumerator()).Returns(users.GetEnumerator()); 
- 
-            var mockContext = new Mock<MovieContext>(); 
-            mockContext.Setup(c => c.Users).Returns(mockSet.Object);
-            
-            var service = new UserRepository(mockContext.Object); 
-            Web.Users.User userById = service.GetUser(1);
-            int totalUsers = service.GetAllUsers().Count();
-            
-            Assert.Equal(1, userById.Id); 
-            Assert.Equal("Henk", userById.FirstName); 
-            Assert.Equal(users.Count(), totalUsers); 
+            return users;
         }
     }
 }
