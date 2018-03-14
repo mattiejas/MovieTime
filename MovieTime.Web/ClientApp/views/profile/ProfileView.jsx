@@ -29,12 +29,17 @@ class EditProfileModal extends React.Component {
     });
   }
   render() {
-    const { hideModal, onUpdate } = this.props;
+    const { hideModal, onUpdate, hidden } = this.props;
     const {
       firstName = this.props.user.firstName,
       lastName = this.props.user.lastName,
       email = this.props.user.email,
     } = this.state.user;
+
+    if (hidden) {
+      return null;
+    }
+
     return (
       <Modal title="Edit Profile" hideModal={hideModal}>
         <div className={styles.edit}>
@@ -71,9 +76,14 @@ class EditProfileModal extends React.Component {
 }
 
 EditProfileModal.propTypes = {
+  hidden: PropTypes.bool,
   user: PropTypes.objectOf(PropTypes.any).isRequired,
   hideModal: PropTypes.func.isRequired,
   onUpdate: PropTypes.func.isRequired,
+};
+
+EditProfileModal.defaultProps = {
+  hidden: false,
 };
 
 class ProfileView extends React.Component {
@@ -83,6 +93,7 @@ class ProfileView extends React.Component {
       user: {},
       isLoading: true,
       isEditing: false,
+      movies: ['Thor: Ragnarok', 'Thor', 'Black Panther', 'Spider-Man: Homecoming', 'Thor: Ragnarok'],
     };
   }
 
@@ -130,14 +141,12 @@ class ProfileView extends React.Component {
     const { id } = this.props.match.params;
     return (
       <div className={styles.view}>
-        {
-          this.state.isEditing &&
-          <EditProfileModal
-            hideModal={() => this.onDiscard()}
-            onUpdate={user => this.updateUserData(user)}
-            user={this.state.user}
-          />
-        }
+        <EditProfileModal
+          hidden={!this.state.isEditing}
+          hideModal={() => this.onDiscard()}
+          onUpdate={user => this.updateUserData(user)}
+          user={this.state.user}
+        />
         <div className={styles.view__background} />
         <div className={styles.view__header}>
           <div className={styles.header}>
@@ -160,7 +169,8 @@ class ProfileView extends React.Component {
             </div>
           </div>
           <div className={styles.content}>
-            <ListWidget movies={['Thor: Ragnarok', 'Thor: Ragnarok', 'Thor: Ragnarok', 'Thor: Ragnarok', 'Thor: Ragnarok']} history={this.props.history} />
+            <ListWidget title="Wants to watch" movies={this.state.movies} history={this.props.history} />
+            <ListWidget title="Has watched" movies={this.state.movies} history={this.props.history} />
           </div>
         </div>
       </div>
