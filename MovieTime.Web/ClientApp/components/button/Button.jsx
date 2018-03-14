@@ -28,8 +28,8 @@ const Button = ({
     );
   }
   return (
-    <div
-      role="button"
+    <button
+      // role="button"
       className={cn(styles.button, dark ? styles.dark : '', danger ? styles.danger : '', className)}
       tabIndex={0}
       {...rest}
@@ -41,7 +41,7 @@ const Button = ({
         }
         <span className={children !== '' && icon !== '' ? styles.spacing : ''} />{children}
       </div>
-    </div>
+    </button>
   );
 };
 

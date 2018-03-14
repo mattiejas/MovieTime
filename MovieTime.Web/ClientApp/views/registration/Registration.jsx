@@ -122,6 +122,7 @@ export default class Registration extends React.Component {
               </div>
               <Button
                 dark
+                type="submit"
                 className={styles.button}
                 onClick={e => this.onFormSubmit(e)}
               >
