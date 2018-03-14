@@ -17,8 +17,10 @@ import styles from './MovieDetailView.scss';
 class MovieDetailView extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       movie: {},
+      isTracking: false,
       backgroundColor: null,
       isLoading: true,
     };
@@ -54,13 +56,13 @@ class MovieDetailView extends React.Component {
         return trackMovie(user.uid, this.state.movie.imdbId);
       })
       .then((response) => {
-        console.log('response');
-        console.log(response);
+        if (response.ok) {
+          this.setState({
+            isTracking: true,
+          });
+        }
       })
-      .catch((err) => {
-        console.log('err');
-        console.log(err);
-      });
+      .catch(err => console.log('err', err));
   }
 
   render() {
@@ -114,7 +116,8 @@ class MovieDetailView extends React.Component {
                 lineHeight={1.8}
                 lines={3}
               >
-                <Button icon="eye" dark onClick={this.handleTracking}>Track</Button>
+                {!this.state.isTracking && <Button icon="eye" dark onClick={this.handleTracking}>Track</Button>}
+                {this.state.isTracking && <Button icon="eye-slash" dark onClick={this.handleTracking}>Tracking</Button>}
                 <table className={styles.view__content__involved}>
                   <tbody>
                     <tr>
