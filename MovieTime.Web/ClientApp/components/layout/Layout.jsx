@@ -11,8 +11,8 @@ const Layout = props => (
 );
 
 Layout.propTypes = {
-  isAuthenticated: PropTypes.bool.isRequired,
   children: PropTypes.node.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
 };
 
 export default Layout;
