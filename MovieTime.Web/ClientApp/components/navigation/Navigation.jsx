@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import cn from 'classnames';
 
 import { logout } from '../../utils/auth';
@@ -9,7 +10,7 @@ import Icon from '../icon/Icon';
 
 import styles from './Navigation.scss';
 
-export class Navigation extends Component {
+export default class Navigation extends Component {
   constructor() {
     super();
 
@@ -51,7 +52,6 @@ export class Navigation extends Component {
                 <li><NavLink activeClassName={styles['navigation__item--active']} to="/404" onClick={() => this.toggleMenu()}>404</NavLink></li>
                 <li><NavLink activeClassName={styles['navigation__item--active']} to="/movie/detail/ferris bueller's day off" onClick={() => this.toggleMenu()}>Movie Detail</NavLink></li>
                 <li><NavLink activeClassName={styles['navigation__item--active']} to="/protected" onClick={() => this.toggleMenu()}>Protected</NavLink></li>
-                <li><NavLink activeClassName={styles['navigation__item--active']} to="/secretdata" onClick={() => this.toggleMenu()}>SecretData</NavLink></li>
               </ul>
               <div className={styles.buttons}>
                 <ButtonGroup>
@@ -84,4 +84,7 @@ export class Navigation extends Component {
   }
 }
 
-export default Navigation;
+Navigation.propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired,
+};
+

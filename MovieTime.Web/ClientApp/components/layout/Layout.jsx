@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Navigation } from '../navigation/Navigation';
+import Navigation from '../navigation/Navigation';
 
 const Layout = props => (
   <div>
@@ -11,7 +11,7 @@ const Layout = props => (
 );
 
 Layout.propTypes = {
-  authUser: PropTypes.object,
+  isAuthenticated: PropTypes.bool.isRequired,
   children: PropTypes.node.isRequired,
 };
 
