@@ -2,15 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Vibrant from 'node-vibrant';
 
+import { getUser } from '../../utils/auth';
+import { getMovieByTitle, trackMovie } from '../../utils/movie';
+
 import MoviePoster from '../../components/movie/MoviePoster';
 import MovieHeading from '../../components/movie/MovieHeading';
 import MovieAttributes from '../../components/movie/MovieAttributes';
 import Placeholder from '../../components/placeholder/Placeholder';
 import ParagraphPlaceholder from '../../components/placeholder/ParagraphPlaceholder';
+import Button from '../../components/button/Button';
 
 import styles from './MovieDetailView.scss';
-
-const API = '/api/movie/title/';
 
 class MovieDetailView extends React.Component {
   constructor(props) {
@@ -20,16 +22,19 @@ class MovieDetailView extends React.Component {
       backgroundColor: null,
       isLoading: true,
     };
+
+    this.handleTracking = this.handleTracking.bind(this);
   }
 
   componentDidMount() {
-    fetch(API + this.props.match.params.title).then(response => response.json()).then((data) => {
-      setTimeout(() => this.setState({
-        movie: data,
-        isLoading: false,
-      }), 200);
-      this.setBackgroundColor(data.poster);
-    });
+    getMovieByTitle(this.props.match.params.title)
+      .then((data) => {
+        setTimeout(() => this.setState({
+          movie: data,
+          isLoading: false,
+        }), 200);
+        this.setBackgroundColor(data.poster);
+      });
   }
 
   setBackgroundColor(poster) {
@@ -37,6 +42,18 @@ class MovieDetailView extends React.Component {
       .then(palette => this.setState({
         backgroundColor: `rgb(${palette.Vibrant.r}, ${palette.Vibrant.g}, ${palette.Vibrant.b})`,
       }));
+  }
+
+  handleTracking(event) {
+    event.preventDefault();
+    getUser()
+      .then((user) => {
+        if (!user.uid && !this.state.movie && !this.state.movie.imdbId) {
+          throw new Error('Something went wrong. Missing the uid or imdbId attribute for request.');
+        }
+        return trackMovie(user.uid, this.state.movie.imdbId);
+      })
+      .then(response => console.log(response.body));
   }
 
   render() {
@@ -90,6 +107,7 @@ class MovieDetailView extends React.Component {
                 lineHeight={1.8}
                 lines={3}
               >
+                <Button icon="eye" dark onClick={this.handleTracking}>Track</Button>
                 <table className={styles.view__content__involved}>
                   <tbody>
                     <tr>

@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using MovieTime.Web.Movie.Persistance;
 using MovieTime.Web.Movie.Repositories;
 using MovieTime.Web.Movie.Services;
+using MovieTime.Web.Track;
 using MovieTime.Web.Users;
 using MovieTime.Web.Utilities;
 
@@ -54,7 +55,7 @@ namespace MovieTime.Web
                 setupAction.ReturnHttpNotAcceptable = true; // do not send default media type if unsupported is requested
                 setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
             });
-
+            
             services.AddAutoMapper();
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info {Title = "MovieTime API", Version = "v1"}); });
 
@@ -65,24 +66,28 @@ namespace MovieTime.Web
             if (string.IsNullOrWhiteSpace(mode) || mode.ToLower() == "true")
             {
                 services.AddDbContext<MovieContext>(options => options.UseSqlServer(connectionString));
+                services.AddDbContext<TrackContext>(options => options.UseSqlServer(connectionString));
             }
             else
             {
                 connectionString = Configuration.GetConnectionString("Postgresql_DATABASE_URL");
                 services.AddDbContext<MovieContext>(options => options.UseNpgsql(connectionString));
+                services.AddDbContext<TrackContext>(options => options.UseNpgsql(connectionString));
             }
-
+            
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IDatabaseMovieRespository, DatabaseMovieRepository>();
-            // For now decide here if we use omdb or tmdb as movie repository.
             services.AddScoped<IMovieRepository, OmdbMovieRepository>();
 
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IUsersRepository, UsersRepository>();
+            
+            services.AddScoped<ITrackService, TrackService>();
+            services.AddScoped<ITrackRepository, TrackRepository>();            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, MovieContext movieContext)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, MovieContext movieContext, TrackContext trackContext)
         {
             if (env.IsDevelopment())
             {
@@ -110,8 +115,9 @@ namespace MovieTime.Web
             //  app.UseMiddleware<SerilogMiddleware>();
 
             app.UseStaticFiles();
-
+            
             movieContext.EnsureSeedDataForContext();
+            trackContext.Database.Migrate();
 
             app.UseSwagger();
 

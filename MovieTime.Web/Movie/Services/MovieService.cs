@@ -37,12 +37,14 @@ namespace MovieTime.Web.Movie.Services
         {
             var movieModel = _databaseMovieRespository.GetMovieByTitle(title);
 
+            // TODO: movie wordt niet opgeslagen in de database
+            // TODO: mapping RunTimeInMinutes is empty
             if (movieModel == null)
             {
                 movieModel = _movieRepository.GetMovieByTitle(title);
             }
 
-            var movieDetailsVm = _mapper.Map<DbMovie, MovieDetailsViewModel>(movieModel); //todo test null
+            var movieDetailsVm = _mapper.Map<DbMovie, MovieDetailsViewModel>(movieModel); // TODO: test null
 
             return movieDetailsVm;
         }
