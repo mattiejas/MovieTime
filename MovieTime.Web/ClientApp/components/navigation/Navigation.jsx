@@ -40,7 +40,7 @@ export default class Navigation extends Component {
           (
             <div className={styles.navigation__wrapper}>
               <div className={styles.title}>Movie<span>Time</span></div>
-              <button onClick={() => this.toggleMenu()}><Icon type="bars" /></button>
+              <button className={styles['nav-button']} onClick={() => this.toggleMenu()}><Icon type="bars" /></button>
               <ul className={
                 cn(
                   this.state.mobileMenuIsVisible ? '' : styles['navigation--hidden'],
@@ -48,10 +48,35 @@ export default class Navigation extends Component {
                 )
               }
               >
-                <li><NavLink exact activeClassName={styles['navigation__item--active']} to="/" onClick={() => this.toggleMenu()}>Home</NavLink></li>
-                <li><NavLink activeClassName={styles['navigation__item--active']} to="/404" onClick={() => this.toggleMenu()}>404</NavLink></li>
-                <li><NavLink activeClassName={styles['navigation__item--active']} to="/movie/detail/ferris bueller's day off" onClick={() => this.toggleMenu()}>Movie Detail</NavLink></li>
-                <li><NavLink activeClassName={styles['navigation__item--active']} to="/protected" onClick={() => this.toggleMenu()}>Protected</NavLink></li>
+                <li>
+                  <NavLink
+                    exact
+                    to="/"
+                    onClick={() => this.toggleMenu()}
+                    activeClassName={styles['navigation__item--active']}
+                  >
+                  Home
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink activeClassName={styles['navigation__item--active']} to="/404" onClick={() => this.toggleMenu()}>
+                    404
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    onClick={() => this.toggleMenu()}
+                    to="/movie/detail/ferris bueller's day off"
+                    activeClassName={styles['navigation__item--active']}
+                  >
+                    Movie Detail
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink activeClassName={styles['navigation__item--active']} to="/protected" onClick={() => this.toggleMenu()}>
+                    Protected
+                  </NavLink>
+                </li>
               </ul>
               <div className={styles.buttons}>
                 <ButtonGroup>
@@ -63,15 +88,27 @@ export default class Navigation extends Component {
           ) : (
             <div className={styles.navigation__wrapper}>
               <div className={styles.title}>Movie<span>Time</span></div>
-              <button onClick={() => this.toggleMenu()}><Icon type="bars" /></button>
+              <button className={styles['nav-button']} onClick={() => this.toggleMenu()}><Icon type="bars" /></button>
               <ul className={cn(
                 this.state.mobileMenuIsVisible ? '' : styles['navigation--hidden'],
                 this.state.inTransition ? styles['navigation--transistion'] : '',
               )}
               >
-                <li><NavLink exact activeClassName={styles['navigation__item--active']} to="/" onClick={() => this.toggleMenu()}>Home</NavLink></li>
-                <li><NavLink activeClassName={styles['navigation__item--active']} to="/404" onClick={() => this.toggleMenu()}>404</NavLink></li>
-                <li><NavLink activeClassName={styles['navigation__item--active']} to="/register" onClick={() => this.toggleMenu()}>Register</NavLink></li>
+                <li>
+                  <NavLink exact activeClassName={styles['navigation__item--active']} to="/" onClick={() => this.toggleMenu()}>
+                    Home
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink activeClassName={styles['navigation__item--active']} to="/404" onClick={() => this.toggleMenu()}>
+                    404
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink activeClassName={styles['navigation__item--active']} to="/register" onClick={() => this.toggleMenu()}>
+                    Register
+                  </NavLink>
+                </li>
               </ul>
               <div className={styles.buttons}>
                 <Button icon="user" to="/login">Login</Button>

@@ -32,7 +32,7 @@
       padding-right: 20px;
     }
 
-    button {
+    .nav-button {
       background: none;
       border: none;
       z-index: 10;
@@ -103,7 +103,7 @@
       .title {
         flex: 1;
       }
-      button {
+      .nav-button {
         display: none;
       }
       ul {
