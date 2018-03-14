@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './SearchInput.scss';
-import history from '../../utils/history';
 import Icon from '../icon/Icon';
+
+import history from '../../utils/history';
+
+import styles from './SearchInput.scss';
 
 class SearchInput extends Component {
   static propTypes = {
-    history: PropTypes.any,
-  }
+    onSearch: PropTypes.func,
+  };
 
   static defaultProps = {
-    history: {},
-  }
+    onSearch: undefined,
+  };
 
   constructor(props) {
     super(props);
@@ -22,8 +24,7 @@ class SearchInput extends Component {
     };
   }
 
-  onChange(val) {
-    console.log('onChange', val);
+  onChange() {
     this.setState({
       searchQuery: this.SearchInput.value,
     });
@@ -31,12 +32,12 @@ class SearchInput extends Component {
 
   onSubmit(e) {
     e.preventDefault();
+    if (this.props.onSearch) this.props.onSearch();
     if (this.state.searchQuery && this.state.searchQuery.length > 1) {
       this.setState({
         redirectTo: `/movie/detail/${this.state.searchQuery}`,
       }, () => {
         history.push(this.state.redirectTo);
-        // history.go(); // todo implement proper routing/refreshing
       });
     }
   }
@@ -47,7 +48,7 @@ class SearchInput extends Component {
         <input
           className={styles['search-input']}
           placeholder="Search..."
-          ref={input => this.SearchInput = input}
+          ref={(input) => { this.SearchInput = input; }}
           onChange={e => this.onChange(e.target.value)}
         />
         <Icon className={styles['search-icon']} type="search" />
