@@ -1,6 +1,6 @@
 ﻿namespace MovieTime.Web.Movie.Persistance.ViewModels
 {
-    public class MovieDetailsViewModel
+    public class MovieDetailsDto
     {
         public string Title { get; set; }
         public string Year { get; set; }

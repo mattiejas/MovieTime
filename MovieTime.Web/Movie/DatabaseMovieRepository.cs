@@ -6,26 +6,23 @@ using MovieTime.Web.Movie.Persistance.Database;
 
 namespace MovieTime.Web.Movie.Repositories
 {
-    public class DatabaseMovieRepository : IDatabaseMovieRespository
+    public class DatabaseMovieRepository :  GenericRepository<Persistance.Database.Movie>, IDatabaseMovieRespository
     {
-        private readonly MovieContext _context;
 
-        public DatabaseMovieRepository(MovieContext context)
-        {
-            _context = context;
-        }
+        public DatabaseMovieRepository(MovieContext context):base(context)
+        {}
 
-        public IEnumerable<DbMovie> GetMoviesByTitleSearch(string title)
+        public IEnumerable<Persistance.Database.Movie> GetMoviesByTitleSearch(string title)
         {
             throw new NotImplementedException();
         }
 
-        public DbMovie GetMovieById(string movieId)
+        public Movie GetMovieById(string movieId)
         {
-            return _context.Movies.FirstOrDefault(x => x.Id == movieId);
+            return GetDbSet().FirstOrDefault(m => m.Id== movieId);
         }
 
-        public DbMovie GetMovieByTitle(string title)
+        public Movie GetMovieByTitle(string title)
         {
             return _context.Movies.FirstOrDefault(x => x.Title == title);
         }
@@ -40,7 +37,7 @@ namespace MovieTime.Web.Movie.Repositories
             throw new NotImplementedException();
         }
 
-        public void AddMovie(DbMovie movie)
+        public void AddMovie(Persistance.Database.Movie movie)
         {
             _context.Movies.Add(movie);
         }

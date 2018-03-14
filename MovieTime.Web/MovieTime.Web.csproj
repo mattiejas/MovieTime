@@ -31,16 +31,18 @@
   </ItemGroup>
   <ItemGroup>
     <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
+    <Compile Remove="Movie\MovieDetails\**" />
     <Content Remove="ClientApp\**" />
+    <Content Remove="Movie\MovieDetails\**" />
+    <EmbeddedResource Remove="Movie\MovieDetails\**" />
+    <None Remove="Movie\MovieDetails\**" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Movie\MovieDetails" />
     <Folder Include="wwwroot\assets\users" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="MovieDetails\EmptyClass.cs" />
     <Compile Remove="MovieDetails\AuthorDto.cs" />
-    <Compile Remove="Movie\Repositories\Modifiable.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services" />

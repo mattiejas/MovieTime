@@ -22,23 +22,23 @@ namespace MovieTime.Tests.Movie
         [Fact]
         public void DatabaseMovieRepositoryTest()
         {
-            var movies = new List<DbMovie>()
+            var movies = new List<Movie>()
             {
-                new DbMovie()
+                new Movie()
                 {
                     Id = "1asd",
                     Title = "The legend of ORA, the potato",
                     Rating = 3.0,
                     Year = DateTime.Now
                 },
-                new DbMovie()
+                new Movie()
                 {
                     Id = "2sdas",
                     Title = "The legend of ORA, the potato 2",
                     Rating = 6.0,
                     Year = DateTime.Now,
                 },
-                new DbMovie()
+                new Movie()
                 {
                     Id = "3ras",
                     Title = "Kungfu panda",
@@ -47,11 +47,11 @@ namespace MovieTime.Tests.Movie
                 }
             }.AsQueryable();
 
-            var mockSet = new Mock<DbSet<DbMovie>>(); 
-            mockSet.As<IQueryable<DbMovie>>().Setup(m => m.Provider).Returns(movies.Provider); 
-            mockSet.As<IQueryable<DbMovie>>().Setup(m => m.Expression).Returns(movies.Expression); 
-            mockSet.As<IQueryable<DbMovie>>().Setup(m => m.ElementType).Returns(movies.ElementType); 
-            mockSet.As<IQueryable<DbMovie>>().Setup(m => m.GetEnumerator()).Returns(movies.GetEnumerator()); 
+            var mockSet = new Mock<DbSet<Web.Movie.Persistance.Database.Movie>>(); 
+            mockSet.As<IQueryable<Movie>>().Setup(m => m.Provider).Returns(movies.Provider); 
+            mockSet.As<IQueryable<Movie>>().Setup(m => m.Expression).Returns(movies.Expression); 
+            mockSet.As<IQueryable<Movie>>().Setup(m => m.ElementType).Returns(movies.ElementType); 
+            mockSet.As<IQueryable<Movie>>().Setup(m => m.GetEnumerator()).Returns(movies.GetEnumerator()); 
  
             var mockContext = new Mock<MovieContext>(); 
             mockContext.Setup(c => c.Movies).Returns(mockSet.Object); 

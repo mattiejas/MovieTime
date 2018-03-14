@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MovieTime.Web.Movie.Persistance.Database
 {
-    public class DbMovie
+    public class Movie
     {
         [Key]
         public string Id { get; set; }
@@ -26,7 +26,7 @@ namespace MovieTime.Web.Movie.Persistance.Database
         public string Rated { get; set; }
 
         [Required]
-        public ICollection<DbMovieGenre> Genres { get; set; }
+        public ICollection<MovieGenre> Genres { get; set; }
 
         [Required]
         public string Poster { get; set; }

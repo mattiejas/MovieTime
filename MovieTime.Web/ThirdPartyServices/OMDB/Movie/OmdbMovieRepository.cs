@@ -29,11 +29,11 @@ namespace MovieTime.Web.Movie.Repositories
             _mapper = mapper;
         }
        
-        public DbMovie GetMovieById(string id) => GetMovieByArg(null, id);
+        public Movie GetMovieById(string id) => GetMovieByArg(null, id);
 
-        public DbMovie GetMovieByTitle(string title) => GetMovieByArg(title);
+        public Movie GetMovieByTitle(string title) => GetMovieByArg(title);
 
-        private DbMovie GetMovieByArg(string title, string id = null)
+        private Movie GetMovieByArg(string title, string id = null)
         {
             if (string.IsNullOrEmpty(title) && string.IsNullOrEmpty(id))
                 throw new Exception("Title and Id can't both be null.");
@@ -50,11 +50,11 @@ namespace MovieTime.Web.Movie.Repositories
             var response = client.Execute<OmdbMovieModel>(request);
             if (response.Data == null) throw new Exception("Empty response");
 
-            var movieDetailsModel = _mapper.Map<OmdbMovieModel, DbMovie>(response.Data);
+            var movieDetailsModel = _mapper.Map<OmdbMovieModel, Movie>(response.Data);
             return movieDetailsModel;
         }
 
-        public IEnumerable<DbMovie> GetMoviesByTitleSearch(string title)
+        public IEnumerable<Persistance.Database.Movie> GetMoviesByTitleSearch(string title)
         {
             // var client = CreateClient();
             // var request = CreateRequest("", Method.GET);

@@ -6,9 +6,9 @@ namespace MovieTime.Web.Movie.Persistance
 {
     public class MovieContext : DbContext
     {
-        public virtual DbSet<DbMovie> Movies { get; set; }
-        public virtual DbSet<DbGenre> Genres { get; set; }
-        public virtual DbSet<DbMovieGenre> MovieGenre { get; set; }
+        public virtual DbSet<Database.Movie> Movies { get; set; }
+        public virtual DbSet<Genre> Genres { get; set; }
+        public virtual DbSet<MovieGenre> MovieGenre { get; set; }
         
         public virtual DbSet<User> Users { get; set; }
 
@@ -20,15 +20,15 @@ namespace MovieTime.Web.Movie.Persistance
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<DbMovieGenre>()
+            modelBuilder.Entity<MovieGenre>()
                 .HasKey(mg => new {mg.DbMovieId, mg.DbGenreId});
 
-            modelBuilder.Entity<DbMovieGenre>()
+            modelBuilder.Entity<MovieGenre>()
                 .HasOne(mg => mg.Movie)
-                .WithMany(g => g.Genres)
+                .WithMany(mv => mv.Genres)
                 .HasForeignKey(mg => mg.DbMovieId);
 
-            modelBuilder.Entity<DbMovieGenre>()
+            modelBuilder.Entity<MovieGenre>()
                 .HasOne(mg => mg.Genre)
                 .WithMany(m => m.Movies)
                 .HasForeignKey(mg => mg.DbGenreId);

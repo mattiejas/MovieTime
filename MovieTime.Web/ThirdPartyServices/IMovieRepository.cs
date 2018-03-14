@@ -5,9 +5,9 @@ namespace MovieTime.Web.Movie.Repositories
 {
     public interface IMovieRepository
     {
-        IEnumerable<DbMovie> GetMoviesByTitleSearch(string title);
+        IEnumerable<Persistance.Database.Movie> GetMoviesByTitleSearch(string title);
         //IEnumerable<DbMovie> GetDatabaseMoviesByPage(int page = 0);
-        DbMovie GetMovieById(string id);
-        DbMovie GetMovieByTitle(string title);
+        Movie GetMovieById(string id);
+        Movie GetMovieByTitle(string title);
     }
 }

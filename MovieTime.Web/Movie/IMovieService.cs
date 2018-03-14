@@ -6,9 +6,9 @@ namespace MovieTime.Web.Movie.Services
 {
     public interface IMovieService
     {
-        MovieDetailsViewModel GetMovieDetailsById(string id);
-        MovieDetailsViewModel GetMovieDetailsByTitle(string title);
+        MovieDetailsDto GetMovieDetailsById(string id);
+        MovieDetailsDto GetMovieDetailsByTitle(string title);
         SearchResultsModel GetMoviesByTitle(string title);
-        void AddMovie(MovieForCreationDto movie);
+        void AddMovie(MovieCreateDto movie);
     }
 }

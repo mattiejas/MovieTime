@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MovieTime.Web.Movie.Persistance.Database
 {
-    public class MovieForCreationDto
+    public class MovieCreateDto
     {
         public string Title { get; set; }
         public DateTime Year { get; set; }
@@ -15,10 +15,10 @@ namespace MovieTime.Web.Movie.Persistance.Database
         public string Actors { get; set; }
         public string Plot { get; set; }
         public string ImdbId { get; set; }
-        public ICollection<GenreForCreationDto> Genres { get; set; }
+        public ICollection<GenreCreateDto> Genres { get; set; }
 
-        public MovieForCreationDto(){
-            Genres = new List<GenreForCreationDto>();
+        public MovieCreateDto(){
+            Genres = new List<GenreCreateDto>();
         }
     }
 }

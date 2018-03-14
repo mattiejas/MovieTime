@@ -7,17 +7,17 @@ namespace MovieTime.Web.Movie.Repositories
     
     public class TmdbMovieRepository: ITmdbMovieRepository
     {
-        public IEnumerable<DbMovie> GetMoviesByTitleSearch(string title)
+        public IEnumerable<Persistance.Database.Movie> GetMoviesByTitleSearch(string title)
         {
             throw new System.NotImplementedException();
         }
 
-        public DbMovie GetMovieById(string id)
+        public Movie GetMovieById(string id)
         {
             throw new System.NotImplementedException();
         }
 
-        public DbMovie GetMovieByTitle(string title)
+        public Movie GetMovieByTitle(string title)
         {
             throw new System.NotImplementedException();
         }

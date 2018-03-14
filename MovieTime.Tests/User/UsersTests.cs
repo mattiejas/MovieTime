@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
-using AutoMapper.Configuration;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using MovieTime.Web.Movie.Persistance;
 using MovieTime.Web.Movie.Persistance.Database;
-using MovieTime.Web.Movie.Repositories;
 using MovieTime.Web.Users;
-using MovieTime.Web.Utilities;
 using Xunit;
 
 namespace MovieTime.Tests.User
@@ -17,7 +13,7 @@ namespace MovieTime.Tests.User
     public class UsersTests
     {
         [Fact]
-        public async void DatabaseMovieRepositoryTest()
+        public async Task DatabaseMovieRepositoryTest()
         {
             //Arrange
             var users = getUsers();
@@ -28,16 +24,16 @@ namespace MovieTime.Tests.User
             var totalUsers = await service.GetAll();
             var count = totalUsers.Count();
             //Assert
-            Assert.Equal(1, userById.Id); 
-            Assert.Equal("Henk", userById.FirstName); 
-            Assert.Equal(users.Count(), count); 
+            Assert.Equal(1, userById.Id);
+            Assert.Equal("Henk", userById.FirstName);
+            Assert.Equal(users.Count(), count);
         }
 
         private MovieContext GetMovieContext( IQueryable<Web.Users.User> users)
         {
             var mockSet = new Mock<DbSet<Web.Users.User>>();
             mockSet.As<IQueryable<Web.Users.User>>().Setup(m => m.Provider).Returns(users.Provider);
-            mockSet.As<IQueryable<DbMovie>>().Setup(m => m.Expression).Returns(users.Expression);
+            mockSet.As<IQueryable<Movie>>().Setup(m => m.Expression).Returns(users.Expression);
             mockSet.As<IQueryable<Web.Users.User>>().Setup(m => m.ElementType).Returns(users.ElementType);
             mockSet.As<IQueryable<Web.Users.User>>().Setup(m => m.GetEnumerator()).Returns(users.GetEnumerator());
             var mockContext = new Mock<MovieContext>();

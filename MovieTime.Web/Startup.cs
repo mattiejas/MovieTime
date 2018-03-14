@@ -98,6 +98,7 @@ namespace MovieTime.Web
                     HotModuleReplacement = true,
                     ReactHotModuleReplacement = true
                 });
+                movieContext.EnsureSeedDataForContext();
             }
             else
             {
@@ -117,7 +118,7 @@ namespace MovieTime.Web
 
             app.UseStaticFiles();
 
-            movieContext.EnsureSeedDataForContext();
+            
 
             app.UseSwagger();
 

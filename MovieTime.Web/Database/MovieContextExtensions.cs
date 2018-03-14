@@ -20,50 +20,43 @@ namespace MovieTime.Web.Movie.Persistance
             // INIT SEED DATA
 
             // ** Genres **
-            var genres = new List<DbGenre>()
+            var genres = new List<Genre>()
             {
-                new DbGenre()
+                new Genre()
                 {
-                    CustomField = false,
                     Name = "Comedy"
                 },
 
-                new DbGenre()
+                new Genre()
                 {
-                    CustomField = false,
                     Name = "Animation"
                 },
-                new DbGenre()
+                new Genre()
                 {
-                    CustomField = false,
                     Name = "Action"
                 },
-                new DbGenre()
+                new Genre()
                 {
-                    CustomField = false,
                     Name = "Adventure"
                 },
-                new DbGenre()
+                new Genre()
                 {
-                    CustomField = false,
                     Name = "Horror"
                 },
-                new DbGenre()
+                new Genre()
                 {
-                    CustomField = false,
                     Name = "Thriller"
                 },
-                new DbGenre()
+                new Genre()
                 {
-                    CustomField = false,
                     Name = "Drama"
                 }
             };
 
             // ** Movies **
-            var movies = new List<DbMovie>()
+            var movies = new List<Database.Movie>()
             {
-                new DbMovie()
+                new Database.Movie()
                 {
                     Id = "25320c5e-f58a-4b1f-b63a-8ee07a840bd3",
                     Title = "The legend of ORA, the potato",
@@ -78,7 +71,7 @@ namespace MovieTime.Web.Movie.Persistance
                     Year = DateTime.Now,
                 },
 
-                new DbMovie()
+                new Database.Movie()
                 {
                     Id = "25320c5e-f58a-4b1f-b63a-8ee07a840bdf",
                     Title = "The legend of ORA, the potato 2",
@@ -93,7 +86,7 @@ namespace MovieTime.Web.Movie.Persistance
                     Year = DateTime.Now,
                 },
 
-                new DbMovie()
+                new Database.Movie()
                 {
                     Id = "25320c5e-f58a-4b1f-b63a-8ee07a840bd1",
                     Title = "Kungfu panda",
@@ -110,30 +103,30 @@ namespace MovieTime.Web.Movie.Persistance
             };
 
             // ** Linking Movies with Genres
-            var movieGenre = new List<DbMovieGenre>(){
-                new DbMovieGenre(){
+            var movieGenre = new List<MovieGenre>(){
+                new MovieGenre(){
                     DbMovieId = movies[0].Id,
                     DbGenreId = genres[3].Name
                 },
-                new DbMovieGenre(){
+                new MovieGenre(){
                     DbMovieId = movies[0].Id,
                     DbGenreId = genres[4].Name
                 },
 
-                new DbMovieGenre(){
+                new MovieGenre(){
                     DbMovieId = movies[1].Id,
                     DbGenreId = genres[3].Name
                 },
 
-                new DbMovieGenre(){
+                new MovieGenre(){
                     DbMovieId = movies[2].Id,
                     DbGenreId = genres[0].Name
                 },
-                new DbMovieGenre(){
+                new MovieGenre(){
                     DbMovieId = movies[2].Id,
                     DbGenreId = genres[1].Name
                 },
-                new DbMovieGenre(){
+                new MovieGenre(){
                     DbMovieId = movies[2].Id,
                     DbGenreId = genres[2].Name
                 },
@@ -149,8 +142,8 @@ namespace MovieTime.Web.Movie.Persistance
             };
 
             context.Movies.AddRange(movies);
-            //context.Genres.AddRange(genres);
-            //context.MovieGenre.AddRange(movieGenre);
+            context.Genres.AddRange(genres);
+            context.MovieGenre.AddRange(movieGenre);
             context.Users.AddRange(users);
             context.SaveChanges();
         }

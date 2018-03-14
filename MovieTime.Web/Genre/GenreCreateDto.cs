@@ -1,9 +1,7 @@
 ﻿namespace MovieTime.Web.Movie.Persistance.Database
 {
-    public class GenreDto
+    public class GenreCreateDto
     {
         public string Name { get; set; }
-
-        public bool CustomField { get; set; }
     }
 }

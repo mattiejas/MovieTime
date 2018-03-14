@@ -12,17 +12,14 @@ namespace MovieTime.Web.Utilities
         public MappingProfile()
         {
             // Add as many of these lines as you need to map your objects
-            CreateMap<OmdbMovieModel, DbMovie>()
+            CreateMap<OmdbMovieModel, Movie>()
                 .ForMember(dest => dest.Year, opt => opt.MapFrom(src => new DateTime(Convert.ToInt32(src.Year), 1, 1)));
 
-            CreateMap<DbMovie, MovieDetailsViewModel>()
+            CreateMap<Movie, MovieDetailsDto>()
                 .ForMember(dest => dest.ImdbId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Year.Year.ToString()));
             
-            CreateMap<DbMovie, MovieDetailDto>()
-                .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Year.Year.ToString()));
-            
-            CreateMap<MovieForCreationDto, DbMovie>();
+            CreateMap<MovieCreateDto, Movie>();
 
 
             CreateMap<UserCreateDto, User>();

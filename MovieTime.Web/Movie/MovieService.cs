@@ -20,7 +20,7 @@ namespace MovieTime.Web.Movie.Services
             _databaseMovieRespository = databaseMovieRespository;
         }
 
-        public MovieDetailsViewModel GetMovieDetailsById(string id)
+        public MovieDetailsDto GetMovieDetailsById(string id)
         {
             var movieModel = _databaseMovieRespository.GetMovieById(id);
             if (movieModel == null)
@@ -32,12 +32,12 @@ namespace MovieTime.Web.Movie.Services
                 _databaseMovieRespository.Save();
             }
 
-            var movieDetailsVm = _mapper.Map<DbMovie, MovieDetailsViewModel>(movieModel);
+            var movieDetailsVm = _mapper.Map<Movie, MovieDetailsDto>(movieModel);
 
             return movieDetailsVm;
         }
 
-        public MovieDetailsViewModel GetMovieDetailsByTitle(string title)
+        public MovieDetailsDto GetMovieDetailsByTitle(string title)
         {
             var movieModel = _databaseMovieRespository.GetMovieByTitle(title);
 
@@ -50,7 +50,7 @@ namespace MovieTime.Web.Movie.Services
                 _databaseMovieRespository.Save();
             }
 
-            var movieDetailsVm = _mapper.Map<DbMovie, MovieDetailsViewModel>(movieModel); //todo test null
+            var movieDetailsVm = _mapper.Map<Movie, MovieDetailsDto>(movieModel); //todo test null
 
             return movieDetailsVm;
         }
@@ -60,7 +60,7 @@ namespace MovieTime.Web.Movie.Services
             throw new NotImplementedException();
         }
 
-        public void AddMovie(MovieForCreationDto movie)
+        public void AddMovie(MovieCreateDto movie)
         {
             throw new NotImplementedException();
         }

@@ -21,9 +21,9 @@ namespace MovieTime.Web.Movie.Controllers
         public SearchResultsModel GetMovies(string title) => _movieService.GetMoviesByTitle(title);
 
         [HttpGet("{id}")]
-        public MovieDetailsViewModel GetById(string id) => _movieService.GetMovieDetailsById(id);
+        public MovieDetailsDto GetById(string id) => _movieService.GetMovieDetailsById(id);
 
         [HttpGet("title/{title}")]
-        public MovieDetailsViewModel GetByTitle(string title) => _movieService.GetMovieDetailsByTitle(title);
+        public MovieDetailsDto GetByTitle(string title) => _movieService.GetMovieDetailsByTitle(title);
     }
 }
