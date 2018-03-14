@@ -22,12 +22,12 @@ namespace MovieTime.Web.Movie.Repositories
 
         public DbMovie GetMovieById(string movieId)
         {
-            return _context.Movies.FirstOrDefault(x => x.Id == movieId);
+            return _context.Movies.FirstOrDefault(x => x.Id.ToLower() == movieId.ToLower());
         }
 
         public DbMovie GetMovieByTitle(string title)
         {
-            return _context.Movies.FirstOrDefault(x => x.Title == title);
+            return _context.Movies.FirstOrDefault(x => x.Title.ToLower() == title.ToLower());
         }
 
         public void DeleteMovieById(string id)
