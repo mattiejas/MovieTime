@@ -18,10 +18,14 @@ namespace MovieTime.Web.Track
         [Route("api/[controller]")]
         public async Task<IActionResult> TrackMovie([FromBody] TrackModel model)
         {
+            if (model == null)
+            {
+                return BadRequest(new { message = "UserId or MovieId is missing." });
+            }
             try
             {
                 await _trackService.TrackMovie(model);
-                return NoContent();         
+                return NoContent();      
             }
             catch (Exception err)
             {

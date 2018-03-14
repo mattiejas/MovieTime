@@ -53,7 +53,14 @@ class MovieDetailView extends React.Component {
         }
         return trackMovie(user.uid, this.state.movie.imdbId);
       })
-      .then(response => console.log(response.body));
+      .then((response) => {
+        console.log('response');
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log('err');
+        console.log(err);
+      });
   }
 
   render() {

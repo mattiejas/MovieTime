@@ -5,10 +5,7 @@ export function trackMovie(userId, movieId) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: {
-      movieId,
-      userId,
-    },
+    body: JSON.stringify({ movieId, userId }),
   });
 }
 
