@@ -31,7 +31,7 @@
       display: none;
     }
 
-    button {
+    .nav-button {
       background: none;
       border: none;
       z-index: 10;
@@ -125,7 +125,7 @@
       .title {
         flex: 1;
       }
-      button {
+      .nav-button {
         display: none;
       }
       ul {
@@ -159,16 +159,63 @@
               box-shadow: 0 -10px 40px 0 rgba(0, 0, 0, 0.5);
             }
           }
-          &.search-mobile {
-            display: none;
-          }
-          &.login-mobile {
-            display: none;
-          }
-          &.logout-mobile {
+          &.search-mobile, &.login-mobile, &.logout-mobile {
             display: none;
           }
         }
+      }
+    }
+  }
+
+  .search-desktop {
+    background-color: transparent !important;
+    input {
+      transition: width 0.1s ease-out, transform 0.1s ease-out;
+      transform: translate(30, 0);
+      border: 5px;
+      width: 0 !important;
+    }
+    button {
+      background-color: white;
+      padding: 0 10px;
+      border-radius: 5px;
+    }
+    &.is-open {
+      background-color: #ffffff !important;
+      input {
+        transform: translate(0, 0);
+        width: 200px !important;
+        background-color: transparent !important;
+      }
+      button {
+        border-radius: 0;
+      }
+    }
+  }
+}
+
+@media (min-width: $grid-lg) {
+  .search-desktop {
+    input {
+      transform: translate(0, 0);
+      width: 200px !important;
+      border: 5px;
+    }
+    button {
+      background-color: white;
+      padding: 0 10px;
+      border-radius: 0;
+    }
+    background-color: #ffffff !important;
+    &.is-open {
+      background-color: #ffffff !important;
+      input {
+        transform: translate(0, 0);
+        width: 200px !important;
+        background-color: transparent !important;
+      }
+      button {
+        border-radius: 0;
       }
     }
   }

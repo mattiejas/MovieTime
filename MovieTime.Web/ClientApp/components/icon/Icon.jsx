@@ -16,7 +16,6 @@ Icon.propTypes = {
 Icon.defaultProps = {
   className: '',
   type: '',
-
 };
 
 export default Icon;

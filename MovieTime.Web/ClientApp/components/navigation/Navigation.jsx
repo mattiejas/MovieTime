@@ -18,6 +18,7 @@ export default class Navigation extends Component {
     this.state = {
       mobileMenuIsVisible: false,
       inTransition: false,
+      searchIsOpen: false,
     };
   }
 
@@ -34,6 +35,13 @@ export default class Navigation extends Component {
     }, 200);
   }
 
+  toggleSearch() {
+    console.log('rest');
+    this.setState({
+      searchIsOpen: !this.state.searchIsOpen,
+    });
+  }
+
   render() {
     return (
       <div className={cn(styles.navigation)}>
@@ -41,7 +49,7 @@ export default class Navigation extends Component {
           (
             <div className={styles.navigation__wrapper}>
               <div className={styles.title}>Movie<span>Time</span></div>
-              <button onClick={() => this.toggleMenu()}><Icon type="bars" /></button>
+              <button className={styles['nav-button']} onClick={() => this.toggleMenu()}><Icon type="bars" /></button>
               <ul className={
                 cn(
                   this.state.mobileMenuIsVisible ? '' : styles['navigation--hidden'],
@@ -63,7 +71,7 @@ export default class Navigation extends Component {
               </ul>
 
               <div className={styles.buttons}>
-                <SearchInput />
+                <SearchInput className={cn(styles['search-desktop'], this.state.searchIsOpen ? styles['is-open'] : null)} onClick={() => this.toggleSearch()} />
                 <ButtonGroup>
                   <Button icon="user" to="/users/2">Eddie Brock</Button>
                   <Button icon="power-off" onClick={() => logout()} />
@@ -73,7 +81,7 @@ export default class Navigation extends Component {
           ) : (
             <div className={styles.navigation__wrapper}>
               <div className={styles.title}>Movie<span>Time</span></div>
-              <button onClick={() => this.toggleMenu()}><Icon type="bars" /></button>
+              <button className={styles['nav-button']} onClick={() => this.toggleMenu()}><Icon type="bars" /></button>
               <ul className={cn(
                 this.state.mobileMenuIsVisible ? '' : styles['navigation--hidden'],
                 this.state.inTransition ? styles['navigation--transistion'] : '',
