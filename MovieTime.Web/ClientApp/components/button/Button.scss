@@ -3,9 +3,10 @@
 .button {
   .button__inner {
     i {
-      padding: 0 2px 0 1px;
+      line-height: 35px;
+      padding: 0 2px;
       font-size: 1.3em;
-      color: $font-color-light;
+      color: $secondary-color;
     }
     .spacing {
       padding-left: 8px;
@@ -27,7 +28,7 @@
   width: auto;
   padding: 5px 10px;
   background-color: $button-default-color;
-  color: $font-color-light;
+  color: $secondary-color;
   font-weight: 400;
   border-radius: 5px;
   box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.20);
@@ -86,16 +87,16 @@
       border-bottom-left-radius: 5px;
     }
     &:nth-child(n) {
-      border-right: 2px solid $light-color;
+      border-right: 1px solid darken($button-default-color, 5);
     }
     &.dark {
       &:nth-child(n) {
-        border-right: 2px solid $secondary-color;
+        border-right: 1px solid $secondary-color;
       }
     }
     &.danger {
       &:nth-child(n) {
-        border-right: 2px solid lighten($danger-color, 10);
+        border-right: 1px solid lighten($danger-color, 10);
       }
     }
     &:last-child {

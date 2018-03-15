@@ -4,19 +4,21 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 
 import { logout } from '../../utils/auth';
+import Icon from '../icon/Icon';
 import Button from '../button/Button';
 import ButtonGroup from '../button/ButtonGroup';
-import Icon from '../icon/Icon';
 
 import styles from './Navigation.scss';
+import SearchInput from '../input/SearchInput';
 
 export default class Navigation extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       mobileMenuIsVisible: false,
       inTransition: false,
+      searchIsOpen: false,
     };
   }
 
@@ -31,6 +33,13 @@ export default class Navigation extends Component {
         inTransition: false,
       });
     }, 200);
+  }
+
+  toggleSearch() {
+    console.log('rest');
+    this.setState({
+      searchIsOpen: !this.state.searchIsOpen,
+    });
   }
 
   render() {
@@ -48,37 +57,21 @@ export default class Navigation extends Component {
                 )
               }
               >
-                <li>
-                  <NavLink
-                    exact
-                    to="/"
-                    onClick={() => this.toggleMenu()}
-                    activeClassName={styles['navigation__item--active']}
-                  >
-                  Home
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink activeClassName={styles['navigation__item--active']} to="/404" onClick={() => this.toggleMenu()}>
-                    404
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    onClick={() => this.toggleMenu()}
-                    to="/movie/detail/ferris bueller's day off"
-                    activeClassName={styles['navigation__item--active']}
-                  >
-                    Movie Detail
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink activeClassName={styles['navigation__item--active']} to="/protected" onClick={() => this.toggleMenu()}>
-                    Protected
-                  </NavLink>
+                <li className={styles['search-mobile']}><SearchInput onSearch={() => this.toggleMenu()} /></li>
+                <li><NavLink exact activeClassName={styles['navigation__item--active']} to="/" onClick={() => this.toggleMenu()}>Home</NavLink></li>
+                <li><NavLink activeClassName={styles['navigation__item--active']} to="/404" onClick={() => this.toggleMenu()}>404</NavLink></li>
+                <li><NavLink activeClassName={styles['navigation__item--active']} to="/movie/detail/ferris bueller's day off" onClick={() => this.toggleMenu()}>Movie Detail</NavLink></li>
+                <li><NavLink activeClassName={styles['navigation__item--active']} to="/protected" onClick={() => this.toggleMenu()}>Protected</NavLink></li>
+                <li className={styles['logout-mobile']}>
+                  <ButtonGroup>
+                    <Button icon="user" to="/users/2">Eddie Brock</Button>
+                    <Button icon="power-off" onClick={() => logout()} />
+                  </ButtonGroup>
                 </li>
               </ul>
+
               <div className={styles.buttons}>
+                <SearchInput className={cn(styles['search-desktop'], this.state.searchIsOpen ? styles['is-open'] : null)} onClick={() => this.toggleSearch()} />
                 <ButtonGroup>
                   <Button icon="user" to="/users/2">Eddie Brock</Button>
                   <Button icon="power-off" onClick={() => logout()} />
@@ -94,20 +87,11 @@ export default class Navigation extends Component {
                 this.state.inTransition ? styles['navigation--transistion'] : '',
               )}
               >
-                <li>
-                  <NavLink exact activeClassName={styles['navigation__item--active']} to="/" onClick={() => this.toggleMenu()}>
-                    Home
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink activeClassName={styles['navigation__item--active']} to="/404" onClick={() => this.toggleMenu()}>
-                    404
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink activeClassName={styles['navigation__item--active']} to="/register" onClick={() => this.toggleMenu()}>
-                    Register
-                  </NavLink>
+                <li><NavLink exact activeClassName={styles['navigation__item--active']} to="/" onClick={() => this.toggleMenu()}>Home</NavLink></li>
+                <li><NavLink activeClassName={styles['navigation__item--active']} to="/404" onClick={() => this.toggleMenu()}>404</NavLink></li>
+                <li><NavLink activeClassName={styles['navigation__item--active']} to="/register" onClick={() => this.toggleMenu()}>Register</NavLink></li>
+                <li className={styles['login-mobile']}>
+                  <Button icon="user" to="/login">Login</Button>
                 </li>
               </ul>
               <div className={styles.buttons}>
