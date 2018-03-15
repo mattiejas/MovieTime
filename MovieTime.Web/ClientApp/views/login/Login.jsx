@@ -47,9 +47,9 @@ export default class Login extends Component {
         <div className={styles['view__content--wrapper']}>
           <div className={styles.view__content}>
             <h1>Login</h1>
+            <div className={styles.error}>{this.state.error}</div>
             <hr />
             <form onSubmit={this.handleSubmit}>
-              {this.state.error}
               <div>
                 <Input
                   label="Email"
