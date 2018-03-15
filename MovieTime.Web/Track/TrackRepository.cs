@@ -49,12 +49,12 @@ namespace MovieTime.Web.Track
         }
 
         public async Task<ICollection<TrackModel>> GetTrackedMoviesByUserId(string userId) => 
-            await _context.Track.Where(t => t.UserId == userId).ToListAsync();
+            await _context.Tracks.Where(t => t.UserId == userId).ToListAsync();
 
         public async Task<bool> IsMovieTrackedByUser(string userId, string movieId)
         {
-            var result = await _context.Track.AnyAsync(t => t.UserId == userId && t.MovieId == movieId);
-            var result2 = _context.Track.ToList();
+            var result = await _context.Tracks.AnyAsync(t => t.UserId == userId && t.MovieId == movieId);
+            var result2 = _context.Tracks.ToList();
             return result;
         }
     }

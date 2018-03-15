@@ -11,8 +11,8 @@ using System;
 namespace MovieTime.Web.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20180315155701_initial")]
-    partial class initial
+    [Migration("20180315214959_initialMovie")]
+    partial class initialMovie
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -93,7 +93,7 @@ namespace MovieTime.Web.Migrations
 
                     b.Property<string>("MovieId");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<string>("UserId");
 
                     b.HasKey("Id");
 
@@ -106,7 +106,7 @@ namespace MovieTime.Web.Migrations
 
             modelBuilder.Entity("MovieTime.Web.Users.User", b =>
                 {
-                    b.Property<Guid>("Id");
+                    b.Property<string>("Id");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -151,8 +151,7 @@ namespace MovieTime.Web.Migrations
 
                     b.HasOne("MovieTime.Web.Users.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

@@ -4,7 +4,7 @@ namespace MovieTime.Web.Track
 {
     public class TrackContext : DbContext
     {
-        public DbSet<TrackModel> Track { get; set; }
+        public DbSet<TrackModel> Tracks { get; set; }
         
         public TrackContext(DbContextOptions<TrackContext> options) : base(options)
         {

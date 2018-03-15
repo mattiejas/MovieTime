@@ -96,7 +96,6 @@ namespace MovieTime.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, MovieContext movieContext, TrackContext trackContext)
         {
-            trackContext.Database.Migrate();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -121,7 +120,8 @@ namespace MovieTime.Web
                     });
                 });
             }
-
+            trackContext.Database.Migrate();
+            
             app.UseAuthentication();
             app.UseStaticFiles();
             app.UseSwagger();

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace MovieTime.Web.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class initialMovie : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -43,7 +43,7 @@ namespace MovieTime.Web.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<string>(nullable: false),
                     Email = table.Column<string>(maxLength: 60, nullable: false),
                     FirstName = table.Column<string>(maxLength: 45, nullable: false),
                     ImageUrl = table.Column<string>(maxLength: 45, nullable: true),
@@ -89,7 +89,7 @@ namespace MovieTime.Web.Migrations
                     EditedDateTime = table.Column<DateTime>(nullable: false),
                     IsConcept = table.Column<bool>(nullable: false),
                     MovieId = table.Column<string>(nullable: true),
-                    UserId = table.Column<Guid>(nullable: false)
+                    UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -105,7 +105,7 @@ namespace MovieTime.Web.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
