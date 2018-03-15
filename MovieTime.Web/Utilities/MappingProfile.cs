@@ -13,7 +13,7 @@ namespace MovieTime.Web.Utilities
         {
             // Add as many of these lines as you need to map your objects
             CreateMap<OmdbMovieModel, DbMovie>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ImdbId))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Year, opt => opt.MapFrom(src => new DateTime(Convert.ToInt32(src.Year), 1, 1)));
 
             CreateMap<DbMovie, MovieDetailsViewModel>()

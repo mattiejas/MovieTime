@@ -39,6 +39,7 @@
   <ItemGroup>
     <Compile Remove="MovieDetails\EmptyClass.cs" />
     <Compile Remove="MovieDetails\AuthorDto.cs" />
+    <Compile Remove="Movie\Repositories\Modifiable.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services" />

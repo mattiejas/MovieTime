@@ -26,7 +26,7 @@ namespace MovieTime.Web.Movie.Persistance.Omdb
         [JsonProperty("imdbVotes")]
         public string ImdbVotes { get; set; }       
         [JsonProperty("imdbID")]
-        public string ImdbId { get; set; }
+        public string Id { get; set; }
         public string Type { get; set; }
         [JsonProperty("DVD")]
         public string Dvd { get; set; }

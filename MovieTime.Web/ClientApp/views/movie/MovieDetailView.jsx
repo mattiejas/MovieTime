@@ -27,11 +27,32 @@ class MovieDetailView extends React.Component {
 
     this.handleTracking = this.handleTracking.bind(this);
     this.handleUntracking = this.handleUntracking.bind(this);
+    this.loadMovieDetails = this.loadMovieDetails.bind(this);
   }
 
   async componentDidMount() {
+    await this.loadMovieDetails(this.props.match.params.title);
+  }
+
+  async componentWillReceiveProps(props) {
+    if (this.props.match.params.title !== props.match.params.title) {
+      await this.loadMovieDetails(this.props.match.params.title);
+    }
+  }
+
+  setBackgroundColor(poster) {
+    Vibrant.from(poster).getPalette()
+      .then(palette => this.setState({
+        backgroundColor: `rgb(${palette.Vibrant.r}, ${palette.Vibrant.g}, ${palette.Vibrant.b})`,
+      }));
+  }
+
+  async loadMovieDetails(movieTitle) {
     try {
-      const movie = await getMovieByTitle(this.props.match.params.title);
+      const movie = await getMovieByTitle(movieTitle);
+
+      console.log('movie', movie);
+
       const user = await getUser();
       const track = await isMovieTracked(user.uid, movie.imdbId);
 
@@ -47,13 +68,6 @@ class MovieDetailView extends React.Component {
     } catch (err) {
       console.log(err);
     }
-  }
-
-  setBackgroundColor(poster) {
-    Vibrant.from(poster).getPalette()
-      .then(palette => this.setState({
-        backgroundColor: `rgb(${palette.Vibrant.r}, ${palette.Vibrant.g}, ${palette.Vibrant.b})`,
-      }));
   }
 
   handleTracking(event) {

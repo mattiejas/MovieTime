@@ -6,13 +6,15 @@ namespace MovieTime.Web.Movie.Persistance
 {
     public class MovieContext : DbContext
     {
-        public DbSet<DbMovie> Movies { get; set; }
-        public DbSet<DbGenre> Genres { get; set; }
-        public DbSet<DbMovieGenre> MovieGenre { get; set; }
+        public virtual DbSet<DbMovie> Movies { get; set; }
+        public virtual DbSet<DbGenre> Genres { get; set; }
+        public virtual DbSet<DbMovieGenre> MovieGenre { get; set; }
         
-        public DbSet<UserModel> Users { get; set; }
+        public virtual DbSet<UserModel> Users { get; set; }
 
         public MovieContext(DbContextOptions<MovieContext> options) : base(options) { }
+
+        public MovieContext() { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
