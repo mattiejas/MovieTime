@@ -10,7 +10,7 @@ namespace MovieTime.Web.Reviews.Models
         [Key]
         public int Id { get; set; }
         
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         public User User { get; set; }
         
         public string MovieId { get; set; }

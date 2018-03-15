@@ -69,12 +69,20 @@ namespace MovieTime.Web
             var mode = Configuration.GetConnectionString("Use_SQLServer");
             if (string.IsNullOrWhiteSpace(mode) || mode.ToLower() == "true")
             {
-                services.AddDbContext<MovieContext>(options => options.UseSqlServer(connectionString));
+                services.AddDbContext<MovieContext>(options =>
+                {
+                    options.UseSqlServer(connectionString);
+                    options.EnableSensitiveDataLogging();
+                });
             }
             else
             {
                 connectionString = Configuration.GetConnectionString("Postgresql_DATABASE_URL");
-                services.AddDbContext<MovieContext>(options => options.UseNpgsql(connectionString));
+                services.AddDbContext<MovieContext>(options =>
+                {
+                    options.UseNpgsql(connectionString);
+                    options.EnableSensitiveDataLogging();
+                });
             }
             
             services.AddScoped<IMovieService, MovieService>();

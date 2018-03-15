@@ -83,7 +83,8 @@ namespace MovieTime.Web.Database
             return queryable;
         }
 
-        public virtual async Task<int> Save()
+        //todo why is there a save method if the update and add already implement it on their own?
+        public virtual async Task<int> Save() 
         {
             return await _context.SaveChangesAsync();
         }
