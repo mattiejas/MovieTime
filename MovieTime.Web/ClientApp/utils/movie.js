@@ -1,6 +1,7 @@
+const trackAPI = '/api/track/';
 
 export function trackMovie(userId, movieId) {
-  return fetch('/api/track/', {
+  return fetch(trackAPI, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',

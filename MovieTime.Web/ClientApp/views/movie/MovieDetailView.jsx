@@ -31,10 +31,10 @@ class MovieDetailView extends React.Component {
   componentDidMount() {
     getMovieByTitle(this.props.match.params.title)
       .then((data) => {
-        setTimeout(() => this.setState({
+        this.setState({
           movie: data,
           isLoading: false,
-        }), 200);
+        })
         this.setBackgroundColor(data.poster);
       });
   }
