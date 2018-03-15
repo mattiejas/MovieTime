@@ -10,13 +10,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using MovieTime.Web.Movie.Persistance;
-using MovieTime.Web.Movie.Repositories;
-using MovieTime.Web.Movie.Services;
 using MovieTime.Web.Users;
 using MovieTime.Web.Utilities;
+using MovieTime.Web.Database;
+using MovieTime.Web.Movies;
+using MovieTime.Web.ThirdPartyServices;
+using MovieTime.Web.ThirdPartyServices.OMDB.Movies;
+using MovieTime.Web.Reviews;
 
 namespace MovieTime.Web
 {
@@ -32,10 +37,24 @@ namespace MovieTime.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+				services.AddAuthentication( JwtBearerDefaults.AuthenticationScheme)
+				.AddJwtBearer( options => {
+                options.Authority = "https://securetoken.google.com/movietime-hhs-c73b9";
+						options.TokenValidationParameters = new TokenValidationParameters
+						{
+								ValidateIssuer= true,
+                                ValidIssuer = "https://securetoken.google.com/movietime-hhs-c73b9",
+                                ValidateAudience = true,
+								ValidAudience= "movietime-hhs-c73b9",
+                                ValidateLifetime= true
+						};
+				});
+
             services.AddMvc(setupAction =>
             {
-                setupAction.ReturnHttpNotAcceptable = true; // do not send default media type if unsupported is requested
+                setupAction.ReturnHttpNotAcceptable = true; // do not send default media type if unsupported type is requested
                 setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
+                setupAction.InputFormatters.Add(new XmlDataContractSerializerInputFormatter());
             });
 
             services.AddAutoMapper();
@@ -46,7 +65,7 @@ namespace MovieTime.Web
             
             // Exec: dotnet ef migrations add "<migration_name>", to add a new migration.
             // Exec: dotnet ef database update, to update the database according to the migrations. 
-            var connectionString = Configuration.GetConnectionString("movieDbConnectionString");
+            var connectionString = Configuration.GetConnectionString("defaultConnection");
             var mode = Configuration.GetConnectionString("Use_SQLServer");
             if (string.IsNullOrWhiteSpace(mode) || mode.ToLower() == "true")
             {
@@ -59,13 +78,15 @@ namespace MovieTime.Web
             }
             
             services.AddScoped<IMovieService, MovieService>();
-            services.AddScoped<IDatabaseMovieRespository, DatabaseMovieRepository>();
+            services.AddScoped<IMovieRespository, MovieRepository>();
             // For now decide here if we use omdb or tmdb as movie repository.
-            services.AddScoped<IMovieRepository, OmdbMovieRepository>();
+            services.AddScoped<IThirdPartyMovieRepository, OmdbMovieRepository>();
             
-            services.AddScoped<IUsersService, UsersService>();
-            services.AddScoped<IUsersRepository, UsersRepository>();
-            
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+
+            services.AddScoped<IReviewService, ReviewService>();
+            services.AddScoped<IReviewRepository, ReviewRepository>(); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -79,6 +100,7 @@ namespace MovieTime.Web
                     HotModuleReplacement = true,
                     ReactHotModuleReplacement = true
                 });
+                movieContext.EnsureSeedDataForContext();
             }
             else
             {
@@ -93,11 +115,12 @@ namespace MovieTime.Web
                 });
             }
 
-            app.UseMiddleware<SerilogMiddleware>();
+            app.UseAuthentication();
+          //  app.UseMiddleware<SerilogMiddleware>();
 
             app.UseStaticFiles();
 
-            movieContext.EnsureSeedDataForContext();
+            
 
             app.UseSwagger();
 
