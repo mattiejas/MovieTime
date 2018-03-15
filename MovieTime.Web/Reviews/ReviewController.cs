@@ -39,7 +39,7 @@ namespace MovieTime.Web.Reviews
         }
 
         [HttpGet("users/{userId}/reviews")]
-        public async Task<IActionResult> GetAllUserReviews(Guid userId)
+        public async Task<IActionResult> GetAllUserReviews(string userId)
         {
             var userExist = await _reviewService.UserExist(userId);
             if (!userExist) return NotFound();

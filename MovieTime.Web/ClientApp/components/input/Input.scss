@@ -28,6 +28,15 @@
     width: 100%;
     color: $font-color;
     margin-right: 20px;
+    &:focus {
+      box-shadow: 0 5px 15px rgba(27, 183, 249, 0.3) !important;
+    }
+    &:disabled {
+      background-color: lighten($light-color, 5);
+      font-style: italic;
+      font-weight: 200;
+      cursor: not-allowed;
+    }
   }
 
   .error {

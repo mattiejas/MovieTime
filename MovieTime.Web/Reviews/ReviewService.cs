@@ -25,12 +25,12 @@ namespace MovieTime.Web.Reviews
             return await _reviewRepository.Find(x => x.Id == id);
         }
 
-        public async Task<Review> GetReviewConcept(Guid userId)
+        public async Task<Review> GetReviewConcept(string userId)
         {
             return await _reviewRepository.Find(x => x.UserId == userId && x.IsConcept);
         }
 
-        public async Task<ICollection<Review>> GetAllReviewConcepts(Guid userId)
+        public async Task<ICollection<Review>> GetAllReviewConcepts(string userId)
         {
             return await _reviewRepository.FindAll(x => x.UserId == userId && x.IsConcept);
         }
@@ -40,7 +40,7 @@ namespace MovieTime.Web.Reviews
             return await _reviewRepository.FindAll(x => x.MovieId == movieId);
         }
 
-        public async Task<ICollection<Review>> GetReviewsOfUser(Guid userId)
+        public async Task<ICollection<Review>> GetReviewsOfUser(string userId)
         {
             return await _reviewRepository.FindAll(x => x.UserId == userId && x.IsConcept == false);
         }
@@ -65,12 +65,12 @@ namespace MovieTime.Web.Reviews
             throw new System.NotImplementedException();
         }
 
-        public async void DeleteReviewsOfUser(Guid userId)
+        public async void DeleteReviewsOfUser(string userId)
         {
             throw new System.NotImplementedException();
         }
 
-        public async Task<bool> UserExist(Guid userId)
+        public async Task<bool> UserExist(string userId)
         {
             var countMatches = await _userRepository.CountMatch(x => x.Id == userId);
             return countMatches > 0;

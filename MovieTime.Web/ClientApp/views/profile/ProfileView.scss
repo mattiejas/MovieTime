@@ -36,6 +36,7 @@
   align-items: center;
   height: 30vh;
   .picture {
+    border: 3px solid lighten($light-color, 5);
     height: auto;
     width: 100%;
   }
@@ -75,7 +76,6 @@
 .content {
   max-width: 1200px;
   margin: 10px auto 0 auto;
-  padding: 10px;
 }
 
 @media (min-width: $grid-sm) {
@@ -93,7 +93,7 @@
 
   .buttons__container {
     grid-template-columns: 240px 1fr;
-    grid-template-areas: ". buttons";
+    grid-template-areas: " buttons";
     .buttons {
       display: block;
       grid-area: buttons;
@@ -112,12 +112,14 @@
   }
 
   .content {
-    margin-top: 100px;
-    padding: 20px;
+    margin-top: 50px;
   }
 
   .header__picture {
     margin-top: 40px;
+    .picture {
+      border: 10px solid lighten($light-color, 5);
+    }
   }
 
   .name {
@@ -165,7 +167,6 @@
     }
   }
   .content {
-    margin-top: 120px;
-    padding: 20px;
+    margin-top: 100px;
   }
 }

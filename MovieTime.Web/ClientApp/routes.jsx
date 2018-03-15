@@ -12,6 +12,7 @@ import ProfileView from './views/profile/ProfileView';
 import NotFoundView from './views/notfound/NotFoundView';
 import MovieDetailView from './views/movie/MovieDetailView';
 import RegistrationForm from './views/registration/Registration';
+import ListView from './views/list/ListView';
 
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
   <Route
@@ -80,9 +81,10 @@ export default class Router extends React.Component {
       <Layout isAuthenticated={this.state.isAuthenticated}>
         <Switch>
           <Route exact path="/" component={Home} />
-          <PrivateRoute path="/movie/detail/:title" isAuthenticated={this.state.isAuthenticated} component={MovieDetailView} />
+          <PrivateRoute path="/movies/:title" isAuthenticated={this.state.isAuthenticated} component={MovieDetailView} />
           <PublicRoute path="/register" isAuthenticated={this.state.isAuthenticated} component={RegistrationForm} />
           <PublicRoute path="/login" isAuthenticated={this.state.isAuthenticated} component={Login} />
+          <Route path="/list" component={ListView} />
           <Route path="/users/:id" component={ProfileView} />
           <Route component={NotFoundView} />
         </Switch>

@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { getUserData, updateUserData } from '../../utils/user';
+import { removeUser } from '../../utils/auth';
+
+import ListWidget from '../../components/list-widget/ListWidget';
 import Placeholder from '../../components/placeholder/Placeholder';
 import Button from '../../components/button/Button';
 import ProfilePicture from '../../components/profile/ProfilePicture';
-import EditProfileModal from '../../components/user/EditProfileModal';
+import EditProfileModal from '../../components/profile/EditProfileModal';
 
 import styles from './ProfileView.scss';
-
-const API = '/api/users/';
 
 class ProfileView extends React.Component {
   constructor() {
@@ -17,11 +19,18 @@ class ProfileView extends React.Component {
       user: {},
       isLoading: true,
       isEditing: false,
+      movies: ['Thor: Ragnarok', 'Thor', 'Black Panther', 'Spider-Man: Homecoming', 'Thor: Ragnarok'],
     };
   }
 
   componentDidMount() {
-    this.fetchUserData(this.props.match.params.id);
+    const { id } = this.props.match.params;
+    getUserData(id).then((data) => {
+      this.setState({
+        user: { id, ...data },
+        isLoading: false,
+      });
+    });
   }
 
   onEdit() {
@@ -36,45 +45,19 @@ class ProfileView extends React.Component {
     });
   }
 
-  fetchUserData(id) {
-    fetch(API + id)
-      .then(response => response.json())
-      .then((data) => {
-        setTimeout(() => this.setState({
-          user: { id, ...data },
-          isLoading: false,
-        }), 200);
-      });
-  }
-
-  updateUserData(user) {
-    fetch(API, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'PUT',
-      body: JSON.stringify(user),
-    })
-      .then(response => response)
-      .then(() => {
-        this.fetchUserData(user.id);
-      });
-  }
-
   render() {
     const { firstName = '', lastName = '' } = this.state.user;
     const { id } = this.props.match.params;
     return (
       <div className={styles.view}>
-        {
-          this.state.isEditing &&
-          <EditProfileModal
-            hideModal={() => this.onDiscard()}
-            onUpdate={user => this.updateUserData(user)}
-            user={this.state.user}
-          />
-        }
+        <EditProfileModal
+          hidden={!this.state.isEditing}
+          hideModal={() => this.onDiscard()}
+          onUpdate={user => updateUserData(user).then(() => {
+              getUserData(user.id);
+          })}
+          user={this.state.user}
+        />
         <div className={styles.view__background} />
         <div className={styles.view__header}>
           <div className={styles.header}>
@@ -97,8 +80,8 @@ class ProfileView extends React.Component {
             </div>
           </div>
           <div className={styles.content}>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus architecto, deleniti dolorem earum
-            excepturi explicabo labore nostrum nulla porro qui quo rem similique tempora veniam vero vitae! Aut, optio.
+            <ListWidget title="Wants to watch" movies={this.state.movies} history={this.props.history} />
+            <ListWidget title="Has watched" movies={this.state.movies} history={this.props.history} />
           </div>
         </div>
       </div>
@@ -108,6 +91,7 @@ class ProfileView extends React.Component {
 
 ProfileView.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default ProfileView;

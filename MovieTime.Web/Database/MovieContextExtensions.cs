@@ -59,7 +59,7 @@ namespace MovieTime.Web.Database
             {
                 new Movie()
                 {
-                    Id = "25320c5e-f58a-4b1f-b63a-8ee07a840bd3",
+                    Id = "7861a023-57a0-4fae-86a2-4d19026da320",
                     Title = "The legend of ORA, the potato",
                     Actors = "John, Maco, Sphent",
                     Director = "Peter",
@@ -72,7 +72,7 @@ namespace MovieTime.Web.Database
 
                 new Movie()
                 {
-                    Id = "25320c5e-f58a-4b1f-b63a-8ee07a840bdf",
+                    Id = "c2c43232-abeb-461a-a998-071721925ad9",
                     Title = "The legend of ORA, the potato 2",
                     Actors = "John 2, Maco 2, Sphent 2",
                     Director = "Peter 2",
@@ -85,7 +85,7 @@ namespace MovieTime.Web.Database
 
                 new Movie()
                 {
-                    Id = "25320c5e-f58a-4b1f-b63a-8ee07a840bd1",
+                    Id = "53fed9fa-75a2-477a-9568-dd6351ca4127",
                     Title = "Kungfu panda",
                     Actors = "Johny bravo",
                     Director = "Bravo John",
@@ -138,33 +138,39 @@ namespace MovieTime.Web.Database
             {
                 new User
                 {
-                    Id = new Guid("6d74f620-2e16-4b19-8bde-bbefa4cadf95"),
+                    Id = "6d74f620-2e16-4b19-8bde-bbefa4cadf95",
                     FirstName = "Peter",
                     LastName = "Parker",
                     Email = "p_parker@outlook.com"
                 },
                 new User
                 {
-                    Id = new Guid("683bd02b-9280-40fd-bd76-d9ef8c26f1fa"),
+                    Id = "683bd02b-9280-40fd-bd76-d9ef8c26f1fa",
                     FirstName = "Eddie",
                     LastName = "Brock",
                     Email = "e_brock@outlook.com"
                 },
                 new User
                 {
-                    Id = new Guid("9c696ab7-cacb-4fd8-9797-96fd83b93a4c"),
+                    Id = "9c696ab7-cacb-4fd8-9797-96fd83b93a4c",
                     FirstName = "MJ",
                     LastName = "Watson",
                     Email = "mj_watson@outlook.com"
                 },
                 new User
                 {
-                    Id = new Guid("7f90cc18-55b9-4f32-9f4e-26c9f18eca53"),
+                    Id = "7f90cc18-55b9-4f32-9f4e-26c9f18eca53",
                     FirstName = "Gwen",
                     LastName = "Stacy",
                     Email = "g_stacy@outlook.com"
                 },
-                new User {FirstName = "Harry", LastName = "Osborn", Email = "h_osborn@outlook.com"}
+                new User
+                {
+                    Id = "36c57237-66d5-4330-ad5a-241d1c223415",
+                    FirstName = "Harry",
+                    LastName = "Osborn",
+                    Email = "h_osborn@outlook.com"
+                }
             };
 
             context.Movies.AddRange(movies);
