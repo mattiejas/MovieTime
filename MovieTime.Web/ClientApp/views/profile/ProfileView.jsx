@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { getUserData, updateUserData } from '../../utils/user';
+
 
 import ListWidget from '../../components/list-widget/ListWidget';
 import Placeholder from '../../components/placeholder/Placeholder';
@@ -8,9 +10,9 @@ import ProfilePicture from '../../components/profile/ProfilePicture';
 import Input from '../../components/input/Input';
 import Modal from '../../components/modal/Modal';
 
+
 import styles from './ProfileView.scss';
 
-const API = '/api/users/';
 
 class EditProfileModal extends React.Component {
   constructor() {
@@ -94,7 +96,13 @@ class ProfileView extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchUserData(this.props.match.params.id);
+    const { id } = this.props.match.params;
+    getUserData(id).then((data) => {
+      this.setState({
+        user: { id, ...data },
+        isLoading: false,
+      });
+    });
   }
 
   onEdit() {
@@ -109,29 +117,6 @@ class ProfileView extends React.Component {
     });
   }
 
-  fetchUserData(id) {
-    fetch(API + id).then(response => response.json()).then((data) => {
-      setTimeout(() => this.setState({
-        user: { id, ...data },
-        isLoading: false,
-      }), 200);
-    });
-  }
-
-  updateUserData(user) {
-    fetch(API, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'PUT',
-      body: JSON.stringify(user),
-    }).then(response => response)
-      .then(() => {
-        this.fetchUserData(user.id);
-      });
-  }
-
   render() {
     const { firstName = '', lastName = '' } = this.state.user;
     const { id } = this.props.match.params;
@@ -140,7 +125,9 @@ class ProfileView extends React.Component {
         <EditProfileModal
           hidden={!this.state.isEditing}
           hideModal={() => this.onDiscard()}
-          onUpdate={user => this.updateUserData(user)}
+          onUpdate={user => updateUserData(user).then(() => {
+              getUserData(user.id);
+          })}
           user={this.state.user}
         />
         <div className={styles.view__background} />
