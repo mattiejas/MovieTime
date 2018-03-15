@@ -9,4 +9,8 @@ const App = ({ baseUrl }) => (
   </Router>
 );
 
+App.propTypes = {
+  baseUrl: PropTypes.string.isRequired,
+};
+
 export default App;
