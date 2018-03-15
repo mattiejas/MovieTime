@@ -113,7 +113,7 @@ namespace MovieTime.Web
                     });
                 });
             }
-
+            
             app.UseAuthentication();
             app.UseStaticFiles();
             app.UseSwagger();

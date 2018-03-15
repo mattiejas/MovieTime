@@ -11,7 +11,7 @@ using System;
 namespace MovieTime.Web.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20180315222857_Initial")]
+    [Migration("20180315223734_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
