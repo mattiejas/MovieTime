@@ -7,82 +7,11 @@ import ListWidget from '../../components/list-widget/ListWidget';
 import Placeholder from '../../components/placeholder/Placeholder';
 import Button from '../../components/button/Button';
 import ProfilePicture from '../../components/profile/ProfilePicture';
-import Input from '../../components/input/Input';
-import Modal from '../../components/modal/Modal';
+import EditProfileModal from '../../components/user/EditProfileModal';
 
 
 import styles from './ProfileView.scss';
 
-
-class EditProfileModal extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      user: {},
-    };
-  }
-  onChange(event) {
-    const { name, value } = event.target;
-    this.setState({
-      user: {
-        ...this.state.user,
-        [name]: value,
-      },
-    });
-  }
-  render() {
-    const { hideModal, onUpdate, hidden } = this.props;
-    const {
-      firstName = this.props.user.firstName,
-      lastName = this.props.user.lastName,
-      email = this.props.user.email,
-    } = this.state.user;
-
-    return (
-      <Modal hidden={hidden} title="Edit Profile" hideModal={hideModal}>
-        <div className={styles.edit}>
-          <div className={styles.group}>
-            <Input label="First Name" name="firstName" value={firstName} onChange={e => this.onChange(e)} />
-            <Input label="Last Name" name="lastName" value={lastName} onChange={e => this.onChange(e)} />
-          </div>
-          <div className={styles.group}>
-            <Input label="E-mail" name="email" value={email} onChange={e => this.onChange(e)} />
-          </div>
-          <hr style={{ marginTop: '20px' }} />
-          <div className={styles.group}>
-            <Input label="Old Password" />
-          </div>
-          <div className={styles.group}>
-            <Input label="New Password" />
-            <Input label="Repeat Password" />
-          </div>
-          <hr style={{ marginTop: '20px' }} />
-          <div className={styles.buttons}>
-            <Button danger className={styles.button} onClick={hideModal}>Cancel</Button>
-            <Button
-              dark
-              className={styles.button}
-              onClick={() => { onUpdate({ ...this.props.user, ...this.state.user }); hideModal(); }}
-            >
-              Update
-            </Button>
-          </div>
-        </div>
-      </Modal>
-    );
-  }
-}
-
-EditProfileModal.propTypes = {
-  hidden: PropTypes.bool,
-  user: PropTypes.objectOf(PropTypes.any).isRequired,
-  hideModal: PropTypes.func.isRequired,
-  onUpdate: PropTypes.func.isRequired,
-};
-
-EditProfileModal.defaultProps = {
-  hidden: false,
-};
 
 class ProfileView extends React.Component {
   constructor() {

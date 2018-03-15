@@ -14,7 +14,10 @@
     font-weight: 300;
     font-style: italic;
     font-size: 1em;
-    margin-bottom: 6px;
+    margin: 20px 0 6px 0;
+    &.error-label {
+      margin: -7px 0 10px 0;
+    }
   }
 
   .input {
@@ -25,5 +28,12 @@
     width: 100%;
     color: $font-color;
     margin-right: 20px;
+  }
+
+  .error {
+    display: block;
+    color: $danger-color;
+    font-size: 0.8em;
+    margin: -5px 0 10px 0;
   }
 }

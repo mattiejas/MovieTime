@@ -1,6 +1,6 @@
 import React from 'react';
-import Button from '../components/button/Button';
-import { removeUser } from '../utils/auth';
+import Button from '../../components/button/Button';
+import { removeUser } from '../../utils/auth';
 
 
 export default class Home extends React.Component {

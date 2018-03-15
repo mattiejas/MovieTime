@@ -2,17 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
-import { auth } from './firebase';
+import auth from './firebase';
+
 import Layout from './components/layout/Layout';
 
-import Home from './views/Home';
-import MovieDetailView from './views/movie/MovieDetailView';
+import Home from './views/home/Home';
+import Login from './views/login/Login';
 import ProfileView from './views/profile/ProfileView';
 import NotFoundView from './views/notfound/NotFoundView';
+import MovieDetailView from './views/movie/MovieDetailView';
 import RegistrationForm from './views/registration/Registration';
-import Protected from './views/Protected';
-import Login from './views/login/Login';
-import ListView from './views/list/ListView';
 
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
   <Route
@@ -84,7 +83,6 @@ export default class Router extends React.Component {
           <PrivateRoute path="/movies/:title" isAuthenticated={this.state.isAuthenticated} component={MovieDetailView} />
           <PublicRoute path="/register" isAuthenticated={this.state.isAuthenticated} component={RegistrationForm} />
           <PublicRoute path="/login" isAuthenticated={this.state.isAuthenticated} component={Login} />
-          <PrivateRoute path="/protected" isAuthenticated={this.state.isAuthenticated} component={Protected} />
           <Route path="/list" component={ListView} />
           <Route path="/users/:id" component={ProfileView} />
           <Route component={NotFoundView} />

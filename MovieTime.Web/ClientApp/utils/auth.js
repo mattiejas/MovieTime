@@ -1,5 +1,5 @@
 import firebase from 'firebase';
-import { auth } from '../firebase';
+import auth from '../firebase';
 
 async function registerWithFireBase(email, password) {
   return auth.createUserWithEmailAndPassword(email, password);
