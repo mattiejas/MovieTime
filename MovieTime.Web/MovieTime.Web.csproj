@@ -33,12 +33,12 @@
     <Content Remove="ClientApp\**" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MovieDetails\" />
     <Folder Include="wwwroot\assets\users" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="MovieDetails\EmptyClass.cs" />
     <Compile Remove="MovieDetails\AuthorDto.cs" />
+    <Compile Remove="Movie\Repositories\Modifiable.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services" />

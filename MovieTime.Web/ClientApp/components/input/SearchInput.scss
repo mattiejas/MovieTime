@@ -1,0 +1,60 @@
+@import "../../styles/core";
+
+.search-form {
+  display: flex;
+  align-content: center;
+  background-color: white;
+  border-radius: 5px;
+  font-size: 0.8em;
+  width: calc(100% - 40px);
+  height: 35px;
+  margin: 20px;
+  padding: 0 15px;
+
+  .search-input {
+    color: $font-color;
+    background-color: white;
+    width: 100%;
+    height: 35px;
+    padding: 0;
+    border: 0;
+    &:focus {
+      outline: none;
+    }
+    &::placeholder {
+      font-style: italic;
+      font-weight: 200;
+      color: $font-color-light;
+    }
+  }
+
+  button {
+    border: 0;
+    display: inline-block;
+    height: 35px;
+    .search-icon {
+      display: block;
+      color: $secondary-color;
+      height: 35px;
+      font-size: 1.4em;
+      border-radius: 5px;
+      line-height: 35px;
+      cursor: pointer;
+      &:hover {
+        color: darken($secondary-color, 10);
+      }
+      &:active {
+        color: darken($secondary-dark-color, 10);
+      }
+    }
+  }
+}
+
+@media (min-width: $grid-sm) {
+  .search-form {
+    margin: 0 20px;
+    .search-input {
+      width: 200px;
+    }
+  }
+}
