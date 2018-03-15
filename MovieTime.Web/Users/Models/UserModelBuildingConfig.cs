@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MovieTime.Web.Database;
 
-namespace MovieTime.Web.Users
+namespace MovieTime.Web.Users.Models
 {
     public class UserModelBuildingConfig : IEntityModelBuildingConfig
     {
@@ -14,7 +14,9 @@ namespace MovieTime.Web.Users
 
         public void MapRelations(ModelBuilder builder)
         {
-            //Todo: map relation with review, rating etc.
+            var user = builder.Entity<User>();
+
+
         }
 
         public void MapProperties(ModelBuilder builder)

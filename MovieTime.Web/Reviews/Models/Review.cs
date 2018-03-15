@@ -7,7 +7,6 @@ namespace MovieTime.Web.Reviews.Models
 {
     public class Review
     {
-        [Key]
         public int Id { get; set; }
         
         public string UserId { get; set; }
