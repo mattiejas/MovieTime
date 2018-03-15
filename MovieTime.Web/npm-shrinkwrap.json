@@ -1547,7 +1547,7 @@
       "dev": true,
       "requires": {
         "babel-plugin-syntax-object-rest-spread": "6.13.0",
-        "babel-runtime": "https://registry.npmjs.org/babel-runtime/-/babel-runtime-6.26.0.tgz"
+        "babel-runtime": "6.26.0"
       }
     },
     "babel-plugin-transform-react-display-name": {
@@ -7001,8 +7001,9 @@
       }
     },
     "lodash": {
-      "version": "https://registry.npmjs.org/lodash/-/lodash-4.17.5.tgz",
-      "integrity": "sha1-maktZcAnLevoyWtgV7yPv6O+1RE="
+      "version": "4.17.5",
+      "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.17.5.tgz",
+      "integrity": "sha512-svL3uiZf1RwhH+cWrfZn3A4+U58wbP0tGVTLQPbjplZxZ8ROD9VLuNgsRniTlLe7OlSqR79RUehXgpBW/s0IQw=="
     },
     "lodash.assign": {
       "version": "4.2.0",

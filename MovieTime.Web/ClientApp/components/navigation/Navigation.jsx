@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 
 import { logout } from '../../utils/auth';
+import Icon from '../icon/Icon';
 import Button from '../button/Button';
 import ButtonGroup from '../button/ButtonGroup';
-import Icon from '../icon/Icon';
 
 import styles from './Navigation.scss';
 

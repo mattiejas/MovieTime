@@ -15,12 +15,14 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using MovieTime.Web.Movie.Persistance;
-using MovieTime.Web.Movie.Repositories;
-using MovieTime.Web.Movie.Services;
 using MovieTime.Web.Track;
 using MovieTime.Web.Users;
 using MovieTime.Web.Utilities;
+using MovieTime.Web.Database;
+using MovieTime.Web.Movies;
+using MovieTime.Web.ThirdPartyServices;
+using MovieTime.Web.ThirdPartyServices.OMDB.Movies;
+using MovieTime.Web.Reviews;
 
 namespace MovieTime.Web
 {
@@ -52,8 +54,9 @@ namespace MovieTime.Web
 
             services.AddMvc(setupAction =>
             {
-                setupAction.ReturnHttpNotAcceptable = true; // do not send default media type if unsupported is requested
+                setupAction.ReturnHttpNotAcceptable = true; // do not send default media type if unsupported type is requested
                 setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
+                setupAction.InputFormatters.Add(new XmlDataContractSerializerInputFormatter());
             });
             
             services.AddAutoMapper();
@@ -76,14 +79,15 @@ namespace MovieTime.Web
             }
             
             services.AddScoped<IMovieService, MovieService>();
-            services.AddScoped<IDatabaseMovieRespository, DatabaseMovieRepository>();
-            services.AddScoped<IMovieRepository, OmdbMovieRepository>();
-
-            services.AddScoped<IUsersService, UsersService>();
-            services.AddScoped<IUsersRepository, UsersRepository>();
+            services.AddScoped<IMovieRespository, MovieRepository>();
+            // For now decide here if we use omdb or tmdb as movie repository.
+            services.AddScoped<IThirdPartyMovieRepository, OmdbMovieRepository>();
             
-            services.AddScoped<ITrackService, TrackService>();
-            services.AddScoped<ITrackRepository, TrackRepository>();            
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+
+            services.AddScoped<IReviewService, ReviewService>();
+            services.AddScoped<IReviewRepository, ReviewRepository>(); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -97,6 +101,8 @@ namespace MovieTime.Web
                     HotModuleReplacement = true,
                     ReactHotModuleReplacement = true
                 });
+                movieContext.EnsureSeedDataForContext();
+                trackContext.Database.Migrate();
             }
             else
             {
@@ -115,9 +121,6 @@ namespace MovieTime.Web
             //  app.UseMiddleware<SerilogMiddleware>();
 
             app.UseStaticFiles();
-            
-            movieContext.EnsureSeedDataForContext();
-            trackContext.Database.Migrate();
 
             app.UseSwagger();
 
