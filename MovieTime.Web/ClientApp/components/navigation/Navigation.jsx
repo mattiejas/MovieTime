@@ -59,8 +59,7 @@ export default class Navigation extends Component {
                 <li className={styles['search-mobile']}><SearchInput onSearch={() => this.toggleMenu()} /></li>
                 <li><NavLink exact activeClassName={styles['navigation__item--active']} to="/" onClick={() => this.toggleMenu()}>Home</NavLink></li>
                 <li><NavLink activeClassName={styles['navigation__item--active']} to="/404" onClick={() => this.toggleMenu()}>404</NavLink></li>
-                <li><NavLink activeClassName={styles['navigation__item--active']} to="/movie/detail/ferris bueller's day off" onClick={() => this.toggleMenu()}>Movie Detail</NavLink></li>
-                <li><NavLink activeClassName={styles['navigation__item--active']} to="/protected" onClick={() => this.toggleMenu()}>Protected</NavLink></li>
+                <li><NavLink activeClassName={styles['navigation__item--active']} to="/movies/Spider-Man: Homecoming" onClick={() => this.toggleMenu()}>Movie Detail</NavLink></li>
                 <li className={styles['logout-mobile']}>
                   <ButtonGroup>
                     <Button icon="user" to="/users/2">Eddie Brock</Button>
@@ -87,7 +86,6 @@ export default class Navigation extends Component {
               )}
               >
                 <li><NavLink exact activeClassName={styles['navigation__item--active']} to="/" onClick={() => this.toggleMenu()}>Home</NavLink></li>
-                <li><NavLink activeClassName={styles['navigation__item--active']} to="/404" onClick={() => this.toggleMenu()}>404</NavLink></li>
                 <li><NavLink activeClassName={styles['navigation__item--active']} to="/register" onClick={() => this.toggleMenu()}>Register</NavLink></li>
                 <li><NavLink activeClassName={styles['navigation__item--active']} to="/list" onClick={() => this.toggleMenu()}>List</NavLink></li>
                 <li className={styles['login-mobile']}>
