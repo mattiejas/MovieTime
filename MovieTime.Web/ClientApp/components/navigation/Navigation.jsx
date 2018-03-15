@@ -5,8 +5,8 @@ import cn from 'classnames';
 
 import styles from './Navigation.scss';
 import Icon from '../icon/Icon';
-import Button from "../button/Button";
-import ButtonGroup from "../button/ButtonGroup";
+import Button from '../button/Button';
+import ButtonGroup from '../button/ButtonGroup';
 
 export class Navigation extends Component {
   constructor() {
