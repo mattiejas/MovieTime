@@ -1,6 +1,6 @@
 ﻿namespace MovieTime.Web.Users
 {
-    public class UserDto
+    public class UserGetDto
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

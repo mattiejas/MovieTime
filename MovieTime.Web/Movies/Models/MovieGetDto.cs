@@ -1,6 +1,6 @@
 ﻿namespace MovieTime.Web.Movies.Models
 {
-    public class MovieDetailsDto
+    public class MovieGetDto
     {
         public string Title { get; set; }
         public string Year { get; set; }

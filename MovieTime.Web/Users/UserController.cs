@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MovieTime.Web.Users.Models;
 
 namespace MovieTime.Web.Users
 {
@@ -20,7 +22,7 @@ namespace MovieTime.Web.Users
         }
 
         [HttpGet]
-        public async Task<ICollection<UserDto>> GetAllUsers() => await _userService.GetAllUsers();
+        public async Task<ICollection<UserGetDto>> GetAllUsers() => await _userService.GetAllUsers();
 
         [HttpGet("{id}", Name = GetUserRoute)]
         public async Task<IActionResult> GetUser(int id)
@@ -36,24 +38,27 @@ namespace MovieTime.Web.Users
         public async Task<IActionResult> CreateUser([FromBody] UserCreateDto user)
         {
             if (user == null) return BadRequest();
+
+            var userExist = await _userService.UserExist(user.Id);
+            if (userExist) return new StatusCodeResult(StatusCodes.Status409Conflict);
             
-            var success = await _userService.CreateUser(user);
+            var success = await _userService.AddUser(user);
             if (!success)
             {
                 // Throw code 500 instead of 4xx because a failure in saving data is a server side issue
-                throw new Exception("Failed to create the user");
+                throw new Exception($"Failed to save the user to the database with the id {user.Id}");
             }
 
             // According to REST principle, it's a good practice to return the created object and
             // the route you have to call to get the same object.
-            var userToReturn = _mapper.Map<UserCreateDto, UserDto>(user);
+            var userToReturn = _mapper.Map<UserCreateDto, UserGetDto>(user);
             var routeValue = new {id = user.Id};
 
             return CreatedAtRoute(GetUserRoute, routeValue, userToReturn);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserUpdateDto user)
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] UserUpdateDto user)
         {
             if (user == null) return BadRequest();
 

@@ -52,8 +52,9 @@ namespace MovieTime.Web
 
             services.AddMvc(setupAction =>
             {
-                setupAction.ReturnHttpNotAcceptable = true; // do not send default media type if unsupported is requested
+                setupAction.ReturnHttpNotAcceptable = true; // do not send default media type if unsupported type is requested
                 setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
+                setupAction.InputFormatters.Add(new XmlDataContractSerializerInputFormatter());
             });
 
             services.AddAutoMapper();

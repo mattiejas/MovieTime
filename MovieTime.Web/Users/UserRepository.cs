@@ -29,11 +29,5 @@ namespace MovieTime.Web.Users
 //            _context.Add(user);
 //            return _context.SaveChanges() > 0;
 //        }
-
-
-        public async Task<int> CountMatches(int id)
-        {
-            return await GetDbSet().CountAsync(x => x.Id == id);
-        }
     }
 }

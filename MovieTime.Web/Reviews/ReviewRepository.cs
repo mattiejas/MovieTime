@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MovieTime.Web.Database;
+using MovieTime.Web.Reviews.Models;
 
 
 namespace MovieTime.Web.Reviews
@@ -12,32 +13,18 @@ namespace MovieTime.Web.Reviews
         {
         }
 
-
-//        public Review GetNewestReview(string movieId)
-//        {
-//            var newestDate = GetAll().Max(x => x.AddedDateTime);
-//            var newestReview = GetAll()
-//                .FirstOrDefault(x => x.AddedDateTime == newestDate);
-//
-//            return newestReview;
-//        }
-//
-//        public async Task<Review> GetNewestReviewAsync(string movieId)
-//        {
-//            var newestDate = GetAll().Max(x => x.AddedDateTime);
-//            var newestReview = await GetAll()
-//                .FirstOrDefaultAsync(x => x.AddedDateTime == newestDate);
-//
-//            return newestReview;
-//        }
-        public Review GetNewestReview(string movieId)
+        // Todo: This is an example to show you when you could use respository specific method. Delete it when there are real examples.
+        public async Task<Review> GetNewestReview(string movieId)
         {
-            throw new System.NotImplementedException();
-        }
+            /*
+             * In order to get the latest date in Review table, we call the Max() method.
+             * The method, which is a DbContext specific method, can't be called outside the repository
+             * because we are encapsulating the database implementation from everyone else.
+             */
+            var newestDate = await GetDbSet().MaxAsync(x => x.AddedDateTime);
+            var newestReview = await GetDbSet().FirstOrDefaultAsync(x => x.AddedDateTime == newestDate);
 
-        public Task<Review> GetNewestReviewAsync(string movieId)
-        {
-            throw new System.NotImplementedException();
+            return newestReview;
         }
     }
 }

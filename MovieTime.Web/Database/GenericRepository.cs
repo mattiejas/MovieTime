@@ -30,6 +30,11 @@ namespace MovieTime.Web.Database
         {
             return await _context.Set<T>().CountAsync();
         }
+
+        public virtual async Task<int> CountMatch(Expression<Func<T, bool>> match)
+        {
+            return await _context.Set<T>().CountAsync(match);
+        }
         
         public virtual async Task<int> Delete(T entity)
         {

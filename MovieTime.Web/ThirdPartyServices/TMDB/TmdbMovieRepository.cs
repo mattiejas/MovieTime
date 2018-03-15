@@ -1,39 +1,25 @@
 ﻿using MovieTime.Web.Movies.Models;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MovieTime.Web.ThirdPartyServices.TMDB
 {   
     public class TmdbMovieRepository: IThirdPartyMovieRepository
     {
-        public IEnumerable<Movie> GetMoviesByTitleSearch(string title)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Movie GetMovieById(string id)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Movie GetMovieByTitle(string title)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        IEnumerable<Movie> IThirdPartyMovieRepository.GetMoviesByTitleSearch(string title)
+        public Task<IEnumerable<Movie>> GetMoviesByTitleSearch(string title)
         {
             throw new NotImplementedException();
         }
 
-        Movie IThirdPartyMovieRepository.GetMovieById(string id)
+        public Task<Movie> GetMovieById(string id)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        Movie IThirdPartyMovieRepository.GetMovieByTitle(string title)
+        public Task<Movie> GetMovieByTitle(string title)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

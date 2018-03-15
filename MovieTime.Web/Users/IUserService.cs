@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using MovieTime.Web.Users.Models;
 
 namespace MovieTime.Web.Users
 {
     public interface IUserService
     {
-        Task<ICollection<UserDto>> GetAllUsers();
-        Task<UserDto> GetUser(int id);
+        Task<ICollection<UserGetDto>> GetAllUsers();
+        Task<UserGetDto> GetUser(int id);
         Task<bool> UpdateUser(UserUpdateDto user);
-        Task<bool> CreateUser(UserCreateDto user);
-        Task<bool> UserExist(int id);
+        Task<bool> AddUser(UserCreateDto user);
+        Task<bool> UserExist(string id);
     }
 }

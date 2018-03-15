@@ -1,11 +1,11 @@
 ﻿using MovieTime.Web.Database;
 using System.Threading.Tasks;
+using MovieTime.Web.Reviews.Models;
 
 namespace MovieTime.Web.Reviews
 {
     public interface IReviewRepository : IGenericRepository<Review>
     {
-        Review GetNewestReview(string movieId);
-        Task<Review> GetNewestReviewAsync(string movieId);
+        Task<Review> GetNewestReview(string movieId);
     }
 }

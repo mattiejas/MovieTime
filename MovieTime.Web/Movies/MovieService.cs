@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using MovieTime.Web.Movies.Models;
 using MovieTime.Web.ThirdPartyServices;
@@ -8,60 +9,58 @@ namespace MovieTime.Web.Movies
 {
     public class MovieService : IMovieService
     {
-        private readonly IMapper _mapper;
         private readonly IThirdPartyMovieRepository _thirdPartyMovieRepository;
         private readonly IMovieRespository _movieRespository;
 
-        public MovieService(IMapper mapper, IThirdPartyMovieRepository thirdPartyMovieRepository, IMovieRespository databaseMovieRespository)
+        public MovieService(IThirdPartyMovieRepository thirdPartyMovieRepository, IMovieRespository databaseMovieRespository)
         {
-            _mapper = mapper;
             _thirdPartyMovieRepository = thirdPartyMovieRepository;
             _movieRespository = databaseMovieRespository;
         }
 
-        public MovieDetailsDto GetMovieDetailsById(string id)
+        /**
+         * Get the movie with the given id.
+         * The business rule is to give internal database higher priority than third party databases.
+         * If the movie doesn't exist in internal database, get it from third party database.
+         */
+        public async Task<Movie> GetMovieById(string id)
         {
-            var movieModel = _movieRespository.GetMovieById(id);
-            if (movieModel == null)
-            {
-                movieModel = _thirdPartyMovieRepository.GetMovieById(id);
+            var movieModel = await _movieRespository.Find(x => x.Id == id);
+            if (movieModel != null) return movieModel;
+            
+            movieModel = await _thirdPartyMovieRepository.GetMovieById(id);
+            await AddMovie(movieModel); // Cache the movie in our database to improve robustness. Todo: temporary
 
-                // Cache the movie in our database to improve robustness
-                _movieRespository.AddMovie(movieModel);
-                _movieRespository.Save();
-            }
-
-            var movieDetailsVm = _mapper.Map<Movie, MovieDetailsDto>(movieModel);
-
-            return movieDetailsVm;
+            return movieModel;
         }
 
-        public MovieDetailsDto GetMovieDetailsByTitle(string title)
+        public async Task<Movie> GetMovieByTitle(string title)
         {
-            var movieModel = _movieRespository.GetMovieByTitle(title);
+            var movieModel = await _movieRespository.Find(x => x.Title == title);
 
-            if (movieModel == null)
-            {
-                movieModel = _thirdPartyMovieRepository.GetMovieByTitle(title);
+            if (movieModel != null) return movieModel;
+            
+            movieModel = await _thirdPartyMovieRepository.GetMovieByTitle(title);
+            await AddMovie(movieModel); // Cache the movie in our database to improve robustness. Todo: temporary
 
-                // Cache the movie in our database to improve robustness
-                _movieRespository.AddMovie(movieModel);
-                _movieRespository.Save();
-            }
-
-            var movieDetailsVm = _mapper.Map<Movie, MovieDetailsDto>(movieModel); //todo test null
-
-            return movieDetailsVm;
+            return movieModel;
         }
 
-        public SearchResultsModel GetMoviesByTitle(string title)
+        public Task<SearchResultsModel> GetMoviesByTitle(string title)
         {
             throw new NotImplementedException();
         }
 
-        public void AddMovie(MovieCreateDto movie)
+        public async Task<bool> AddMovie(Movie movie)
         {
-            throw new NotImplementedException();
+            var createdMovie = await _movieRespository.Add(movie);
+            return createdMovie != null;
+        }
+
+        public async Task<bool> MovieExist(string movieId)
+        {
+            var countMatch = await _movieRespository.CountMatch(x => x.Id == movieId);
+            return countMatch > 0;
         }
     }
 }

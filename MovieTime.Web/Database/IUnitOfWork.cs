@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using MovieTime.Web.Database;
 
-namespace MovieTime.Web.Reviews
+namespace MovieTime.Web.Database
 {
     public interface IUnitOfWork : IDisposable
     {

@@ -11,6 +11,7 @@ namespace MovieTime.Web.Database
     {
         Task<T> Add(T t);
         Task<int> CountAll();
+        Task<int> CountMatch(Expression<Func<T, bool>> match);
         Task<int> Delete(T entity);
         Task<T> Find(Expression<Func<T, bool>> match);
         Task<ICollection<T>> FindAll(Expression<Func<T, bool>> match);

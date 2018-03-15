@@ -2,6 +2,7 @@
 using MovieTime.Web.Users;
 using MovieTime.Web.Movies.Models;
 using MovieTime.Web.Genres;
+using MovieTime.Web.Reviews;
 
 namespace MovieTime.Web.Database
 {
@@ -12,6 +13,7 @@ namespace MovieTime.Web.Database
         public virtual DbSet<MovieGenre> MovieGenre { get; set; }
         
         public virtual DbSet<User> Users { get; set; }
+//        public virtual DbSet<Review> Reviews { get; set; }
 
         public MovieContext(DbContextOptions<MovieContext> options) : base(options) { }
 

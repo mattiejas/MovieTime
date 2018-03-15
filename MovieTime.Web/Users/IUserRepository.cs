@@ -10,7 +10,5 @@ namespace MovieTime.Web.Users
 //        User GetUser(int id);
 //        bool UpdateUser(User user);
 //        bool CreateUser(User user);
-        Task<int> CountMatches(int id);
-
     }
 }

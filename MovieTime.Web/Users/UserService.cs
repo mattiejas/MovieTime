@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using MovieTime.Web.Users.Models;
 
 namespace MovieTime.Web.Users
 {
@@ -18,17 +19,17 @@ namespace MovieTime.Web.Users
             _mapper = mapper;
         }
         
-        public async Task<ICollection<UserDto>> GetAllUsers()
+        public async Task<ICollection<UserGetDto>> GetAllUsers()
         {
             ICollection<User> user = await _userRepository.GetAll();
-            var userDto = _mapper.Map<ICollection<User>, List<UserDto>>(user);
+            var userDto = _mapper.Map<ICollection<User>, List<UserGetDto>>(user);
             return userDto;
         }
 
-        public async Task<UserDto> GetUser(int id)
+        public async Task<UserGetDto> GetUser(int id)
         {
             var user = await _userRepository.Get(id);
-            var userDto = _mapper.Map<User, UserDto>(user);
+            var userDto = _mapper.Map<User, UserGetDto>(user);
             return userDto;
         }
 
@@ -40,17 +41,17 @@ namespace MovieTime.Web.Users
             return storedUser != null;
         }
 
-        public async Task<bool> CreateUser(UserCreateDto userDto)
+        public async Task<bool> AddUser(UserCreateDto userDto)
         {
             var user = _mapper.Map<UserCreateDto, User>(userDto);
             var createdUser = await _userRepository.Add(user);
             return createdUser != null;
         }
 
-        public async Task<bool> UserExist(int id)
+        public async Task<bool> UserExist(string id)
         {
-            var countMatches = await _userRepository.CountMatches(id);
-            return countMatches == 1;
+            var countMatches = await _userRepository.CountMatch(x => x.Id == id);
+            return countMatches > 0;
         }
     }
 }

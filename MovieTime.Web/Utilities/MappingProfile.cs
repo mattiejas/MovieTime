@@ -3,6 +3,7 @@ using AutoMapper;
 using MovieTime.Web.Movies.Models;
 using MovieTime.Web.ThirdPartyServices.OMDB.Movies;
 using MovieTime.Web.Users;
+using MovieTime.Web.Users.Models;
 
 namespace MovieTime.Web.Utilities
 {
@@ -14,7 +15,7 @@ namespace MovieTime.Web.Utilities
             CreateMap<OmdbMovieModel, Movie>()
                 .ForMember(dest => dest.Year, opt => opt.MapFrom(src => new DateTime(Convert.ToInt32(src.Year), 1, 1)));
 
-            CreateMap<Movie, MovieDetailsDto>()
+            CreateMap<Movie, MovieGetDto>()
                 .ForMember(dest => dest.ImdbId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Year.Year.ToString()));
             
@@ -23,8 +24,8 @@ namespace MovieTime.Web.Utilities
 
             CreateMap<UserCreateDto, User>();
             CreateMap<UserUpdateDto, User>();
-            CreateMap<UserDto, User>();
-            CreateMap<User, UserDto>();
+            CreateMap<UserGetDto, User>();
+            CreateMap<User, UserGetDto>();
         }
     }
 }

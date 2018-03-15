@@ -1,6 +1,6 @@
-﻿namespace MovieTime.Web.Users
+﻿namespace MovieTime.Web.Users.Models
 {
-    public class     UserCreateDto
+    public class UserCreateDto
     {
         public string Id { get; set; }
         public string FirstName { get; set; }

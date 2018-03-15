@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using MovieTime.Web.Utilities;
 using RestSharp;
-using MovieTime.Web.ThirdPartyServices;
 using MovieTime.Web.Movies.Models;
 
 namespace MovieTime.Web.ThirdPartyServices.OMDB.Movies
 {
-    
-    public class OmdbMovieRepository :   IThirdPartyMovieRepository
+    public class OmdbMovieRepository : IThirdPartyMovieRepository
     {
         private static readonly string BASE_URL = "http://www.omdbapi.com";
         private static readonly string API_KEY_ARG = "apikey";
@@ -27,12 +26,12 @@ namespace MovieTime.Web.ThirdPartyServices.OMDB.Movies
         {
             _mapper = mapper;
         }
-       
-        public Movie GetMovieById(string id) => GetMovieByArg(null, id);
 
-        public Movie GetMovieByTitle(string title) => GetMovieByArg(title);
+        public async Task<Movie> GetMovieById(string id) => await GetMovieByArg(null, id);
 
-        private Movie GetMovieByArg(string title, string id = null)
+        public async Task<Movie> GetMovieByTitle(string title) => await GetMovieByArg(title);
+
+        private async Task<Movie> GetMovieByArg(string title, string id = null)
         {
             if (string.IsNullOrEmpty(title) && string.IsNullOrEmpty(id))
                 throw new Exception("Title and Id can't both be null.");
@@ -46,14 +45,14 @@ namespace MovieTime.Web.ThirdPartyServices.OMDB.Movies
 
             request.AddParameter(MOVIE_PLOT_ARG, "full");
 
-            var response = client.Execute<OmdbMovieModel>(request);
+            var response = await client.ExecuteTaskAsync<OmdbMovieModel>(request);
             if (response.Data == null) throw new Exception("Empty response");
 
-            var movieDetailsModel = _mapper.Map<OmdbMovieModel, Movie>(response.Data);
-            return movieDetailsModel;
+            var movieModel = _mapper.Map<OmdbMovieModel, Movie>(response.Data);
+            return movieModel;
         }
 
-        public IEnumerable<Movie> GetMoviesByTitleSearch(string title)
+        public async Task<IEnumerable<Movie>> GetMoviesByTitleSearch(string title)
         {
             // var client = CreateClient();
             // var request = CreateRequest("", Method.GET);
@@ -73,7 +72,7 @@ namespace MovieTime.Web.ThirdPartyServices.OMDB.Movies
         /// <param name="resource"></param>
         /// <param name="method"></param>
         /// <returns></returns>
-        private static RestRequest CreateRequest(string resource, RestSharp.Method method)
+        private RestRequest CreateRequest(string resource, RestSharp.Method method)
         {
             var request = new RestRequest(resource, method);
 
@@ -89,7 +88,7 @@ namespace MovieTime.Web.ThirdPartyServices.OMDB.Movies
         /// Generic CreateClient method, configured with the base url and the correct deserialization.
         /// </summary>
         /// <returns></returns>
-        private static RestClient CreateClient()
+        private RestClient CreateClient()
         {
             var client = new RestClient(BASE_URL);
 
@@ -100,21 +99,6 @@ namespace MovieTime.Web.ThirdPartyServices.OMDB.Movies
             client.AddHandler("*+json", Serialization.NewtonsoftJsonSerializer.Default);
 
             return client;
-        }
-
-        IEnumerable<Movie> IThirdPartyMovieRepository.GetMoviesByTitleSearch(string title)
-        {
-            throw new NotImplementedException();
-        }
-
-        Movie IThirdPartyMovieRepository.GetMovieById(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        Movie IThirdPartyMovieRepository.GetMovieByTitle(string title)
-        {
-            throw new NotImplementedException();
         }
     }
 }

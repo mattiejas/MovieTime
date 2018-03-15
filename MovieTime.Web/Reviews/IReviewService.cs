@@ -1,29 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using MovieTime.Web.Reviews.Models;
 
 namespace MovieTime.Web.Reviews
 {
     public interface IReviewService
     {
-        Review GetReview(int id);
-        Task<Review> GetReviewAsync(int id);
-
-        ICollection<Review> GetMovieReviews(string movieId);
-        Task<ICollection<Review>> getMovieReviewsAsync(string movieId);
-
-        ICollection<Review> GetUserReviews(string userId);
-        Task<ICollection<Review>> GetUserReviewsAsync(string userId);
-
+        Task<Review> GetReview(int id);
+        Task<Review> GetReviewConcept(string userId);
+        Task<ICollection<Review>> GetAllReviewConcepts(string userId);
+        Task<ICollection<Review>> GetReviewsOfMovie(string movieId);
+        Task<ICollection<Review>> GetReviewsOfUser(string userId);
         void AddReview(Review review);
-        void AddReviewAsync(Review review);
-
         void EditReview(Review review);
-        void EditReviewAsync(Review review);
-
         void DeleteReview(int reviewId);
-        void DeleteReviewAsync(int reviewId);
-
-        void DeleteAllReviews(string movieId);
-        void DeleteAllReviewsAsync(string movieId);
+        void DeleteReviewsOfMovie(string movieId);
+        void DeleteReviewsOfUser(string userId);
+        Task<bool> UserExist(string userId);
+        Task<bool> MovieExist(string movieId);
     }
 }

@@ -1,13 +1,13 @@
 ﻿using MovieTime.Web.Movies.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MovieTime.Web.ThirdPartyServices
 {
     public interface IThirdPartyMovieRepository
     {
-        IEnumerable<Movie> GetMoviesByTitleSearch(string title);
-        //IEnumerable<DbMovie> GetDatabaseMoviesByPage(int page = 0);
-        Movie GetMovieById(string id);
-        Movie GetMovieByTitle(string title);
+        Task<IEnumerable<Movie>> GetMoviesByTitleSearch(string title);
+        Task<Movie> GetMovieById(string id);
+        Task<Movie> GetMovieByTitle(string title);
     }
 }
