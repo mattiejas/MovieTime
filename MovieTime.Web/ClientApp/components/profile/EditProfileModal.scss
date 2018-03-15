@@ -12,6 +12,12 @@
       margin: 0 0 20px 0;
     }
   }
+  .error {
+    color: $danger-color;
+    font-size: 0.8em;
+    font-style: italic;
+    font-weight: 200;
+  }
 }
 
 @media (min-width: $grid-sm) {
