@@ -50,17 +50,17 @@ namespace MovieTime.Tests.User
             {
                 new Web.Users.User()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = "uniqueid1",
                     FirstName = "Henk",
                 },
                 new Web.Users.User()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = "uniqueid2",
                     FirstName = "Tom",
                 },
                 new Web.Users.User()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = "uniqueid3",
                     FirstName = "Peter",
                 }
             }.AsQueryable();

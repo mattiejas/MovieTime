@@ -25,7 +25,7 @@ namespace MovieTime.Web.Users
         public async Task<ICollection<UserGetDto>> GetAllUsers() => await _userService.GetAllUsers();
 
         [HttpGet("{id}", Name = GetUserRoute)]
-        public async Task<IActionResult> GetUser(Guid id)
+        public async Task<IActionResult> GetUser(string id)
         {
             var userDto = await _userService.GetUser(id);
 
@@ -58,7 +58,7 @@ namespace MovieTime.Web.Users
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UserUpdateDto user)
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] UserUpdateDto user)
         {
             if (user == null) return BadRequest();
 

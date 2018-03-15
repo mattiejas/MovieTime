@@ -8,10 +8,10 @@ namespace MovieTime.Web.Users
     public interface IUserService
     {
         Task<ICollection<UserGetDto>> GetAllUsers();
-        Task<UserGetDto> GetUser(Guid id);
+        Task<UserGetDto> GetUser(string id);
         Task<bool> UpdateUser(UserUpdateDto user);
         Task<bool> AddUser(UserCreateDto user);
-        Task<bool> UserExist(Guid id);
-        Task<int> RemoveUser(Guid id);
+        Task<bool> UserExist(string id);
+        Task<int> RemoveUser(string id);
     }
 }

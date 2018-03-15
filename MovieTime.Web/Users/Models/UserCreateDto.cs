@@ -4,7 +4,7 @@ namespace MovieTime.Web.Users.Models
 {
     public class UserCreateDto
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         public string UserName { get; set; }
         public string FirstName { get; set; }

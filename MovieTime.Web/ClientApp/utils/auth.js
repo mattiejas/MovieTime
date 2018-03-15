@@ -12,7 +12,6 @@ export async function getUser() {
   return auth.currentUser;
 }
 
-
 async function getTokenForCurrentUser() {
   return getUser()
     .then(user => user.getIdToken(true));
@@ -26,7 +25,7 @@ async function registerWithBackEnd(person, token) {
   const requestHeader = getRequestHeader(token);
   const data = {
     method: 'post',
-    body: JSON.stringify({ Email: person.email }),
+    body: JSON.stringify(person),
     headers: requestHeader,
   };
   await fetch('/auth/register/', data);

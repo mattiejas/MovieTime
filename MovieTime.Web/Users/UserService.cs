@@ -26,7 +26,7 @@ namespace MovieTime.Web.Users
             return userDto;
         }
 
-        public async Task<UserGetDto> GetUser(Guid id)
+        public async Task<UserGetDto> GetUser(string id)
         {
             var user = await _userRepository.Find(x => x.Id == id);
             var userDto = _mapper.Map<User, UserGetDto>(user);
@@ -48,13 +48,13 @@ namespace MovieTime.Web.Users
             return createdUser != null;
         }
 
-        public async Task<bool> UserExist(Guid id)
+        public async Task<bool> UserExist(string id)
         {
             var countMatches = await _userRepository.CountMatch(x => x.Id == id);
             return countMatches > 0;
         }
 
-        public async Task<int> RemoveUser(Guid id)
+        public async Task<int> RemoveUser(string id)
         {
             var user = await _userRepository.Find(x => x.Id == id);
             var result = await _userRepository.Delete(user);

@@ -25,12 +25,16 @@ namespace MovieTime.Web.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserCreateDto userModel)
         {
+            if(userModel == null) 
+                return BadRequest("User data is missing from body");
+            
+            Log.Information($"Trying to register the user in the backend.");
             var userIdFromToken = this.User.GetUserId();
             
             if (userIdFromToken == null)
                 return BadRequest("User is not authenticated");
 
-            userModel.Id = new Guid(userIdFromToken);
+            userModel.Id = userIdFromToken;
 
             if (await _userService.AddUser(userModel))
             {
@@ -47,12 +51,13 @@ namespace MovieTime.Web.Controllers
         [HttpPost("unregister")]
         public async Task<IActionResult> Unregister()
         {
+            Log.Information($"Trying to unregister the user in the backend.");
             var userIdFromToken = this.User.GetUserId();
             
             if (userIdFromToken == null)
                 return BadRequest("User is unknown");
 
-            if (await _userService.RemoveUser(new Guid(userIdFromToken)) > 0)
+            if (await _userService.RemoveUser(userIdFromToken) > 0)
             {
                 Log.Information($"Succesfully unregistered the user.");
                 return Ok(new {message = "Succesfully registered the user."});
