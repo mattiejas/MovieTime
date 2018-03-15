@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MovieTime.Web.Database;
 
-namespace MovieTime.Web.Users
+namespace MovieTime.Web.Users.Models
 {
     public class UserModelBuildingConfig : IEntityModelBuildingConfig
     {

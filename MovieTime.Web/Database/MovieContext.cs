@@ -26,19 +26,6 @@ namespace MovieTime.Web.Database
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<MovieGenre>()
-                .HasKey(mg => new {mg.DbMovieId, mg.DbGenreId});
-
-            modelBuilder.Entity<MovieGenre>()
-                .HasOne(mg => mg.Movie)
-                .WithMany(mv => mv.Genres)
-                .HasForeignKey(mg => mg.DbMovieId);
-
-            modelBuilder.Entity<MovieGenre>()
-                .HasOne(mg => mg.Genre)
-                .WithMany(m => m.Movies)
-                .HasForeignKey(mg => mg.DbGenreId);
-
             var modelConfigMapping = GetEntityBuildingConfigs();
             foreach (IEntityModelBuildingConfig modelBuildingConfig in modelConfigMapping)
             {
