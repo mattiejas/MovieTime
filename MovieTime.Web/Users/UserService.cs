@@ -26,9 +26,9 @@ namespace MovieTime.Web.Users
             return userDto;
         }
 
-        public async Task<UserGetDto> GetUser(int id)
+        public async Task<UserGetDto> GetUser(string id)
         {
-            var user = await _userRepository.Get(id);
+            var user = await _userRepository.Find(x => x.Id == id);
             var userDto = _mapper.Map<User, UserGetDto>(user);
             return userDto;
         }

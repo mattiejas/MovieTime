@@ -25,7 +25,7 @@ namespace MovieTime.Web.Users
         public async Task<ICollection<UserGetDto>> GetAllUsers() => await _userService.GetAllUsers();
 
         [HttpGet("{id}", Name = GetUserRoute)]
-        public async Task<IActionResult> GetUser(int id)
+        public async Task<IActionResult> GetUser(string id)
         {
             var userDto = await _userService.GetUser(id);
 
