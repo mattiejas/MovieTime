@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Vibrant from 'node-vibrant';
 
 import { getUser } from '../../utils/auth';
-import { getMovieByTitle, trackMovie } from '../../utils/movie';
+import { getMovieByTitle, trackMovie, untrackMovie, isMovieTracked } from '../../utils/movie';
 
 import MoviePoster from '../../components/movie/MoviePoster';
 import MovieHeading from '../../components/movie/MovieHeading';
@@ -26,17 +26,38 @@ class MovieDetailView extends React.Component {
     };
 
     this.handleTracking = this.handleTracking.bind(this);
+    this.handleUntracking = this.handleUntracking.bind(this);
   }
 
-  componentDidMount() {
-    getMovieByTitle(this.props.match.params.title)
-      .then((data) => {
-        this.setState({
-          movie: data,
-          isLoading: false,
-        })
-        this.setBackgroundColor(data.poster);
+  // componentDidMount() {
+  //   getMovieByTitle(this.props.match.params.title)
+  //     .then((data) => {
+  //       this.setState({
+  //         movie: data,
+  //         isLoading: false,
+  //       });
+  //       this.setBackgroundColor(data.poster);
+  //     });
+  // }
+
+  async componentDidMount() {
+    try {
+      const movie = await getMovieByTitle(this.props.match.params.title);
+      const user = await getUser();
+      const track = await isMovieTracked(user.uid, movie.imdbId);
+
+      // Using this.setState is correct, because we are using ES2017 async instead of Promises.
+      // eslint-disable-next-line react/no-did-mount-set-state
+      this.setState({
+        movie,
+        isTracking: track.isTracked,
+        isLoading: false,
       });
+
+      this.setBackgroundColor(movie.poster);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   setBackgroundColor(poster) {
@@ -49,16 +70,25 @@ class MovieDetailView extends React.Component {
   handleTracking(event) {
     event.preventDefault();
     getUser()
-      .then((user) => {
-        if (!user.uid && !this.state.movie && !this.state.movie.imdbId) {
-          throw new Error('Something went wrong. Missing the uid or imdbId attribute for request.');
-        }
-        return trackMovie(user.uid, this.state.movie.imdbId);
-      })
+      .then(user => trackMovie(user.uid, this.state.movie.imdbId))
       .then((response) => {
         if (response.ok) {
           this.setState({
             isTracking: true,
+          });
+        }
+      })
+      .catch(err => console.log('err', err));
+  }
+
+  handleUntracking(event) {
+    event.preventDefault();
+    getUser()
+      .then(user => untrackMovie(user.uid, this.state.movie.imdbId))
+      .then((response) => {
+        if (response.ok) {
+          this.setState({
+            isTracking: false,
           });
         }
       })
@@ -116,8 +146,8 @@ class MovieDetailView extends React.Component {
                 lineHeight={1.8}
                 lines={3}
               >
-                {!this.state.isTracking && <Button icon="eye" dark onClick={this.handleTracking}>Track</Button>}
-                {this.state.isTracking && <Button icon="eye-slash" dark onClick={this.handleTracking}>Tracking</Button>}
+                {!this.state.isTracking && <Button dark onClick={this.handleTracking}>Track</Button>}
+                {this.state.isTracking && <Button dark onClick={this.handleUntracking}>Tracking</Button>}
                 <table className={styles.view__content__involved}>
                   <tbody>
                     <tr>

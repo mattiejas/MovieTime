@@ -1,13 +1,26 @@
-const trackAPI = '/api/track/';
-
 export function trackMovie(userId, movieId) {
-  return fetch(trackAPI, {
+  return fetch('/api/track/', {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ movieId, userId }),
+    body: JSON.stringify({ userId, movieId }),
   });
+}
+
+export function untrackMovie(userId, movieId) {
+  return fetch('/api/track/untrack', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ userId, movieId }),
+  });
+}
+
+export function isMovieTracked(userId, movieId) {
+  return fetch(`/api/track/user/${userId}/movie/${movieId}`)
+    .then(response => response.json());
 }
 
 export function getMovieByTitle(title) {
