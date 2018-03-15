@@ -36,7 +36,7 @@
   align-items: center;
   height: 30vh;
   .picture {
-    border: 10px solid lighten($light-color, 5);
+    border: 3px solid lighten($light-color, 5);
     height: auto;
     width: 100%;
   }
@@ -131,6 +131,9 @@
 
   .header__picture {
     margin-top: 40px;
+    .picture {
+      border: 10px solid lighten($light-color, 5);
+    }
   }
 
   .name {

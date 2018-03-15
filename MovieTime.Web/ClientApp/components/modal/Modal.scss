@@ -2,20 +2,22 @@
 
 .modal__background {
   background-color: rgba(0, 0, 0, 0.5);
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  right: 0;
+  bottom: 0;
   z-index: 10000;
   display: flex;
   align-items: flex-start;
   .modal {
     max-width: 1200px;
+    overflow-y: auto;
+    height: calc(100% - 20px);
     width: 100%;
     background-color: #fff;
     padding: 40px;
-    margin: 70px 10px;
+    margin: 10px;
     border-radius: 5px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     h1 {
@@ -28,10 +30,12 @@
   .modal__background {
     align-items: center;
     .modal {
+      height: auto;
+      max-height: calc(100% - 40px);
       min-width: 600px;
       min-height: 300px;
       width: unset;
-      margin: 0 auto;
+      margin: 20px auto;
     }
   }
 }

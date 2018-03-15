@@ -1,9 +1,22 @@
 @import "core";
 
 :global {
+  :focus {
+    outline: none;
+    box-shadow: 0 10px 30px rgba(27, 183, 249, 0.5) !important;
+  }
+  html {
+    height: 100%;
+  }
   body {
+    position: relative;
+    height: 100%;
     background: $background-color;
     padding-top: 50px;
+
+    &.no-scroll {
+      overflow: hidden;
+    }
   }
   .image {
     display: block;

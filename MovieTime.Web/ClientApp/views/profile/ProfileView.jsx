@@ -36,12 +36,8 @@ class EditProfileModal extends React.Component {
       email = this.props.user.email,
     } = this.state.user;
 
-    if (hidden) {
-      return null;
-    }
-
     return (
-      <Modal title="Edit Profile" hideModal={hideModal}>
+      <Modal hidden={hidden} title="Edit Profile" hideModal={hideModal}>
         <div className={styles.edit}>
           <div className={styles.group}>
             <Input label="First Name" name="firstName" value={firstName} onChange={e => this.onChange(e)} />
