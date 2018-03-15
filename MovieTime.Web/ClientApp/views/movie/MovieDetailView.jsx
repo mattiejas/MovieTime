@@ -29,17 +29,6 @@ class MovieDetailView extends React.Component {
     this.handleUntracking = this.handleUntracking.bind(this);
   }
 
-  // componentDidMount() {
-  //   getMovieByTitle(this.props.match.params.title)
-  //     .then((data) => {
-  //       this.setState({
-  //         movie: data,
-  //         isLoading: false,
-  //       });
-  //       this.setBackgroundColor(data.poster);
-  //     });
-  // }
-
   async componentDidMount() {
     try {
       const movie = await getMovieByTitle(this.props.match.params.title);

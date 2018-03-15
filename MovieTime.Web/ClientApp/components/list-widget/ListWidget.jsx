@@ -59,8 +59,10 @@ class ListWidget extends React.Component {
           loadingTimeout = clearTimeout(loadingTimeout);
         }
 
+        console.log(_.orderBy([...this.state.movies, data], m => m.title));
+
         this.setState({
-          movies: [...this.state.movies, data],
+          movies: _.orderBy([...this.state.movies, data], m => m.title),
         });
 
         loadingTimeout = setTimeout(() => this.setState({

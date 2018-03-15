@@ -5,7 +5,9 @@ import styles from './Modal.scss';
 
 class Modal extends React.Component {
   componentDidMount() {
-    this.modal.focus();
+    if (!this.props.hidden) {
+      this.modal.focus();
+    }
   }
 
   onKeyPress(e) {
@@ -17,6 +19,18 @@ class Modal extends React.Component {
   }
 
   render() {
+    if (this.props.hidden) {
+      // enable background scrolling
+      document.getElementsByTagName('body')[0].removeAttribute('class');
+    } else {
+      // disable background scrolling
+      document.getElementsByTagName('body')[0].setAttribute('class', 'no-scroll');
+    }
+
+    if (this.props.hidden) {
+      return null;
+    }
+
     return (
       <div
         className={styles.modal__background}
@@ -53,10 +67,12 @@ Modal.propTypes = {
   children: PropTypes.node.isRequired,
   hideModal: PropTypes.func.isRequired,
   title: PropTypes.string,
+  hidden: PropTypes.bool,
 };
 
 Modal.defaultProps = {
   title: undefined,
+  hidden: false,
 };
 
 export default Modal;
