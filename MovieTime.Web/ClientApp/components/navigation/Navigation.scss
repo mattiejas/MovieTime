@@ -15,15 +15,21 @@
     align-items: center;
 
     .title {
-      color: #FFFFFF;
-      font-size: 22px;
-      font-weight: 200;
-      vertical-align: top;
-      margin: 0 0 0 20px;
-      z-index: 10;
-      span {
+      a {
+        color: #FFFFFF;
+        font-size: 22px;
+        font-weight: 200;
         vertical-align: top;
-        font-weight: 400;
+        margin: 0 0 0 20px;
+        z-index: 10;
+        text-decoration: none;
+        &:focus {
+          box-shadow: none !important;
+        }
+        span {
+          vertical-align: top;
+          font-weight: 400;
+        }
       }
     }
 
