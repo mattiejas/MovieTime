@@ -2,6 +2,7 @@
 using MovieTime.Web.Users;
 using MovieTime.Web.Movies.Models;
 using MovieTime.Web.Genres;
+using MovieTime.Web.Ratings.Models;
 using MovieTime.Web.Reviews;
 
 namespace MovieTime.Web.Database
@@ -13,6 +14,7 @@ namespace MovieTime.Web.Database
         public virtual DbSet<MovieGenre> MovieGenre { get; set; }
         
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Rating> Ratings { get; set; }
 //        public virtual DbSet<Review> Reviews { get; set; }
 
         public MovieContext(DbContextOptions<MovieContext> options) : base(options) { }
@@ -35,6 +37,12 @@ namespace MovieTime.Web.Database
                 .HasOne(mg => mg.Genre)
                 .WithMany(m => m.Movies)
                 .HasForeignKey(mg => mg.DbGenreId);
+
+            modelBuilder.Entity<Rating>()
+                .HasOne(r => r.Movie);
+                
+            modelBuilder.Entity<Rating>()
+                .HasOne(r => r.User);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using MovieTime.Web.Genres;
 using MovieTime.Web.Movies.Models;
+using MovieTime.Web.Ratings.Models;
 using MovieTime.Web.Users;
 
 namespace MovieTime.Web.Database
@@ -142,10 +143,21 @@ namespace MovieTime.Web.Database
                 new User {  FirstName = "Harry", LastName = "Osborn", Email = "h_osborn@outlook.com" }
             };
 
+            var ratings = new List<Rating>
+            {
+                new Rating { Movie = movies[0], User = users[0], Value = 1 },
+                new Rating { Movie = movies[1], User = users[1], Value = 4 },
+                new Rating { Movie = movies[2], User = users[2], Value = 5 },                
+                new Rating { Movie = movies[0], User = users[1], Value = 2 },
+                new Rating { Movie = movies[1], User = users[2], Value = 3 },
+                new Rating { Movie = movies[2], User = users[0], Value = 2 }                
+            };
+
             context.Movies.AddRange(movies);
             context.Genres.AddRange(genres);
             context.MovieGenre.AddRange(movieGenre);
             context.Users.AddRange(users);
+            context.Ratings.AddRange(ratings);
             context.SaveChanges();
         }
     }
