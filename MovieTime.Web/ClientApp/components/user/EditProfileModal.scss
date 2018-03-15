@@ -1,0 +1,41 @@
+@import "../../styles/core";
+
+.edit {
+  .group {}
+  .input {
+    width: 100%;
+  }
+  .buttons {
+    width: 100%;
+    .button {
+      width: 100%;
+      margin: 0 0 20px 0;
+    }
+  }
+}
+
+@media (min-width: $grid-sm) {
+  .edit {
+    .group {
+      display: flex;
+      justify-content: space-between;
+      .input {
+        flex-grow: 1;
+      }
+    }
+    .input {
+      width: unset;
+    }
+    .buttons {
+      float: right;
+      width: auto;
+      .button {
+        width: auto;
+        margin: 0 10px;
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+}
