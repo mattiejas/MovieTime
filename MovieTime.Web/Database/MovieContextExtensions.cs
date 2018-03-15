@@ -170,7 +170,13 @@ namespace MovieTime.Web.Database
                     LastName = "Stacy",
                     Email = "g_stacy@outlook.com"
                 },
-                new User {FirstName = "Harry", LastName = "Osborn", Email = "h_osborn@outlook.com"}
+                new User
+                {
+                    Id = new Guid("36c57237-66d5-4330-ad5a-241d1c223415"),
+                    FirstName = "Harry",
+                    LastName = "Osborn",
+                    Email = "h_osborn@outlook.com"
+                }
             };
 
             context.Movies.AddRange(movies);
