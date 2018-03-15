@@ -98,42 +98,73 @@ namespace MovieTime.Web.Database
             };
 
             // ** Linking Movies with Genres
-            var movieGenre = new List<MovieGenre>(){
-                new MovieGenre(){
+            var movieGenre = new List<MovieGenre>()
+            {
+                new MovieGenre()
+                {
                     DbMovieId = movies[0].Id,
                     DbGenreId = genres[3].Name
                 },
-                new MovieGenre(){
+                new MovieGenre()
+                {
                     DbMovieId = movies[0].Id,
                     DbGenreId = genres[4].Name
                 },
 
-                new MovieGenre(){
+                new MovieGenre()
+                {
                     DbMovieId = movies[1].Id,
                     DbGenreId = genres[3].Name
                 },
 
-                new MovieGenre(){
+                new MovieGenre()
+                {
                     DbMovieId = movies[2].Id,
                     DbGenreId = genres[0].Name
                 },
-                new MovieGenre(){
+                new MovieGenre()
+                {
                     DbMovieId = movies[2].Id,
                     DbGenreId = genres[1].Name
                 },
-                new MovieGenre(){
+                new MovieGenre()
+                {
                     DbMovieId = movies[2].Id,
                     DbGenreId = genres[2].Name
                 },
             };
-            
+
             var users = new List<User>
             {
-                new User {  FirstName = "Peter", LastName = "Parker", Email = "p_parker@outlook.com" },
-                new User {  FirstName = "Eddie", LastName = "Brock", Email = "e_brock@outlook.com" },
-                new User {  FirstName = "MJ", LastName = "Watson", Email = "mj_watson@outlook.com" },
-                new User {  FirstName = "Gwen", LastName = "Stacy", Email = "g_stacy@outlook.com" },
-                new User {  FirstName = "Harry", LastName = "Osborn", Email = "h_osborn@outlook.com" }
+                new User
+                {
+                    Id = new Guid("6d74f620-2e16-4b19-8bde-bbefa4cadf95"),
+                    FirstName = "Peter",
+                    LastName = "Parker",
+                    Email = "p_parker@outlook.com"
+                },
+                new User
+                {
+                    Id = new Guid("683bd02b-9280-40fd-bd76-d9ef8c26f1fa"),
+                    FirstName = "Eddie",
+                    LastName = "Brock",
+                    Email = "e_brock@outlook.com"
+                },
+                new User
+                {
+                    Id = new Guid("9c696ab7-cacb-4fd8-9797-96fd83b93a4c"),
+                    FirstName = "MJ",
+                    LastName = "Watson",
+                    Email = "mj_watson@outlook.com"
+                },
+                new User
+                {
+                    Id = new Guid("7f90cc18-55b9-4f32-9f4e-26c9f18eca53"),
+                    FirstName = "Gwen",
+                    LastName = "Stacy",
+                    Email = "g_stacy@outlook.com"
+                },
+                new User {FirstName = "Harry", LastName = "Osborn", Email = "h_osborn@outlook.com"}
             };
 
             context.Movies.AddRange(movies);

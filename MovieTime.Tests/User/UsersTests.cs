@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -49,17 +50,17 @@ namespace MovieTime.Tests.User
             {
                 new Web.Users.User()
                 {
-                    Id = "1",
+                    Id = Guid.NewGuid(),
                     FirstName = "Henk",
                 },
                 new Web.Users.User()
                 {
-                    Id = "2",
+                    Id = Guid.NewGuid(),
                     FirstName = "Tom",
                 },
                 new Web.Users.User()
                 {
-                    Id = "3",
+                    Id = Guid.NewGuid(),
                     FirstName = "Peter",
                 }
             }.AsQueryable();

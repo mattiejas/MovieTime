@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MovieTime.Web.Reviews
@@ -38,7 +39,7 @@ namespace MovieTime.Web.Reviews
         }
 
         [HttpGet("users/{userId}/reviews")]
-        public async Task<IActionResult> GetAllUserReviews(string userId)
+        public async Task<IActionResult> GetAllUserReviews(Guid userId)
         {
             var userExist = await _reviewService.UserExist(userId);
             if (!userExist) return NotFound();

@@ -13,21 +13,5 @@ namespace MovieTime.Web.Users
         {
             
         }
-        
-//        public ICollection<User> GetAllUsers() => _context.Users.ToList();
-//        
-//        public User GetUser(int id) => _context.Users.FirstOrDefault(user => user.Id == id);
-//
-//        public bool UpdateUser(User user)
-//        {
-//            _context.Update(user);
-//            return _context.SaveChanges() > 0;
-//        }
-//
-//        public bool CreateUser(User user)
-//        {
-//            _context.Add(user);
-//            return _context.SaveChanges() > 0;
-//        }
     }
 }
