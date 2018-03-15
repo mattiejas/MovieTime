@@ -1,0 +1,63 @@
+@import "../../styles/core";
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 5px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  .table {
+    overflow-x: auto;
+    background-color: #ffffff;
+    border-radius: 5px;
+    width: 100%;
+
+    thead {
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+      background-color: $font-color-light;
+      tr > th {
+        padding: 10px;
+        font-size: 1.1em;
+        letter-spacing: 0.06em;
+        color: #ffffff;
+        text-align: left;
+        white-space: nowrap;
+
+        &:first-child {
+          padding-left: 15px;
+          border-top-left-radius: 5px;
+        }
+        &:last-child {
+          border-top-right-radius: 5px;
+          padding-right: 15px;
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        &:nth-child(2n) {
+          background-color: #fafafa;
+        }
+        &:hover {
+          background-color: $light-color;
+        }
+        td {
+          padding: 7px 10px;
+          color: $font-color;
+          font-size: 1em;
+          text-align: left;
+          font-weight: 200;
+          white-space: nowrap;
+
+          &:first-child {
+            padding-left: 15px;
+          }
+          &:last-child {
+            padding-right: 15px;
+          }
+        }
+      }
+    }
+  }
+}
