@@ -42,14 +42,14 @@ class LoginModal extends React.Component {
 
   render() {
     return (
-      <Modal className={styles.login} hidden={this.props.hidden} title="Login to confirm" hideModal={() => this.onDiscard()}>
+      <Modal className={styles.login} hidden={this.props.hidden} title="Don't leave us, please :c" hideModal={() => this.onDiscard()}>
         <span className={styles.error}>{this.state.error}</span>
         <Input name="email" label="Email" value={this.props.email} disabled />
         <Input name="password" label="Password" type="password" value={this.state.password} onChange={e => this.onChange(e)} />
         <hr />
         <div className={styles.buttons}>
-          <Button danger onClick={() => this.onDiscard()}>Cancel</Button>
-          <Button dark onClick={() => this.login()}>Login</Button>
+          <Button onClick={() => this.onDiscard()}>Cancel</Button>
+          <Button danger onClick={() => this.login()}>Delete me!</Button>
         </div>
       </Modal>
     );

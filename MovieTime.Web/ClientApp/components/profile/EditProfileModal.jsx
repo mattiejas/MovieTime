@@ -88,7 +88,7 @@ class EditProfileModal extends React.Component {
               <Button danger onClick={() => this.toggleLogin()} dark>Delete Me</Button>
             </div>
             <div>
-              <Button danger className={styles.button} onClick={hideModal}>Cancel</Button>
+              <Button className={styles.button} onClick={hideModal}>Cancel</Button>
               <Button
                 dark
                 className={styles.button}
