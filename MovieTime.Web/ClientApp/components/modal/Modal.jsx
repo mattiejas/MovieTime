@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
 
 import styles from './Modal.scss';
 
@@ -41,7 +42,7 @@ class Modal extends React.Component {
       >
         <div
           ref={(modal) => { this.modal = modal; }}
-          className={styles.modal}
+          className={cn(styles.modal, this.props.className)}
           role="button"
           tabIndex={0}
           onKeyDown={e => this.onKeyPress(e)}
@@ -68,11 +69,13 @@ Modal.propTypes = {
   hideModal: PropTypes.func.isRequired,
   title: PropTypes.string,
   hidden: PropTypes.bool,
+  className: PropTypes.string,
 };
 
 Modal.defaultProps = {
   title: undefined,
   hidden: false,
+  className: '',
 };
 
 export default Modal;

@@ -27,8 +27,9 @@
       width: unset;
     }
     .buttons {
-      float: right;
-      width: auto;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
       .button {
         width: auto;
         margin: 0 10px;

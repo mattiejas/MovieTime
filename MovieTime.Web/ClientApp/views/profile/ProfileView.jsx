@@ -1,17 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getUserData, updateUserData } from '../../utils/user';
 
+import { getUserData, updateUserData } from '../../utils/user';
+import { removeUser } from '../../utils/auth';
 
 import ListWidget from '../../components/list-widget/ListWidget';
 import Placeholder from '../../components/placeholder/Placeholder';
 import Button from '../../components/button/Button';
 import ProfilePicture from '../../components/profile/ProfilePicture';
-import EditProfileModal from '../../components/user/EditProfileModal';
-
+import EditProfileModal from '../../components/profile/EditProfileModal';
 
 import styles from './ProfileView.scss';
-
 
 class ProfileView extends React.Component {
   constructor() {

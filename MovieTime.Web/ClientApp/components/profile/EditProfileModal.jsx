@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { removeUser } from '../../utils/auth';
+
+import LoginModal from '../modal/LoginModal';
 import Button from '../button/Button';
 import Modal from '../modal/Modal';
 import Input from '../input/Input';
@@ -12,6 +15,7 @@ class EditProfileModal extends React.Component {
     super();
     this.state = {
       user: {},
+      loginRequired: false,
     };
   }
   onChange(event) {
@@ -23,6 +27,21 @@ class EditProfileModal extends React.Component {
       },
     });
   }
+  toggleLogin() {
+    this.setState({
+      loginRequired: !this.state.loginRequired,
+    });
+  }
+  onLoginFailed() {
+    console.log('failed');
+  }
+  onLoginSucceeded() {
+    console.log('succeeded');
+  }
+  async removeUser() {
+    this.toggleLogin();
+    // await removeUser();
+  }
   render() {
     const { hideModal, onUpdate } = this.props;
     const {
@@ -33,8 +52,19 @@ class EditProfileModal extends React.Component {
       'new-password': newPassword,
       'repeat-password': repeatPassword,
     } = this.state.user;
+
+    if (this.props.hidden) {
+      return null;
+    }
+
     return (
       <Modal title="Edit Profile" hideModal={hideModal}>
+        <LoginModal
+          hidden={!this.state.loginRequired}
+          hideModal={() => this.toggleLogin()}
+          onFailure={() => this.onLoginFailed()}
+          onSuccess={() => this.onLoginSucceeded()}
+        />
         <div className={styles.edit}>
           <div className={styles.group}>
             <Input label="First Name" name="firstName" value={firstName} onChange={e => this.onChange(e)} />
@@ -53,14 +83,21 @@ class EditProfileModal extends React.Component {
           </div>
           <hr style={{ marginTop: '20px' }} />
           <div className={styles.buttons}>
-            <Button danger className={styles.button} onClick={hideModal}>Cancel</Button>
-            <Button
-              dark
-              className={styles.button}
-              onClick={() => { onUpdate({ ...this.props.user, ...this.state.user }); hideModal(); }}
-            >
-              Update
-            </Button>
+            <div>
+              <Button danger onClick={e => this.removeUser(e)} dark>Delete Me</Button>
+            </div>
+            <div>
+              <Button danger className={styles.button} onClick={hideModal}>Cancel</Button>
+              <Button
+                dark
+                className={styles.button}
+                onClick={() => {
+                  onUpdate({ ...this.props.user, ...this.state.user }); hideModal();
+                }}
+              >
+                Update
+              </Button>
+            </div>
           </div>
         </div>
       </Modal>
@@ -72,6 +109,11 @@ EditProfileModal.propTypes = {
   user: PropTypes.objectOf(PropTypes.any).isRequired,
   hideModal: PropTypes.func.isRequired,
   onUpdate: PropTypes.func.isRequired,
+  hidden: PropTypes.bool,
+};
+
+EditProfileModal.defaultProps = {
+  hidden: false,
 };
 
 export default EditProfileModal;

@@ -12,6 +12,7 @@ import ProfileView from './views/profile/ProfileView';
 import NotFoundView from './views/notfound/NotFoundView';
 import MovieDetailView from './views/movie/MovieDetailView';
 import RegistrationForm from './views/registration/Registration';
+import ListView from './views/list/ListView';
 
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
   <Route

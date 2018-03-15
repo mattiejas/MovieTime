@@ -93,7 +93,7 @@
 
   .buttons__container {
     grid-template-columns: 240px 1fr;
-    grid-template-areas: ". buttons";
+    grid-template-areas: " buttons";
     .buttons {
       display: block;
       grid-area: buttons;
