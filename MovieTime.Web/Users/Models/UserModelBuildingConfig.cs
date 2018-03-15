@@ -13,7 +13,9 @@ namespace MovieTime.Web.Users.Models
 
         public void MapRelations(ModelBuilder builder)
         {
-            //Todo: map relation with review, rating etc.
+            var user = builder.Entity<User>();
+
+
         }
 
         public void MapProperties(ModelBuilder builder)
