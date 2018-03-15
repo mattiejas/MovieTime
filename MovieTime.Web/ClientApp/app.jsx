@@ -1,5 +1,7 @@
 import React from 'react';
 import { Router } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
 import Routes from './routes';
 import history from './utils/history';
 

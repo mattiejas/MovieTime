@@ -36,7 +36,6 @@ export default class Navigation extends Component {
   }
 
   toggleSearch() {
-    console.log('rest');
     this.setState({
       searchIsOpen: !this.state.searchIsOpen,
     });
@@ -90,6 +89,7 @@ export default class Navigation extends Component {
                 <li><NavLink exact activeClassName={styles['navigation__item--active']} to="/" onClick={() => this.toggleMenu()}>Home</NavLink></li>
                 <li><NavLink activeClassName={styles['navigation__item--active']} to="/404" onClick={() => this.toggleMenu()}>404</NavLink></li>
                 <li><NavLink activeClassName={styles['navigation__item--active']} to="/register" onClick={() => this.toggleMenu()}>Register</NavLink></li>
+                <li><NavLink activeClassName={styles['navigation__item--active']} to="/list" onClick={() => this.toggleMenu()}>List</NavLink></li>
                 <li className={styles['login-mobile']}>
                   <Button icon="user" to="/login">Login</Button>
                 </li>

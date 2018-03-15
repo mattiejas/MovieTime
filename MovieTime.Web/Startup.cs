@@ -93,8 +93,7 @@ namespace MovieTime.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, MovieContext movieContext, TrackContext trackContext)
         {
-            movieContext.Database.Migrate();
-
+            trackContext.Database.Migrate();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -104,11 +103,10 @@ namespace MovieTime.Web
                     ReactHotModuleReplacement = true
                 });
                 movieContext.EnsureSeedDataForContext();
-                trackContext.Database.Migrate();
             }
             else
             {
-
+                movieContext.Database.Migrate();
                 app.UseMiddleware<SerilogMiddleware>();
                 //app.UseExceptionHandler("/Home/Error");
                 app.UseExceptionHandler(appBuilder =>
@@ -119,13 +117,10 @@ namespace MovieTime.Web
                         await context.Response.WriteAsync("An unexpected fault happened. Try again later.");
                     });
                 });
-
             }
 
             app.UseAuthentication();
-            
             app.UseStaticFiles();
-
             app.UseSwagger();
 
             if (env.IsDevelopment())

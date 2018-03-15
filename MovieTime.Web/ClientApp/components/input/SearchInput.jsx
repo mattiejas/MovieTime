@@ -41,7 +41,7 @@ class SearchInput extends Component {
     if (this.props.onSearch) this.props.onSearch();
     if (this.state.searchQuery && this.state.searchQuery.length > 1) {
       this.setState({
-        redirectTo: `/movie/detail/${this.state.searchQuery}`,
+        redirectTo: `/movies/${this.state.searchQuery}`,
       }, () => {
         history.push(this.state.redirectTo);
       });
