@@ -11,15 +11,15 @@ using System;
 namespace MovieTime.Web.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20180315155701_initial")]
-    partial class initial
+    [Migration("20180315222857_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
+                .HasAnnotation("ProductVersion", "2.0.1-rtm-125");
 
             modelBuilder.Entity("MovieTime.Web.Genres.Genre", b =>
                 {
@@ -93,7 +93,7 @@ namespace MovieTime.Web.Migrations
 
                     b.Property<string>("MovieId");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<string>("UserId");
 
                     b.HasKey("Id");
 
@@ -104,9 +104,20 @@ namespace MovieTime.Web.Migrations
                     b.ToTable("Review");
                 });
 
+            modelBuilder.Entity("MovieTime.Web.Tracked.Models.TrackedMovie", b =>
+                {
+                    b.Property<string>("MovieId");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("MovieId", "UserId");
+
+                    b.ToTable("TrackedMovies");
+                });
+
             modelBuilder.Entity("MovieTime.Web.Users.User", b =>
                 {
-                    b.Property<Guid>("Id");
+                    b.Property<string>("Id");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -151,8 +162,7 @@ namespace MovieTime.Web.Migrations
 
                     b.HasOne("MovieTime.Web.Users.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

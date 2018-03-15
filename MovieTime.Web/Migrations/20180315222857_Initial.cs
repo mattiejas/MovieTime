@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace MovieTime.Web.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -40,10 +40,22 @@ namespace MovieTime.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TrackedMovies",
+                columns: table => new
+                {
+                    MovieId = table.Column<string>(nullable: false),
+                    UserId = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TrackedMovies", x => new { x.MovieId, x.UserId });
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<string>(nullable: false),
                     Email = table.Column<string>(maxLength: 60, nullable: false),
                     FirstName = table.Column<string>(maxLength: 45, nullable: false),
                     ImageUrl = table.Column<string>(maxLength: 45, nullable: true),
@@ -84,12 +96,12 @@ namespace MovieTime.Web.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     AddedDateTime = table.Column<DateTime>(nullable: false),
                     EditedDateTime = table.Column<DateTime>(nullable: false),
                     IsConcept = table.Column<bool>(nullable: false),
                     MovieId = table.Column<string>(nullable: true),
-                    UserId = table.Column<Guid>(nullable: false)
+                    UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -105,7 +117,7 @@ namespace MovieTime.Web.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -131,6 +143,9 @@ namespace MovieTime.Web.Migrations
 
             migrationBuilder.DropTable(
                 name: "Review");
+
+            migrationBuilder.DropTable(
+                name: "TrackedMovies");
 
             migrationBuilder.DropTable(
                 name: "Genres");

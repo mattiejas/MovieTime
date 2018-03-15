@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MovieTime.Web.Tracked.Models;
 using Serilog;
 
-namespace MovieTime.Web.Track
+namespace MovieTime.Web.TrackedMovies
 {
     public class TrackController : Controller
     {
@@ -16,7 +17,7 @@ namespace MovieTime.Web.Track
         
         [HttpPost]
         [Route("api/[controller]")]
-        public async Task<IActionResult> TrackMovie([FromBody] TrackModel model)
+        public async Task<IActionResult> TrackMovie([FromBody] TrackedMovie model)
         {
             if (model == null)
             {
@@ -36,7 +37,7 @@ namespace MovieTime.Web.Track
         
         [HttpPost]
         [Route("api/[controller]/untrack")]
-        public async Task<IActionResult> UntrackMovie([FromBody] TrackModel model)
+        public async Task<IActionResult> UntrackMovie([FromBody] TrackedMovie model)
         {
             if (model == null)
             {
@@ -60,7 +61,7 @@ namespace MovieTime.Web.Track
         {
             try
             {
-                TrackedMoviesDTO models = await _trackService.GetTrackedMoviesByUserId(userId);
+                TrackedMoviesDto models = await _trackService.GetTrackedMoviesByUserId(userId);
                 return Ok();
             }
             catch (Exception err)
