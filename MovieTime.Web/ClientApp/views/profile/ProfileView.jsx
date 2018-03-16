@@ -28,7 +28,7 @@ class ProfileView extends React.Component {
     getUserData(id)
       .then((data) => {
         this.setState({
-          user: { id, ...data },
+          user: data,
           isLoading: false,
         });
       })
@@ -58,8 +58,8 @@ class ProfileView extends React.Component {
         <EditProfileModal
           hidden={!this.state.isEditing}
           hideModal={() => this.onDiscard()}
-          onUpdate={user => updateUserData(user).then(() => {
-              getUserData(user.id);
+          onUpdate={user => updateUserData(user, id).then(() => {
+            getUserData(id);
           })}
           user={this.state.user}
         />

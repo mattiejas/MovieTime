@@ -63,7 +63,7 @@ namespace MovieTime.Web.Users
             if (user == null) return BadRequest();
 
             var userExist = await _userService.UserExist(id);
-            if (!userExist) return NotFound();
+            if (!userExist) return NotFound(new {message = String.Format("User {0} not found", id)});
 
             var success = await _userService.UpdateUser(user);
             if (!success) throw new Exception("Failed to update the user");

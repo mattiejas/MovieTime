@@ -3,8 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
-import { getUserData } from '../../utils/user';
-import { getUser, logout } from '../../utils/auth';
+import { logout } from '../../utils/auth';
 
 import Icon from '../icon/Icon';
 import Button from '../button/Button';
@@ -21,24 +20,7 @@ export default class Navigation extends Component {
       mobileMenuIsVisible: false,
       inTransition: false,
       searchIsOpen: false,
-      userId: null,
-      user: {},
     };
-  }
-
-  componentDidMount() {
-    if (this.props.isAuthenticated) {
-      getUser()
-        .then((user) => {
-          getUserData(user.uid)
-            .then((data) => {
-              this.setState({
-                userId: user.uid,
-                user: data,
-              });
-            });
-        });
-    }
   }
 
   toggleMenu() {
@@ -97,8 +79,8 @@ export default class Navigation extends Component {
                 </li>
                 <li className={styles['logout-mobile']}>
                   <ButtonGroup>
-                    <Button icon="user" to={`/users/${this.state.userId}`}>
-                      {`${this.state.user.firstName || 'Logged'} ${this.state.user.lastName || 'in'}`}
+                    <Button icon="user" to={`/users/${this.props.user.id}`}>
+                      {`${this.props.user.firstName} ${this.props.user.lastName}`}
                     </Button>
                     <Button icon="power-off" onClick={() => logout()} />
                   </ButtonGroup>
@@ -111,8 +93,8 @@ export default class Navigation extends Component {
                   onClick={() => this.toggleSearch()}
                 />
                 <ButtonGroup>
-                  <Button icon="user" to={`/users/${this.state.userId}`}>
-                    {`${this.state.user.firstName} ${this.state.user.lastName}`}
+                  <Button icon="user" to={`/users/${this.props.user.id}`}>
+                    {`${this.props.user.firstName} ${this.props.user.lastName}`}
                   </Button>
                   <Button icon="power-off" onClick={() => logout()} />
                 </ButtonGroup>
@@ -162,6 +144,7 @@ export default class Navigation extends Component {
 }
 
 Navigation.propTypes = {
+  user: PropTypes.objectOf(PropTypes.any),
   isAuthenticated: PropTypes.bool.isRequired,
 };
 
