@@ -36,7 +36,7 @@ class MovieDetailView extends React.Component {
 
   async componentWillReceiveProps(props) {
     if (this.props.match.params.title !== props.match.params.title) {
-      await this.loadMovieDetails(this.props.match.params.title);
+      await this.loadMovieDetails(props.match.params.title);
     }
   }
 
@@ -50,7 +50,6 @@ class MovieDetailView extends React.Component {
   async loadMovieDetails(movieTitle) {
     try {
       const movie = await getMovieByTitle(movieTitle);
-
       const user = await getUser();
       const track = await isMovieTracked(user.uid, movie.imdbId);
 
@@ -61,10 +60,11 @@ class MovieDetailView extends React.Component {
         isTracking: track.isTracked,
         isLoading: false,
       });
-
-      this.setBackgroundColor(movie.poster);
+      if (movie.poster && movie.poster !== 'N/A') {
+        this.setBackgroundColor(movie.poster);
+      }
     } catch (err) {
-      console.log(err);
+      throw err;
     }
   }
 
@@ -79,7 +79,7 @@ class MovieDetailView extends React.Component {
           });
         }
       })
-      .catch(err => console.log('err', err));
+      .catch(err => err);
   }
 
   handleUntracking(event) {
@@ -93,7 +93,7 @@ class MovieDetailView extends React.Component {
           });
         }
       })
-      .catch(err => console.log('err', err));
+      .catch(err => err);
   }
 
   render() {
@@ -125,7 +125,9 @@ class MovieDetailView extends React.Component {
                   <MovieHeading title={title} year={year} />
                 </Placeholder>
               </div>
-              <MoviePoster source={poster} alt={`${title} poster`} />
+              {poster && poster !== 'N/A' &&
+                <MoviePoster source={poster} alt={`${title} poster`} />
+              }
             </div>
             <div className="*column">
               <div className={styles.view__content__heading}>

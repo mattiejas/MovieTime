@@ -50,6 +50,7 @@
     "firebase": "4.10.1",
     "font-awesome": "^4.7.0",
     "hibp-checker": "1.0.0",
+    "history": "^4.7.2",
     "lodash": "https://registry.npmjs.org/lodash/-/lodash-4.17.5.tgz",
     "node-vibrant": "^3.0.0",
     "prop-types": "^15.6.0",
