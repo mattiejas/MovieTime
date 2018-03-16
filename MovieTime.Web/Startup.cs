@@ -80,10 +80,10 @@ namespace MovieTime.Web
             services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddScoped<IReviewService, ReviewService>();
-            services.AddScoped<IReviewRepository, ReviewRepository>();
-
-            services.AddScoped<ITrackService, TrackService>();
-            services.AddScoped<ITrackRepository, TrackRepository>();
+            services.AddScoped<IReviewRepository, ReviewRepository>(); 
+            
+            services.AddScoped<ITrackService, TrackService>(); 
+            services.AddScoped<ITrackRepository, TrackRepository>(); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
