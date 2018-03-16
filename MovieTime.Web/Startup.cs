@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,10 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using MovieTime.Web.Track;
 using MovieTime.Web.Users;
 using MovieTime.Web.Utilities;
 using MovieTime.Web.Database;
@@ -23,6 +17,7 @@ using MovieTime.Web.Movies;
 using MovieTime.Web.ThirdPartyServices;
 using MovieTime.Web.ThirdPartyServices.OMDB.Movies;
 using MovieTime.Web.Reviews;
+using MovieTime.Web.TrackedMovies;
 
 namespace MovieTime.Web
 {
@@ -69,13 +64,11 @@ namespace MovieTime.Web
             if (string.IsNullOrWhiteSpace(mode) || mode.ToLower() == "true")
             {
                 services.AddDbContext<MovieContext>(options => options.UseSqlServer(connectionString));
-                services.AddDbContext<TrackContext>(options => options.UseSqlServer(connectionString));
             }
             else
             {
                 connectionString = Configuration.GetConnectionString("Postgresql_DATABASE_URL");
                 services.AddDbContext<MovieContext>(options => options.UseNpgsql(connectionString));
-                services.AddDbContext<TrackContext>(options => options.UseNpgsql(connectionString));
             }
             
             services.AddScoped<IMovieService, MovieService>();
@@ -94,9 +87,8 @@ namespace MovieTime.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, MovieContext movieContext, TrackContext trackContext)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, MovieContext movieContext)
         {
-            trackContext.Database.Migrate();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -121,7 +113,7 @@ namespace MovieTime.Web
                     });
                 });
             }
-
+            
             app.UseAuthentication();
             app.UseStaticFiles();
             app.UseSwagger();

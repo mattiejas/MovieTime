@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MovieTime.Web.Track
+namespace MovieTime.Web.Tracked.Models
 {
-    public class TrackedMoviesDTO
+    public class TrackedMoviesDto
     {
         public string userId { get; set; }        
         public ICollection<string> movieIds { get; set; }

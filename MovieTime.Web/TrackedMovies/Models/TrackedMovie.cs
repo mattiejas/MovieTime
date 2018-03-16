@@ -1,6 +1,6 @@
-﻿namespace MovieTime.Web.Track
+﻿namespace MovieTime.Web.Tracked.Models
 {
-    public class TrackModel
+    public class TrackedMovie
     {
         public string UserId { get; set; }
         public string MovieId { get; set; }

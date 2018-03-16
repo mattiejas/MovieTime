@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
@@ -47,7 +47,7 @@ export default class Navigation extends Component {
         {this.props.isAuthenticated === true ?
           (
             <div className={styles.navigation__wrapper}>
-              <div className={styles.title}>Movie<span>Time</span></div>
+              <div className={styles.title}><Link to="/" href="/">Movie<span>Time</span></Link></div>
               <button className={styles['nav-button']} onClick={() => this.toggleMenu()}><Icon type="bars" /></button>
               <ul className={
                 cn(
@@ -58,12 +58,10 @@ export default class Navigation extends Component {
               >
                 <li className={styles['search-mobile']}><SearchInput onSearch={() => this.toggleMenu()} /></li>
                 <li><NavLink exact activeClassName={styles['navigation__item--active']} to="/" onClick={() => this.toggleMenu()}>Home</NavLink></li>
-                <li><NavLink activeClassName={styles['navigation__item--active']} to="/404" onClick={() => this.toggleMenu()}>404</NavLink></li>
-                <li><NavLink activeClassName={styles['navigation__item--active']} to="/movie/detail/ferris bueller's day off" onClick={() => this.toggleMenu()}>Movie Detail</NavLink></li>
-                <li><NavLink activeClassName={styles['navigation__item--active']} to="/protected" onClick={() => this.toggleMenu()}>Protected</NavLink></li>
+                <li><NavLink activeClassName={styles['navigation__item--active']} to="/movies/Spider-Man: Homecoming" onClick={() => this.toggleMenu()}>Spider-Man: Homecoming</NavLink></li>
                 <li className={styles['logout-mobile']}>
                   <ButtonGroup>
-                    <Button icon="user" to="/users/2">Eddie Brock</Button>
+                    <Button icon="user" to="/users/683bd02b-9280-40fd-bd76-d9ef8c26f1fa">Eddie Brock</Button>
                     <Button icon="power-off" onClick={() => logout()} />
                   </ButtonGroup>
                 </li>
@@ -72,7 +70,7 @@ export default class Navigation extends Component {
               <div className={styles.buttons}>
                 <SearchInput className={cn(styles['search-desktop'], this.state.searchIsOpen ? styles['is-open'] : null)} onClick={() => this.toggleSearch()} />
                 <ButtonGroup>
-                  <Button icon="user" to="/users/2">Eddie Brock</Button>
+                  <Button icon="user" to="/users/683bd02b-9280-40fd-bd76-d9ef8c26f1fa">Eddie Brock</Button>
                   <Button icon="power-off" onClick={() => logout()} />
                 </ButtonGroup>
               </div>
@@ -87,9 +85,7 @@ export default class Navigation extends Component {
               )}
               >
                 <li><NavLink exact activeClassName={styles['navigation__item--active']} to="/" onClick={() => this.toggleMenu()}>Home</NavLink></li>
-                <li><NavLink activeClassName={styles['navigation__item--active']} to="/404" onClick={() => this.toggleMenu()}>404</NavLink></li>
                 <li><NavLink activeClassName={styles['navigation__item--active']} to="/register" onClick={() => this.toggleMenu()}>Register</NavLink></li>
-                <li><NavLink activeClassName={styles['navigation__item--active']} to="/list" onClick={() => this.toggleMenu()}>List</NavLink></li>
                 <li className={styles['login-mobile']}>
                   <Button icon="user" to="/login">Login</Button>
                 </li>

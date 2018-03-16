@@ -51,8 +51,6 @@ class MovieDetailView extends React.Component {
     try {
       const movie = await getMovieByTitle(movieTitle);
 
-      console.log('movie', movie);
-
       const user = await getUser();
       const track = await isMovieTracked(user.uid, movie.imdbId);
 
@@ -138,45 +136,47 @@ class MovieDetailView extends React.Component {
                     </Placeholder>
                   </div>
                   <Placeholder isReady={!this.state.isLoading}>
-                    <MovieAttributes rating={6} time={runTime} genres={genre} />
+                    <MovieAttributes rating={0} time={runTime || 'N/A'} genres={genre || 'N/A'} />
                   </Placeholder>
                 </div>
               </div>
-              <ParagraphPlaceholder
-                isReady={!this.state.isLoading}
-                width={300}
-                height={20}
-                lineHeight={1.8}
-                lines={3}
-              >
-                {!this.state.isTracking && <Button dark onClick={this.handleTracking}>Track</Button>}
-                {this.state.isTracking && <Button dark onClick={this.handleUntracking}>Tracking</Button>}
-                <table className={styles.view__content__involved}>
-                  <tbody>
-                    <tr>
-                      <th>Director:</th>
-                      <td>{director}</td>
-                    </tr>
-                    <tr>
-                      <th>Writers:</th>
-                      <td>{writer}</td>
-                    </tr>
-                    <tr>
-                      <th>Actors:</th>
-                      <td>{actors}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </ParagraphPlaceholder>
-              <ParagraphPlaceholder
-                isReady={!this.state.isLoading}
-                width={500}
-                height={20}
-                lineHeight={1.5}
-                lines={5}
-              >
-                <p>{plot}</p>
-              </ParagraphPlaceholder>
+              <div className={styles.content}>
+                <ParagraphPlaceholder
+                  isReady={!this.state.isLoading}
+                  width={300}
+                  height={20}
+                  lineHeight={1.8}
+                  lines={3}
+                >
+                  {!this.state.isTracking && <Button dark onClick={this.handleTracking}>Track</Button>}
+                  {this.state.isTracking && <Button dark onClick={this.handleUntracking}>Tracking</Button>}
+                  <table className={styles.view__content__involved}>
+                    <tbody>
+                      <tr>
+                        <th>Director:</th>
+                        <td>{director}</td>
+                      </tr>
+                      <tr>
+                        <th>Writers:</th>
+                        <td>{writer}</td>
+                      </tr>
+                      <tr>
+                        <th>Actors:</th>
+                        <td>{actors}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </ParagraphPlaceholder>
+                <ParagraphPlaceholder
+                  isReady={!this.state.isLoading}
+                  width={500}
+                  height={20}
+                  lineHeight={1.5}
+                  lines={5}
+                >
+                  <p>{plot}</p>
+                </ParagraphPlaceholder>
+              </div>
             </div>
           </div>
         </div>

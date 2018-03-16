@@ -6,6 +6,8 @@ using MovieTime.Web.Users;
 using MovieTime.Web.Movies.Models;
 using MovieTime.Web.Genres;
 using MovieTime.Web.Reviews;
+using MovieTime.Web.Tracked.Models;
+using MovieTime.Web.TrackedMovies;
 
 namespace MovieTime.Web.Database
 {
@@ -14,6 +16,7 @@ namespace MovieTime.Web.Database
         public virtual DbSet<Movie> Movies { get; set; }
         public virtual DbSet<Genre> Genres { get; set; }
         public virtual DbSet<MovieGenre> MovieGenre { get; set; }
+        public virtual DbSet<TrackedMovie> TrackedMovies { get; set; }
         
         public virtual DbSet<User> Users { get; set; }
 //        public virtual DbSet<Review> Reviews { get; set; }
