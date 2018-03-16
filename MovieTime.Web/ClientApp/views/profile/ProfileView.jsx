@@ -27,7 +27,6 @@ class ProfileView extends React.Component {
     const { id } = this.props.match.params;
     getUserData(id)
       .then((data) => {
-        console.log(data);
         this.setState({
           user: { id, ...data },
           isLoading: false,

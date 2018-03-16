@@ -30,17 +30,13 @@ export default class Navigation extends Component {
     if (this.props.isAuthenticated) {
       getUser()
         .then((user) => {
-          console.log(user.uid);
-          this.setState({
-            userId: user.uid,
-          }, () => {
-            getUserData(user.uid).then((data) => {
-              console.log(data);
+          getUserData(user.uid)
+            .then((data) => {
               this.setState({
+                userId: user.uid,
                 user: data,
               });
             });
-          });
         });
     }
   }
@@ -87,7 +83,7 @@ export default class Navigation extends Component {
                     to="/"
                     onClick={() => this.toggleMenu()}
                   >
-                  Home
+                    Home
                   </NavLink>
                 </li>
                 <li>
@@ -102,7 +98,7 @@ export default class Navigation extends Component {
                 <li className={styles['logout-mobile']}>
                   <ButtonGroup>
                     <Button icon="user" to={`/users/${this.state.userId}`}>
-                      {`${this.state.user.firstName} ${this.state.user.lastName}`}
+                      {`${this.state.user.firstName || 'Logged'} ${this.state.user.lastName || 'in'}`}
                     </Button>
                     <Button icon="power-off" onClick={() => logout()} />
                   </ButtonGroup>
