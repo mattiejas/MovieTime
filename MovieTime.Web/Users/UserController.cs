@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.KeyVault.Models;
 using MovieTime.Web.Users.Models;
+using Serilog;
 
 namespace MovieTime.Web.Users
 {
@@ -27,11 +29,9 @@ namespace MovieTime.Web.Users
         [HttpGet("{id}", Name = GetUserRoute)]
         public async Task<IActionResult> GetUser(string id)
         {
-            var userDto = await _userService.GetUser(id);
-
-            if (userDto == null) return NotFound();
-
-            return Ok(userDto);
+            var model = await _userService.GetUser(id);
+            if (model == null) return NotFound(new {message = String.Format("User {0} not found", id)});
+            return Ok(model);
         }
 
         [HttpPost]

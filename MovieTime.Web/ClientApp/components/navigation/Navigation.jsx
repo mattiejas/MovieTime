@@ -30,10 +30,12 @@ export default class Navigation extends Component {
     if (this.props.isAuthenticated) {
       getUser()
         .then((user) => {
+          console.log(user.uid);
           this.setState({
             userId: user.uid,
           }, () => {
             getUserData(user.uid).then((data) => {
+              console.log(data);
               this.setState({
                 user: data,
               });

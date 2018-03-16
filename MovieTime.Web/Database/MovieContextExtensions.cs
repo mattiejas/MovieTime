@@ -145,7 +145,7 @@ namespace MovieTime.Web.Database
                 },
                 new User
                 {
-                    Id = "VJYm2nlU6OXwGWPw4QKQAuletoB3",
+                    Id = "vgkyE9ifs0gVA0KJyxZ8ghSYBUy1",
                     FirstName = "Matthias",
                     LastName = "Aarnoutse",
                     Email = "m.aarnoutse117@gmail.com"

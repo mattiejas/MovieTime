@@ -25,12 +25,18 @@ class ProfileView extends React.Component {
 
   componentDidMount() {
     const { id } = this.props.match.params;
-    getUserData(id).then((data) => {
-      this.setState({
-        user: { id, ...data },
-        isLoading: false,
+    getUserData(id)
+      .then((data) => {
+        console.log(data);
+        this.setState({
+          user: { id, ...data },
+          isLoading: false,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        this.props.history.push('/404');
       });
-    });
   }
 
   onEdit() {
