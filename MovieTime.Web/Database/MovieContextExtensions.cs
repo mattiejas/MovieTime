@@ -145,10 +145,10 @@ namespace MovieTime.Web.Database
                 },
                 new User
                 {
-                    Id = "683bd02b-9280-40fd-bd76-d9ef8c26f1fa",
-                    FirstName = "Eddie",
-                    LastName = "Brock",
-                    Email = "e_brock@outlook.com"
+                    Id = "VJYm2nlU6OXwGWPw4QKQAuletoB3",
+                    FirstName = "Matthias",
+                    LastName = "Aarnoutse",
+                    Email = "m.aarnoutse117@gmail.com"
                 },
                 new User
                 {

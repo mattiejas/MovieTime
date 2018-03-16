@@ -30,10 +30,9 @@ class LoginModal extends React.Component {
   }
 
   login() {
-    // TODO: replace with state email
-    login('matt.aarnoutse@outlook.com', this.state.password)
+    login(this.state.email, this.state.password)
       .then(() => {
-        this.onSuccess('matt.aarnoutse@outlook.com', this.state.password);
+        this.onSuccess(this.state.email, this.state.password);
       })
       .catch((err) => {
         this.setState({ error: err.message });
