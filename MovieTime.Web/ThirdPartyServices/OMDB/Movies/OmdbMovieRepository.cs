@@ -5,100 +5,54 @@ using AutoMapper;
 using MovieTime.Web.Utilities;
 using RestSharp;
 using MovieTime.Web.Movies.Models;
+using MovieTime.Web.ThirdPartyServices.OMDB.MovieList;
 
 namespace MovieTime.Web.ThirdPartyServices.OMDB.Movies
 {
     public class OmdbMovieRepository : IThirdPartyMovieRepository
     {
-        private static readonly string BASE_URL = "http://www.omdbapi.com";
-        private static readonly string API_KEY_ARG = "apikey";
-        private static readonly string API_KEY_VAL = "90331463";
-
-        private static readonly string MOVIE_ID_ARG = "i";
-        private static readonly string MOVIE_TITLE_ARG = "t";
-        private static readonly string MOVIE_SEARCH_ARG = "s";
-        private static readonly string TYPE_ARG = "type";
-        private readonly string MOVIE_PLOT_ARG = "plot";
-
         private readonly IMapper _mapper;
+        private readonly OmdbRestClientService _clientService;
+        private readonly RestClient _client;
 
         public OmdbMovieRepository(IMapper mapper)
         {
             _mapper = mapper;
+            _clientService = new OmdbRestClientService() ;
+            _client = _clientService.CreateClient();
         }
 
-        public async Task<Movie> GetMovieById(string id) => await GetMovieByArg(null, id);
-
-        public async Task<Movie> GetMovieByTitle(string title) => await GetMovieByArg(title);
-
-        private async Task<Movie> GetMovieByArg(string title, string id = null)
+        public async Task<Movie> GetMovieById(string id)
         {
-            if (string.IsNullOrEmpty(title) && string.IsNullOrEmpty(id))
-                throw new Exception("Title and Id can't both be null.");
-            if (title != null && id != null) throw new Exception("Title and Id can't both be filled.");
+            if (string.IsNullOrEmpty(id)) throw new ArgumentNullException("A valid Id is needed");
+            var request = _clientService.CreateMovieRequest(id);
+            var response = await _client.ExecuteTaskAsync<OmdbMovieModel>(request);
+            if (response.Data.Response=="False") throw new Exception("Empty response for MovieById request");
 
-            var client = CreateClient();
-            var request = CreateRequest("", Method.GET);
-
-            if (title != null) request.AddParameter(MOVIE_TITLE_ARG, title);
-            if (id != null) request.AddParameter(MOVIE_ID_ARG, id);
-
-            request.AddParameter(MOVIE_PLOT_ARG, "full");
-
-            var response = await client.ExecuteTaskAsync<OmdbMovieModel>(request);
-            if (response.Data == null) throw new Exception("Empty response");
-
-            var movieModel = _mapper.Map<OmdbMovieModel, Movie>(response.Data);
-            return movieModel;
+            var movie = _mapper.Map<OmdbMovieModel, Movie>(response.Data);
+            return movie;
         }
 
-        public async Task<IEnumerable<Movie>> GetMoviesByTitleSearch(string title)
+        public async Task<Movie> GetMovieByTitle(string title)
         {
-            // var client = CreateClient();
-            // var request = CreateRequest("", Method.GET);
-            //
-            // request.AddParameter(MOVIE_SEARCH_ARG, title);
-            //
-            // var response = client.Execute<SearchResultsModel>(request);
-            // if (response.Data == null) throw new Exception("Empty response");
-            //
-            // return response.Data;
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(title)) throw new ArgumentNullException("A valid title is needed");
+            var request = _clientService.CreateMovieRequest(null, title);
+            var response = await _client.ExecuteTaskAsync<OmdbMovieModel>(request);
+            if (response.Data.Response == "False") throw new Exception("Empty response for MovieByTitle request");
+
+            var movie = _mapper.Map<OmdbMovieModel, Movie>(response.Data);
+            return movie;
         }
 
-        /// <summary>
-        /// Generic CreateRequest method, configured with shared information and the correct serialization.
-        /// </summary>
-        /// <param name="resource"></param>
-        /// <param name="method"></param>
-        /// <returns></returns>
-        private RestRequest CreateRequest(string resource, RestSharp.Method method)
+        public async Task<SearchResultsModel> GetMoviesByTitle(string title, int page=1)
         {
-            var request = new RestRequest(resource, method);
+            if (string.IsNullOrEmpty(title)) throw new ArgumentNullException("A valid title is needed");
+            if (page < 1 || page > 100) throw new ArgumentOutOfRangeException("GetMoviesByTitle needs a page value in the range 1-100");
 
-            request.AddParameter(TYPE_ARG, "movie");
-            request.AddParameter(API_KEY_ARG, API_KEY_VAL);
-            request.RequestFormat = DataFormat.Json;
-            request.JsonSerializer = Serialization.NewtonsoftJsonSerializer.Default;
-
-            return request;
-        }
-
-        /// <summary>
-        /// Generic CreateClient method, configured with the base url and the correct deserialization.
-        /// </summary>
-        /// <returns></returns>
-        private RestClient CreateClient()
-        {
-            var client = new RestClient(BASE_URL);
-
-            client.AddHandler("application/json", Serialization.NewtonsoftJsonSerializer.Default);
-            client.AddHandler("text/json", Serialization.NewtonsoftJsonSerializer.Default);
-            client.AddHandler("text/x-json", Serialization.NewtonsoftJsonSerializer.Default);
-            client.AddHandler("text/javascript", Serialization.NewtonsoftJsonSerializer.Default);
-            client.AddHandler("*+json", Serialization.NewtonsoftJsonSerializer.Default);
-
-            return client;
+            var request =  _clientService.CreateMoviesRequest(title, page);
+            var response = await _client.ExecuteTaskAsync<SearchResultsModel>(request);
+            if (response.Data == null) throw new Exception("Empty response for MoviesByTitle request");
+            return response.Data;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MovieTime.Web.Movies.Models;
+using MovieTime.Web.ThirdPartyServices.OMDB.MovieList;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ namespace MovieTime.Web.ThirdPartyServices.TMDB
 {   
     public class TmdbMovieRepository: IThirdPartyMovieRepository
     {
-        public Task<IEnumerable<Movie>> GetMoviesByTitleSearch(string title)
+        public Task<SearchResultsModel> GetMoviesByTitle(string title, int page =0)
         {
             throw new NotImplementedException();
         }
