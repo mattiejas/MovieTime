@@ -70,8 +70,7 @@ class MovieDetailView extends React.Component {
 
   handleTracking(event) {
     event.preventDefault();
-    getUser()
-      .then(user => trackMovie(user.uid, this.state.movie.imdbId))
+    trackMovie(this.state.movie.imdbId)
       .then((response) => {
         if (response.ok) {
           this.setState({
@@ -84,8 +83,7 @@ class MovieDetailView extends React.Component {
 
   handleUntracking(event) {
     event.preventDefault();
-    getUser()
-      .then(user => untrackMovie(user.uid, this.state.movie.imdbId))
+    untrackMovie(this.state.movie.imdbId)
       .then((response) => {
         if (response.ok) {
           this.setState({
