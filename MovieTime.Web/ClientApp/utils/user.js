@@ -1,11 +1,14 @@
+import betterFetch from './better-fetch';
+
 const usersAPI = '/api/users/';
 
 export function getUserData(id) {
-  return fetch(usersAPI + id).then(response => response.json());
+  return betterFetch(usersAPI + id);
 }
 
-export function updateUserData(user) {
-  return fetch(usersAPI, {
+export function updateUserData(user, id) {
+  console.log(user, id);
+  return fetch(usersAPI + id, {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',

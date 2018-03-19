@@ -66,9 +66,9 @@ export default class Router extends React.Component {
   componentDidMount() {
     auth.onAuthStateChanged((user) => {
       if (user) {
-        this.setState({ isAuthenticated: true });
+        this.setState({ isAuthenticated: true, userId: user.uid });
       } else {
-        this.setState({ isAuthenticated: false });
+        this.setState({ isAuthenticated: false, userId: null });
       }
     });
   }
@@ -78,7 +78,7 @@ export default class Router extends React.Component {
       return null;
     }
     return (
-      <Layout isAuthenticated={this.state.isAuthenticated}>
+      <Layout isAuthenticated={this.state.isAuthenticated} userId={this.state.userId}>
         <Switch>
           <Route exact path="/" component={Home} />
           <PrivateRoute path="/movies/:title" isAuthenticated={this.state.isAuthenticated} component={MovieDetailView} />
