@@ -7,7 +7,6 @@ export function getUserData(id) {
 }
 
 export function updateUserData(user, id) {
-  console.log(user, id);
   return fetch(usersAPI + id, {
     headers: {
       Accept: 'application/json',
@@ -17,4 +16,3 @@ export function updateUserData(user, id) {
     body: JSON.stringify(user),
   }).then(response => response);
 }
-

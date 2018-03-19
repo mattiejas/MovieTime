@@ -18,7 +18,10 @@ async function getTokenForCurrentUser() {
 }
 
 function getRequestHeader(token) {
-  return { Authorization: `Bearer ${token}`, 'Content-type': 'Application/json' };
+  return {
+    Authorization: `Bearer ${token}`,
+    'Content-type': 'Application/json',
+  };
 }
 
 async function registerWithBackEnd(person, token) {
@@ -31,18 +34,23 @@ async function registerWithBackEnd(person, token) {
   await fetch('/auth/register/', data);
 }
 
+export function logout() {
+  return auth.signOut();
+}
+
 export async function register(person) {
-  await registerWithFireBase(person.email, person.password);
-  const token = await getTokenForCurrentUser();
-  await registerWithBackEnd(person, token);
+  return registerWithFireBase(person.email, person.password)
+    .then(() => {
+      getTokenForCurrentUser().then((token) => {
+        registerWithBackEnd(person, token).then(() => ({ success: true, message: 'Success' }));
+      });
+      return { success: false, message: 'Something went wrong' };
+    })
+    .catch(err => ({ success: false, message: err.message }));
 }
 
 export function login(email, password) {
   return auth.signInWithEmailAndPassword(email, password);
-}
-
-export function logout() {
-  return auth.signOut();
 }
 
 async function removeUserFromFirebase(password) {
@@ -55,7 +63,10 @@ async function removeUserFromFirebase(password) {
 async function removeUserFromBackend() {
   const token = await getTokenForCurrentUser();
   const requestHeader = getRequestHeader(token);
-  await fetch('/auth/unregister/', { method: 'post', headers: requestHeader });
+  await fetch('/auth/unregister/', {
+    method: 'post',
+    headers: requestHeader,
+  });
 }
 
 export async function removeUser(password) {

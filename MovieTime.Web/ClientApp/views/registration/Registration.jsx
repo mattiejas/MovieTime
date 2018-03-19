@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import checkPassword from 'hibp-checker';
 import isEmail from 'validator/lib/isEmail';
 
-import { register } from '../../utils/auth';
+import { logout, register } from '../../utils/auth';
 
 import Input from '../../components/input/Input';
 
@@ -10,9 +11,10 @@ import styles from './Registration.scss';
 import Button from '../../components/button/Button';
 
 export default class Registration extends React.Component {
-  static async registerUserWithFireBase(person) {
-    await register(person);
-  }
+  static propTypes = {
+    history: PropTypes.objectOf(PropTypes.any),
+    watchAuthenticationStateChange: PropTypes.func.isRequired,
+  };
 
   constructor(props) {
     super(props);
@@ -20,7 +22,7 @@ export default class Registration extends React.Component {
     this.state = {
       fields: {},
       fieldErrors: {},
-      fieldError: false,
+      fieldError: null,
     };
 
     this.onFormSubmit = this.onFormSubmit.bind(this);
@@ -31,13 +33,27 @@ export default class Registration extends React.Component {
 
   async onFormSubmit(event) {
     event.preventDefault();
-    const person = this.state.fields;
+    const person = {
+      firstName: this.state.fields['first-name'],
+      lastName: this.state.fields['last-name'],
+      email: this.state.fields.email,
+      password: this.state.fields.password,
+    };
     if (await this.isFormInputInvalid()) return;
 
-    this.constructor.registerUserWithFireBase(person);
-    this.setState({
-      fields: { email: '', password: '' },
-    });
+    this.props.watchAuthenticationStateChange(false);
+    register(person)
+      .then((response) => {
+        if (!response.success) {
+          this.setState({
+            fieldError: response.message,
+          });
+        }
+        logout();
+        setTimeout(() => {
+          this.props.history.push('/login');
+        }, 0);
+      });
   }
 
   onInputChange(e, error) {
@@ -46,7 +62,11 @@ export default class Registration extends React.Component {
 
     fields[name] = value;
     fieldErrors[name] = error;
-    this.setState({ fields, fieldErrors, fieldError: null });
+    this.setState({
+      fields,
+      fieldErrors,
+      fieldError: null,
+    });
   }
 
   async isFormInputInvalid() {
@@ -56,7 +76,8 @@ export default class Registration extends React.Component {
       return true;
     }
 
-    const errMessages = Object.keys(fieldErrors).filter(k => fieldErrors[k]);
+    const errMessages = Object.keys(fieldErrors)
+      .filter(k => fieldErrors[k]);
     await this.isPassword(fields.password);
     if (this.state.fieldError) return true;
     if (errMessages.length) return true;

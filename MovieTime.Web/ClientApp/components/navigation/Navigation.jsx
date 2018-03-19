@@ -148,3 +148,7 @@ Navigation.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
 };
 
+Navigation.defaultProps = {
+  user: {},
+};
+

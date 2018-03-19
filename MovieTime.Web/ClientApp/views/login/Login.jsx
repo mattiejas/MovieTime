@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import { login } from '../../utils/auth';
 
@@ -25,6 +26,9 @@ export default class Login extends Component {
     event.preventDefault();
 
     login(this.state.email, this.state.password)
+      .then(() => {
+        this.props.watchAuthenticationStateChange(true);
+      })
       .catch((err) => {
         this.setState({ error: err.message });
       });
@@ -74,3 +78,8 @@ export default class Login extends Component {
     );
   }
 }
+
+Login.propTypes = {
+  watchAuthenticationStateChange: PropTypes.func.isRequired,
+};
+
