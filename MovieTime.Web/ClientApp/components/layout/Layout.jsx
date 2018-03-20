@@ -11,13 +11,13 @@ class Layout extends React.Component {
 
   componentDidMount() {
     if (this.props.isAuthenticated && this.props.userId) {
-      this.updateUser();
+      this.updateUser(this.props.userId);
     }
   }
 
   componentWillReceiveProps(props) {
     if (props.isAuthenticated && props.userId) {
-      this.updateUser();
+      this.updateUser(props.userId);
     } else {
       this.setState({
         user: null,
@@ -25,13 +25,13 @@ class Layout extends React.Component {
     }
   }
 
-  updateUser() {
-    getUserData(this.props.userId)
+  updateUser(userId) {
+    getUserData(userId)
       .then((user) => {
         this.setState({
           user: {
             ...user,
-            id: this.props.userId,
+            id: userId,
           },
         });
       });

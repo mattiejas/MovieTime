@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import { login } from '../../utils/auth';
 
@@ -25,6 +26,9 @@ export default class Login extends Component {
     event.preventDefault();
 
     login(this.state.email, this.state.password)
+      .then(() => {
+        this.props.watchAuthenticationStateChange(true);
+      })
       .catch((err) => {
         this.setState({ error: err.message });
       });
@@ -46,7 +50,10 @@ export default class Login extends Component {
         <div className={styles.view__background} />
         <div className={styles['view__content--wrapper']}>
           <div className={styles.view__content}>
-            <h1>Login</h1>
+            {this.props.location.state && this.props.location.state.afterRegister ?
+              <h1>Please login to continue</h1> :
+              <h1>Login</h1>
+            }
             <div className={styles.error}>{this.state.error}</div>
             <hr />
             <form onSubmit={this.handleSubmit}>
@@ -74,3 +81,9 @@ export default class Login extends Component {
     );
   }
 }
+
+Login.propTypes = {
+  watchAuthenticationStateChange: PropTypes.func.isRequired,
+  location: PropTypes.objectOf(PropTypes.any).isRequired,
+};
+
