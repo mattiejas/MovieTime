@@ -21,6 +21,11 @@ function getRequestHeader(token) {
   return { Authorization: `Bearer ${token}`, 'Content-type': 'Application/json' };
 }
 
+export function getTokenAndRequestHeader() {
+  return getTokenForCurrentUser()
+    .then(token => getRequestHeader(token));
+}
+
 async function registerWithBackEnd(person, token) {
   const requestHeader = getRequestHeader(token);
   const data = {

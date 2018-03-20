@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MovieTime.Web.Auth;
 using MovieTime.Web.Tracked.Models;
 using Serilog;
 
@@ -19,13 +20,18 @@ namespace MovieTime.Web.TrackedMovies
         [Route("api/[controller]")]
         public async Task<IActionResult> TrackMovie([FromBody] TrackedMovie model)
         {
-            if (model == null)
-            {
-                return BadRequest(new { message = "UserId or MovieId is missing." });
-            }
             try
             {
+                if (model == null)
+                    return BadRequest(new { message = "Identity of the movie is missing" });
+                
+                var userIdFromToken = this.User.GetUserId();
+                if (userIdFromToken == null)
+                    return BadRequest(new { message = "User is not authenticated" });
+
+                model.UserId = userIdFromToken;
                 await _trackService.TrackMovie(model);
+                
                 return NoContent();      
             }
             catch (Exception err)
@@ -38,14 +44,18 @@ namespace MovieTime.Web.TrackedMovies
         [HttpPost]
         [Route("api/[controller]/untrack")]
         public async Task<IActionResult> UntrackMovie([FromBody] TrackedMovie model)
-        {
-            if (model == null)
-            {
-                return BadRequest(new { message = "UserId or MovieId is missing." });
-            }
+        {         
             try
             {
-                await _trackService.UntrackMovie(model);
+                if (model == null)
+                    return BadRequest(new { message = "Identity of the movie is missing" });
+                
+                var userIdFromToken = this.User.GetUserId();
+                if (userIdFromToken == null)
+                    return BadRequest(new { message = "User is not authenticated" });
+
+                model.UserId = userIdFromToken;
+                await _trackService.UntrackMovie(model); 
                 return Ok();
             }
             catch (Exception err)
@@ -73,11 +83,15 @@ namespace MovieTime.Web.TrackedMovies
         
         [HttpGet]
         [Route("api/[controller]/user/{userId}/movie/{movieId}")]
-        public async Task<IActionResult> IsMovieTrackedByUser(string userId, string movieId)
+        public async Task<IActionResult> IsMovieTrackedByUser(string movieId)
         {
             try
             {
-                var result = await _trackService.IsMovieTrackedByUser(userId, movieId);
+                var userIdFromToken = this.User.GetUserId();
+                if (userIdFromToken == null)
+                    return BadRequest(new { message = "User is not authenticated" });
+
+                var result = await _trackService.IsMovieTrackedByUser(userIdFromToken, movieId);
                 return Ok(new { isTracked = result });
             }
             catch (Exception err)

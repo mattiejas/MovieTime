@@ -1,25 +1,29 @@
-export function trackMovie(userId, movieId) {
-  return fetch('/api/track/', {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ userId, movieId }),
-  });
+import { getTokenAndRequestHeader } from '../utils/auth';
+
+export function trackMovie(movieId) {
+  return getTokenAndRequestHeader()
+    .then(requestHeader => fetch('/api/track/', {
+      method: 'post',
+      headers: requestHeader,
+      body: JSON.stringify({ movieId }),
+    }));
 }
 
-export function untrackMovie(userId, movieId) {
-  return fetch('/api/track/untrack', {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ userId, movieId }),
-  });
+export function untrackMovie(movieId) {
+  return getTokenAndRequestHeader()
+    .then(requestHeader => fetch('/api/track/untrack', {
+      method: 'post',
+      headers: requestHeader,
+      body: JSON.stringify({ movieId }),
+    }));
 }
 
 export function isMovieTracked(userId, movieId) {
-  return fetch(`/api/track/user/${userId}/movie/${movieId}`)
+  return getTokenAndRequestHeader()
+    .then(requestHeader => fetch(`/api/track/user/${userId}/movie/${movieId}`, {
+      method: 'get',
+      headers: requestHeader,
+    }))
     .then(response => response.json());
 }
 
