@@ -7,12 +7,17 @@ export function getUserData(id) {
 }
 
 export function updateUserData(user, id) {
+  const updateUserDto = {
+    ...user,
+    id,
+  };
+
   return fetch(usersAPI + id, {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
     method: 'PUT',
-    body: JSON.stringify(user),
+    body: JSON.stringify(updateUserDto),
   }).then(response => response);
 }

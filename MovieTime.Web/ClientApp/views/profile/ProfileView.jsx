@@ -25,17 +25,7 @@ class ProfileView extends React.Component {
 
   componentDidMount() {
     const { id } = this.props.match.params;
-    getUserData(id)
-      .then((data) => {
-        this.setState({
-          user: data,
-          isLoading: false,
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-        this.props.history.push('/404');
-      });
+    this.displayUserData(id);
   }
 
   onEdit() {
@@ -50,6 +40,20 @@ class ProfileView extends React.Component {
     });
   }
 
+  displayUserData(id) {
+    getUserData(id)
+      .then((data) => {
+        this.setState({
+          user: data,
+          isLoading: false,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        this.props.history.push('/404');
+      });
+  }
+
   render() {
     const { firstName = '', lastName = '' } = this.state.user;
     const { id } = this.props.match.params;
@@ -59,7 +63,7 @@ class ProfileView extends React.Component {
           hidden={!this.state.isEditing}
           hideModal={() => this.onDiscard()}
           onUpdate={user => updateUserData(user, id).then(() => {
-            getUserData(id);
+              this.displayUserData(id);
           })}
           user={this.state.user}
         />
