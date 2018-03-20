@@ -49,7 +49,12 @@ export default class Navigation extends Component {
           (
             <div className={styles.navigation__wrapper}>
               <div className={styles.title}><Link to="/" href="/">Movie<span>Time</span></Link></div>
-              <button className={styles['nav-button']} onClick={() => this.toggleMenu()}><Icon type="bars" /></button>
+              <button className={styles['nav-button']} onClick={() => this.toggleMenu()}>
+                <Icon
+                  className={this.state.mobileMenuIsVisible ? styles['nav-button--open'] : undefined}
+                  type={this.state.mobileMenuIsVisible ? 'times' : 'bars'}
+                />
+              </button>
               <ul className={
                 cn(
                   this.state.mobileMenuIsVisible ? '' : styles['navigation--hidden'],
