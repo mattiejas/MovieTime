@@ -40,13 +40,16 @@ export function logout() {
 
 export async function register(person) {
   return registerWithFireBase(person.email, person.password)
-    .then(() => {
-      getTokenForCurrentUser().then((token) => {
-        registerWithBackEnd(person, token).then(() => ({ success: true, message: 'Success' }));
-      });
-      return { success: false, message: 'Something went wrong' };
-    })
-    .catch(err => ({ success: false, message: err.message }));
+    .then(() => getTokenForCurrentUser())
+    .then(token => registerWithBackEnd(person, token))
+    .then(() => ({
+      success: true,
+      message: 'Success',
+    }))
+    .catch(err => ({
+      success: false,
+      message: err.message,
+    }));
 }
 
 export function login(email, password) {

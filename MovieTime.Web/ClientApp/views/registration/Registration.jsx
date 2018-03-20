@@ -51,7 +51,7 @@ export default class Registration extends React.Component {
         }
         logout();
         setTimeout(() => {
-          this.props.history.push('/login');
+          this.props.history.push('/login', { afterRegister: true });
         }, 0);
       });
   }

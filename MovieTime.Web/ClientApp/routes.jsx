@@ -111,7 +111,9 @@ export default class Router extends React.Component {
           <PublicRoute
             path="/login"
             isAuthenticated={this.state.isAuthenticated}
-            component={() => <Login watchAuthenticationStateChange={shouldWatch => this.watchAuthenticationStateChange(shouldWatch)} />}
+            component={props => (
+              <Login watchAuthenticationStateChange={shouldWatch => this.watchAuthenticationStateChange(shouldWatch)} {...props} />
+            )}
           />
           <Route path="/list" component={ListView} />
           <Route path="/users/:id" component={ProfileView} />
