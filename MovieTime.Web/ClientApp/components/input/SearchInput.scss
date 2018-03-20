@@ -19,7 +19,7 @@
     padding: 0;
     border: 0;
     &:focus {
-      outline: none;
+      box-shadow: none !important;
     }
     &::placeholder {
       font-style: italic;
