@@ -42,9 +42,12 @@ class MovieDetailView extends React.Component {
 
   setBackgroundColor(poster) {
     Vibrant.from(poster).getPalette()
-      .then(palette => this.setState({
-        backgroundColor: `rgb(${palette.Vibrant.r}, ${palette.Vibrant.g}, ${palette.Vibrant.b})`,
-      }));
+      .then((palette) => {
+        const p = palette.Vibrant || palette.LightVibrant || palette.DarkVibrant;
+        this.setState({
+          backgroundColor: `rgb(${Math.floor(p.r)}, ${Math.floor(p.g)}, ${Math.floor(p.b)})`,
+        });
+      });
   }
 
   async loadMovieDetails(movieTitle) {
