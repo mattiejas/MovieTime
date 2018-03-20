@@ -6,13 +6,14 @@ import isEmail from 'validator/lib/isEmail';
 import { logout, register } from '../../utils/auth';
 
 import Input from '../../components/input/Input';
+import Button from '../../components/button/Button';
+import Spinner from '../../components/spinner/Spinner';
 
 import styles from './Registration.scss';
-import Button from '../../components/button/Button';
 
 export default class Registration extends React.Component {
   static propTypes = {
-    history: PropTypes.objectOf(PropTypes.any),
+    history: PropTypes.objectOf(PropTypes.any).isRequired,
     watchAuthenticationStateChange: PropTypes.func.isRequired,
   };
 
@@ -23,6 +24,7 @@ export default class Registration extends React.Component {
       fields: {},
       fieldErrors: {},
       fieldError: null,
+      isLoading: false,
     };
 
     this.onFormSubmit = this.onFormSubmit.bind(this);
@@ -31,7 +33,17 @@ export default class Registration extends React.Component {
     this.isPassword = this.isPassword.bind(this);
   }
 
+  componentDidMount() {
+    // temporarily disable watching for auth changes
+    // to give backend time to save user data
+    this.props.watchAuthenticationStateChange(false);
+  }
+
   async onFormSubmit(event) {
+    this.setState({
+      isLoading: true,
+    });
+
     event.preventDefault();
     const person = {
       firstName: this.state.fields['first-name'],
@@ -41,18 +53,19 @@ export default class Registration extends React.Component {
     };
     if (await this.isFormInputInvalid()) return;
 
-    this.props.watchAuthenticationStateChange(false);
     register(person)
       .then((response) => {
         if (!response.success) {
           this.setState({
             fieldError: response.message,
+            isLoading: false,
           });
+        } else {
+          logout();
+          setTimeout(() => {
+            this.props.history.push('/login', { afterRegister: true });
+          }, 0);
         }
-        logout();
-        setTimeout(() => {
-          this.props.history.push('/login', { afterRegister: true });
-        }, 0);
       });
   }
 
@@ -99,6 +112,7 @@ export default class Registration extends React.Component {
           <div className={styles.view__content}>
             <h1>Register</h1>
             <hr />
+            <Spinner hidden={!this.state.isLoading} />
             <form onSubmit={this.onFormSubmit}>
               <div className={styles.group}>
                 <Input
