@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.KeyVault.Models;
+using MovieTime.Web.Auth;
 using MovieTime.Web.Users.Models;
 using Serilog;
 
@@ -29,8 +31,9 @@ namespace MovieTime.Web.Users
         [HttpGet("{id}", Name = GetUserRoute)]
         public async Task<IActionResult> GetUser(string id)
         {
+            if (string.IsNullOrWhiteSpace(id)) return NotFound(new {message = $"Invalid id: {id}"});
             var model = await _userService.GetUser(id);
-            if (model == null) return NotFound(new {message = String.Format("User {0} not found", id)});
+            if (model == null) return NotFound(new {message = $"User {id} not found"});
             return Ok(model);
         }
 
@@ -62,11 +65,17 @@ namespace MovieTime.Web.Users
         {
             if (user == null) return BadRequest();
 
+            var currentUserId = this.User.GetUserId();
+            if(user.Id != currentUserId) 
+                return NotFound(new {message = $"User {user.Id} not allowed to modify {currentUserId}."});
+            
             var userExist = await _userService.UserExist(user.Id);
-            if (!userExist) return NotFound(new {message = $"User {user.Id} not found"});
+            if (!userExist) 
+                return NotFound(new {message = $"User {user.Id} not found"});
 
             var success = await _userService.UpdateUser(user);
-            if (!success) throw new Exception("Failed to update the user");
+            if (!success) 
+                throw new Exception("Failed to update the user");
             
             // In case no additional information is changed at serverside (like timestamp), don't return the updated object
             return NoContent();
