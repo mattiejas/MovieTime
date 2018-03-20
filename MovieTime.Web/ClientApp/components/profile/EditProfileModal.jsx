@@ -25,15 +25,18 @@ class EditProfileModal extends React.Component {
       },
     });
   }
+
   onLoginSucceeded(email, password) {
     this.toggleLogin();
     this.removeUser(email, password);
   }
+
   toggleLogin() {
     this.setState({
       loginRequired: !this.state.loginRequired,
     });
   }
+
   removeUser(email, password) {
     removeUser(email, password)
       .then(() => {
@@ -42,6 +45,7 @@ class EditProfileModal extends React.Component {
       })
       .catch(err => this.setState({ error: err.message }));
   }
+
   render() {
     const { hideModal, onUpdate } = this.props;
     const {

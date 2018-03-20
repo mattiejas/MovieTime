@@ -177,7 +177,14 @@ namespace MovieTime.Web.Database
                     FirstName = "Harry",
                     LastName = "Osborn",
                     Email = "h_osborn@outlook.com"
-                }
+                },
+                new User
+                {
+                    Id = "uk8vAfunAQS4jhGdYkPIWnyYLNM2",
+                    FirstName = "Hermen",
+                    LastName = "Otter",
+                    Email = "14144697@student.hhs.nl"
+                },
             };
 
             context.Movies.AddRange(movies);
