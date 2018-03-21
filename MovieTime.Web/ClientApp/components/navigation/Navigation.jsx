@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
-import { logout } from '../../utils/auth';
+import { logout as fbLogout } from '../../utils/auth';
+import { logout } from '../../modules/auth';
 
 import Icon from '../icon/Icon';
 import Button from '../button/Button';
@@ -12,7 +14,7 @@ import SearchInput from '../input/SearchInput';
 
 import styles from './Navigation.scss';
 
-export default class Navigation extends Component {
+class Navigation extends Component {
   constructor(props) {
     super(props);
 
@@ -42,7 +44,14 @@ export default class Navigation extends Component {
     });
   }
 
+  logout() {
+    fbLogout().then(() => {
+      this.props.logout();
+    });
+  }
+
   render() {
+    console.log(this.props.logout, this.props);
     return (
       <div className={cn(styles.navigation)}>
         {this.props.isAuthenticated === true ?
@@ -87,7 +96,7 @@ export default class Navigation extends Component {
                     <Button icon="user" to={`/users/${this.props.user.id}`}>
                       {`${this.props.user.firstName} ${this.props.user.lastName}`}
                     </Button>
-                    <Button icon="power-off" onClick={() => logout()} />
+                    <Button icon="power-off" onClick={() => this.logout()} />
                   </ButtonGroup>
                 </li>
               </ul>
@@ -101,7 +110,7 @@ export default class Navigation extends Component {
                   <Button icon="user" to={`/users/${this.props.user.id}`}>
                     {`${this.props.user.firstName} ${this.props.user.lastName}`}
                   </Button>
-                  <Button icon="power-off" onClick={() => logout()} />
+                  <Button icon="power-off" onClick={() => this.logout()} />
                 </ButtonGroup>
               </div>
             </div>
@@ -151,9 +160,12 @@ export default class Navigation extends Component {
 Navigation.propTypes = {
   user: PropTypes.objectOf(PropTypes.any),
   isAuthenticated: PropTypes.bool.isRequired,
+  logout: PropTypes.func,
 };
 
 Navigation.defaultProps = {
   user: {},
+  logout: undefined,
 };
 
+export default connect(null, { logout })(Navigation);
