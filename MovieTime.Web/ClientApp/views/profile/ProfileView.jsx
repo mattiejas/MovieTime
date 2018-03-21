@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { getUserData, updateUserData } from '../../utils/user';
-import { removeUser } from '../../utils/auth';
+import { getUser } from '../../utils/auth';
 
 import ListWidget from '../../components/list-widget/ListWidget';
 import Placeholder from '../../components/placeholder/Placeholder';
@@ -16,6 +16,7 @@ class ProfileView extends React.Component {
   constructor() {
     super();
     this.state = {
+      canEditProfile: false,
       user: {},
       isLoading: true,
       isEditing: false,
@@ -26,7 +27,9 @@ class ProfileView extends React.Component {
   componentDidMount() {
     const { id } = this.props.match.params;
     this.displayUserData(id);
+    this.getProfileCanBeEdited();
   }
+
 
   onEdit() {
     this.setState({
@@ -38,6 +41,15 @@ class ProfileView extends React.Component {
     this.setState({
       isEditing: false,
     });
+  }
+
+  getProfileCanBeEdited() {
+    const { id } = this.props.match.params;
+
+    return getUser()
+      .then((user) => {
+        this.setState({ canEditProfile: user.uid === id });
+      });
   }
 
   displayUserData(id) {
@@ -56,7 +68,11 @@ class ProfileView extends React.Component {
 
   render() {
     const { firstName = '', lastName = '' } = this.state.user;
+    const { canEditProfile } = this.state;
     const { id } = this.props.match.params;
+
+    const styleForEditButton = canEditProfile ? '' : styles.hidden;
+
     return (
       <div className={styles.view}>
         <EditProfileModal
@@ -84,7 +100,7 @@ class ProfileView extends React.Component {
           </div>
           <div className={styles.buttons__container}>
             <div className={styles.buttons}>
-              <Button dark icon="pencil" onClick={() => this.onEdit()}>Edit</Button>
+              <Button dark icon="pencil" className={styleForEditButton} onClick={() => this.onEdit()}>Edit</Button>
               <Button dark icon="user">Follow</Button>
             </div>
           </div>
