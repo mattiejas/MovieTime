@@ -11,16 +11,21 @@ import Login from './views/login/Login';
 import ProfileView from './views/profile/ProfileView';
 import NotFoundView from './views/notfound/NotFoundView';
 import MovieDetailView from './views/movie/MovieDetailView';
-import RegistrationForm from './views/registration/Registration';
 import ListView from './views/list/ListView';
+import Registration from './views/registration/Registration';
 
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
   <Route
     {...rest}
-    render={props => (isAuthenticated === true
-      ? <Component {...props} />
-      : <Redirect to={{ pathname: '/login', state: { from: props.location } }} />)
-    }
+    render={props =>
+      (isAuthenticated === true
+        ? <Component {...props} />
+        : <Redirect
+          to={{
+            pathname: '/login',
+            state: { from: props.location },
+          }}
+        />)}
   />
 );
 
@@ -37,10 +42,10 @@ PrivateRoute.defaultProps = {
 const PublicRoute = ({ component: Component, isAuthenticated, ...rest }) => (
   <Route
     {...rest}
-    render={props => (isAuthenticated === false
+    render={props =>
+      (isAuthenticated === false
         ? <Component {...props} />
-        : <Redirect to="/" />)
-      }
+        : <Redirect to={props.location.state.from || '/'} />)}
   />
 );
 
@@ -59,31 +64,75 @@ export default class Router extends React.Component {
     super(props);
 
     this.state = {
-      isAuthenticated: null,
+      isAuthenticated: false,
+      userId: null,
+      watchAuthentication: true,
     };
   }
 
   componentDidMount() {
     auth.onAuthStateChanged((user) => {
-      if (user) {
-        this.setState({ isAuthenticated: true, userId: user.uid });
-      } else {
-        this.setState({ isAuthenticated: false, userId: null });
+      if (this.state.watchAuthentication) {
+        if (user) {
+          this.setState({
+            isAuthenticated: true,
+            userId: user.uid,
+          });
+        } else {
+          this.setState({
+            isAuthenticated: false,
+            userId: null,
+          });
+        }
       }
     });
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.state.watchAuthentication === nextState.watchAuthentication;
+  }
+
+  watchAuthenticationStateChange(shouldWatch = true) {
+    this.setState({
+      watchAuthentication: shouldWatch,
+    });
+  }
+
   render() {
-    if (this.state.isAuthenticated === null) {
-      return null;
-    }
     return (
-      <Layout isAuthenticated={this.state.isAuthenticated} userId={this.state.userId}>
+      <Layout
+        isAuthenticated={this.state.isAuthenticated}
+        userId={this.state.userId}
+      >
         <Switch>
           <Route exact path="/" component={Home} />
-          <PrivateRoute path="/movies/:title" isAuthenticated={this.state.isAuthenticated} component={MovieDetailView} />
-          <PublicRoute path="/register" isAuthenticated={this.state.isAuthenticated} component={RegistrationForm} />
-          <PublicRoute path="/login" isAuthenticated={this.state.isAuthenticated} component={Login} />
+          <PrivateRoute
+            path="/movies/:title"
+            isAuthenticated={this.state.isAuthenticated}
+            component={MovieDetailView}
+          />
+          <PublicRoute
+            path="/register"
+            isAuthenticated={this.state.isAuthenticated}
+            component={props => (
+              <Registration
+                watchAuthenticationStateChange={shouldWatch =>
+                                    this.watchAuthenticationStateChange(shouldWatch)}
+                {...props}
+              />
+                        )}
+          />
+          <PublicRoute
+            path="/login"
+            isAuthenticated={this.state.isAuthenticated}
+            component={props => (
+              <Login
+                watchAuthenticationStateChange={shouldWatch =>
+                                    this.watchAuthenticationStateChange(shouldWatch)}
+                {...props}
+              />
+                        )}
+          />
           <Route path="/list" component={ListView} />
           <Route path="/users/:id" component={ProfileView} />
           <Route component={NotFoundView} />
@@ -93,6 +142,4 @@ export default class Router extends React.Component {
   }
 }
 
-export const routes = (
-  <Router />
-);
+export const routes = <Router />;

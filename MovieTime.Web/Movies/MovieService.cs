@@ -27,8 +27,8 @@ namespace MovieTime.Web.Movies
         {
             var movieModel = await _movieRespository.Find(x => x.Id == id);
             if (movieModel != null) return movieModel;
-            
-            movieModel = await _thirdPartyMovieRepository.GetMovieById(id);
+
+             movieModel = await _thirdPartyMovieRepository.GetMovieById(id);
             await AddMovie(movieModel); // Cache the movie in our database to improve robustness. Todo: temporary
 
             return movieModel;
@@ -41,7 +41,7 @@ namespace MovieTime.Web.Movies
             if (movieModel != null) return movieModel;
             
             movieModel = await _thirdPartyMovieRepository.GetMovieByTitle(title);
-            //await AddMovie(movieModel); // Cache the movie in our database to improve robustness. Todo: temporary
+            await AddMovie(movieModel); // Cache the movie in our database to improve robustness. Todo: temporary
 
             return movieModel;
         }

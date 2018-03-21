@@ -20,6 +20,7 @@ class MovieDetailView extends React.Component {
 
     this.state = {
       movie: {},
+      isDisabled: false,
       isTracking: false,
       backgroundColor: null,
       isLoading: true,
@@ -73,11 +74,15 @@ class MovieDetailView extends React.Component {
 
   handleTracking(event) {
     event.preventDefault();
+    this.setState({
+      isDisabled: true,
+    });
     trackMovie(this.state.movie.imdbId)
       .then((response) => {
         if (response.ok) {
           this.setState({
             isTracking: true,
+            isDisabled: false,
           });
         }
       })
@@ -86,10 +91,14 @@ class MovieDetailView extends React.Component {
 
   handleUntracking(event) {
     event.preventDefault();
+    this.setState({
+      isDisabled: true,
+    });
     untrackMovie(this.state.movie.imdbId)
       .then((response) => {
         if (response.ok) {
           this.setState({
+            isDisabled: false,
             isTracking: false,
           });
         }
@@ -151,8 +160,16 @@ class MovieDetailView extends React.Component {
                   lineHeight={1.8}
                   lines={3}
                 >
-                  {!this.state.isTracking && <Button dark onClick={this.handleTracking}>Track</Button>}
-                  {this.state.isTracking && <Button dark onClick={this.handleUntracking}>Tracking</Button>}
+                  {!this.state.isTracking &&
+                    <Button dark disabled={this.state.isDisabled ? 'disabled' : ''} onClick={this.handleTracking}>
+                      Track
+                    </Button>
+                  }
+                  {this.state.isTracking &&
+                    <Button dark disabled={this.state.isDisabled ? 'disabled' : ''} onClick={this.handleUntracking}>
+                      Tracking
+                    </Button>
+                  }
                   <table className={styles.view__content__involved}>
                     <tbody>
                       <tr>

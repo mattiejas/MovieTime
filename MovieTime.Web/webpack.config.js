@@ -90,7 +90,12 @@ module.exports = (env) => {
               options: {
                 babelrc: false,
                 presets: ['env', 'react'],
-                plugins: ['transform-class-properties', 'transform-es2015-destructuring', 'transform-object-rest-spread', 'transform-async-to-generator'],
+                plugins: [
+                  'transform-class-properties',
+                  'transform-es2015-destructuring',
+                  'transform-object-rest-spread',
+                  'transform-async-to-generator',
+                ],
               },
             },
           ],

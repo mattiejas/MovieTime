@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import auth from '../../firebase';
 import { getUserData, updateUserData } from '../../utils/user';
 import { getUser } from '../../utils/auth';
 
@@ -27,9 +28,22 @@ class ProfileView extends React.Component {
   componentDidMount() {
     const { id } = this.props.match.params;
     this.displayUserData(id);
-    this.getProfileCanBeEdited();
+    // this.getProfileCanBeEdited();
+
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({
+          canEditProfile: user.uid === id,
+        });
+      } else {
+        this.setState({ canEditProfile: false });
+      }
+    });
   }
 
+  componentWillUpdate() {
+
+  }
 
   onEdit() {
     this.setState({
@@ -43,14 +57,17 @@ class ProfileView extends React.Component {
     });
   }
 
-  getProfileCanBeEdited() {
-    const { id } = this.props.match.params;
+  // getProfileCanBeEdited() {
+  //   const { id } = this.props.match.params;
 
-    return getUser()
-      .then((user) => {
-        this.setState({ canEditProfile: user.uid === id });
-      });
-  }
+  //   return getUser()
+  //     .then((user) => {
+  //       console.log('user', user);
+  //       if (user) {
+  //         this.setState({ canEditProfile: user.uid === id });
+  //       }
+  //     });
+  // }
 
   displayUserData(id) {
     getUserData(id)
@@ -60,8 +77,7 @@ class ProfileView extends React.Component {
           isLoading: false,
         });
       })
-      .catch((err) => {
-        console.error(err);
+      .catch(() => {
         this.props.history.push('/404');
       });
   }
@@ -71,7 +87,7 @@ class ProfileView extends React.Component {
     const { canEditProfile } = this.state;
     const { id } = this.props.match.params;
 
-    const styleForEditButton = canEditProfile ? '' : styles.hidden;
+    // const styleForEditButton = canEditProfile ? '' : styles.hidden;
 
     return (
       <div className={styles.view}>
@@ -93,15 +109,15 @@ class ProfileView extends React.Component {
               <div className={styles.name}>
                 <Placeholder isReady={!this.state.isLoading}>
                   <h1>{`${firstName} ${lastName}`}</h1>
-                  <h3>has watched 42 movies worthy of 66 hours and 420 minutes</h3>
+                  <h3>has watched ... movies worthy of ... hours and ... minutes</h3>
                 </Placeholder>
               </div>
             </div>
           </div>
           <div className={styles.buttons__container}>
             <div className={styles.buttons}>
-              <Button dark icon="pencil" className={styleForEditButton} onClick={() => this.onEdit()}>Edit</Button>
-              <Button dark icon="user">Follow</Button>
+              {canEditProfile && <Button dark icon="pencil" onClick={() => this.onEdit()}>Edit</Button>}
+              {/* <Button dark icon="user">Follow</Button> */}
             </div>
           </div>
           <div className={styles.content}>

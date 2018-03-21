@@ -20,4 +20,3 @@ export function updateUserData(user, id) {
       body: JSON.stringify(updateUserDto),
     }).then(response => response));
 }
-
