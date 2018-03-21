@@ -36,7 +36,7 @@ namespace MovieTime.Web.Movies
 
         public async Task<Movie> GetMovieByTitle(string title)
         {
-            var movieModel = await _movieRespository.Find(x => x.Title == title);
+            var movieModel = await _movieRespository.Find(x => x.Title.ToLower() == title.ToLower());
 
             if (movieModel != null) return movieModel;
             
@@ -57,7 +57,7 @@ namespace MovieTime.Web.Movies
             return createdMovie != null;
         }
 
-        public async Task<bool> MovieExist(string movieId)
+        public async Task<bool> MovieExistById(string movieId)
         {
             var countMatch = await _movieRespository.CountMatch(x => x.Id == movieId);
             return countMatch > 0;

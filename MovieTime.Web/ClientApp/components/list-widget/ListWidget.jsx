@@ -12,7 +12,6 @@ import MoviePoster from '../movie/MoviePoster';
 class ListWidget extends React.Component {
   state = {
     movies: [],
-    isLoading: false,
     movieCount: null,
   };
 
@@ -35,7 +34,6 @@ class ListWidget extends React.Component {
     this.setState({
       movies: [],
       lastPosterIsViewAll: false,
-      isLoading: true,
     });
 
     let movieCount;
@@ -52,28 +50,16 @@ class ListWidget extends React.Component {
       });
     }
 
-    let loadingTimeout;
     props.movies.slice(0, movieCount).forEach((movie) => {
       movieUtils.getMovieByTitle(movie).then((data) => {
-        if (loadingTimeout) {
-          loadingTimeout = clearTimeout(loadingTimeout);
-        }
-
         this.setState({
           movies: _.orderBy([...this.state.movies, data], m => m.title),
         });
-
-        loadingTimeout = setTimeout(() => this.setState({
-          isLoading: false,
-        }), 100);
       });
     });
   }
 
   render() {
-    if (this.state.isLoading) {
-      return null;
-    }
     return (
       <div className={styles.wrapper}>
         <h4>{this.props.title}</h4>

@@ -17,6 +17,7 @@ async function getTokenForCurrentUser() {
     .then(user => user.getIdToken(true));
 }
 
+
 function getRequestHeader(token) {
   return {
     Authorization: `Bearer ${token}`,

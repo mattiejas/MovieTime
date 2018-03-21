@@ -18,14 +18,14 @@ const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
   <Route
     {...rest}
     render={props =>
-            (isAuthenticated === true
-                ? <Component {...props} />
-                : <Redirect
-                  to={{
-                          pathname: '/login',
-                          state: { from: props.location },
-                      }}
-                />)}
+      (isAuthenticated === true
+        ? <Component {...props} />
+        : <Redirect
+          to={{
+            pathname: '/login',
+            state: { from: props.location },
+          }}
+        />)}
   />
 );
 
@@ -43,9 +43,9 @@ const PublicRoute = ({ component: Component, isAuthenticated, ...rest }) => (
   <Route
     {...rest}
     render={props =>
-            (isAuthenticated === false
-                ? <Component {...props} />
-                : <Redirect to={props.location.state.from || '/'} />)}
+      (isAuthenticated === false
+        ? <Component {...props} />
+        : <Redirect to={props.location.state.from || '/'} />)}
   />
 );
 
