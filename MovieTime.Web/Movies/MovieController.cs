@@ -55,7 +55,7 @@ namespace MovieTime.Web.Movies
         {
             if (movieCreateDto == null) return BadRequest();
 
-            var movieExist = await _movieService.MovieExist(movieCreateDto.ImdbId);
+            var movieExist = await _movieService.MovieExistById(movieCreateDto.ImdbId);
             if (movieExist) return new StatusCodeResult(StatusCodes.Status409Conflict);
 
             var movie = _mapper.Map<MovieCreateDto, Movie>(movieCreateDto);

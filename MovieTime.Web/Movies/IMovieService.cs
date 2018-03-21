@@ -11,6 +11,6 @@ namespace MovieTime.Web.Movies
         Task<Movie> GetMovieByTitle(string title);
         Task<SearchResultsModel> GetMoviesByTitle(string title);
         Task<bool> AddMovie(Movie movie);
-        Task<bool> MovieExist(string movieId);
+        Task<bool> MovieExistById(string movieId);
     }
 }
