@@ -2,6 +2,7 @@ require('@babel/polyfill');
 
 const path = require('path');
 const webpack = require('webpack');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = (env) => {
   const isDevelopment = (env && env.dev) || (env && !env.prod) || true;
@@ -85,10 +86,7 @@ module.exports = (env) => {
       ],
     },
     plugins: [
-      new webpack.DllReferencePlugin({
-        context: __dirname,
-        manifest: require('./wwwroot/dist/vendor-manifest.json'), // eslint-disable-line global-require
-      }),
+      new CleanWebpackPlugin([path.resolve(__dirname, 'wwwroot', 'dist')]),
     ],
     output: {
       path: path.resolve(__dirname, 'wwwroot', 'dist'),
