@@ -21,7 +21,13 @@ class ProfileView extends React.Component {
       user: {},
       isLoading: true,
       isEditing: false,
-      movies: ['Thor: Ragnarok', 'Thor', 'Black Panther', 'Spider-Man: Homecoming', 'Thor: Ragnarok'],
+      movies: [
+        'Thor: Ragnarok',
+        'Thor: Ragnarok',
+        'Thor: Ragnarok',
+        'Thor: Ragnarok',
+        'Thor: Ragnarok',
+      ],
     };
   }
 
@@ -41,9 +47,7 @@ class ProfileView extends React.Component {
     });
   }
 
-  componentWillUpdate() {
-
-  }
+  componentWillUpdate() {}
 
   onEdit() {
     this.setState({
@@ -94,35 +98,56 @@ class ProfileView extends React.Component {
         <EditProfileModal
           hidden={!this.state.isEditing}
           hideModal={() => this.onDiscard()}
-          onUpdate={user => updateUserData(user, id).then(() => {
-              this.displayUserData(id);
-          })}
+          onUpdate={user =>
+                        updateUserData(user, id).then(() => {
+                            this.displayUserData(id);
+                        })}
           user={this.state.user}
         />
         <div className={styles.view__background} />
         <div className={styles.view__header}>
           <div className={styles.header}>
             <div className={styles.header__picture}>
-              <ProfilePicture className={styles.picture} source={`/assets/users/${id}.png`} />
+              <ProfilePicture
+                className={styles.picture}
+                source={`/assets/users/${id}.png`}
+              />
             </div>
             <div className={styles.header__content}>
               <div className={styles.name}>
                 <Placeholder isReady={!this.state.isLoading}>
                   <h1>{`${firstName} ${lastName}`}</h1>
-                  <h3>has watched ... movies worthy of ... hours and ... minutes</h3>
+                  <h3>
+                                        has watched ... movies worthy of ... hours and ... minutes
+                  </h3>
                 </Placeholder>
               </div>
             </div>
           </div>
           <div className={styles.buttons__container}>
             <div className={styles.buttons}>
-              {canEditProfile && <Button dark icon="pencil" onClick={() => this.onEdit()}>Edit</Button>}
+              {canEditProfile &&
+              <Button
+                dark
+                icon="pencil"
+                onClick={() => this.onEdit()}
+              >
+                                    Edit
+              </Button>}
               {/* <Button dark icon="user">Follow</Button> */}
             </div>
           </div>
           <div className={styles.content}>
-            <ListWidget title="Wants to watch" movies={this.state.movies} history={this.props.history} />
-            <ListWidget title="Has watched" movies={this.state.movies} history={this.props.history} />
+            <ListWidget
+              title="Wants to watch"
+              movies={this.state.movies}
+              history={this.props.history}
+            />
+            <ListWidget
+              title="Has watched"
+              movies={this.state.movies}
+              history={this.props.history}
+            />
           </div>
         </div>
       </div>

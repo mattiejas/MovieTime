@@ -76,10 +76,10 @@ export default class Navigation extends Component {
                 <li>
                   <NavLink
                     activeClassName={styles['navigation__item--active']}
-                    to="/movies/Spider-Man: Homecoming"
+                    to="/movies/Thor: Ragnarok"
                     onClick={() => this.toggleMenu()}
                   >
-                    Spider-Man: Homecoming
+                    Thor: Ragnarok
                   </NavLink>
                 </li>
                 <li className={styles['logout-mobile']}>
