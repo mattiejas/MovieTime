@@ -12,7 +12,6 @@ using Serilog;
 
 namespace MovieTime.Web.Users
 {
-    [Authorize]
     [Route("api/users")]
     public class UserController : Controller
     {
