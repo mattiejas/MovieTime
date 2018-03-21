@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import _ from 'lodash';
 
 import auth from './firebase';
 
@@ -18,14 +17,15 @@ import Registration from './views/registration/Registration';
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
   <Route
     {...rest}
-    render={props => (isAuthenticated === true
-      ? <Component {...props} />
-      : <Redirect to={{
-        pathname: '/login',
-        state: { from: props.location },
-      }}
-      />)
-    }
+    render={props =>
+            (isAuthenticated === true
+                ? <Component {...props} />
+                : <Redirect
+                  to={{
+                          pathname: '/login',
+                          state: { from: props.location },
+                      }}
+                />)}
   />
 );
 
@@ -42,10 +42,10 @@ PrivateRoute.defaultProps = {
 const PublicRoute = ({ component: Component, isAuthenticated, ...rest }) => (
   <Route
     {...rest}
-    render={props => (isAuthenticated === false
-      ? <Component {...props} />
-      : <Redirect to="/" />)
-    }
+    render={props =>
+            (isAuthenticated === false
+                ? <Component {...props} />
+                : <Redirect to={props.location.state.from || '/'} />)}
   />
 );
 
@@ -100,25 +100,38 @@ export default class Router extends React.Component {
 
   render() {
     return (
-      <Layout isAuthenticated={this.state.isAuthenticated} userId={this.state.userId}>
+      <Layout
+        isAuthenticated={this.state.isAuthenticated}
+        userId={this.state.userId}
+      >
         <Switch>
           <Route exact path="/" component={Home} />
-          <PrivateRoute path="/movies/:title" isAuthenticated={this.state.isAuthenticated} component={MovieDetailView} />
+          <PrivateRoute
+            path="/movies/:title"
+            isAuthenticated={this.state.isAuthenticated}
+            component={MovieDetailView}
+          />
           <PublicRoute
             path="/register"
             isAuthenticated={this.state.isAuthenticated}
-            component={props =>
-              (<Registration
-                watchAuthenticationStateChange={shouldWatch => this.watchAuthenticationStateChange(shouldWatch)}
+            component={props => (
+              <Registration
+                watchAuthenticationStateChange={shouldWatch =>
+                                    this.watchAuthenticationStateChange(shouldWatch)}
                 {...props}
-              />)}
+              />
+                        )}
           />
           <PublicRoute
             path="/login"
             isAuthenticated={this.state.isAuthenticated}
             component={props => (
-              <Login watchAuthenticationStateChange={shouldWatch => this.watchAuthenticationStateChange(shouldWatch)} {...props} />
-            )}
+              <Login
+                watchAuthenticationStateChange={shouldWatch =>
+                                    this.watchAuthenticationStateChange(shouldWatch)}
+                {...props}
+              />
+                        )}
           />
           <Route path="/list" component={ListView} />
           <Route path="/users/:id" component={ProfileView} />
@@ -129,6 +142,4 @@ export default class Router extends React.Component {
   }
 }
 
-export const routes = (
-  <Router />
-);
+export const routes = <Router />;
