@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import auth from '../../firebase';
 import { getUserData, updateUserData } from '../../utils/user';
-import { getUser } from '../../utils/auth';
+// import { getUser } from '../../utils/auth';
 
 import ListWidget from '../../components/list-widget/ListWidget';
 import Placeholder from '../../components/placeholder/Placeholder';
