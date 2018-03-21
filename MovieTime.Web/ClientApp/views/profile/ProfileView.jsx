@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { getUserData, updateUserData } from '../../utils/user';
-import { removeUser } from '../../utils/auth';
 
 import ListWidget from '../../components/list-widget/ListWidget';
 import Placeholder from '../../components/placeholder/Placeholder';
@@ -32,8 +31,7 @@ class ProfileView extends React.Component {
           isLoading: false,
         });
       })
-      .catch((err) => {
-        console.error(err);
+      .catch(() => {
         this.props.history.push('/404');
       });
   }
@@ -73,7 +71,7 @@ class ProfileView extends React.Component {
               <div className={styles.name}>
                 <Placeholder isReady={!this.state.isLoading}>
                   <h1>{`${firstName} ${lastName}`}</h1>
-                  <h3>has watched 42 movies worthy of 66 hours and 420 minutes</h3>
+                  <h3>has watched ... movies worthy of ... hours and ... minutes</h3>
                 </Placeholder>
               </div>
             </div>
@@ -81,7 +79,7 @@ class ProfileView extends React.Component {
           <div className={styles.buttons__container}>
             <div className={styles.buttons}>
               <Button dark icon="pencil" onClick={() => this.onEdit()}>Edit</Button>
-              <Button dark icon="user">Follow</Button>
+              {/* <Button dark icon="user">Follow</Button> */}
             </div>
           </div>
           <div className={styles.content}>

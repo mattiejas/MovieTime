@@ -18,7 +18,7 @@ class ProfilePicture extends React.Component {
   render() {
     return (
       <div className={cn(styles.profile_picture, this.props.className)}>
-        <img className="image" src={this.state.source} alt="user" onError={() => this.onError()} />
+        <img className="image" src={this.state.source} alt="User" onError={() => this.onError()} />
       </div>
     );
   }
