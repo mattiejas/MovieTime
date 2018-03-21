@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using AutoMapper;
 using MovieTime.Web.Movies.Models;
+using MovieTime.Web.ThirdPartyServices.OMDB.MovieList;
 using MovieTime.Web.ThirdPartyServices.OMDB.Movies;
 using MovieTime.Web.Users;
 using MovieTime.Web.Users.Models;
@@ -26,6 +29,8 @@ namespace MovieTime.Web.Utilities
             CreateMap<UserUpdateDto, User>();
             CreateMap<UserGetDto, User>();
             CreateMap<User, UserGetDto>();
+
+            CreateMap<SearchResultsModel, ShortMovieModel>();
         }
     }
 }
