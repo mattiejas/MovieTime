@@ -3,7 +3,6 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "vendor": "webpack --config webpack.config.vendor.js && webpack --config webpack.config.js",
     "webpack": "webpack --config webpack.config.js",
     "start": "export ASPNETCORE_ENVIRONMENT=Development && dotnet run",
     "start:prod": "export ASPNETCORE_ENVIRONMENT=Production && dotnet run"
