@@ -12,6 +12,7 @@ using Serilog;
 namespace MovieTime.Tests.Movie
 {
     
+    
     public class MovieDetailsTest
     {
         private readonly OmdbMovieRepository _omdbMovieRepository;
