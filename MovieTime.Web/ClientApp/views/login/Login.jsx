@@ -28,6 +28,7 @@ export default class Login extends Component {
     login(this.state.email, this.state.password)
       .then(() => {
         this.props.watchAuthenticationStateChange(true);
+        this.props.history.push(this.props.history.location);
       })
       .catch((err) => {
         this.setState({ error: err.message });
@@ -85,5 +86,6 @@ export default class Login extends Component {
 Login.propTypes = {
   watchAuthenticationStateChange: PropTypes.func.isRequired,
   location: PropTypes.objectOf(PropTypes.any).isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
