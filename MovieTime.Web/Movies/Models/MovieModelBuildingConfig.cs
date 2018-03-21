@@ -22,14 +22,14 @@ namespace MovieTime.Web.Movies.Models
 
             movie.HasKey(m => m.Id);
             movie.Property(m => m.Id).ValueGeneratedNever();
-            movie.Property(m => m.Title).IsRequired().HasMaxLength(40);
+            movie.Property(m => m.Title).IsRequired().HasMaxLength(2000);
             movie.Property(m => m.Year).IsRequired();
             movie.Property(m => m.Poster).IsRequired();
             movie.Property(m => m.RunTimeInMinutes).IsRequired();
-            movie.Property(m => m.Director).IsRequired().HasMaxLength(200);
-            movie.Property(m => m.Writer).IsRequired().HasMaxLength(200);
-            movie.Property(m => m.Actors).IsRequired().HasMaxLength(200);
-            movie.Property(m => m.Plot).IsRequired().HasMaxLength(2000);
+            movie.Property(m => m.Director).IsRequired().HasMaxLength(2000);
+            movie.Property(m => m.Writer).IsRequired().HasMaxLength(2000);
+            movie.Property(m => m.Actors).IsRequired().HasMaxLength(2000);
+            movie.Property(m => m.Plot).IsRequired().HasMaxLength(4000);
         }
     }
 }
