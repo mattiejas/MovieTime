@@ -1,11 +1,18 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import Router from './routes';
+import { Router } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
+import Routes from './routes';
+import history from './utils/history';
 
 const App = ({ baseUrl }) => (
-  <BrowserRouter basename={baseUrl}>
-    <Router />
-  </BrowserRouter>
+  <Router basename={baseUrl} history={history}>
+    <Routes />
+  </Router>
 );
+
+App.propTypes = {
+  baseUrl: PropTypes.string.isRequired,
+};
 
 export default App;

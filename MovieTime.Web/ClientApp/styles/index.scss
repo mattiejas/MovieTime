@@ -1,9 +1,23 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700');
 @import "core";
 
 :global {
+  :focus {
+    outline: none;
+    box-shadow: 0 10px 20px -10px rgba(27, 183, 249, 0.6) !important;
+  }
+  html {
+    height: 100%;
+  }
   body {
+    position: relative;
+    height: 100%;
     background: $background-color;
     padding-top: 50px;
+
+    &.no-scroll {
+      overflow: hidden;
+    }
   }
   .image {
     display: block;
@@ -11,7 +25,7 @@
     height: auto;
   }
   hr {
-    height: 1px;
+    height: 1px !important;
     background-color: $light-color;
     color: $light-color;
     margin-bottom: 20px;

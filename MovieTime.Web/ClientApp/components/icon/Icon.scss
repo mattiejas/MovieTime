@@ -1,0 +1,11 @@
+@import "../../styles/core";
+
+.icon {
+  cursor: pointer;
+  &:hover {
+    color: $secondary-dark-color;
+  }
+  &:active {
+    color: darken($secondary-dark-color, 10);
+  }
+}

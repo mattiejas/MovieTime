@@ -4,11 +4,25 @@ import cn from 'classnames';
 
 import styles from './ProfilePicture.scss';
 
-const ProfilePicture = ({ source, className }) => (
-  <div className={cn(styles.profile_picture, className)}>
-    <img className="image" src={source} alt="user" />
-  </div>
-);
+class ProfilePicture extends React.Component {
+  state = {
+    source: this.props.source,
+  };
+
+  onError() {
+    this.setState({
+      source: '/assets/users/fallback.png',
+    });
+  }
+
+  render() {
+    return (
+      <div className={cn(styles.profile_picture, this.props.className)}>
+        <img className="image" src={this.state.source} alt="User" onError={() => this.onError()} />
+      </div>
+    );
+  }
+}
 
 ProfilePicture.propTypes = {
   source: PropTypes.string,

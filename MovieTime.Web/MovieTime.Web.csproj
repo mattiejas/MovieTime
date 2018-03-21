@@ -27,13 +27,14 @@
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
+    <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
     <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
     <Content Remove="ClientApp\**" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MovieDetails\" />
+    <Folder Include="Migrations" />
     <Folder Include="wwwroot\assets\users" />
   </ItemGroup>
   <ItemGroup>

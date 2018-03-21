@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using AutoMapper;
-using MovieTime.Web.Movie.Persistance.Database;
-using MovieTime.Web.Movie.Persistance.Omdb;
-using MovieTime.Web.Movie.Persistance.ViewModels;
+using MovieTime.Web.Movies.Models;
+using MovieTime.Web.ThirdPartyServices.OMDB.MovieList;
+using MovieTime.Web.ThirdPartyServices.OMDB.Movies;
 using MovieTime.Web.Users;
+using MovieTime.Web.Users.Models;
 
 namespace MovieTime.Web.Utilities
 {
@@ -12,23 +15,22 @@ namespace MovieTime.Web.Utilities
         public MappingProfile()
         {
             // Add as many of these lines as you need to map your objects
-            CreateMap<OmdbMovieModel, DbMovie>()
+            CreateMap<OmdbMovieModel, Movie>()
                 .ForMember(dest => dest.Year, opt => opt.MapFrom(src => new DateTime(Convert.ToInt32(src.Year), 1, 1)));
 
-            CreateMap<DbMovie, MovieDetailsViewModel>()
+            CreateMap<Movie, MovieGetDto>()
                 .ForMember(dest => dest.ImdbId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Year.Year.ToString()));
             
-            CreateMap<DbMovie, MovieDetailDto>()
-                .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Year.Year.ToString()));
-            
-            CreateMap<MovieForCreationDto, DbMovie>();
+            CreateMap<MovieCreateDto, Movie>();
 
 
-            CreateMap<UserCreateDto, UserModel>();
-            CreateMap<UserUpdateDto, UserModel>();
-            CreateMap<UserViewModel, UserModel>();
-            CreateMap<UserModel, UserViewModel>();
+            CreateMap<UserCreateDto, User>();
+            CreateMap<UserUpdateDto, User>();
+            CreateMap<UserGetDto, User>();
+            CreateMap<User, UserGetDto>();
+
+            CreateMap<SearchResultsModel, ShortMovieModel>();
         }
     }
 }

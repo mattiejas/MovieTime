@@ -1,93 +1,53 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import auth from '../../firebase';
+import { getUserData, updateUserData } from '../../utils/user';
+// import { getUser } from '../../utils/auth';
+
+import ListWidget from '../../components/list-widget/ListWidget';
 import Placeholder from '../../components/placeholder/Placeholder';
 import Button from '../../components/button/Button';
 import ProfilePicture from '../../components/profile/ProfilePicture';
-import Input from '../../components/input/Input';
-import Modal from '../../components/modal/Modal';
+import EditProfileModal from '../../components/profile/EditProfileModal';
 
 import styles from './ProfileView.scss';
-
-const API = '/api/users/';
-
-class EditProfileModal extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      user: {},
-    };
-  }
-  onChange(event) {
-    const { name, value } = event.target;
-    this.setState({
-      user: {
-        ...this.state.user,
-        [name]: value,
-      },
-    });
-  }
-  render() {
-    const { hideModal, onUpdate } = this.props;
-    const {
-      firstName = this.props.user.firstName,
-      lastName = this.props.user.lastName,
-      email = this.props.user.email,
-    } = this.state.user;
-    return (
-      <Modal title="Edit Profile" hideModal={hideModal}>
-        <div className={styles.edit}>
-          <div className={styles.group}>
-            <Input label="First Name" name="firstName" value={firstName} onChange={e => this.onChange(e)} />
-            <Input label="Last Name" name="lastName" value={lastName} onChange={e => this.onChange(e)} />
-          </div>
-          <div className={styles.group}>
-            <Input label="E-mail" name="email" value={email} onChange={e => this.onChange(e)} />
-          </div>
-          <hr style={{ marginTop: '20px' }} />
-          <div className={styles.group}>
-            <Input label="Old Password" />
-          </div>
-          <div className={styles.group}>
-            <Input label="New Password" />
-            <Input label="Repeat Password" />
-          </div>
-          <hr style={{ marginTop: '20px' }} />
-          <div className={styles.buttons}>
-            <Button danger className={styles.button} onClick={hideModal}>Cancel</Button>
-            <Button
-              dark
-              className={styles.button}
-              onClick={() => { onUpdate({ ...this.props.user, ...this.state.user }); hideModal(); }}
-            >
-              Update
-            </Button>
-          </div>
-        </div>
-      </Modal>
-    );
-  }
-}
-
-EditProfileModal.propTypes = {
-  user: PropTypes.objectOf(PropTypes.any).isRequired,
-  hideModal: PropTypes.func.isRequired,
-  onUpdate: PropTypes.func.isRequired,
-};
 
 class ProfileView extends React.Component {
   constructor() {
     super();
     this.state = {
+      canEditProfile: false,
       user: {},
       isLoading: true,
       isEditing: false,
+      movies: [
+        'Thor: Ragnarok',
+        'Thor: Ragnarok',
+        'Thor: Ragnarok',
+        'Thor: Ragnarok',
+        'Thor: Ragnarok',
+      ],
     };
   }
 
   componentDidMount() {
-    this.fetchUserData(this.props.match.params.id);
+    const { id } = this.props.match.params;
+    this.displayUserData(id);
+    // this.getProfileCanBeEdited();
+
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({
+          canEditProfile: user.uid === id,
+        });
+      } else {
+        this.setState({ canEditProfile: false });
+      }
+    });
   }
+
+  componentWillUpdate() {}
 
   onEdit() {
     this.setState({
@@ -101,66 +61,93 @@ class ProfileView extends React.Component {
     });
   }
 
-  fetchUserData(id) {
-    fetch(API + id).then(response => response.json()).then((data) => {
-      setTimeout(() => this.setState({
-        user: { id, ...data },
-        isLoading: false,
-      }), 200);
-    });
-  }
+  // getProfileCanBeEdited() {
+  //   const { id } = this.props.match.params;
 
-  updateUserData(user) {
-    fetch(API, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'PUT',
-      body: JSON.stringify(user),
-    }).then(response => response)
-      .then(() => {
-        this.fetchUserData(user.id);
+  //   return getUser()
+  //     .then((user) => {
+  //       console.log('user', user);
+  //       if (user) {
+  //         this.setState({ canEditProfile: user.uid === id });
+  //       }
+  //     });
+  // }
+
+  displayUserData(id) {
+    getUserData(id)
+      .then((data) => {
+        this.setState({
+          user: data,
+          isLoading: false,
+        });
+      })
+      .catch(() => {
+        this.props.history.push('/404');
       });
   }
 
   render() {
     const { firstName = '', lastName = '' } = this.state.user;
+    const { canEditProfile } = this.state;
     const { id } = this.props.match.params;
+
+    // const styleForEditButton = canEditProfile ? '' : styles.hidden;
+
     return (
       <div className={styles.view}>
-        {
-          this.state.isEditing &&
-          <EditProfileModal
-            hideModal={() => this.onDiscard()}
-            onUpdate={user => this.updateUserData(user)}
-            user={this.state.user}
-          />
-        }
+        <EditProfileModal
+          hidden={!this.state.isEditing}
+          hideModal={() => this.onDiscard()}
+          onUpdate={user =>
+                        updateUserData(user, id).then(() => {
+                            this.displayUserData(id);
+                        })}
+          user={this.state.user}
+        />
         <div className={styles.view__background} />
         <div className={styles.view__header}>
           <div className={styles.header}>
             <div className={styles.header__picture}>
-              <ProfilePicture className={styles.picture} source={`/assets/users/${id}.png`} />
+              <ProfilePicture
+                className={styles.picture}
+                source={`/assets/users/${id}.png`}
+              />
             </div>
             <div className={styles.header__content}>
               <div className={styles.name}>
                 <Placeholder isReady={!this.state.isLoading}>
                   <h1>{`${firstName} ${lastName}`}</h1>
-                  <h3>has watched 42 movies worthy of 66 hours and 420 minutes</h3>
+                  <h3>
+                                        has watched ... movies worthy of ... hours and ... minutes
+                  </h3>
                 </Placeholder>
               </div>
             </div>
           </div>
           <div className={styles.buttons__container}>
             <div className={styles.buttons}>
-              <Button dark icon="pencil" onClick={() => this.onEdit()}>Edit</Button>
-              <Button dark icon="user">Follow</Button>
+              {canEditProfile &&
+              <Button
+                dark
+                icon="pencil"
+                onClick={() => this.onEdit()}
+              >
+                                    Edit
+              </Button>}
+              {/* <Button dark icon="user">Follow</Button> */}
             </div>
           </div>
           <div className={styles.content}>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus architecto, deleniti dolorem earum
-            excepturi explicabo labore nostrum nulla porro qui quo rem similique tempora veniam vero vitae! Aut, optio.
+            <ListWidget
+              title="Wants to watch"
+              movies={this.state.movies}
+              history={this.props.history}
+            />
+            <ListWidget
+              title="Has watched"
+              movies={this.state.movies}
+              history={this.props.history}
+            />
           </div>
         </div>
       </div>
@@ -170,6 +157,7 @@ class ProfileView extends React.Component {
 
 ProfileView.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default ProfileView;

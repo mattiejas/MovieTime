@@ -2,41 +2,108 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Vibrant from 'node-vibrant';
 
+import { getUser } from '../../utils/auth';
+import { getMovieByTitle, trackMovie, untrackMovie, isMovieTracked } from '../../utils/movie';
+
 import MoviePoster from '../../components/movie/MoviePoster';
 import MovieHeading from '../../components/movie/MovieHeading';
 import MovieAttributes from '../../components/movie/MovieAttributes';
 import Placeholder from '../../components/placeholder/Placeholder';
 import ParagraphPlaceholder from '../../components/placeholder/ParagraphPlaceholder';
+import Button from '../../components/button/Button';
 
 import styles from './MovieDetailView.scss';
-
-const API = '/api/movie/title/';
 
 class MovieDetailView extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       movie: {},
+      isDisabled: false,
+      isTracking: false,
       backgroundColor: null,
       isLoading: true,
     };
+
+    this.handleTracking = this.handleTracking.bind(this);
+    this.handleUntracking = this.handleUntracking.bind(this);
+    this.loadMovieDetails = this.loadMovieDetails.bind(this);
   }
 
-  componentDidMount() {
-    fetch(API + this.props.match.params.title).then(response => response.json()).then((data) => {
-      setTimeout(() => this.setState({
-        movie: data,
-        isLoading: false,
-      }), 200);
-      this.setBackgroundColor(data.poster);
-    });
+  async componentDidMount() {
+    await this.loadMovieDetails(this.props.match.params.title);
+  }
+
+  async componentWillReceiveProps(props) {
+    if (this.props.match.params.title !== props.match.params.title) {
+      await this.loadMovieDetails(props.match.params.title);
+    }
   }
 
   setBackgroundColor(poster) {
     Vibrant.from(poster).getPalette()
-      .then(palette => this.setState({
-        backgroundColor: `rgb(${palette.Vibrant.r}, ${palette.Vibrant.g}, ${palette.Vibrant.b})`,
-      }));
+      .then((palette) => {
+        const p = palette.Vibrant || palette.LightVibrant || palette.DarkVibrant;
+        this.setState({
+          backgroundColor: `rgb(${Math.floor(p.r)}, ${Math.floor(p.g)}, ${Math.floor(p.b)})`,
+        });
+      });
+  }
+
+  async loadMovieDetails(movieTitle) {
+    try {
+      const movie = await getMovieByTitle(movieTitle);
+      const user = await getUser();
+      const track = await isMovieTracked(user.uid, movie.imdbId);
+
+      // Using this.setState is correct, because we are using ES2017 async instead of Promises.
+      // eslint-disable-next-line react/no-did-mount-set-state
+      this.setState({
+        movie,
+        isTracking: track.isTracked,
+        isLoading: false,
+      });
+      if (movie.poster && movie.poster !== 'N/A') {
+        this.setBackgroundColor(movie.poster);
+      }
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  handleTracking(event) {
+    event.preventDefault();
+    this.setState({
+      isDisabled: true,
+    });
+    trackMovie(this.state.movie.imdbId)
+      .then((response) => {
+        if (response.ok) {
+          this.setState({
+            isTracking: true,
+            isDisabled: false,
+          });
+        }
+      })
+      .catch(err => err);
+  }
+
+  handleUntracking(event) {
+    event.preventDefault();
+    this.setState({
+      isDisabled: true,
+    });
+    untrackMovie(this.state.movie.imdbId)
+      .then((response) => {
+        if (response.ok) {
+          this.setState({
+            isDisabled: false,
+            isTracking: false,
+          });
+        }
+      })
+      .catch(err => err);
   }
 
   render() {
@@ -68,7 +135,9 @@ class MovieDetailView extends React.Component {
                   <MovieHeading title={title} year={year} />
                 </Placeholder>
               </div>
-              <MoviePoster source={poster} alt={`${title} poster`} />
+              {poster && poster !== 'N/A' &&
+                <MoviePoster source={poster} alt={`${title} poster`} />
+              }
             </div>
             <div className="*column">
               <div className={styles.view__content__heading}>
@@ -79,43 +148,55 @@ class MovieDetailView extends React.Component {
                     </Placeholder>
                   </div>
                   <Placeholder isReady={!this.state.isLoading}>
-                    <MovieAttributes rating={6} time={runTime} genres={genre} />
+                    <MovieAttributes rating={0} time={runTime || 'N/A'} genres={genre || 'N/A'} />
                   </Placeholder>
                 </div>
               </div>
-              <ParagraphPlaceholder
-                isReady={!this.state.isLoading}
-                width={300}
-                height={20}
-                lineHeight={1.8}
-                lines={3}
-              >
-                <table className={styles.view__content__involved}>
-                  <tbody>
-                    <tr>
-                      <th>Director:</th>
-                      <td>{director}</td>
-                    </tr>
-                    <tr>
-                      <th>Writers:</th>
-                      <td>{writer}</td>
-                    </tr>
-                    <tr>
-                      <th>Actors:</th>
-                      <td>{actors}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </ParagraphPlaceholder>
-              <ParagraphPlaceholder
-                isReady={!this.state.isLoading}
-                width={500}
-                height={20}
-                lineHeight={1.5}
-                lines={5}
-              >
-                <p>{plot}</p>
-              </ParagraphPlaceholder>
+              <div className={styles.content}>
+                <ParagraphPlaceholder
+                  isReady={!this.state.isLoading}
+                  width={300}
+                  height={20}
+                  lineHeight={1.8}
+                  lines={3}
+                >
+                  {!this.state.isTracking &&
+                    <Button dark disabled={this.state.isDisabled ? 'disabled' : ''} onClick={this.handleTracking}>
+                      Track
+                    </Button>
+                  }
+                  {this.state.isTracking &&
+                    <Button dark disabled={this.state.isDisabled ? 'disabled' : ''} onClick={this.handleUntracking}>
+                      Tracking
+                    </Button>
+                  }
+                  <table className={styles.view__content__involved}>
+                    <tbody>
+                      <tr>
+                        <th>Director:</th>
+                        <td>{director}</td>
+                      </tr>
+                      <tr>
+                        <th>Writers:</th>
+                        <td>{writer}</td>
+                      </tr>
+                      <tr>
+                        <th>Actors:</th>
+                        <td>{actors}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </ParagraphPlaceholder>
+                <ParagraphPlaceholder
+                  isReady={!this.state.isLoading}
+                  width={500}
+                  height={20}
+                  lineHeight={1.5}
+                  lines={5}
+                >
+                  <p>{plot}</p>
+                </ParagraphPlaceholder>
+              </div>
             </div>
           </div>
         </div>

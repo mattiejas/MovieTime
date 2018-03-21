@@ -11,5 +11,8 @@
             "experimentalObjectRestSpread": true,
             "restParams": true
         }
+    },
+    "rules": {
+        "max-len": ["error", 140]
     }
 }

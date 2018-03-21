@@ -1,0 +1,48 @@
+@import "../../styles/core";
+
+.edit {
+  .group {}
+  .input {
+    width: 100%;
+  }
+  .buttons {
+    width: 100%;
+    .button {
+      width: 100%;
+      margin: 0 0 20px 0;
+    }
+  }
+  .error {
+    color: $danger-color;
+    font-size: 0.8em;
+    font-style: italic;
+    font-weight: 200;
+  }
+}
+
+@media (min-width: $grid-sm) {
+  .edit {
+    .group {
+      display: flex;
+      justify-content: space-between;
+      .input {
+        flex-grow: 1;
+      }
+    }
+    .input {
+      width: unset;
+    }
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      .button {
+        width: auto;
+        margin: 0 10px;
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+}

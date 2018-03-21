@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
-using MovieTime.Web.Movie.Persistance;
+using MovieTime.Web.Database;
 using System;
 
 namespace MovieTime.Web.Migrations
@@ -20,22 +20,32 @@ namespace MovieTime.Web.Migrations
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
                 .HasAnnotation("ProductVersion", "2.0.1-rtm-125");
 
-            modelBuilder.Entity("MovieTime.Web.Movie.Persistance.Database.DbGenre", b =>
+            modelBuilder.Entity("MovieTime.Web.Genres.Genre", b =>
                 {
                     b.Property<string>("Name")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("CustomField");
 
                     b.HasKey("Name");
 
                     b.ToTable("Genres");
                 });
 
-            modelBuilder.Entity("MovieTime.Web.Movie.Persistance.Database.DbMovie", b =>
+            modelBuilder.Entity("MovieTime.Web.Genres.MovieGenre", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<string>("DbMovieId");
+
+                    b.Property<string>("DbGenreId");
+
+                    b.HasKey("DbMovieId", "DbGenreId");
+
+                    b.HasIndex("DbGenreId");
+
+                    b.ToTable("MovieGenre");
+                });
+
+            modelBuilder.Entity("MovieTime.Web.Movies.Models.Movie", b =>
+                {
+                    b.Property<string>("Id");
 
                     b.Property<string>("Actors")
                         .IsRequired()
@@ -47,18 +57,12 @@ namespace MovieTime.Web.Migrations
 
                     b.Property<string>("Plot")
                         .IsRequired()
-                        .HasMaxLength(600);
+                        .HasMaxLength(2000);
 
                     b.Property<string>("Poster")
                         .IsRequired();
 
-                    b.Property<string>("Rated")
-                        .IsRequired();
-
-                    b.Property<double>("Rating");
-
-                    b.Property<int>("RunTimeInMinutes")
-                        .HasMaxLength(1440);
+                    b.Property<int>("RunTimeInMinutes");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -75,46 +79,89 @@ namespace MovieTime.Web.Migrations
                     b.ToTable("Movies");
                 });
 
-            modelBuilder.Entity("MovieTime.Web.Movie.Persistance.Database.DbMovieGenre", b =>
-                {
-                    b.Property<string>("DbMovieId");
-
-                    b.Property<string>("DbGenreId");
-
-                    b.HasKey("DbMovieId", "DbGenreId");
-
-                    b.HasIndex("DbGenreId");
-
-                    b.ToTable("MovieGenre");
-                });
-
-            modelBuilder.Entity("MovieTime.Web.Users.UserModel", b =>
+            modelBuilder.Entity("MovieTime.Web.Reviews.Models.Review", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Email");
+                    b.Property<DateTime>("AddedDateTime");
 
-                    b.Property<string>("FirstName");
+                    b.Property<DateTime>("EditedDateTime");
 
-                    b.Property<string>("LastName");
+                    b.Property<bool>("IsConcept");
+
+                    b.Property<string>("MovieId");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MovieId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Review");
+                });
+
+            modelBuilder.Entity("MovieTime.Web.Tracked.Models.TrackedMovie", b =>
+                {
+                    b.Property<string>("MovieId");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("MovieId", "UserId");
+
+                    b.ToTable("TrackedMovies");
+                });
+
+            modelBuilder.Entity("MovieTime.Web.Users.User", b =>
+                {
+                    b.Property<string>("Id");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(60);
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(45);
+
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(45);
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(45);
+
+                    b.Property<string>("UserName");
 
                     b.HasKey("Id");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("MovieTime.Web.Movie.Persistance.Database.DbMovieGenre", b =>
+            modelBuilder.Entity("MovieTime.Web.Genres.MovieGenre", b =>
                 {
-                    b.HasOne("MovieTime.Web.Movie.Persistance.Database.DbGenre", "Genre")
+                    b.HasOne("MovieTime.Web.Genres.Genre", "Genre")
                         .WithMany("Movies")
                         .HasForeignKey("DbGenreId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("MovieTime.Web.Movie.Persistance.Database.DbMovie", "Movie")
+                    b.HasOne("MovieTime.Web.Movies.Models.Movie", "Movie")
                         .WithMany("Genres")
                         .HasForeignKey("DbMovieId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("MovieTime.Web.Reviews.Models.Review", b =>
+                {
+                    b.HasOne("MovieTime.Web.Movies.Models.Movie", "Movie")
+                        .WithMany()
+                        .HasForeignKey("MovieId");
+
+                    b.HasOne("MovieTime.Web.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import { login } from '../../utils/auth';
+
+import Input from '../../components/input/Input';
+import Button from '../../components/button/Button';
+
+import styles from './Login.scss';
 
 export default class Login extends Component {
   constructor(props) {
@@ -20,6 +26,10 @@ export default class Login extends Component {
     event.preventDefault();
 
     login(this.state.email, this.state.password)
+      .then(() => {
+        this.props.watchAuthenticationStateChange(true);
+        this.props.history.push(this.props.history.location);
+      })
       .catch((err) => {
         this.setState({ error: err.message });
       });
@@ -38,20 +48,44 @@ export default class Login extends Component {
   render() {
     return (
       <div>
-        <h2>Login</h2>
-        <form onSubmit={this.handleSubmit}>
-          {this.state.error}
-          <div>
-            <label htmlFor="email">E-mail</label>
-            <input name="email" id="email" type="email" onChange={this.handleInputChange} value={this.state.email} />
+        <div className={styles.view__background} />
+        <div className={styles['view__content--wrapper']}>
+          <div className={styles.view__content}>
+            {this.props.location.state && this.props.location.state.afterRegister ?
+              <h1>Please login to continue</h1> :
+              <h1>Login</h1>
+            }
+            <div className={styles.error}>{this.state.error}</div>
+            <hr />
+            <form onSubmit={this.handleSubmit}>
+              <div>
+                <Input
+                  label="Email"
+                  name="email"
+                  type="email"
+                  onChange={e => this.handleInputChange(e)}
+                  value={this.state.email}
+                />
+                <Input
+                  label="Password"
+                  name="password"
+                  type="password"
+                  onChange={e => this.handleInputChange(e)}
+                  value={this.state.password}
+                />
+              </div>
+              <Button dark className={styles.button} onClick={e => this.handleSubmit(e)}>Login</Button>
+            </form>
           </div>
-          <div>
-            <label htmlFor="password">Password</label>
-            <input name="password" id="password" type="text" onChange={this.handleInputChange} value={this.state.password} />
-          </div>
-          <input type="submit" value="Login" />
-        </form>
+        </div>
       </div>
     );
   }
 }
+
+Login.propTypes = {
+  watchAuthenticationStateChange: PropTypes.func.isRequired,
+  location: PropTypes.objectOf(PropTypes.any).isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
+};
+

@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
 
 import styles from './Modal.scss';
 
 class Modal extends React.Component {
   componentDidMount() {
-    this.modal.focus();
+    if (!this.props.hidden) {
+      this.modal.focus();
+    }
   }
 
   onKeyPress(e) {
@@ -17,6 +20,18 @@ class Modal extends React.Component {
   }
 
   render() {
+    if (this.props.hidden) {
+      // enable background scrolling
+      document.getElementsByTagName('body')[0].removeAttribute('class');
+    } else {
+      // disable background scrolling
+      document.getElementsByTagName('body')[0].setAttribute('class', 'no-scroll');
+    }
+
+    if (this.props.hidden) {
+      return null;
+    }
+
     return (
       <div
         className={styles.modal__background}
@@ -27,7 +42,7 @@ class Modal extends React.Component {
       >
         <div
           ref={(modal) => { this.modal = modal; }}
-          className={styles.modal}
+          className={cn(styles.modal, this.props.className)}
           role="button"
           tabIndex={0}
           onKeyDown={e => this.onKeyPress(e)}
@@ -53,10 +68,14 @@ Modal.propTypes = {
   children: PropTypes.node.isRequired,
   hideModal: PropTypes.func.isRequired,
   title: PropTypes.string,
+  hidden: PropTypes.bool,
+  className: PropTypes.string,
 };
 
 Modal.defaultProps = {
   title: undefined,
+  hidden: false,
+  className: '',
 };
 
 export default Modal;

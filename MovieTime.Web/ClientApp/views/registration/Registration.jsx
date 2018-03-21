@@ -1,56 +1,98 @@
-import React, { Component } from 'react';
-import isEmail from 'validator/lib/isEmail';
-import { register } from '../../utils/auth';
-import Field from './Field';
+import React from 'react';
+import PropTypes from 'prop-types';
 import checkPassword from 'hibp-checker';
+import isEmail from 'validator/lib/isEmail';
+
+import { logout, register } from '../../utils/auth';
+
+import Input from '../../components/input/Input';
+import Button from '../../components/button/Button';
+import Spinner from '../../components/spinner/Spinner';
+
+import styles from './Registration.scss';
 
 export default class Registration extends React.Component {
-  static async registerUserWithFireBase(person) {
-    await register(person);
-  }
+  static propTypes = {
+    history: PropTypes.objectOf(PropTypes.any).isRequired,
+    watchAuthenticationStateChange: PropTypes.func.isRequired,
+  };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      fields: { email: '', password: '' },
+      fields: {},
       fieldErrors: {},
-      isPwned: false,
+      fieldError: null,
+      isLoading: false,
     };
 
     this.onFormSubmit = this.onFormSubmit.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
-    this.isFormInputInValid = this.isFormInputInValid.bind(this);
+    this.isFormInputInvalid = this.isFormInputInvalid.bind(this);
     this.isPassword = this.isPassword.bind(this);
   }
 
-  async onFormSubmit(event) {
-    event.preventDefault();
-    const person = this.state.fields;
-    if (await this.isFormInputInValid()) return;
-
-    this.constructor.registerUserWithFireBase(person);
-    this.setState({
-      fields: { email: '', password: '' },
-    });
+  componentDidMount() {
+    // temporarily disable watching for auth changes
+    // to give backend time to save user data
+    this.props.watchAuthenticationStateChange(false);
   }
 
-  onInputChange({ name, value, error }) {
+  async onFormSubmit(event) {
+    this.setState({
+      isLoading: true,
+    });
+
+    event.preventDefault();
+    const person = {
+      firstName: this.state.fields['first-name'],
+      lastName: this.state.fields['last-name'],
+      email: this.state.fields.email,
+      password: this.state.fields.password,
+    };
+    if (await this.isFormInputInvalid()) return;
+
+    register(person)
+      .then((response) => {
+        if (!response.success) {
+          this.setState({
+            fieldError: response.message,
+            isLoading: false,
+          });
+        } else {
+          logout();
+          setTimeout(() => {
+            this.props.history.push('/login', { afterRegister: true });
+          }, 0);
+        }
+      });
+  }
+
+  onInputChange(e, error) {
+    const { name, value } = e.target;
     const { fields, fieldErrors } = this.state;
-    const isPwned = false;
 
     fields[name] = value;
     fieldErrors[name] = error;
-    this.setState({ fields, fieldErrors, isPwned });
+    this.setState({
+      fields,
+      fieldErrors,
+      fieldError: null,
+    });
   }
 
-  async isFormInputInValid() {
+  async isFormInputInvalid() {
     const { fields, fieldErrors } = this.state;
-    const errMessages = Object.keys(fieldErrors).filter(k => fieldErrors[k]);
+    if (!fields.email || !fields.password || !fields['repeat-password'] || !fields['first-name'] || !fields['last-name']) {
+      this.setState({ fieldError: 'Some required fields are still empty' });
+      return true;
+    }
+
+    const errMessages = Object.keys(fieldErrors)
+      .filter(k => fieldErrors[k]);
     await this.isPassword(fields.password);
-    if (this.state.isPwned) return true;
-    if (!fields.email) return true;
-    if (!fields.password) return true;
+    if (this.state.fieldError) return true;
     if (errMessages.length) return true;
     return false;
   }
@@ -58,37 +100,73 @@ export default class Registration extends React.Component {
   async isPassword(val) {
     const breachCount = await checkPassword(val);
     if (breachCount > 100) {
-      this.setState({ isPwned: 'Ohh noo! This password has been pwned more than 100 times! Please choose another.' });
+      this.setState({ fieldError: 'This password has been cracked over a 100 times, please come up with a stronger password.' });
     }
   }
 
   render() {
     return (
       <div>
-        <form onSubmit={this.onFormSubmit}>
-          <label> E-mail: </label>
-          <Field
-            placeholder="Email"
-            name="email"
-            value={this.state.fields.email}
-            onChange={this.onInputChange}
-            validate={val => (isEmail(val) ? false : 'Email required!')}
-          />
-
-          <br />
-
-          <label>Password:</label>
-          <Field
-            placeholder="Password"
-            name="password"
-            value={this.state.fields.password}
-            onChange={this.onInputChange}
-            validate={val => (val.length > 6 ? false : 'Password has to be at least 6 characters')}
-          />
-          <span style={{ color: 'red' }}>{this.state.isPwned}</span>
-          <br />
-          <input type="submit" />
-        </form>
+        <div className={styles.view__background} />
+        <div className={styles['view__content--wrapper']}>
+          <div className={styles.view__content}>
+            <h1>Register</h1>
+            <hr />
+            <Spinner hidden={!this.state.isLoading} />
+            <form onSubmit={this.onFormSubmit}>
+              <div className={styles.group}>
+                <Input
+                  label="First Name"
+                  name="first-name"
+                  value={this.state.fields['first-name']}
+                  onChange={(e, error) => this.onInputChange(e, error)}
+                  validate={value => (value.length <= 0 ? 'First Name is required' : null)}
+                />
+                <Input
+                  label="Last Name"
+                  name="last-name"
+                  value={this.state.fields['last-name']}
+                  onChange={(e, error) => this.onInputChange(e, error)}
+                  validate={value => (value.length <= 0 ? 'Last Name is required' : null)}
+                />
+              </div>
+              <Input
+                label="Email"
+                name="email"
+                value={this.state.fields.email}
+                onChange={(e, error) => this.onInputChange(e, error)}
+                validate={val => (isEmail(val) ? null : 'Email is invalid')}
+              />
+              <div className={styles.group}>
+                <Input
+                  label="Password"
+                  name="password"
+                  type="password"
+                  value={this.state.fields.password}
+                  onChange={(e, error) => this.onInputChange(e, error)}
+                  validate={value => (value.length <= 6 ? 'Password has to be at least 6 characters' : null)}
+                />
+                <Input
+                  label="Repeat Password"
+                  name="repeat-password"
+                  type="password"
+                  value={this.state.fields['repeat-password']}
+                  onChange={(e, error) => this.onInputChange(e, error)}
+                  validate={value => (value !== this.state.fields.password ? 'Password does not match' : null)}
+                />
+              </div>
+              <Button
+                dark
+                type="submit"
+                className={styles.button}
+                onClick={e => this.onFormSubmit(e)}
+              >
+                Register
+              </Button>
+              <span className={styles.error}>{this.state.fieldError}</span>
+            </form>
+          </div>
+        </div>
       </div>
     );
   }

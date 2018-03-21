@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
 
 import styles from './MoviePoster.scss';
 
@@ -32,8 +33,32 @@ class MoviePoster extends React.Component {
   }
 
   render() {
+    if (this.props.onClick) {
+      return (
+        <div
+          role="button"
+          tabIndex="0"
+          onClick={this.props.onClick}
+          onKeyPress={this.props.onClick}
+          className={cn(styles['movie-poster'], this.props.className)}
+        >
+          <img
+            ref={(img) => {
+              this.image = img;
+            }}
+            className="image"
+            onLoad={() => this.onLoad()}
+            src={this.props.source}
+            alt={this.props.alt}
+            style={{
+              opacity: this.state.isLoading ? '0' : '1',
+            }}
+          />
+        </div>
+      );
+    }
     return (
-      <div className={styles['movie-poster']}>
+      <div className={cn(styles['movie-poster'], this.props.className)}>
         <img
           ref={(img) => {
             this.image = img;
@@ -54,11 +79,15 @@ class MoviePoster extends React.Component {
 MoviePoster.propTypes = {
   source: PropTypes.string,
   alt: PropTypes.string,
+  className: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
 MoviePoster.defaultProps = {
   alt: '',
   source: '',
+  className: '',
+  onClick: undefined,
 };
 
 export default MoviePoster;
