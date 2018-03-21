@@ -41,7 +41,7 @@ namespace MovieTime.Web.Movies
             if (movieModel != null) return movieModel;
             
             movieModel = await _thirdPartyMovieRepository.GetMovieByTitle(title);
-            //await AddMovie(movieModel); // Cache the movie in our database to improve robustness. Todo: temporary
+            await AddMovie(movieModel); // Cache the movie in our database to improve robustness. Todo: temporary
 
             return movieModel;
         }
