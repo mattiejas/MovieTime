@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import Navigation from '../navigation/Navigation';
 import { getUserData } from '../../utils/user';
@@ -40,7 +41,7 @@ class Layout extends React.Component {
   render() {
     return (
       <div>
-        <Navigation isAuthenticated={!!this.state.user} user={this.state.user} />
+        <Navigation user={this.state.user} />
         {this.props.children}
       </div>
     );
@@ -49,12 +50,17 @@ class Layout extends React.Component {
 
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
-  isAuthenticated: PropTypes.bool.isRequired,
+  isAuthenticated: PropTypes.bool,
   userId: PropTypes.string,
 };
 
 Layout.defaultProps = {
   userId: null,
+  isAuthenticated: false,
 };
 
-export default Layout;
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.authenticated,
+});
+
+export default connect(mapStateToProps)(Layout);

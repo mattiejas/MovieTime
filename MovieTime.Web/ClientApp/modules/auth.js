@@ -1,32 +1,32 @@
 // Actions
-export const logout = () => ({
-  type: 'LOGOUT',
+export const setAuthenticated = user => ({
+  type: 'SET_AUTHENTICATED',
+  payload: user,
 });
 
+export const setUnauthenticated = () => ({
+  type: 'SET_UNAUTHENTICATED',
+});
 
 // Reducer
 const initialState = {
-  authenticated: true,
+  authenticated: false,
 };
 
 const authReducer = (state = initialState, action) => {
-  console.log('state', state);
-  console.log('action', action);
   switch (action.type) {
-    case 'LOGIN':
-      return [
+    case 'SET_AUTHENTICATED':
+      return {
         ...state,
-        {
-          authenticated: true,
-        },
-      ];
-    case 'LOGOUT':
-      return [
+        authenticated: true,
+        user: action.payload,
+      };
+    case 'SET_UNAUTHENTICATED':
+      return {
         ...state,
-        {
-          authenticated: false,
-        },
-      ];
+        authenticated: false,
+        user: null,
+      };
     default:
       return state;
   }

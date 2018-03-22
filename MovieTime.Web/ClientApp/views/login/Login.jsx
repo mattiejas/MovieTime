@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
-import { login } from '../../utils/auth';
+import { login as fbLogin, logout } from '../../utils/auth';
+import { getUserData } from '../../utils/user';
+import { setAuthenticated } from '../../modules/auth';
 
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
 
 import styles from './Login.scss';
 
-export default class Login extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
 
@@ -25,10 +28,18 @@ export default class Login extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    login(this.state.email, this.state.password)
-      .then(() => {
-        this.props.watchAuthenticationStateChange(true);
-        this.props.history.push(this.props.history.location);
+    fbLogin(this.state.email, this.state.password)
+      .then((user) => {
+        getUserData(user.uid).then((data) => {
+          this.props.watchAuthenticationStateChange(true);
+          this.props.history.push(this.props.history.location);
+          this.props.setAuthenticated({ ...data, id: user.uid });
+        }).catch((err) => {
+          this.setState({
+            error: err.message,
+          });
+          logout();
+        });
       })
       .catch((err) => {
         this.setState({ error: err.message });
@@ -87,5 +98,7 @@ Login.propTypes = {
   watchAuthenticationStateChange: PropTypes.func.isRequired,
   location: PropTypes.objectOf(PropTypes.any).isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
+  setAuthenticated: PropTypes.func.isRequired,
 };
 
+export default connect(null, { setAuthenticated })(Login);

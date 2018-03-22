@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 
 import { logout as fbLogout } from '../../utils/auth';
-import { logout } from '../../modules/auth';
+import { setUnauthenticated } from '../../modules/auth';
 
 import Icon from '../icon/Icon';
 import Button from '../button/Button';
@@ -46,12 +46,12 @@ class Navigation extends Component {
 
   logout() {
     fbLogout().then(() => {
-      this.props.logout();
+      this.props.setUnauthenticated();
     });
   }
 
   render() {
-    console.log(this.props.logout, this.props);
+    console.log('props', this.props.isAuthenticated);
     return (
       <div className={cn(styles.navigation)}>
         {this.props.isAuthenticated === true ?
@@ -159,13 +159,18 @@ class Navigation extends Component {
 
 Navigation.propTypes = {
   user: PropTypes.objectOf(PropTypes.any),
-  isAuthenticated: PropTypes.bool.isRequired,
-  logout: PropTypes.func,
+  isAuthenticated: PropTypes.bool,
+  setUnauthenticated: PropTypes.func.isRequired,
 };
 
 Navigation.defaultProps = {
   user: {},
-  logout: undefined,
+  isAuthenticated: false,
 };
 
-export default connect(null, { logout })(Navigation);
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.authenticated,
+  user: state.auth.user,
+});
+
+export default connect(mapStateToProps, { setUnauthenticated })(Navigation);

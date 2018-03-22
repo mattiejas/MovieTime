@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
 import auth from './firebase';
+import { setAuthenticated, setUnauthenticated } from './modules/auth';
+import { getUserData } from './utils/user';
 
 import Layout from './components/layout/Layout';
 
@@ -60,12 +62,21 @@ PublicRoute.defaultProps = {
   location: undefined,
 };
 
-export class Router extends React.Component {
+class Routes extends React.Component {
+  static propTypes = {
+    isAuthenticated: PropTypes.bool,
+    setAuthenticated: PropTypes.func.isRequired,
+    setUnauthenticated: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    isAuthenticated: false,
+  };
+
   constructor(props) {
     super(props);
 
     this.state = {
-      isAuthenticated: false,
       userId: null,
       watchAuthentication: true,
     };
@@ -75,22 +86,14 @@ export class Router extends React.Component {
     auth.onAuthStateChanged((user) => {
       if (this.state.watchAuthentication) {
         if (user) {
-          this.setState({
-            isAuthenticated: true,
-            userId: user.uid,
+          getUserData(user.uid).then((data) => {
+            this.props.setAuthenticated({ ...data, id: user.uid });
           });
         } else {
-          this.setState({
-            isAuthenticated: false,
-            userId: null,
-          });
+          this.props.setUnauthenticated();
         }
       }
     });
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return this.state.watchAuthentication === nextState.watchAuthentication;
   }
 
   watchAuthenticationStateChange(shouldWatch = true) {
@@ -100,37 +103,35 @@ export class Router extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <Layout
-        isAuthenticated={this.state.isAuthenticated}
         userId={this.state.userId}
       >
         <Switch>
           <Route exact path="/" component={Home} />
           <PrivateRoute
             path="/movies/:title"
-            isAuthenticated={this.state.isAuthenticated}
+            isAuthenticated={this.props.isAuthenticated}
             component={MovieDetailView}
           />
           <PublicRoute
             path="/register"
-            isAuthenticated={this.state.isAuthenticated}
+            isAuthenticated={this.props.isAuthenticated}
             component={props => (
               <Registration
                 watchAuthenticationStateChange={shouldWatch =>
-                                    this.watchAuthenticationStateChange(shouldWatch)}
+                  this.watchAuthenticationStateChange(shouldWatch)}
                 {...props}
               />
             )}
           />
           <PublicRoute
             path="/login"
-            isAuthenticated={this.state.isAuthenticated}
+            isAuthenticated={this.props.isAuthenticated}
             component={props => (
               <Login
                 watchAuthenticationStateChange={shouldWatch =>
-                                    this.watchAuthenticationStateChange(shouldWatch)}
+                  this.watchAuthenticationStateChange(shouldWatch)}
                 {...props}
               />
             )}
@@ -145,7 +146,12 @@ export class Router extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.authenticated,
+  isAuthenticated: state.auth.authenticated,
 });
 
-export default connect(mapStateToProps)(Router);
+const mapDispatchToProps = {
+  setAuthenticated,
+  setUnauthenticated,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Routes);
