@@ -3,20 +3,17 @@ require('@babel/polyfill');
 const path = require('path');
 const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const HTMLWebpackPlugin = require('html-webpack-plugin');
+
 
 module.exports = (env) => {
   const isDevelopment = (env && env.dev) || (env && !env.prod) || true;
 
   return {
+    mode: 'development',
     entry: { main: ['@babel/polyfill', './ClientApp/boot.jsx'] },
     devtool: 'inline-source-map',
     resolve: { extensions: ['.js', '.jsx'] },
-    node: {
-      fs: 'empty',
-      net: 'empty',
-      tls: 'empty',
-      child_process: 'empty',
-    },
     module: {
       rules: [
         {
@@ -85,8 +82,14 @@ module.exports = (env) => {
         },
       ],
     },
+    optimization: {
+      splitChunks: {},
+    },
     plugins: [
       new CleanWebpackPlugin([path.resolve(__dirname, 'wwwroot', 'dist')]),
+      new HTMLWebpackPlugin({
+        title: 'Code Splitting',
+      }),
     ],
     output: {
       path: path.resolve(__dirname, 'wwwroot', 'dist'),
