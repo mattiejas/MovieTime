@@ -1,23 +1,29 @@
 import React from 'react';
-import { createStore } from 'redux';
+import { applyMiddleware, combineReducers, createStore, compose } from 'redux';
 import { Provider } from 'react-redux';
-import { Router } from 'react-router-dom';
+import { ConnectedRouter, routerMiddleware, routerReducer } from 'react-router-redux';
 import PropTypes from 'prop-types';
 
 import Routes from './routes';
 import history from './utils/history';
-import rootReducer from './modules';
+import reducers from './modules';
 
+// eslint-disable-next-line no-underscore-dangle
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const middleware = routerMiddleware(history);
 const store = createStore(
-  rootReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+  combineReducers({
+    ...reducers,
+    router: routerReducer,
+  }),
+  composeEnhancers(applyMiddleware(middleware)),
 );
 
 const App = ({ baseUrl }) => (
   <Provider store={store}>
-    <Router basename={baseUrl} history={history}>
+    <ConnectedRouter basename={baseUrl} history={history}>
       <Routes />
-    </Router>
+    </ConnectedRouter>
   </Provider>
 );
 

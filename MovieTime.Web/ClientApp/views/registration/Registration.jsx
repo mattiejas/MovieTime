@@ -11,10 +11,9 @@ import Spinner from '../../components/spinner/Spinner';
 
 import styles from './Registration.scss';
 
-export default class Registration extends React.Component {
+class Registration extends React.Component {
   static propTypes = {
     history: PropTypes.objectOf(PropTypes.any).isRequired,
-    watchAuthenticationStateChange: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -33,18 +32,9 @@ export default class Registration extends React.Component {
     this.isPassword = this.isPassword.bind(this);
   }
 
-  componentDidMount() {
-    // temporarily disable watching for auth changes
-    // to give backend time to save user data
-    this.props.watchAuthenticationStateChange(false);
-  }
-
   async onFormSubmit(event) {
-    this.setState({
-      isLoading: true,
-    });
-
     event.preventDefault();
+
     const person = {
       firstName: this.state.fields['first-name'],
       lastName: this.state.fields['last-name'],
@@ -52,6 +42,10 @@ export default class Registration extends React.Component {
       password: this.state.fields.password,
     };
     if (await this.isFormInputInvalid()) return;
+
+    this.setState({
+      isLoading: true,
+    });
 
     register(person)
       .then((response) => {
@@ -62,9 +56,7 @@ export default class Registration extends React.Component {
           });
         } else {
           logout();
-          setTimeout(() => {
-            this.props.history.push('/login', { afterRegister: true });
-          }, 0);
+          this.props.history.push('/login', { afterRegister: true });
         }
       });
   }
@@ -171,3 +163,5 @@ export default class Registration extends React.Component {
     );
   }
 }
+
+export default Registration;

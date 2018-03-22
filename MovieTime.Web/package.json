@@ -60,6 +60,7 @@
     "react-hot-loader": "next",
     "react-redux": "^5.0.7",
     "react-router-dom": "4.1.1",
+    "react-router-redux": "^5.0.0-alpha.9",
     "redux": "^3.7.2",
     "redux-observable": "^0.18.0",
     "rxjs": "^5.5.7",

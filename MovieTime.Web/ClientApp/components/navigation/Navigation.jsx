@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
 import { logout } from '../../utils/auth';
-import { setUnauthenticated } from '../../modules/auth';
 
 import Icon from '../icon/Icon';
 import Button from '../button/Button';
@@ -165,4 +164,4 @@ const mapStateToProps = state => ({
   user: state.auth.user,
 });
 
-export default connect(mapStateToProps)(Navigation);
+export default withRouter(connect(mapStateToProps)(Navigation));
