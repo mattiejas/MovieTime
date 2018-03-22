@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
 import auth from './firebase';
@@ -18,14 +19,14 @@ const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
   <Route
     {...rest}
     render={props =>
-      (isAuthenticated === true
-        ? <Component {...props} />
-        : <Redirect
-          to={{
-            pathname: '/login',
-            state: { from: props.location },
-          }}
-        />)}
+            (isAuthenticated === true
+                ? <Component {...props} />
+                : <Redirect
+                  to={{
+                          pathname: '/login',
+                          state: { from: props.location },
+                      }}
+                />)}
   />
 );
 
@@ -43,8 +44,8 @@ const PublicRoute = ({ component: Component, isAuthenticated, ...rest }) => (
   <Route
     {...rest}
     render={props =>
-      (isAuthenticated === false
-        ? <Component {...props} />
+            (isAuthenticated === false
+                ? <Component {...props} />
         : <Redirect to={(props.location.state && props.location.state.from) || '/'} />)}
   />
 );
@@ -59,7 +60,7 @@ PublicRoute.defaultProps = {
   location: undefined,
 };
 
-export default class Router extends React.Component {
+export class Router extends React.Component {
   constructor(props) {
     super(props);
 
@@ -99,6 +100,7 @@ export default class Router extends React.Component {
   }
 
   render() {
+    console.log(this.props);
     return (
       <Layout
         isAuthenticated={this.state.isAuthenticated}
@@ -120,7 +122,7 @@ export default class Router extends React.Component {
                                     this.watchAuthenticationStateChange(shouldWatch)}
                 {...props}
               />
-                        )}
+            )}
           />
           <PublicRoute
             path="/login"
@@ -131,7 +133,7 @@ export default class Router extends React.Component {
                                     this.watchAuthenticationStateChange(shouldWatch)}
                 {...props}
               />
-                        )}
+            )}
           />
           <Route path="/list" component={ListView} />
           <Route path="/users/:id" component={ProfileView} />
@@ -142,4 +144,8 @@ export default class Router extends React.Component {
   }
 }
 
-export const routes = <Router />;
+const mapStateToProps = state => ({
+  isAuthenticated: state.authenticated,
+});
+
+export default connect(mapStateToProps)(Router);
