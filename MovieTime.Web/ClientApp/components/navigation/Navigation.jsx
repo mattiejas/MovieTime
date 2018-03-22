@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
-import { logout as fbLogout } from '../../utils/auth';
+import { logout } from '../../utils/auth';
 import { setUnauthenticated } from '../../modules/auth';
 
 import Icon from '../icon/Icon';
@@ -44,14 +44,7 @@ class Navigation extends Component {
     });
   }
 
-  logout() {
-    fbLogout().then(() => {
-      this.props.setUnauthenticated();
-    });
-  }
-
   render() {
-    console.log('props', this.props.isAuthenticated);
     return (
       <div className={cn(styles.navigation)}>
         {this.props.isAuthenticated === true ?
@@ -96,7 +89,7 @@ class Navigation extends Component {
                     <Button icon="user" to={`/users/${this.props.user.id}`}>
                       {`${this.props.user.firstName} ${this.props.user.lastName}`}
                     </Button>
-                    <Button icon="power-off" onClick={() => this.logout()} />
+                    <Button icon="power-off" onClick={() => logout()} />
                   </ButtonGroup>
                 </li>
               </ul>
@@ -110,7 +103,7 @@ class Navigation extends Component {
                   <Button icon="user" to={`/users/${this.props.user.id}`}>
                     {`${this.props.user.firstName} ${this.props.user.lastName}`}
                   </Button>
-                  <Button icon="power-off" onClick={() => this.logout()} />
+                  <Button icon="power-off" onClick={() => logout()} />
                 </ButtonGroup>
               </div>
             </div>
@@ -160,7 +153,6 @@ class Navigation extends Component {
 Navigation.propTypes = {
   user: PropTypes.objectOf(PropTypes.any),
   isAuthenticated: PropTypes.bool,
-  setUnauthenticated: PropTypes.func.isRequired,
 };
 
 Navigation.defaultProps = {
@@ -173,4 +165,4 @@ const mapStateToProps = state => ({
   user: state.auth.user,
 });
 
-export default connect(mapStateToProps, { setUnauthenticated })(Navigation);
+export default connect(mapStateToProps)(Navigation);
