@@ -40,10 +40,6 @@ export default class Registration extends React.Component {
   }
 
   async onFormSubmit(event) {
-    this.setState({
-      isLoading: true,
-    });
-
     event.preventDefault();
     const person = {
       firstName: this.state.fields['first-name'],
@@ -52,6 +48,10 @@ export default class Registration extends React.Component {
       password: this.state.fields.password,
     };
     if (await this.isFormInputInvalid()) return;
+
+    this.setState({
+      isLoading: true,
+    });
 
     register(person)
       .then((response) => {
