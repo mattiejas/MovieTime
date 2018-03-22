@@ -92,7 +92,6 @@ module.exports = (env) => {
         context: __dirname,
         manifest: require('./wwwroot/dist/vendor-manifest.json'), // eslint-disable-line global-require
       }),
-      new ExtractTextPlugin('site.css'),
     ],
     output: {
       path: path.resolve(__dirname, 'wwwroot', 'dist'),
