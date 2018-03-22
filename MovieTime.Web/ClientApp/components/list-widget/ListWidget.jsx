@@ -13,17 +13,19 @@ class ListWidget extends React.Component {
   state = {
     movies: [],
     movieCount: null,
+    firstLoad: true,
   };
 
+  /* Only fetch movies if they're not the same as in the previous props */
   componentWillReceiveProps(props) {
-    this.fetchMovies(props);
+    if (this.state.firstLoad || !_.isEqual(this.props.movies, props.movies)) {
+      this.fetchMovies(props);
+    }
   }
 
+  /* Component should only update when all movies has been loaded */
   shouldComponentUpdate(nextProps, nextState) {
-    if (nextState.movies.length <= nextState.movieCount && !nextState.isLoading) {
-      return true;
-    }
-    return !_.isEqual(this.props.movies, nextProps.movies);
+    return nextState.movies.length === nextState.movieCount;
   }
 
   onClick(url) {
@@ -34,6 +36,7 @@ class ListWidget extends React.Component {
     this.setState({
       movies: [],
       lastPosterIsViewAll: false,
+      firstLoad: false,
     });
 
     let movieCount;
