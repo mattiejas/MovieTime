@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import auth from '../../firebase';
 import { getUserData, updateUserData } from '../../utils/user';
-// import { getUser } from '../../utils/auth';
 
 import ListWidget from '../../components/list-widget/ListWidget';
 import Placeholder from '../../components/placeholder/Placeholder';
@@ -61,18 +60,6 @@ class ProfileView extends React.Component {
     });
   }
 
-  // getProfileCanBeEdited() {
-  //   const { id } = this.props.match.params;
-
-  //   return getUser()
-  //     .then((user) => {
-  //       console.log('user', user);
-  //       if (user) {
-  //         this.setState({ canEditProfile: user.uid === id });
-  //       }
-  //     });
-  // }
-
   displayUserData(id) {
     getUserData(id)
       .then((data) => {
@@ -91,17 +78,15 @@ class ProfileView extends React.Component {
     const { canEditProfile } = this.state;
     const { id } = this.props.match.params;
 
-    // const styleForEditButton = canEditProfile ? '' : styles.hidden;
-
     return (
       <div className={styles.view}>
         <EditProfileModal
           hidden={!this.state.isEditing}
           hideModal={() => this.onDiscard()}
           onUpdate={user =>
-                        updateUserData(user, id).then(() => {
-                            this.displayUserData(id);
-                        })}
+            updateUserData(user, id).then(() => {
+                this.displayUserData(id);
+            })}
           user={this.state.user}
         />
         <div className={styles.view__background} />
@@ -118,7 +103,7 @@ class ProfileView extends React.Component {
                 <Placeholder isReady={!this.state.isLoading}>
                   <h1>{`${firstName} ${lastName}`}</h1>
                   <h3>
-                                        has watched ... movies worthy of ... hours and ... minutes
+                    has watched ... movies worthy of ... hours and ... minutes
                   </h3>
                 </Placeholder>
               </div>
