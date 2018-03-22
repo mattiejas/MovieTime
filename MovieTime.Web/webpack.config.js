@@ -5,58 +5,7 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = (env) => {
-  const isDevBuild = (env && env.dev) || (env && !env.prod) || true;
-
-  const cssProd = ExtractTextPlugin.extract({
-    use: [{
-      loader: 'css-loader',
-      options: {
-        modules: true,
-        localIdentName: '[name]__[local]___[hash:base64:5]',
-        camelCase: true,
-        importLoaders: 2,
-        sourceMap: false,
-      },
-    }, {
-      loader: 'postcss-loader',
-      options: {
-        sourceMap: false,
-      },
-    }, {
-      loader: 'sass-loader',
-      options: {
-        sourceMap: false,
-      },
-    }],
-  });
-
-  const cssDev = [
-    {
-      loader: 'style-loader',
-    },
-    {
-      loader: 'css-loader',
-      options: {
-        modules: true,
-        camelCase: true,
-        importLoaders: 2,
-        localIdentName: '[name]__[local]___[hash:base64:5]',
-        sourceMap: true,
-      },
-    },
-    {
-      loader: 'postcss-loader',
-      options: {
-        sourceMap: true,
-      },
-    },
-    {
-      loader: 'sass-loader',
-      options: {
-        sourceMap: true,
-      },
-    },
-  ];
+  // const isDevBuild = (env && env.dev) || (env && !env.prod) || true;
 
   return {
     entry: { main: ['babel-polyfill', './ClientApp/boot.jsx'] },
@@ -103,8 +52,35 @@ module.exports = (env) => {
         {
           test: /\.scss$/,
           include: /ClientApp/,
-          use: isDevBuild ? cssDev : cssProd,
-        }, {
+          use: [
+            {
+              loader: 'style-loader',
+            },
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                camelCase: true,
+                importLoaders: 2,
+                localIdentName: '[name]__[local]___[hash:base64:5]',
+                sourceMap: true,
+              },
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                sourceMap: true,
+              },
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: true,
+              },
+            },
+          ],
+        },
+        {
           test: /\.(png|jpg|jpeg|gif|svg)$/,
           include: /ClientApp/,
           use: 'url-loader?limit=25000',
