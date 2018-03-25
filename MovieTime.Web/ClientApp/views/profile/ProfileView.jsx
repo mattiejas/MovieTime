@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { updateUser, getUser } from '../../modules/users';
+import { authenticateById } from '../../modules/auth';
 
 import ListWidget from '../../components/list-widget/ListWidget';
 import Placeholder from '../../components/placeholder/Placeholder';
@@ -55,6 +56,15 @@ class ProfileView extends React.Component {
     });
   }
 
+  onUpdate(user) {
+    this.props.updateUser(user).then(() => {
+      if (this.props.authId === user.id) {
+        // re-authenticate so username in navigation updates
+        this.props.authenticateById(this.props.authId);
+      }
+    });
+  }
+
   render() {
     const { canEditProfile, isLoading } = this.state;
     const { firstName, lastName } = this.props.user;
@@ -65,7 +75,7 @@ class ProfileView extends React.Component {
         <EditProfileModal
           hidden={!this.state.isEditing}
           hideModal={() => this.onDiscard()}
-          onUpdate={user => this.props.updateUser({ ...user, id })}
+          onUpdate={user => this.onUpdate({ ...user, id })}
           user={this.props.user}
         />
         <div className={styles.view__background} />
@@ -124,6 +134,7 @@ ProfileView.propTypes = {
   history: PropTypes.objectOf(PropTypes.any).isRequired,
   updateUser: PropTypes.func.isRequired,
   getUser: PropTypes.func.isRequired,
+  authenticateById: PropTypes.func.isRequired,
   user: PropTypes.objectOf(PropTypes.any),
   authId: PropTypes.string,
 };
@@ -138,4 +149,10 @@ const mapStateToProps = (state, props) => ({
   authId: state.auth.user && state.auth.user.id,
 });
 
-export default connect(mapStateToProps, { updateUser, getUser })(ProfileView);
+const mapDispatchToProps = {
+  updateUser,
+  getUser,
+  authenticateById,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileView);

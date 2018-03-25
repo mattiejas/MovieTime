@@ -3,7 +3,7 @@ import { getUserData, updateUserData } from '../utils/user';
 // Actions
 export const updateUser = user => (dispatch) => {
   dispatch({ type: 'UPDATE_USER_REQUEST' });
-  updateUserData(user)
+  return updateUserData(user)
     .then(() => {
       dispatch({
         type: 'UPDATE_USER_SUCCESS',
@@ -18,7 +18,7 @@ export const updateUser = user => (dispatch) => {
 
 export const getUser = id => (dispatch) => {
   dispatch({ type: 'FETCH_USER_REQUEST' });
-  getUserData(id)
+  return getUserData(id)
     .then((response) => {
       dispatch({
         type: 'FETCH_USER_SUCCESS',

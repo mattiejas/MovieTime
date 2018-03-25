@@ -5,7 +5,7 @@ import { login, logout } from '../utils/auth';
 
 export const authenticate = (username, password) => (dispatch) => {
   dispatch({ type: 'AUTHENTICATE_REQUEST' });
-  login(username, password).then((user) => {
+  return login(username, password).then((user) => {
     getUserData(user.uid)
       .then((response) => {
         dispatch({
@@ -23,7 +23,7 @@ export const authenticate = (username, password) => (dispatch) => {
 
 export const authenticateById = id => (dispatch) => {
   dispatch({ type: 'AUTHENTICATE_REQUEST' });
-  getUserData(id)
+  return getUserData(id)
     .then((response) => {
       dispatch({
         type: 'AUTHENTICATE_SUCCESS',
@@ -39,7 +39,7 @@ export const authenticateById = id => (dispatch) => {
 
 export const unauthenticate = () => (dispatch) => {
   dispatch({ type: 'UNAUTHENTICATE_REQUEST' });
-  logout().then(() => {
+  return logout().then(() => {
     dispatch({
       type: 'UNAUTHENTICATE_SUCCESS',
     });
