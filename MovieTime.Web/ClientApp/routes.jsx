@@ -4,9 +4,7 @@ import { connect } from 'react-redux';
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 
 import auth from './firebase';
-import { setAuthenticated, setUnauthenticated } from './modules/auth';
-import { getUserData } from './utils/user';
-import { logout } from './utils/auth';
+import { authenticateById, unauthenticate } from './modules/auth';
 
 import Layout from './components/layout/Layout';
 
@@ -66,8 +64,8 @@ PublicRoute.defaultProps = {
 class Routes extends React.Component {
   static propTypes = {
     isAuthenticated: PropTypes.bool,
-    setAuthenticated: PropTypes.func.isRequired,
-    setUnauthenticated: PropTypes.func.isRequired,
+    authenticateById: PropTypes.func.isRequired,
+    unauthenticate: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -77,11 +75,9 @@ class Routes extends React.Component {
   componentDidMount() {
     auth.onAuthStateChanged((user) => {
       if (user) {
-        getUserData(user.uid).then((data) => {
-          this.props.setAuthenticated({ ...data, id: user.uid });
-        }).catch(() => logout());
+        this.props.authenticateById(user.uid);
       } else {
-        this.props.setUnauthenticated();
+        this.props.unauthenticate();
       }
     });
   }
@@ -124,8 +120,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  setAuthenticated,
-  setUnauthenticated,
+  authenticateById,
+  unauthenticate,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Routes));

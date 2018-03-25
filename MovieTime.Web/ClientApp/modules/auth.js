@@ -1,12 +1,54 @@
-// Actions
-export const setAuthenticated = user => ({
-  type: 'SET_AUTHENTICATED',
-  payload: user,
-});
+import { getUserData } from '../utils/user';
+import { login, logout } from '../utils/auth';
 
-export const setUnauthenticated = () => ({
-  type: 'SET_UNAUTHENTICATED',
-});
+// Actions
+
+export const authenticate = (username, password) => (dispatch) => {
+  dispatch({ type: 'AUTHENTICATE_REQUEST' });
+  login(username, password).then((user) => {
+    getUserData(user.uid)
+      .then((response) => {
+        dispatch({
+          type: 'AUTHENTICATE_SUCCESS',
+          payload: { ...response, id: user.uid },
+        });
+        return response;
+      })
+      .catch((err) => {
+        dispatch({ type: 'AUTHENTICATE_ERROR' });
+        return err;
+      });
+  });
+};
+
+export const authenticateById = id => (dispatch) => {
+  dispatch({ type: 'AUTHENTICATE_REQUEST' });
+  getUserData(id)
+    .then((response) => {
+      dispatch({
+        type: 'AUTHENTICATE_SUCCESS',
+        payload: { ...response, id },
+      });
+      return response;
+    })
+    .catch((err) => {
+      dispatch({ type: 'AUTHENTICATE_ERROR' });
+      return err;
+    });
+};
+
+export const unauthenticate = () => (dispatch) => {
+  dispatch({ type: 'UNAUTHENTICATE_REQUEST' });
+  logout().then(() => {
+    dispatch({
+      type: 'UNAUTHENTICATE_SUCCESS',
+    });
+  })
+    .catch((err) => {
+      dispatch({ type: 'UNAUTHENTICATE_ERROR' });
+      return err;
+    });
+};
 
 // Reducer
 const initialState = {
@@ -15,13 +57,13 @@ const initialState = {
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'SET_AUTHENTICATED':
+    case 'AUTHENTICATE_SUCCESS':
       return {
         ...state,
         authenticated: true,
         user: action.payload,
       };
-    case 'SET_UNAUTHENTICATED':
+    case 'UNAUTHENTICATE_SUCCESS':
       return {
         ...state,
         authenticated: false,

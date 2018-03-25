@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { login, logout } from '../../utils/auth';
-import { getUserData } from '../../utils/user';
+import { login } from '../../utils/auth';
 
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
@@ -27,17 +28,6 @@ class Login extends Component {
     event.preventDefault();
 
     login(this.state.email, this.state.password)
-      .then((user) => {
-        // check if user is in db
-        getUserData(user.uid).then(() => {
-          this.props.history.push(this.props.history.location);
-        }).catch((err) => {
-          this.setState({
-            error: err.message,
-          });
-          logout();
-        });
-      })
       .catch((err) => {
         this.setState({ error: err.message });
       });
@@ -51,6 +41,10 @@ class Login extends Component {
     this.setState({
       [name]: value,
     });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps.user, nextProps);
   }
 
   render() {
@@ -94,6 +88,11 @@ class Login extends Component {
 Login.propTypes = {
   location: PropTypes.objectOf(PropTypes.any).isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
+  user: PropTypes.objectOf(PropTypes.any),
 };
 
-export default Login;
+const mapStateToProps = state => ({
+  user: state.auth.user,
+});
+
+export default withRouter(connect(mapStateToProps)(Login));

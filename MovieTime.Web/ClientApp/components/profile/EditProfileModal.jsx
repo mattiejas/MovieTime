@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { removeUser, logout } from '../../utils/auth';
+import { removeUser } from '../../utils/auth';
+import { unauthenticate } from '../../modules/auth';
 
 import LoginModal from '../modal/LoginModal';
 import Button from '../button/Button';
@@ -41,7 +42,7 @@ class EditProfileModal extends React.Component {
     removeUser(email, password)
       .then(() => {
         this.props.hideModal();
-        logout();
+        unauthenticate();
       })
       .catch(err => this.setState({ error: err.message }));
   }

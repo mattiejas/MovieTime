@@ -1,8 +1,9 @@
 import React from 'react';
-import { applyMiddleware, combineReducers, createStore, compose } from 'redux';
-import { Provider } from 'react-redux';
-import { ConnectedRouter, routerMiddleware, routerReducer } from 'react-router-redux';
+import thunk from 'redux-thunk';
 import PropTypes from 'prop-types';
+import { Provider } from 'react-redux';
+import { applyMiddleware, combineReducers, createStore, compose } from 'redux';
+import { ConnectedRouter, routerMiddleware, routerReducer } from 'react-router-redux';
 
 import Routes from './routes';
 import history from './utils/history';
@@ -16,7 +17,7 @@ const store = createStore(
     ...reducers,
     router: routerReducer,
   }),
-  composeEnhancers(applyMiddleware(middleware)),
+  composeEnhancers(applyMiddleware(thunk, middleware)),
 );
 
 const App = ({ baseUrl }) => (
