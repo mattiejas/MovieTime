@@ -1,4 +1,5 @@
 import { getTokenAndRequestHeader } from '../utils/auth';
+import betterFetch from './better-fetch';
 
 export function trackMovie(movieId) {
   return getTokenAndRequestHeader()
@@ -27,7 +28,5 @@ export function isMovieTracked(userId, movieId) {
     .then(response => response.json());
 }
 
-export function getMovieByTitle(title) {
-  return fetch(`/api/movie/title/${title}`)
-    .then(response => response.json());
-}
+export const getMovieByTitle = title =>
+  betterFetch(`/api/movie/title/${title}`);

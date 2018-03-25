@@ -9,6 +9,7 @@ export const updateUser = user => (dispatch) => {
         type: 'UPDATE_USER_SUCCESS',
         payload: user,
       });
+      return user;
     })
     .catch((err) => {
       dispatch({ type: 'UPDATE_USER_ERROR' });
@@ -35,7 +36,7 @@ export const getUser = id => (dispatch) => {
 // Reducer
 const initialState = {};
 
-const userReducer = (state = initialState, action) => {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'UPDATE_USER_SUCCESS':
       return {
@@ -52,4 +53,4 @@ const userReducer = (state = initialState, action) => {
   }
 };
 
-export default userReducer;
+export default reducer;

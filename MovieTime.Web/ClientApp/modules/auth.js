@@ -55,7 +55,7 @@ const initialState = {
   authenticated: false,
 };
 
-const authReducer = (state = initialState, action) => {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'AUTHENTICATE_SUCCESS':
       return {
@@ -74,4 +74,4 @@ const authReducer = (state = initialState, action) => {
   }
 };
 
-export default authReducer;
+export default reducer;
