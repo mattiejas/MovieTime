@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { login } from '../../utils/auth';
+import { authenticate } from '../../modules/auth';
 
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
@@ -27,7 +27,7 @@ class Login extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    login(this.state.email, this.state.password)
+    this.props.authenticate(this.state.email, this.state.password)
       .catch((err) => {
         this.setState({ error: err.message });
       });
@@ -41,10 +41,6 @@ class Login extends Component {
     this.setState({
       [name]: value,
     });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    console.log(nextProps.user, nextProps);
   }
 
   render() {
@@ -87,12 +83,11 @@ class Login extends Component {
 
 Login.propTypes = {
   location: PropTypes.objectOf(PropTypes.any).isRequired,
-  history: PropTypes.objectOf(PropTypes.any).isRequired,
-  user: PropTypes.objectOf(PropTypes.any),
+  authenticate: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
-  user: state.auth.user,
-});
+const mapDispatchToProps = {
+  authenticate,
+};
 
-export default withRouter(connect(mapStateToProps)(Login));
+export default withRouter(connect(null, mapDispatchToProps)(Login));
