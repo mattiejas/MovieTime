@@ -63,11 +63,13 @@ namespace MovieTime.Web.Database
             return await _context.Set<T>().SingleOrDefaultAsync(match);
         }
 
+        // TODO: FindAll & FindBy are the same methods
         public virtual async Task<ICollection<T>> FindAll(Expression<Func<T, bool>> match)
         {
             return await _context.Set<T>().Where(match).ToListAsync();
         }
 
+        // TODO: FindAll & FindBy are the same methods
         public virtual async Task<ICollection<T>> FindBy(Expression<Func<T, bool>> predicate)
         {
             return await _context.Set<T>().Where(predicate).ToListAsync();

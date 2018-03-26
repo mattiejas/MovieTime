@@ -13,7 +13,7 @@ namespace MovieTime.Web.Database
             // Clear the database. Don't do this for production environment(s)
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
-//            context.Movies.RemoveRange(context.Movies);
+    //            context.Movies.RemoveRange(context.Movies);
 //            context.Genres.RemoveRange(context.Genres);
 //            context.MovieGenre.RemoveRange(context.MovieGenre);
 //            context.SaveChanges();
@@ -152,7 +152,7 @@ namespace MovieTime.Web.Database
                 },
                 new User
                 {
-                    Id = "SdDQKV4mQZW9nHzGGR7RvOL4ofy2",
+                    Id = "6OBuN1B9X6MR8ftamRaum3nnHC93",
                     FirstName = "Jeffrey",
                     LastName = "Dufour",
                     Email = "15036278@student.hhs.nl"
