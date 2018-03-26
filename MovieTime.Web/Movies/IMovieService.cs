@@ -9,7 +9,7 @@ namespace MovieTime.Web.Movies
     {
         Task<Movie> GetMovieById(string id);
         Task<Movie> GetMovieByTitle(string title);
-        Task<SearchResultsModel> GetMoviesByTitle(string title);
+        Task<SearchResultsModel> GetMoviesByTitle(string title, int page);
         Task<bool> AddMovie(Movie movie);
         Task<bool> MovieExistById(string movieId);
     }

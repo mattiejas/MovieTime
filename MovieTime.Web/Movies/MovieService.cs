@@ -46,9 +46,12 @@ namespace MovieTime.Web.Movies
             return movieModel;
         }
 
-        public Task<SearchResultsModel> GetMoviesByTitle(string title)
+        public async Task<SearchResultsModel> GetMoviesByTitle(string title, int page = 1)
         {
-            throw new NotImplementedException();
+            var searchResultsModel = await _thirdPartyMovieRepository.GetMoviesByTitle(title, page);
+            
+            searchResultsModel.
+            
         }
 
         public async Task<bool> AddMovie(Movie movie)

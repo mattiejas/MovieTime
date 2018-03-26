@@ -23,9 +23,14 @@ namespace MovieTime.Web.Movies
         }
 
         [HttpGet("search/{title}")]
-        public async Task<IActionResult> GetMovies(string title)
+        public async Task<IActionResult> GetMovies(string title, int page)
         {
-            throw new NotImplementedException();
+            var movie = await _movieService.GetMoviesByTitle(title, page);
+            if (movie == null) return NotFound();
+
+            var movieGetDto = _mapper.Map<Movie, MovieGetDto>(movie);
+
+            return Ok(movieGetDto);
         }
 
         [HttpGet("{id}", Name = GetMovieByIdRoute)]
