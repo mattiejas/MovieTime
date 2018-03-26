@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
@@ -12,7 +13,7 @@ import SearchInput from '../input/SearchInput';
 
 import styles from './Navigation.scss';
 
-export default class Navigation extends Component {
+class Navigation extends Component {
   constructor(props) {
     super(props);
 
@@ -150,10 +151,17 @@ export default class Navigation extends Component {
 
 Navigation.propTypes = {
   user: PropTypes.objectOf(PropTypes.any),
-  isAuthenticated: PropTypes.bool.isRequired,
+  isAuthenticated: PropTypes.bool,
 };
 
 Navigation.defaultProps = {
   user: {},
+  isAuthenticated: false,
 };
 
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.authenticated,
+  user: state.auth.user,
+});
+
+export default withRouter(connect(mapStateToProps)(Navigation));

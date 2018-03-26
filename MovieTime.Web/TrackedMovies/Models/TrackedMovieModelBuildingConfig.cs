@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieTime.Web.Database;
-using MovieTime.Web.Movies.Models;
-using MovieTime.Web.Tracked.Models;
 
 namespace MovieTime.Web.TrackedMovies.Models
 {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace MovieTime.Web.Database
 {
@@ -22,7 +23,22 @@ namespace MovieTime.Web.Database
         public virtual async Task<int> Add(T t)
         {
             _context.Set<T>().Add(t);
-            return await _context.SaveChangesAsync();
+            try
+            {
+                return await _context.SaveChangesAsync();
+            }
+            catch(Exception e)
+            {
+                Log.Error(e.Message);
+                return 0;
+            }
+        }
+
+        public virtual async Task<T> AddIfNotExists(T entity, Expression<Func<T, bool>> match)
+        {
+            var exists = _context.Set<T>().Any(match);
+            if (exists) return null;
+            return await Add(entity);
         }
 
         public virtual async Task<int> CountAll()
@@ -46,11 +62,13 @@ namespace MovieTime.Web.Database
             return await _context.Set<T>().SingleOrDefaultAsync(match);
         }
 
+        // TODO: FindAll & FindBy are the same methods
         public virtual async Task<ICollection<T>> FindAll(Expression<Func<T, bool>> match)
         {
             return await _context.Set<T>().Where(match).ToListAsync();
         }
 
+        // TODO: FindAll & FindBy are the same methods
         public virtual async Task<ICollection<T>> FindBy(Expression<Func<T, bool>> predicate)
         {
             return await _context.Set<T>().Where(predicate).ToListAsync();

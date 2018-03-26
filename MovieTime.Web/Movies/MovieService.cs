@@ -62,7 +62,7 @@ namespace MovieTime.Web.Movies
         {
             if (movie == null) return false;
 
-            var changeCount = await _movieRespository.Add(movie);
+            var changeCount = await _movieRespository.AddIfNotExists(movie, x => x.Id == movie.Id);
 
             if (!string.IsNullOrWhiteSpace(movie.Poster)) 
                 await DownloadMoviePoster(movie);

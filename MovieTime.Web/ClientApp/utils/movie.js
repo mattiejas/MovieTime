@@ -1,33 +1,30 @@
 import { getTokenAndRequestHeader } from '../utils/auth';
+import betterFetch from './better-fetch';
 
 export function trackMovie(movieId) {
   return getTokenAndRequestHeader()
-    .then(requestHeader => fetch('/api/track/', {
+    .then(requestHeader => fetch(`/api/tracks/movie/${movieId}`, {
       method: 'post',
       headers: requestHeader,
-      body: JSON.stringify({ movieId }),
     }));
 }
 
 export function untrackMovie(movieId) {
   return getTokenAndRequestHeader()
-    .then(requestHeader => fetch('/api/track/untrack', {
+    .then(requestHeader => fetch(`/api/untrack/movie/${movieId}`, {
       method: 'post',
       headers: requestHeader,
-      body: JSON.stringify({ movieId }),
     }));
 }
 
 export function isMovieTracked(userId, movieId) {
   return getTokenAndRequestHeader()
-    .then(requestHeader => fetch(`/api/track/user/${userId}/movie/${movieId}`, {
+    .then(requestHeader => fetch(`/api/tracked/movie/${movieId}`, {
       method: 'get',
       headers: requestHeader,
     }))
     .then(response => response.json());
 }
 
-export function getMovieByTitle(title) {
-  return fetch(`/api/movie/title/${title}`)
-    .then(response => response.json());
-}
+export const getMovieByTitle = title =>
+  betterFetch(`/api/movie/title/${title}`);
