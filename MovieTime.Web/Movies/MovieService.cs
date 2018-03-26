@@ -31,7 +31,8 @@ namespace MovieTime.Web.Movies
          */
         public async Task<Movie> GetMovieById(string id)
         {
-            var movieModel = await _movieRespository.Find(x => x.Id == id);
+            var movieModel = await _movieRespository.Find(x => x.Id.ToLower() == id.ToLower());
+            
             if (movieModel != null) return movieModel;
 
             movieModel = await _thirdPartyMovieRepository.GetMovieById(id);
@@ -61,13 +62,14 @@ namespace MovieTime.Web.Movies
         {
             if (movie == null) return false;
 
-            var createdMovie = await _movieRespository.Add(movie);
+            var changeCount = await _movieRespository.Add(movie);
 
             if (!string.IsNullOrWhiteSpace(movie.Poster)) 
                 await DownloadMoviePoster(movie);
             else
                 Log.Information($"Invalid poster information for {movie.Id} - {movie.Title}");
-            return createdMovie != null;
+            
+            return changeCount > 0;
         }
 
         private async Task DownloadMoviePoster(Movie movie)

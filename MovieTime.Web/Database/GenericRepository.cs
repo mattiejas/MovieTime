@@ -19,11 +19,10 @@ namespace MovieTime.Web.Database
             disposed = false;
         }
 
-        public virtual async Task<T> Add(T t)
+        public virtual async Task<int> Add(T t)
         {
             _context.Set<T>().Add(t);
-            await _context.SaveChangesAsync();
-            return t;
+            return await _context.SaveChangesAsync();
         }
 
         public virtual async Task<int> CountAll()
