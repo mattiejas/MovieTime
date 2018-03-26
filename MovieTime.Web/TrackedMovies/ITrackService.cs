@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using MovieTime.Web.Tracked.Models;
+using MovieTime.Web.TrackedMovies.Models;
 
 namespace MovieTime.Web.TrackedMovies
 {
@@ -8,7 +8,6 @@ namespace MovieTime.Web.TrackedMovies
     {
         Task<bool> TrackMovie(TrackedMovie model);
         Task<bool> UntrackMovie(TrackedMovie model);
-        Task<TrackedMoviesDto> GetTrackedMoviesByUserId(string userId);
         Task<bool> IsMovieTrackedByUser(string userId, string movieId);
     }
 }

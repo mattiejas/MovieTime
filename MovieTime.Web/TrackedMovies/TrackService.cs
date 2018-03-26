@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using MovieTime.Web.Tracked.Models;
+using MovieTime.Web.TrackedMovies.Models;
 
 namespace MovieTime.Web.TrackedMovies
 {
@@ -26,14 +26,6 @@ namespace MovieTime.Web.TrackedMovies
         {
             var result = await _trackRepository.Delete(model);
             return result > 0;
-        }
-
-        public async Task<TrackedMoviesDto> GetTrackedMoviesByUserId(string userId)
-        {
-            var trackModels = await _trackRepository.FindBy(t => t.UserId == userId);
-            var movies = trackModels.Select(x => x.MovieId).ToList();
-            
-            return new TrackedMoviesDto{ userId = userId, movieIds = movies };
         }
 
         public async Task<bool> IsMovieTrackedByUser(string userId, string movieId)

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using MovieTime.Web.Database;
-using MovieTime.Web.Tracked.Models;
+using MovieTime.Web.TrackedMovies.Models;
 using Serilog;
 
 namespace MovieTime.Web.TrackedMovies

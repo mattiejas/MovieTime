@@ -1,6 +1,6 @@
 ﻿using System;
 using MovieTime.Web.Database;
-using MovieTime.Web.Tracked.Models;
+using MovieTime.Web.TrackedMovies.Models;
 
 namespace MovieTime.Web.TrackedMovies
 {
