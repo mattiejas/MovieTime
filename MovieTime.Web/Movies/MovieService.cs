@@ -62,14 +62,14 @@ namespace MovieTime.Web.Movies
         {
             if (movie == null) return false;
 
-            var changeCount = await _movieRespository.AddIfNotExists(movie, x => x.Id == movie.Id);
+            var movieIsAdded = await _movieRespository.AddIfNotExists(movie, x => x.Id == movie.Id);
 
             if (!string.IsNullOrWhiteSpace(movie.Poster)) 
                 await DownloadMoviePoster(movie);
             else
                 Log.Information($"Invalid poster information for {movie.Id} - {movie.Title}");
             
-            return changeCount > 0;
+            return movieIsAdded;
         }
 
         private async Task DownloadMoviePoster(Movie movie)
