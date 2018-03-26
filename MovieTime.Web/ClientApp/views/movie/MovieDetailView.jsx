@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Vibrant from 'node-vibrant';
+import { connect } from 'react-redux';
+
 
 import { getUser } from '../../utils/auth';
-import { getMovieByTitle, trackMovie, untrackMovie, isMovieTracked } from '../../utils/movie';
+import { requestMovieByTitle } from '../../modules/movies';
+import { trackMovie, untrackMovie, isMovieTracked } from '../../utils/movie';
 
 import MoviePoster from '../../components/movie/MoviePoster';
 import MovieHeading from '../../components/movie/MovieHeading';
@@ -53,7 +56,7 @@ class MovieDetailView extends React.Component {
 
   async loadMovieDetails(movieTitle) {
     try {
-      const movie = await getMovieByTitle(movieTitle);
+      const movie = await this.props.requestMovieByTitle(movieTitle);
       const user = await getUser();
       const track = await isMovieTracked(user.uid, movie.imdbId);
 
@@ -207,6 +210,15 @@ class MovieDetailView extends React.Component {
 
 MovieDetailView.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
+  requestMovieByTitle: PropTypes.func.isRequired,
 };
 
-export default MovieDetailView;
+const mapStateToProps = (state, props) => ({
+  movie: state.movies[props.match.params.title] || {},
+});
+
+const mapDispatchToProps = {
+  requestMovieByTitle,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MovieDetailView);
