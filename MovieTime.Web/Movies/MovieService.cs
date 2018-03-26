@@ -32,11 +32,17 @@ namespace MovieTime.Web.Movies
         public async Task<Movie> GetMovieById(string id)
         {
             var movieModel = await _movieRespository.Find(x => x.Id.ToLower() == id.ToLower());
-            
-            if (movieModel != null) return movieModel;
+            if (movieModel != null)
+            {
+                await DownloadMoviePoster(movieModel);
+                return movieModel;
+            }
 
             movieModel = await _thirdPartyMovieRepository.GetMovieById(id);
-            await AddMovie(movieModel); // Cache the movie in our database to improve robustness. Todo: temporary
+            if (movieModel != null) await DownloadMoviePoster(movieModel);
+
+            // Cache the movie in our database to improve robustness. Todo: temporary
+            await AddMovie(movieModel);
 
             return movieModel;
         }
@@ -45,10 +51,17 @@ namespace MovieTime.Web.Movies
         {
             var movieModel = await _movieRespository.Find(x => x.Title.ToLower() == title.ToLower());
 
-            if (movieModel != null) return movieModel;
+            if (movieModel != null)
+            {
+                await DownloadMoviePoster(movieModel);
+                return movieModel;
+            }
 
             movieModel = await _thirdPartyMovieRepository.GetMovieByTitle(title);
-            await AddMovie(movieModel); // Cache the movie in our database to improve robustness. Todo: temporary
+            if (movieModel != null) await DownloadMoviePoster(movieModel);
+
+            // Cache the movie in our database to improve robustness. Todo: temporary
+            await AddMovie(movieModel);
 
             return movieModel;
         }
@@ -64,17 +77,23 @@ namespace MovieTime.Web.Movies
 
             var movieIsAdded = await _movieRespository.AddIfNotExists(movie, x => x.Id == movie.Id);
 
-            if (!string.IsNullOrWhiteSpace(movie.Poster)) 
+            if (!string.IsNullOrWhiteSpace(movie.Poster))
                 await DownloadMoviePoster(movie);
             else
                 Log.Information($"Invalid poster information for {movie.Id} - {movie.Title}");
-            
+
             return movieIsAdded;
         }
 
         private async Task DownloadMoviePoster(Movie movie)
         {
-            var folderPath = Path.Combine(_hostingEnvironment.WebRootPath, "assets\\posters");
+            if (string.IsNullOrWhiteSpace(movie.Poster))
+            {
+                Log.Information($"Invalid poster information for {movie.Id} - {movie.Title}");
+                return;
+            }
+
+            var folderPath = Path.Combine(Path.Combine(_hostingEnvironment.WebRootPath, "assets"), "posters");
             var fileName = movie.Id + Path.GetExtension(movie.Poster);
             var fileUploadPath = Path.Combine(folderPath, fileName);
             if (File.Exists(fileUploadPath))

@@ -4,6 +4,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MovieTime.Web.Movies.Models;
+using Serilog;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -35,6 +36,8 @@ namespace MovieTime.Web.Movies
             if (movie == null) return NotFound();
 
             var movieGetDto = _mapper.Map<Movie, MovieGetDto>(movie);
+            
+            Log.Warning("Movie posters location is " + movie.Poster);
 
             return Ok(movieGetDto);
         }
