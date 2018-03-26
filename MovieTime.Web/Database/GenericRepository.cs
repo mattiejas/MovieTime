@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace MovieTime.Web.Database
 {
@@ -22,8 +23,23 @@ namespace MovieTime.Web.Database
         public virtual async Task<T> Add(T t)
         {
             _context.Set<T>().Add(t);
-            await _context.SaveChangesAsync();
-            return t;
+            try
+            {
+                await _context.SaveChangesAsync();
+                return t;
+            }
+            catch(Exception e)
+            {
+                Log.Error(e.Message);
+                return null;
+            }
+        }
+
+        public virtual async Task<T> AddIfNotExists(T entity, Expression<Func<T, bool>> match)
+        {
+            var exists = _context.Set<T>().Any(match);
+            if (exists) return null;
+            return await Add(entity);
         }
 
         public virtual async Task<int> CountAll()
