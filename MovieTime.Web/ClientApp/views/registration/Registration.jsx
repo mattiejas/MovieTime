@@ -144,7 +144,7 @@ export default class Registration extends React.Component {
                   type="password"
                   value={this.state.fields.password}
                   onChange={(e, error) => this.onInputChange(e, error)}
-                  validate={value => (value.length <= 6 ? 'Password has to be at least 6 characters' : null)}
+                  validate={value => (value.length < 6 ? 'Password has to be at least 6 characters' : null)}
                 />
                 <Input
                   label="Repeat Password"
