@@ -53,7 +53,7 @@ namespace MovieTime.Web.Movies
 
         public async Task<bool> AddMovie(Movie movie)
         {
-            var createdMovie = await _movieRespository.Add(movie);
+            var createdMovie = await _movieRespository.AddIfNotExists(movie, x => x.Id == movie.Id);
             return createdMovie != null;
         }
 

@@ -10,16 +10,16 @@ const Table = ({ headers, rows }) => (
       <thead>
         <tr>
           {
-            _.map(headers, (heading, i) => (<th key={i}>{heading}</th>))
+            _.map(headers, (heading, i) => (<th key={`header-data--${i}`}>{heading}</th>))
           }
         </tr>
       </thead>
       <tbody>
         {
-          _.map(rows, row => (
-            <tr>
+          _.map(rows, (row, i) => (
+            <tr key={`table-row--${i}`}>
               {
-                _.map(row, (item, i) => <td key={i}>{item}</td>)
+                _.map(row, (item, j) => <td key={`table-data--${j}`}>{item}</td>)
               }
             </tr>))
         }
