@@ -1,4 +1,4 @@
-﻿namespace MovieTime.Web.Tracked.Models
+﻿namespace MovieTime.Web.TrackedMovies.Models
 {
     public class TrackedMovie
     {
