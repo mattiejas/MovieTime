@@ -25,7 +25,7 @@ namespace MovieTime.Web
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration; 
+            Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -49,16 +49,15 @@ namespace MovieTime.Web
 
             services.AddMvc(setupAction =>
             {
-                setupAction.ReturnHttpNotAcceptable = true; // do not send default media type if unsupported type is requested
+                setupAction.ReturnHttpNotAcceptable =
+                    true; // do not send default media type if unsupported type is requested
                 setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
                 setupAction.InputFormatters.Add(new XmlDataContractSerializerInputFormatter());
             });
-            
+
             services.AddAutoMapper();
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info {Title = "MovieTime API", Version = "v1"}); });
 
-            // Exec: dotnet ef migrations add "<migration_name>", to add a new migration.
-            // Exec: dotnet ef database update, to update the database according to the migrations. 
             var connectionString = Configuration.GetConnectionString("defaultConnection");
             var mode = Configuration.GetConnectionString("Use_SQLServer");
             if (string.IsNullOrWhiteSpace(mode) || mode.ToLower() == "true")
@@ -70,20 +69,20 @@ namespace MovieTime.Web
                 connectionString = Configuration.GetConnectionString("Postgresql_DATABASE_URL");
                 services.AddDbContext<MovieContext>(options => options.UseNpgsql(connectionString));
             }
-            
+
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IMovieRespository, MovieRepository>();
             // For now decide here if we use omdb or tmdb as movie repository.
             services.AddScoped<IThirdPartyMovieRepository, OmdbMovieRepository>();
-            
+
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddScoped<IReviewService, ReviewService>();
-            services.AddScoped<IReviewRepository, ReviewRepository>(); 
-            
-            services.AddScoped<ITrackService, TrackService>(); 
-            services.AddScoped<ITrackRepository, TrackRepository>(); 
+            services.AddScoped<IReviewRepository, ReviewRepository>();
+
+            services.AddScoped<ITrackService, TrackService>();
+            services.AddScoped<ITrackRepository, TrackRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -97,11 +96,19 @@ namespace MovieTime.Web
                     HotModuleReplacement = true,
                     ReactHotModuleReplacement = true
                 });
-                movieContext.EnsureSeedDataForContext();
+
+                var setDbToInitialState = Configuration.GetConnectionString("clear_local_db");
+                if (string.IsNullOrWhiteSpace(setDbToInitialState) || setDbToInitialState.ToLower() == "true")
+                {
+                    movieContext.SeedContextWithoutMigration(env);
+                    // You can also use SeedContext() to use migrations instead of EnsureCreated().
+                    // movieContext.SeedContext(env);
+                }
             }
             else
             {
-                movieContext.Database.Migrate();
+                StartMigration(movieContext);
+                
                 app.UseMiddleware<SerilogMiddleware>();
                 //app.UseExceptionHandler("/Home/Error");
                 app.UseExceptionHandler(appBuilder =>
@@ -113,7 +120,7 @@ namespace MovieTime.Web
                     });
                 });
             }
-            
+
             app.UseAuthentication();
             app.UseStaticFiles();
             app.UseSwagger();
@@ -133,6 +140,35 @@ namespace MovieTime.Web
                     name: "spa-fallback",
                     defaults: new {controller = "Home", action = "Index"});
             });
+        }
+
+        /**
+         * Applies all pending migrations automatically.
+         *
+         * Instructions:
+         * In order to update the database, you have to create a migration first.
+         * One of the possible approach for this project is to create migration in the master branch before deploying it.
+         * 
+         * The instructions to create a new migration:
+         * ----------------------------------------------------------
+         * cd ....MovieTime.Web (locate to the web project)
+         * dotnet restore
+         * dotnet ef migrations add <Name_Migration>
+         * ----------------------------------------------------------
+         *
+         * In the migration folder, the <name_migration> shows down and up methods.
+         * If both methods are empty, migration can be deleted since no changes in entities occured.
+         * ----------------------------------------------------------
+         * dotnet ef migrations remove
+         * ----------------------------------------------------------
+         *
+         * The migration will be applied by this method. So there is no need to call 'dotnet ef database update' command.
+         *
+         * Todo: In production, it's recommended to run migration scripts instead.
+         */
+        private void StartMigration(MovieContext movieContext)
+        {
+            movieContext.Database.Migrate();
         }
     }
 }

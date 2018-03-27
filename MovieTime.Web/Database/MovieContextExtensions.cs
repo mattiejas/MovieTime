@@ -1,5 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using MovieTime.Web.Genres;
 using MovieTime.Web.Movies.Models;
 using MovieTime.Web.Users;
@@ -8,19 +13,83 @@ namespace MovieTime.Web.Database
 {
     public static class MovieContextExtensions
     {
-        public static void EnsureSeedDataForContext(this MovieContext context)
+        /**
+         * Set the database to initial state with mockup data.
+         * No migrations needed since EnsureCreated is used instead
+         */
+        public static void SeedContextWithoutMigration(this MovieContext context, IHostingEnvironment env)
         {
-            // Clear the database. Don't do this for production environment(s)
-            context.Database.EnsureDeleted();
+            // FOR DEVELOPMENT ONLY!
+            if (!env.IsDevelopment()) return;
+            
+            // BACKUP DATA
+            // Making backup while db or entity doesn't exits will lead to uncatchable exception. So ensure db is created.
             context.Database.EnsureCreated();
-//            context.Movies.RemoveRange(context.Movies);
-//            context.Genres.RemoveRange(context.Genres);
-//            context.MovieGenre.RemoveRange(context.MovieGenre);
-//            context.SaveChanges();
 
-            // INIT SEED DATA
+            var usersBackup = new List<User>();
+            if (context.Users.Any()) usersBackup = context.Users.ToList();
 
-            // ** Genres **
+            // DELETE DATABASE
+            context.Database.EnsureDeleted();
+
+            // INIT DATABASE
+            context.Database.EnsureCreated();
+
+            // INSERT DATA
+            var genres = GetGenresSampleData();
+            var movies = GetMoviesSampleData();
+            var movieGenre = GetMovieGenresSampleData(movies, genres);
+            var users = usersBackup.Count <= 0 ? GetUsersSampleData() : usersBackup;
+
+            context.Movies.AddRange(movies);
+            context.Genres.AddRange(genres);
+            context.MovieGenre.AddRange(movieGenre);
+            context.Users.AddRange(users);
+            context.SaveChanges();
+        }
+
+        /**
+         * Set the database to initial state with mockup data.
+         * Migrations are used to initialise database. Ensure at least one migration is created before using this method.
+         *
+         * In case you manually update the database (via cdm) by applying migration,
+         * you may get an 'object <Entity> already exists' error.
+         * When that problem occurs, manually delete your database first. Databases created by EnsureCreated() ignores
+         * migration, which can lead to conflict when migration occurs afterwards.
+         */
+        public static void SeedContext(this MovieContext context, IHostingEnvironment env)
+        {
+            // FOR DEVELOPMENT ONLY!
+            if (!env.IsDevelopment()) return;
+            
+            // BACKUP DATA
+            // Making backup while db or entity doesn't exits will lead to uncatchable exception. Ensure db is created.
+            context.Database.EnsureCreated();
+            
+            var usersBackup = new List<User>();
+            if (context.Users.Any()) usersBackup = context.Users.ToList();
+
+            // DELETE DATABASE
+            context.Database.EnsureDeleted();
+
+            // INIT DATABASE
+            context.Database.Migrate();
+
+            // INSERT DATA
+            var genres = GetGenresSampleData();
+            var movies = GetMoviesSampleData();
+            var movieGenre = GetMovieGenresSampleData(movies, genres);
+            var users = usersBackup.Count <= 0 ? GetUsersSampleData() : usersBackup;
+
+            context.Movies.AddRange(movies);
+            context.Genres.AddRange(genres);
+            context.MovieGenre.AddRange(movieGenre);
+            context.Users.AddRange(users);
+            context.SaveChanges();
+        }
+
+        private static List<Genre> GetGenresSampleData()
+        {
             var genres = new List<Genre>()
             {
                 new Genre()
@@ -54,13 +123,17 @@ namespace MovieTime.Web.Database
                 }
             };
 
-            // ** Movies **
+            return genres;
+        }
+
+        private static List<Movie> GetMoviesSampleData()
+        {
             var movies = new List<Movie>()
             {
                 new Movie()
                 {
                     Id = "7861a023-57a0-4fae-86a2-4d19026da320",
-                    Title = "The legend of ORA, the potato",
+                    Title = "The legend of ORA, the potato Test Data",
                     Actors = "John, Maco, Sphent",
                     Director = "Peter",
                     Plot = "Long time ago, the legend of ORA was born. One day Little ORA decided to...",
@@ -73,7 +146,7 @@ namespace MovieTime.Web.Database
                 new Movie()
                 {
                     Id = "c2c43232-abeb-461a-a998-071721925ad9",
-                    Title = "The legend of ORA, the potato 2",
+                    Title = "The legend of ORA, the potato 2 Test Data",
                     Actors = "John 2, Maco 2, Sphent 2",
                     Director = "Peter 2",
                     Plot = "Long time ago 2, the legend of ORA was born. One day Little ORA decided to...",
@@ -86,7 +159,7 @@ namespace MovieTime.Web.Database
                 new Movie()
                 {
                     Id = "53fed9fa-75a2-477a-9568-dd6351ca4127",
-                    Title = "Kungfu panda",
+                    Title = "Kungfu panda Test data",
                     Actors = "Johny bravo",
                     Director = "Bravo John",
                     Plot = "The panda, which learned his kung fu from....",
@@ -97,7 +170,11 @@ namespace MovieTime.Web.Database
                 }
             };
 
-            // ** Linking Movies with Genres
+            return movies;
+        }
+
+        private static List<MovieGenre> GetMovieGenresSampleData(List<Movie> movies, List<Genre> genres)
+        {
             var movieGenre = new List<MovieGenre>()
             {
                 new MovieGenre()
@@ -134,6 +211,11 @@ namespace MovieTime.Web.Database
                 },
             };
 
+            return movieGenre;
+        }
+
+        private static List<User> GetUsersSampleData()
+        {
             var users = new List<User>
             {
                 new User
@@ -186,12 +268,7 @@ namespace MovieTime.Web.Database
                     Email = "14144697@student.hhs.nl"
                 },
             };
-
-            context.Movies.AddRange(movies);
-            context.Genres.AddRange(genres);
-            context.MovieGenre.AddRange(movieGenre);
-            context.Users.AddRange(users);
-            context.SaveChanges();
+            return users;
         }
     }
 }

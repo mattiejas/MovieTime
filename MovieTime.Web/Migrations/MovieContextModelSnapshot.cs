@@ -17,8 +17,8 @@ namespace MovieTime.Web.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.0.1-rtm-125");
+                .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("MovieTime.Web.Genres.Genre", b =>
                 {
@@ -49,15 +49,15 @@ namespace MovieTime.Web.Migrations
 
                     b.Property<string>("Actors")
                         .IsRequired()
-                        .HasMaxLength(200);
+                        .HasMaxLength(2000);
 
                     b.Property<string>("Director")
                         .IsRequired()
-                        .HasMaxLength(200);
+                        .HasMaxLength(2000);
 
                     b.Property<string>("Plot")
                         .IsRequired()
-                        .HasMaxLength(2000);
+                        .HasMaxLength(4000);
 
                     b.Property<string>("Poster")
                         .IsRequired();
@@ -66,11 +66,11 @@ namespace MovieTime.Web.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(40);
+                        .HasMaxLength(2000);
 
                     b.Property<string>("Writer")
                         .IsRequired()
-                        .HasMaxLength(200);
+                        .HasMaxLength(2000);
 
                     b.Property<DateTime>("Year");
 
