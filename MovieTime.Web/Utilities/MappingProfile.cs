@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using AutoMapper;
 using MovieTime.Web.Helpers;
 using MovieTime.Web.Movies.Models;
