@@ -9,5 +9,6 @@ namespace MovieTime.Web.TrackedMovies
         Task<bool> TrackMovie(TrackedMovie model);
         Task<bool> UntrackMovie(TrackedMovie model);
         Task<bool> IsMovieTrackedByUser(string userId, string movieId);
-    }
+        Task<TrackedMovie> ToggleMovieWatchedStatus(TrackedMovie trackedMovie);
+	}
 }

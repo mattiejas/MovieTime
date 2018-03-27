@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using MovieTime.Web.Auth;
 using MovieTime.Web.TrackedMovies.Models;
@@ -11,10 +12,12 @@ namespace MovieTime.Web.TrackedMovies
     public class TrackController : Controller
     {
         private readonly ITrackService _trackService;
+        private readonly IMapper _mapper;
 
-        public TrackController(ITrackService trackService)
+        public TrackController(ITrackService trackService, IMapper mapper)
         {
             _trackService = trackService;
+            _mapper = mapper;
         }
         
         [HttpPost("tracks/movie/{movieId}")]
@@ -33,7 +36,10 @@ namespace MovieTime.Web.TrackedMovies
                     return BadRequest(new { message = "User is not authenticated" });
                 }
 
-                await _trackService.TrackMovie(new TrackedMovie { MovieId = movieId, UserId = userIdFromToken });
+                var trackedMovieDto = new TrackedMovieDto { MovieId = movieId, UserId = userIdFromToken, Watched = false };
+                var trackedMovie = _mapper.Map<TrackedMovieDto, TrackedMovie>(trackedMovieDto);
+
+                await _trackService.TrackMovie(trackedMovie);
                 
                 return NoContent();      
             }
@@ -81,8 +87,45 @@ namespace MovieTime.Web.TrackedMovies
                     return BadRequest(new { message = "User is not authenticated" });
                 }
 
-                await _trackService.UntrackMovie(new TrackedMovie { MovieId = movieId, UserId = userIdFromToken }); 
+                var trackedMovieDto = new TrackedMovieDto { MovieId = movieId, UserId = userIdFromToken };
+                var trackedMovie = _mapper.Map<TrackedMovieDto, TrackedMovie>(trackedMovieDto);
+
+                await _trackService.UntrackMovie(trackedMovie); 
                 return Ok();
+            }
+            catch (Exception err)
+            {
+                Log.Error(err.Message);
+                return BadRequest(new { message = err.Message });
+            }
+        }  
+
+        [HttpPost("watch/movie/{movieId}")]
+        public async Task<IActionResult> ToggleMovieWatchedStatus([FromBody] TrackedMovieDto trackedMovieDto)
+        {         
+            try
+            {
+                if (trackedMovieDto == null)
+                {
+                    return BadRequest(new { message = "Identity of the movie is missing" });
+                }
+                
+                var userIdFromToken = this.User.GetUserId();
+                if (userIdFromToken == null)
+                {
+                    return BadRequest(new { message = "User is not authenticated" });
+                }
+                trackedMovieDto.UserId = userIdFromToken;
+
+                var trackedMovie = _mapper.Map<TrackedMovieDto, TrackedMovie>(trackedMovieDto);
+
+                var result = await _trackService.ToggleMovieWatchedStatus(trackedMovie); 
+                if (result == null) 
+                {
+                    return NotFound();
+                }
+
+                return Ok(result);
             }
             catch (Exception err)
             {

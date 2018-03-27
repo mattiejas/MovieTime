@@ -17,6 +17,19 @@ namespace MovieTime.Web.TrackedMovies
     {
         public TrackRepository(MovieContext context) : base(context)
         {
+            
+        }
+
+        public async Task<TrackedMovie> Update(TrackedMovie trackedMovie)
+        {
+            var exists = await _context.Set<TrackedMovie>().AnyAsync(t => t.MovieId == trackedMovie.MovieId && t.UserId == trackedMovie.UserId);
+            if (exists)
+            {
+                _context.Update(trackedMovie);
+                await _context.SaveChangesAsync();
+                return trackedMovie;
+            }
+            return null;
         }
     }
 }
