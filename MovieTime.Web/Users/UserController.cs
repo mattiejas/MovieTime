@@ -78,7 +78,7 @@ namespace MovieTime.Web.Users
                 throw new Exception("Failed to update the user");
             
             // In case no additional information is changed at serverside (like timestamp), don't return the updated object
-            return NoContent();
+            return Ok(new {message = "User successfully updated"});
         } 
     }
 }

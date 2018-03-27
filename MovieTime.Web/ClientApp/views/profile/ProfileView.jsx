@@ -1,8 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import auth from '../../firebase';
-import { getUserData, updateUserData } from '../../utils/user';
+import { updateUser, getUser } from '../../modules/users';
+import { authenticateById } from '../../modules/auth';
 
 import ListWidget from '../../components/list-widget/ListWidget';
 import Placeholder from '../../components/placeholder/Placeholder';
@@ -13,11 +14,10 @@ import EditProfileModal from '../../components/profile/EditProfileModal';
 import styles from './ProfileView.scss';
 
 class ProfileView extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      canEditProfile: false,
-      user: {},
+      canEditProfile: props.authId === (props.user && props.user.id),
       isLoading: true,
       isEditing: false,
       movies: [
@@ -32,21 +32,17 @@ class ProfileView extends React.Component {
 
   componentDidMount() {
     const { id } = this.props.match.params;
-    this.displayUserData(id);
-    // this.getProfileCanBeEdited();
-
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        this.setState({
-          canEditProfile: user.uid === id,
-        });
-      } else {
-        this.setState({ canEditProfile: false });
-      }
-    });
+    this.props.getUser(id);
   }
 
-  componentWillUpdate() {}
+  componentWillReceiveProps(nextProps) {
+    if (Object.prototype.hasOwnProperty.call(nextProps.user, 'firstName')) {
+      this.setState({
+        isLoading: false,
+        canEditProfile: nextProps.authId === (nextProps.user && nextProps.user.id),
+      });
+    }
+  }
 
   onEdit() {
     this.setState({
@@ -60,22 +56,18 @@ class ProfileView extends React.Component {
     });
   }
 
-  displayUserData(id) {
-    getUserData(id)
-      .then((data) => {
-        this.setState({
-          user: data,
-          isLoading: false,
-        });
-      })
-      .catch(() => {
-        this.props.history.push('/404');
-      });
+  onUpdate(user) {
+    this.props.updateUser(user).then(() => {
+      if (this.props.authId === user.id) {
+        // re-authenticate so username in navigation updates
+        this.props.authenticateById(this.props.authId);
+      }
+    });
   }
 
   render() {
-    const { firstName = '', lastName = '' } = this.state.user;
-    const { canEditProfile } = this.state;
+    const { canEditProfile, isLoading } = this.state;
+    const { firstName, lastName } = this.props.user;
     const { id } = this.props.match.params;
 
     return (
@@ -83,11 +75,8 @@ class ProfileView extends React.Component {
         <EditProfileModal
           hidden={!this.state.isEditing}
           hideModal={() => this.onDiscard()}
-          onUpdate={user =>
-            updateUserData(user, id).then(() => {
-                this.displayUserData(id);
-            })}
-          user={this.state.user}
+          onUpdate={user => this.onUpdate({ ...user, id })}
+          user={this.props.user}
         />
         <div className={styles.view__background} />
         <div className={styles.view__header}>
@@ -100,7 +89,7 @@ class ProfileView extends React.Component {
             </div>
             <div className={styles.header__content}>
               <div className={styles.name}>
-                <Placeholder isReady={!this.state.isLoading}>
+                <Placeholder isReady={!isLoading}>
                   <h1>{`${firstName} ${lastName}`}</h1>
                   <h3>
                     has watched ... movies worthy of ... hours and ... minutes
@@ -143,6 +132,27 @@ class ProfileView extends React.Component {
 ProfileView.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
+  updateUser: PropTypes.func.isRequired,
+  getUser: PropTypes.func.isRequired,
+  authenticateById: PropTypes.func.isRequired,
+  user: PropTypes.objectOf(PropTypes.any),
+  authId: PropTypes.string,
 };
 
-export default ProfileView;
+ProfileView.defaultProps = {
+  user: {},
+  authId: null,
+};
+
+const mapStateToProps = (state, props) => ({
+  user: state.users[props.match.params.id] || {},
+  authId: state.auth.user && state.auth.user.id,
+});
+
+const mapDispatchToProps = {
+  updateUser,
+  getUser,
+  authenticateById,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileView);

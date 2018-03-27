@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MovieTime.Web.Tracked.Models
+namespace MovieTime.Web.TrackedMovies.Models
 {
     public class TrackedMoviesDto
     {

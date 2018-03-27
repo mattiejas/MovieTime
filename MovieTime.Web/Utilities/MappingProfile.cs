@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using AutoMapper;
+using MovieTime.Web.Helpers;
 using MovieTime.Web.Movies.Models;
 using MovieTime.Web.ThirdPartyServices.OMDB.MovieList;
 using MovieTime.Web.ThirdPartyServices.OMDB.Movies;
@@ -16,7 +15,8 @@ namespace MovieTime.Web.Utilities
         {
             // Add as many of these lines as you need to map your objects
             CreateMap<OmdbMovieModel, Movie>()
-                .ForMember(dest => dest.Year, opt => opt.MapFrom(src => new DateTime(Convert.ToInt32(src.Year), 1, 1)));
+                .ForMember(dest => dest.Year, opt => opt.MapFrom(src => new DateTime(Convert.ToInt32(src.Year), 1, 1)))
+                .ForMember(dest => dest.RunTimeInMinutes, opt => opt.MapFrom(src => DataConverterHelper.ConvertOmdbRuntimeToInt(src.Runtime)));
 
             CreateMap<Movie, MovieGetDto>()
                 .ForMember(dest => dest.ImdbId, opt => opt.MapFrom(src => src.Id))

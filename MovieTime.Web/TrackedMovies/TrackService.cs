@@ -1,18 +1,10 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using MovieTime.Web.Tracked.Models;
+using MovieTime.Web.TrackedMovies.Models;
 
 namespace MovieTime.Web.TrackedMovies
 {
-    public interface ITrackService
-    {
-        Task<bool> TrackMovie(TrackedMovie model);
-        Task<bool> UntrackMovie(TrackedMovie model);
-        Task<TrackedMoviesDto> GetTrackedMoviesByUserId(string userId);
-        Task<bool> IsMovieTrackedByUser(string userId, string movieId);
-    }
-    
     public class TrackService : ITrackService
     {
         private readonly ITrackRepository _trackRepository;
@@ -23,22 +15,23 @@ namespace MovieTime.Web.TrackedMovies
             _trackRepository = trackRepository;
             _mapper = mapper;
         }
-        
-        public Task<bool> TrackMovie(TrackedMovie model) => _trackRepository.TrackMovie(model);
 
-        public Task<bool> UntrackMovie(TrackedMovie model) => _trackRepository.UntrackMovie(model);
-
-        public async Task<TrackedMoviesDto> GetTrackedMoviesByUserId(string userId)
+        public async Task<bool> TrackMovie(TrackedMovie model)
         {
-            var trackModels = await _trackRepository.GetTrackedMoviesByUserId(userId);
-            var movies = trackModels.Select(x => x.MovieId).ToList();
-            
-            return new TrackedMoviesDto{ userId = userId, movieIds = movies };
+            var result = await _trackRepository.Add(model);
+            return result;
+        }
+
+        public async Task<bool> UntrackMovie(TrackedMovie model)
+        {
+            var result = await _trackRepository.Delete(model);
+            return result > 0;
         }
 
         public async Task<bool> IsMovieTrackedByUser(string userId, string movieId)
         {
-            return await _trackRepository.IsMovieTrackedByUser(userId, movieId);
+            var result = await _trackRepository.Find(t => t.UserId == userId && t.MovieId == movieId);
+            return result != null;
         }
     }
 }
