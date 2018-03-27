@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using MovieTime.Web.Movies.Models;
@@ -31,15 +32,15 @@ namespace MovieTime.Web.Movies
          */
         public async Task<Movie> GetMovieById(string id)
         {
-            var movieModel = await _movieRespository.Find(x => x.Id.ToLower() == id.ToLower());
+            var movieModel = await _movieRespository.Find(x => x.Id == id);
             if (movieModel != null)
             {
-                await DownloadMoviePoster(movieModel);
+                movieModel.Poster = await DownloadMoviePoster(movieModel);
                 return movieModel;
             }
 
             movieModel = await _thirdPartyMovieRepository.GetMovieById(id);
-            if (movieModel != null) await DownloadMoviePoster(movieModel);
+            if (movieModel != null) movieModel.Poster = await DownloadMoviePoster(movieModel);
 
             // Cache the movie in our database to improve robustness. Todo: temporary
             await AddMovie(movieModel);
@@ -53,12 +54,12 @@ namespace MovieTime.Web.Movies
 
             if (movieModel != null)
             {
-                await DownloadMoviePoster(movieModel);
+                movieModel.Poster = await DownloadMoviePoster(movieModel);
                 return movieModel;
             }
 
             movieModel = await _thirdPartyMovieRepository.GetMovieByTitle(title);
-            if (movieModel != null) await DownloadMoviePoster(movieModel);
+            if (movieModel != null) movieModel.Poster = await DownloadMoviePoster(movieModel);
 
             // Cache the movie in our database to improve robustness. Todo: temporary
             await AddMovie(movieModel);
@@ -75,55 +76,57 @@ namespace MovieTime.Web.Movies
         {
             if (movie == null) return false;
 
-            var movieIsAdded = await _movieRespository.AddIfNotExists(movie, x => x.Id == movie.Id);
+            movie.Poster = await DownloadMoviePoster(movie);
 
-            if (!string.IsNullOrWhiteSpace(movie.Poster))
-                await DownloadMoviePoster(movie);
-            else
-                Log.Information($"Invalid poster information for {movie.Id} - {movie.Title}");
-
-            return movieIsAdded;
+            return await _movieRespository.AddIfNotExists(movie, x => x.Id == movie.Id);
         }
 
-        private async Task DownloadMoviePoster(Movie movie)
+        private async Task<string> DownloadMoviePoster(Movie movie)
         {
             if (string.IsNullOrWhiteSpace(movie.Poster))
             {
                 Log.Information($"Invalid poster information for {movie.Id} - {movie.Title}");
-                return;
+                return movie.Poster;
             }
 
-            var folderPath = Path.Combine(Path.Combine(_hostingEnvironment.WebRootPath, "assets"), "posters");
+            var folderPath = Path.Combine("assets", "posters");
             var fileName = movie.Id + Path.GetExtension(movie.Poster);
-            var fileUploadPath = Path.Combine(folderPath, fileName);
+            var posterLocation = Path.Combine(folderPath, fileName);
+
+            var fileUploadPath = Path.Combine(_hostingEnvironment.WebRootPath, posterLocation);
+
             if (File.Exists(fileUploadPath))
             {
                 Log.Information($"Poster {fileUploadPath} already exists in the assets folder.");
+                return posterLocation;
             }
-            else
+
+            try
             {
-                try
+                Directory.CreateDirectory(folderPath);
+                using (var httpClient = new HttpClient())
+                using (var contentStream = await httpClient.GetStreamAsync(movie.Poster))
                 {
-                    Directory.CreateDirectory(folderPath);
-                    using (var httpClient = new HttpClient())
-                    using (var contentStream = await httpClient.GetStreamAsync(movie.Poster))
+                    int bufferSize = 1048576;
+                    using (var fileStream = new FileStream(fileUploadPath, FileMode.Create, FileAccess.Write,
+                        FileShare.None, bufferSize, true))
                     {
-                        int bufferSize = 1048576;
-                        using (var fileStream = new FileStream(fileUploadPath, FileMode.Create, FileAccess.Write,
-                            FileShare.None, bufferSize, true))
-                        {
-                            await contentStream.CopyToAsync(fileStream);
-                        }
+                        await contentStream.CopyToAsync(fileStream);
                     }
                 }
-                catch (Exception ex)
-                {
-                    Log.Error(ex.Message);
-                }
-
-                if (File.Exists(fileUploadPath))
-                    Log.Information($"Poster {fileUploadPath} is succesfully retrieved to the assets folder");
             }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+            }
+
+            if (File.Exists(fileUploadPath))
+            {
+                Log.Information($"Poster {fileUploadPath} is succesfully retrieved to the assets folder");
+                return posterLocation;
+            }
+
+            return movie.Poster;
         }
 
         public async Task<bool> MovieExistById(string movieId)
