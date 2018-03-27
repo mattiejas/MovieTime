@@ -13,10 +13,8 @@ export async function getUser() {
 }
 
 async function getTokenForCurrentUser() {
-  return getUser()
-    .then(user => user.getIdToken(true));
+  return getUser().then(user => user.getIdToken(true));
 }
-
 
 function getRequestHeader(token) {
   return {
@@ -26,8 +24,7 @@ function getRequestHeader(token) {
 }
 
 export function getTokenAndRequestHeader() {
-  return getTokenForCurrentUser()
-    .then(token => getRequestHeader(token));
+  return getTokenForCurrentUser().then(token => getRequestHeader(token));
 }
 
 async function registerWithBackEnd(person, token) {
@@ -81,4 +78,23 @@ async function removeUserFromBackend() {
 export async function removeUser(password) {
   await removeUserFromBackend();
   await removeUserFromFirebase(password);
+}
+
+async function newGoogleLoginHappened(user) {
+  if (user) {
+    console.log('NewGoogleLoginInHappened, we already have a user', user);
+  } else {
+    console.log('NewGoogleLoginInHappened, we are about to create a google provider to redirect to');
+    const provider = new firebase.auth.GoogleAuthProvider();
+    firebase
+      .auth()
+      .signInWithRedirect(provider)
+      .then((result) => {
+        console.log('NewGoogleLoginInHappened,', result);
+      });
+  }
+}
+
+export async function signInWithGoogle(user) {
+  newGoogleLoginHappened(user);
 }

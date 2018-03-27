@@ -1,0 +1,9 @@
+DROP TABLE Review
+GO
+DROP TABLE Users
+GO
+DROP TABLE MovieGenre
+GO
+DROP TABLE Genres
+GO
+DROP TABLE Movies

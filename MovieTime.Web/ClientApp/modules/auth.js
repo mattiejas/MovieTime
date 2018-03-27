@@ -1,11 +1,28 @@
 import { getUserData } from '../utils/user';
-import { login, logout } from '../utils/auth';
+import { login, logout, signInWithGoogle } from '../utils/auth';
 
 // Actions
-
 export const authenticate = (username, password) => (dispatch) => {
   dispatch({ type: 'AUTHENTICATE_REQUEST' });
   return login(username, password).then((user) => {
+    getUserData(user.uid)
+      .then((response) => {
+        dispatch({
+          type: 'AUTHENTICATE_SUCCESS',
+          payload: { ...response, id: user.uid },
+        });
+        return response;
+      })
+      .catch((err) => {
+        dispatch({ type: 'AUTHENTICATE_ERROR' });
+        return err;
+      });
+  });
+};
+
+export const authenticateWithGoogle = user => (dispatch) => {
+  dispatch({ type: 'AUTHENTICATE_REQUEST' });
+  return signInWithGoogle(user).then((user) => {
     getUserData(user.uid)
       .then((response) => {
         dispatch({
@@ -39,11 +56,12 @@ export const authenticateById = id => (dispatch) => {
 
 export const unauthenticate = () => (dispatch) => {
   dispatch({ type: 'UNAUTHENTICATE_REQUEST' });
-  return logout().then(() => {
-    dispatch({
-      type: 'UNAUTHENTICATE_SUCCESS',
-    });
-  })
+  return logout()
+    .then(() => {
+      dispatch({
+        type: 'UNAUTHENTICATE_SUCCESS',
+      });
+    })
     .catch((err) => {
       dispatch({ type: 'UNAUTHENTICATE_ERROR' });
       return err;
