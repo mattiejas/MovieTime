@@ -44,8 +44,8 @@ namespace MovieTime.Web.Users
         public async Task<bool> AddUser(UserCreateDto userDto)
         {
             var user = _mapper.Map<UserCreateDto, User>(userDto);
-            var createdUser = await _userRepository.Add(user);
-            return createdUser != null;
+            var userIsCreated = await _userRepository.Add(user);
+            return userIsCreated;
         }
 
         public async Task<bool> UserExist(string id)

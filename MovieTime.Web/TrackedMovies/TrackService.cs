@@ -19,7 +19,7 @@ namespace MovieTime.Web.TrackedMovies
         public async Task<bool> TrackMovie(TrackedMovie model)
         {
             var result = await _trackRepository.Add(model);
-            return result != null;
+            return result;
         }
 
         public async Task<bool> UntrackMovie(TrackedMovie model)
