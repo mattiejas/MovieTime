@@ -125,7 +125,8 @@ namespace MovieTime.Web.TrackedMovies
                     return NotFound();
                 }
 
-                return Ok(result);
+                var response = _mapper.Map<TrackedMovie, TrackedMovieDto>(result);
+                return Ok(response);
             }
             catch (Exception err)
             {
