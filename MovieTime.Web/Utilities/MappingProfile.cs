@@ -21,7 +21,8 @@ namespace MovieTime.Web.Utilities
 
             CreateMap<Movie, MovieGetDto>()
                 .ForMember(dest => dest.ImdbId, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Year.Year.ToString()));
+                .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Year.Year.ToString()))
+                .ForMember(dest => dest.RunTime, opt => opt.MapFrom(src => src.RunTimeInMinutes));
             
             CreateMap<MovieCreateDto, Movie>();
 
@@ -36,7 +37,7 @@ namespace MovieTime.Web.Utilities
             CreateMap<TrackedMoviesGetDto, TrackedMovie>()
                 .ForPath(dest => dest.Movie.Title, opt => opt.MapFrom(src => src.Title))
                 .ForPath(dest => dest.Movie.Year, opt => opt.MapFrom(src => src.Year))
-                .ForPath(dest => dest.Movie.RunTimeInMinutes, opt => opt.MapFrom(src => src.Length))
+                .ForPath(dest => dest.Movie.RunTimeInMinutes, opt => opt.MapFrom(src => src.RunTime))
                 .ForPath(dest => dest.Movie.Poster, opt => opt.MapFrom(src => src.Poster))
                 .ForPath(dest => dest.Watched, opt => opt.MapFrom(src => src.Watched))
                 .ReverseMap();

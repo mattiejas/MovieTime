@@ -114,7 +114,7 @@ class MovieDetailView extends React.Component {
       title = '',
       year = '',
       poster,
-      runTime = '0 m',
+      runTime = '0',
       genre = '',
       director = '',
       writer = '',
