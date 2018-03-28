@@ -13,5 +13,6 @@ namespace MovieTime.Web.TrackedMovies.Models
         public Movie Movie { get; set; }
 
         public bool Watched { get; set; }
+        public DateTime CreatedTime { get; set; }
     }
 }

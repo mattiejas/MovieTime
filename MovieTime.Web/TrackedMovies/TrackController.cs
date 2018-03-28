@@ -8,6 +8,7 @@ using MovieTime.Web.TrackedMovies.Models;
 using Serilog;
 using System.Linq;
 using System.Collections;
+using System.Globalization;
 
 namespace MovieTime.Web.TrackedMovies
 {
@@ -63,6 +64,7 @@ namespace MovieTime.Web.TrackedMovies
                 }
 
                 var trackedMovie = new TrackedMovie { MovieId = movieId, UserId = userIdFromToken, Watched = false };
+                var localDate = DateTime.Now;
                 await _trackService.TrackMovie(trackedMovie);
                 
                 return NoContent();      
