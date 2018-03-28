@@ -6,6 +6,7 @@ using MovieTime.Web.ThirdPartyServices.OMDB.MovieList;
 using MovieTime.Web.ThirdPartyServices.OMDB.Movies;
 using MovieTime.Web.Users;
 using MovieTime.Web.Users.Models;
+using MovieTime.Web.TrackedMovies.Models;
 
 namespace MovieTime.Web.Utilities
 {
@@ -31,6 +32,8 @@ namespace MovieTime.Web.Utilities
             CreateMap<User, UserGetDto>();
 
             CreateMap<SearchResultsModel, ShortMovieModel>();
+
+            CreateMap<TrackedMovieDto, TrackedMovie>();
         }
     }
 }
