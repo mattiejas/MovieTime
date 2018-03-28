@@ -24,6 +24,9 @@ namespace MovieTime.Web.Utilities
             
             CreateMap<MovieCreateDto, Movie>();
 
+            CreateMap<ShortMovieModel, ShortMovieDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ImdbId))
+                .ForMember(dest => dest.Genre, opt => opt.MapFrom(src => src.Type));
 
             CreateMap<UserCreateDto, User>();
             CreateMap<UserUpdateDto, User>();

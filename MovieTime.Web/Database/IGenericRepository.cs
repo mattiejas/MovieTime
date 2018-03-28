@@ -9,7 +9,7 @@ namespace MovieTime.Web.Database
     // Resource: https://www.c-sharpcorner.com/article/net-entity-framework-core-generic-async-operations-with-unit-of-work-generic-re/
     public interface IGenericRepository<T> where T : class
     {
-        Task<T> Add(T t);
+        Task<T> Add(T t, bool save = true);
         Task<int> CountAll();
         Task<int> CountMatch(Expression<Func<T, bool>> match);
         Task<int> Delete(T entity);

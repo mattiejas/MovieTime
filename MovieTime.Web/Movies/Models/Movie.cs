@@ -21,7 +21,7 @@ namespace MovieTime.Web.Movies.Models
         public string Poster { get; set; }
 
         public int RunTimeInMinutes { get; set; }
-
+        
         public string Director { get; set; }
 
         public string Writer { get; set; }

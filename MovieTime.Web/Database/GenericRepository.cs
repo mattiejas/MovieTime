@@ -9,7 +9,6 @@ namespace MovieTime.Web.Database
 {
     public abstract class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-
         protected MovieContext _context;
         private bool disposed;
 
@@ -19,10 +18,10 @@ namespace MovieTime.Web.Database
             disposed = false;
         }
 
-        public virtual async Task<T> Add(T t)
+        public virtual async Task<T> Add(T t, bool save = true)
         {
             _context.Set<T>().Add(t);
-            await _context.SaveChangesAsync();
+            if (save) await _context.SaveChangesAsync();
             return t;
         }
 
@@ -35,13 +34,13 @@ namespace MovieTime.Web.Database
         {
             return await _context.Set<T>().CountAsync(match);
         }
-        
+
         public virtual async Task<int> Delete(T entity)
         {
             _context.Set<T>().Remove(entity);
             return await _context.SaveChangesAsync();
         }
-        
+
         public virtual async Task<T> Find(Expression<Func<T, bool>> match)
         {
             return await _context.Set<T>().SingleOrDefaultAsync(match);
@@ -56,7 +55,7 @@ namespace MovieTime.Web.Database
         {
             return await _context.Set<T>().Where(predicate).ToListAsync();
         }
-        
+
         public virtual async Task<T> Get(int id)
         {
             return await _context.Set<T>().FindAsync(id);
@@ -71,7 +70,7 @@ namespace MovieTime.Web.Database
         {
             return await _context.Set<T>().ToListAsync();
         }
-        
+
         public virtual IQueryable<T> GetAllIncluding(params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> queryable = GetDbSet();
@@ -84,7 +83,7 @@ namespace MovieTime.Web.Database
         }
 
         //todo why is there a save method if the update and add already implement it on their own?
-        public virtual async Task<int> Save() 
+        public virtual async Task<int> Save()
         {
             return await _context.SaveChangesAsync();
         }
@@ -101,7 +100,7 @@ namespace MovieTime.Web.Database
 
             return exist;
         }
-        
+
         public void Dispose()
         {
             Dispose(true);
