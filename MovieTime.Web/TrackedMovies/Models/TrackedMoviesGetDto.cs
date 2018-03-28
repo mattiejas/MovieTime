@@ -3,7 +3,7 @@ using MovieTime.Web.Movies.Models;
 using System.Collections;
 namespace MovieTime.Web.TrackedMovies.Models
 {
-    public class TrackedMoviesDto
+    public class TrackedMoviesGetDto
     {
         public string Title { get; set; }
         public DateTime Year { get; set; }

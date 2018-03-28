@@ -35,7 +35,7 @@ namespace MovieTime.Web.TrackedMovies
                 }
 
                 var trackedMovies = await _trackService.GetTrackedMoviesByUser(userIdFromToken);
-                var trackedMoviesDto = _mapper.Map<ICollection<TrackedMovie>, ICollection<TrackedMoviesDto>>(trackedMovies);
+                var trackedMoviesDto = _mapper.Map<ICollection<TrackedMovie>, ICollection<TrackedMoviesGetDto>>(trackedMovies);
 
                 return Ok(trackedMoviesDto);
             }
@@ -62,9 +62,7 @@ namespace MovieTime.Web.TrackedMovies
                     return BadRequest(new { message = "User is not authenticated" });
                 }
 
-                var trackedMovieDto = new TrackedMovieDto { MovieId = movieId, UserId = userIdFromToken, Watched = false };
-                var trackedMovie = _mapper.Map<TrackedMovieDto, TrackedMovie>(trackedMovieDto);
-
+                var trackedMovie = new TrackedMovie { MovieId = movieId, UserId = userIdFromToken, Watched = false };
                 await _trackService.TrackMovie(trackedMovie);
                 
                 return NoContent();      
@@ -113,10 +111,9 @@ namespace MovieTime.Web.TrackedMovies
                     return BadRequest(new { message = "User is not authenticated" });
                 }
 
-                var trackedMovieDto = new TrackedMovieDto { MovieId = movieId, UserId = userIdFromToken };
-                var trackedMovie = _mapper.Map<TrackedMovieDto, TrackedMovie>(trackedMovieDto);
-
+                var trackedMovie = new TrackedMovie { MovieId = movieId, UserId = userIdFromToken };
                 await _trackService.UntrackMovie(trackedMovie); 
+
                 return Ok();
             }
             catch (Exception err)
@@ -143,8 +140,12 @@ namespace MovieTime.Web.TrackedMovies
                 }
 
                 var result = await _trackService.ToggleMovieWatchedStatus(movieId, userIdFromToken);
+                if (result == null) 
+                {
+                    return BadRequest(new { message = "User is not tracking the current movie" });
+                }
 
-                var response = _mapper.Map<TrackedMovie, TrackedMovieDto>(result);
+                var response = _mapper.Map<TrackedMovie, TrackedMovieGetDto>(result);
                 return Ok(response);
             }
             catch (Exception err)

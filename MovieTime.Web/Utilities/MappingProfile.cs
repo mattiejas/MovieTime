@@ -32,9 +32,8 @@ namespace MovieTime.Web.Utilities
 
             CreateMap<SearchResultsModel, ShortMovieModel>();
 
-            CreateMap<TrackedMovieDto, TrackedMovie>();
-            CreateMap<TrackedMovieCreateDto, TrackedMovie>();
-            CreateMap<TrackedMoviesDto, TrackedMovie>()
+            CreateMap<TrackedMovieGetDto, TrackedMovie>();
+            CreateMap<TrackedMoviesGetDto, TrackedMovie>()
                 .ForPath(dest => dest.Movie.Title, opt => opt.MapFrom(src => src.Title))
                 .ForPath(dest => dest.Movie.Year, opt => opt.MapFrom(src => src.Year))
                 .ForPath(dest => dest.Movie.RunTimeInMinutes, opt => opt.MapFrom(src => src.Length))

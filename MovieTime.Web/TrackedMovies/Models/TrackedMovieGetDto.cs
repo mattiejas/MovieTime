@@ -1,6 +1,7 @@
-﻿namespace MovieTime.Web.TrackedMovies.Models
+﻿using System;
+namespace MovieTime.Web.TrackedMovies.Models
 {
-    public class TrackedMovieDto
+    public class TrackedMovieGetDto
     {
         public string UserId { get; set; }
         public string MovieId { get; set; }
