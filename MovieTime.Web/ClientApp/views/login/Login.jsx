@@ -34,6 +34,7 @@ class Login extends Component {
   }
 
   handleSignInWithGoogle(event) {
+    event.preventDefault();
     auth.onAuthStateChanged((user) => {
       this.props.authenticateWithGoogle(user);
     });
@@ -69,12 +70,16 @@ class Login extends Component {
                   value={this.state.password}
                 />
               </div>
-              <Button dark className={styles.button} onClick={e => this.handleSubmit(e)}>
-								Login
-              </Button>
-              <Button danger className={styles.button} onClick={e => this.handleSignInWithGoogle(e)}>
-								Sign In With Google
-              </Button>
+              <div className={styles.buttons__container}>
+                <div className={styles.buttons}>
+                  <Button dark className={styles.button} onClick={e => this.handleSubmit(e)}>
+										Login
+                  </Button>
+                  <Button danger className={styles.button} onClick={e => this.handleSignInWithGoogle(e)}>
+										Sign In With Google
+                  </Button>
+                </div>
+              </div>
             </form>
           </div>
         </div>

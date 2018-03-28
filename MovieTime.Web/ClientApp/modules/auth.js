@@ -21,6 +21,7 @@ export const authenticate = (username, password) => (dispatch) => {
 };
 
 export const authenticateWithGoogle = user => (dispatch) => {
+  if (user) return;
   dispatch({ type: 'AUTHENTICATE_REQUEST' });
   return newGoogleLoginHappened(user).then((user) => {
     getUserData(user.uid)
@@ -38,7 +39,7 @@ export const authenticateWithGoogle = user => (dispatch) => {
   });
 };
 
-export const authenticateById = id => (dispatch) => {
+export const authenticateById = (id, onError) => (dispatch) => {
   dispatch({ type: 'AUTHENTICATE_REQUEST' });
   return getUserData(id)
     .then((response) => {
@@ -50,6 +51,7 @@ export const authenticateById = id => (dispatch) => {
     })
     .catch((err) => {
       dispatch({ type: 'AUTHENTICATE_ERROR' });
+      if (onError) onError();
       return err;
     });
 };

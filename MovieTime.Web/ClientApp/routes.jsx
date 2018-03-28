@@ -5,6 +5,7 @@ import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 
 import auth from './firebase';
 import { authenticateById, unauthenticate } from './modules/auth';
+import { registerWithBackEnd, registerAfterGoogleSignIn } from './utils/auth';
 
 import Layout from './components/layout/Layout';
 
@@ -72,9 +73,9 @@ class Routes extends React.Component {
 	componentDidMount() {
 	  auth.onAuthStateChanged((user) => {
 	    if (user) {
-
-
-	     // this.props.authenticateById(user.uid);
+	      this.props.authenticateById(user.uid, () => {
+	        registerAfterGoogleSignIn(user).then(() => this.props.authenticateById(user.uid));
+	      });
 	    } else {
 	      this.props.unauthenticate();
 	    }

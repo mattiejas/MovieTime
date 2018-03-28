@@ -81,31 +81,10 @@ export async function removeUser(password) {
 }
 
 export async function newGoogleLoginHappened(user) {
-  if (user) {
-    console.log('NewGoogleLoginInHappened, we already have a user', user);
-
-    const person = { firstName: user.displayName, email: user.email, uid: user.uid };
-    const token = user.getIdToken(true);
-    registerWithBackEnd(person, token);
-    return user;
-  }
   const provider = new firebase.auth.GoogleAuthProvider();
   await firebase
     .auth()
-    .signInWithPopup(provider)
-    .then(() => {
-      firebase
-        .auth()
-        .getRedirectResult()
-        .then((result) => {
-          const user = result.user;
-          console.log('redirectResult user=', user);
-          // const person = { firstName: user.displayName, email: user.email };
-          // const token = getTokenForCurrentUser();
-          // registerWithBackEnd(person, token);
-          return user;
-        });
-    })
+    .signInWithRedirect(provider)
     .catch((error) => {
       // Handle Errors here.
       const errorCode = error.code;
@@ -117,4 +96,21 @@ export async function newGoogleLoginHappened(user) {
       console.log('Inside catch of NewGoogleLoginHappened', errorMessage);
       // ...
     });
+}
+
+export async function registerAfterGoogleSignIn(user) {
+  console.log('registerAfterGoogleSign', user);
+  if (user.providerData[0].providerId === 'google.com') {
+    const first = user.displayName.substring(0, user.displayName.indexOf(' '));
+    const last = user.displayName.substring(first.length);
+    const person = {
+      firstName: first,
+      lastName: last,
+      email: user.email,
+    };
+    const token = await getTokenForCurrentUser();
+
+    await registerWithBackEnd(person, token);
+    console.log('register');
+  }
 }
