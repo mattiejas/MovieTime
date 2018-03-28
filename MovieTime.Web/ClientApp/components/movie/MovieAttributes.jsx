@@ -7,7 +7,7 @@ import Icon from '../icon/Icon';
 const MovieAttributes = props => (
   <ul className={styles['movie-attributes']}>
     <li><Icon type="star" /> <span>{props.rating} / 10</span></li>
-    <li><Icon type="clock-o" /> <span>{props.time}</span></li>
+    <li><Icon type="clock-o" /> <span>{props.time}m</span></li>
     <li><Icon type="film" /> <span>{props.genres}</span></li>
   </ul>
 );
