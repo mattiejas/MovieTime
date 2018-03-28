@@ -101,7 +101,7 @@ namespace MovieTime.Web.TrackedMovies
         }  
 
         [HttpPost("watch/movie/{movieId}")]
-        public async Task<IActionResult> ToggleMovieWatchedStatus([FromBody] TrackedMovieDto trackedMovieDto)
+        public async Task<IActionResult> ToggleMovieWatchedStatus([FromBody] TrackedMovieCreateDto trackedMovieDto)
         {         
             try
             {
@@ -117,7 +117,7 @@ namespace MovieTime.Web.TrackedMovies
                 }
                 trackedMovieDto.UserId = userIdFromToken;
 
-                var trackedMovie = _mapper.Map<TrackedMovieDto, TrackedMovie>(trackedMovieDto);
+                var trackedMovie = _mapper.Map<TrackedMovieCreateDto, TrackedMovie>(trackedMovieDto);
 
                 var result = await _trackService.ToggleMovieWatchedStatus(trackedMovie); 
                 if (result == null) 

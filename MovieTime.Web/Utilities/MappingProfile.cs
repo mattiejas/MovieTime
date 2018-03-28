@@ -25,7 +25,6 @@ namespace MovieTime.Web.Utilities
             
             CreateMap<MovieCreateDto, Movie>();
 
-
             CreateMap<UserCreateDto, User>();
             CreateMap<UserUpdateDto, User>();
             CreateMap<UserGetDto, User>();
@@ -34,6 +33,7 @@ namespace MovieTime.Web.Utilities
             CreateMap<SearchResultsModel, ShortMovieModel>();
 
             CreateMap<TrackedMovieDto, TrackedMovie>();
+            CreateMap<TrackedMovieCreateDto, TrackedMovie>();
         }
     }
 }
