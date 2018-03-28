@@ -24,8 +24,8 @@ namespace MovieTime.Web.TrackedMovies
             _mapper = mapper;
         }
 
-        [HttpGet("tracks/movie")]
-        public async Task<IActionResult> GetAllTrackedMovies()
+        [HttpGet("tracks/user/{userId}")]
+        public async Task<IActionResult> GetAllTrackedMovies(string userId)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace MovieTime.Web.TrackedMovies
                     return BadRequest(new { message = "User is not authenticated" });
                 }
 
-                var trackedMovies = await _trackService.GetTrackedMoviesByUser(userIdFromToken);
+                var trackedMovies = await _trackService.GetTrackedMoviesByUser(userId);
                 var trackedMoviesDto = _mapper.Map<ICollection<TrackedMovie>, ICollection<TrackedMoviesGetDto>>(trackedMovies);
 
                 return Ok(trackedMoviesDto);
