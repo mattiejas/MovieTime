@@ -127,13 +127,13 @@ namespace MovieTime.Web.TrackedMovies
         }  
 
         [HttpPost("watch/movie/{movieId}")]
-        public async Task<IActionResult> ToggleMovieWatchedStatus([FromBody] TrackedMovieCreateDto trackedMovieDto)
+        public async Task<IActionResult> ToggleMovieWatchedStatus(string movieId)
         {         
             try
             {
-                if (trackedMovieDto == null)
+                if (movieId == null)
                 {
-                    return BadRequest(new { message = "Identity of the movie is missing" });
+                    return BadRequest(new { message = "Identity of the movie is missing" });   
                 }
                 
                 var userIdFromToken = this.User.GetUserId();
@@ -141,15 +141,8 @@ namespace MovieTime.Web.TrackedMovies
                 {
                     return BadRequest(new { message = "User is not authenticated" });
                 }
-                trackedMovieDto.UserId = userIdFromToken;
 
-                var trackedMovie = _mapper.Map<TrackedMovieCreateDto, TrackedMovie>(trackedMovieDto);
-
-                var result = await _trackService.ToggleMovieWatchedStatus(trackedMovie); 
-                if (result == null) 
-                {
-                    return NotFound();
-                }
+                var result = await _trackService.ToggleMovieWatchedStatus(movieId, userIdFromToken);
 
                 var response = _mapper.Map<TrackedMovie, TrackedMovieDto>(result);
                 return Ok(response);

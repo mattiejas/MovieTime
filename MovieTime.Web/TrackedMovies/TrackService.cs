@@ -35,15 +35,23 @@ namespace MovieTime.Web.TrackedMovies
             return result != null;
         }
 
-        public async Task<TrackedMovie> ToggleMovieWatchedStatus(TrackedMovie trackedMovie)
-        {
-            trackedMovie.Watched = !trackedMovie.Watched;
-            return await _trackRepository.Update(trackedMovie);
-        }
-
         public async Task<ICollection<TrackedMovie>> GetTrackedMoviesByUser(string userId)
         {
             return await _trackRepository.FindAll(t => t.UserId == userId);
+        }
+
+        public async Task<TrackedMovie> ToggleMovieWatchedStatus(string movieId, string userId)
+        {
+            TrackedMovie track = await _trackRepository.Find(t => t.MovieId == movieId && t.UserId == userId);
+
+            if (track == null) 
+            {
+                return null;
+            }
+            track.Watched = !track.Watched;
+
+            var result = await _trackRepository.Update(track);
+            return result;
         }
     }
 }
