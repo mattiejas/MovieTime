@@ -7,6 +7,5 @@ namespace MovieTime.Web.TrackedMovies
 {
     public interface ITrackRepository : IGenericRepository<TrackedMovie>
     {
-        Task<TrackedMovie> Update(TrackedMovie trackedMovie);
     }
 }

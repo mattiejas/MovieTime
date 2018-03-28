@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -20,16 +21,9 @@ namespace MovieTime.Web.TrackedMovies
             
         }
 
-        public async Task<TrackedMovie> Update(TrackedMovie trackedMovie)
+        public override async Task<ICollection<TrackedMovie>> FindAll(Expression<Func<TrackedMovie, bool>> match)
         {
-            var exists = await _context.Set<TrackedMovie>().AnyAsync(t => t.MovieId == trackedMovie.MovieId && t.UserId == trackedMovie.UserId);
-            if (exists)
-            {
-                _context.Update(trackedMovie);
-                await _context.SaveChangesAsync();
-                return trackedMovie;
-            }
-            return null;
+            return await GetDbSet().Include(t => t.User).Include(t => t.Movie).ToListAsync();
         }
     }
 }

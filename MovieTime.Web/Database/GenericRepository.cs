@@ -117,6 +117,16 @@ namespace MovieTime.Web.Database
             return exist;
         }
 
+        public virtual async Task<T> Update(T t)
+        {
+            if (t == null) return null;
+           
+            T entry = _context.Update(t).Entity;
+            await _context.SaveChangesAsync();
+
+            return entry;
+        }
+
         public void Dispose()
         {
             Dispose(true);
