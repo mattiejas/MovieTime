@@ -40,6 +40,7 @@ namespace MovieTime.Web.Utilities
                 .ForPath(dest => dest.Movie.RunTimeInMinutes, opt => opt.MapFrom(src => src.RunTime))
                 .ForPath(dest => dest.Movie.Poster, opt => opt.MapFrom(src => src.Poster))
                 .ForPath(dest => dest.Watched, opt => opt.MapFrom(src => src.Watched))
+                .ForPath(dest => dest.CreatedTime, opt => opt.MapFrom(src => src.CreatedTime))
                 .ReverseMap();
         }
     }

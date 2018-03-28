@@ -20,10 +20,5 @@ namespace MovieTime.Web.TrackedMovies
         {
             
         }
-
-        public override async Task<ICollection<TrackedMovie>> FindAll(Expression<Func<TrackedMovie, bool>> match)
-        {
-            return await GetDbSet().Include(t => t.User).Include(t => t.Movie).ToListAsync();
-        }
     }
 }

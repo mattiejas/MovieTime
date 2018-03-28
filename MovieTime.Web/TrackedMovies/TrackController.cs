@@ -64,7 +64,7 @@ namespace MovieTime.Web.TrackedMovies
                 }
 
                 var trackedMovie = new TrackedMovie { MovieId = movieId, UserId = userIdFromToken, Watched = false };
-                var localDate = DateTime.Now;
+                trackedMovie.CreatedTime = DateTime.Now;
                 await _trackService.TrackMovie(trackedMovie);
                 
                 return NoContent();      
