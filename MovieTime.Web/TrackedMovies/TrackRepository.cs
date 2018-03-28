@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +31,11 @@ namespace MovieTime.Web.TrackedMovies
                 return trackedMovie;
             }
             return null;
+        }
+
+        public override async Task<ICollection<TrackedMovie>> FindAll(Expression<Func<TrackedMovie, bool>> match)
+        {
+            return await GetDbSet().Include(t => t.User).Include(t => t.Movie).ToListAsync();
         }
     }
 }

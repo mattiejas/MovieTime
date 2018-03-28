@@ -34,6 +34,13 @@ namespace MovieTime.Web.Utilities
 
             CreateMap<TrackedMovieDto, TrackedMovie>();
             CreateMap<TrackedMovieCreateDto, TrackedMovie>();
+            CreateMap<TrackedMoviesDto, TrackedMovie>()
+                .ForPath(dest => dest.Movie.Title, opt => opt.MapFrom(src => src.Title))
+                .ForPath(dest => dest.Movie.Year, opt => opt.MapFrom(src => src.Year))
+                .ForPath(dest => dest.Movie.RunTimeInMinutes, opt => opt.MapFrom(src => src.Length))
+                .ForPath(dest => dest.Movie.Poster, opt => opt.MapFrom(src => src.Poster))
+                .ForPath(dest => dest.Watched, opt => opt.MapFrom(src => src.Watched))
+                .ReverseMap();
         }
     }
 }

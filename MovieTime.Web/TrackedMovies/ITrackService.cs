@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MovieTime.Web.TrackedMovies.Models;
 
@@ -10,5 +11,6 @@ namespace MovieTime.Web.TrackedMovies
         Task<bool> UntrackMovie(TrackedMovie model);
         Task<bool> IsMovieTrackedByUser(string userId, string movieId);
         Task<TrackedMovie> ToggleMovieWatchedStatus(TrackedMovie trackedMovie);
+        Task<ICollection<TrackedMovie>> GetTrackedMoviesByUser(string userId);
 	}
 }
