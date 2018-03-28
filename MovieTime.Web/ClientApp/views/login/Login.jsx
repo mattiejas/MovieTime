@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { authenticate, authenticateWithGoogle } from '../../modules/auth';
-import { signInWithGoogle } from '../../utils/auth';
 import auth from '../../firebase';
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';

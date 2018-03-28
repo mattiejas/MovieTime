@@ -1,5 +1,5 @@
 import { getUserData } from '../utils/user';
-import { login, logout, signInWithGoogle } from '../utils/auth';
+import { login, logout, newGoogleLoginHappened } from '../utils/auth';
 
 // Actions
 export const authenticate = (username, password) => (dispatch) => {
@@ -22,7 +22,7 @@ export const authenticate = (username, password) => (dispatch) => {
 
 export const authenticateWithGoogle = user => (dispatch) => {
   dispatch({ type: 'AUTHENTICATE_REQUEST' });
-  return signInWithGoogle(user).then((user) => {
+  return newGoogleLoginHappened(user).then((user) => {
     getUserData(user.uid)
       .then((response) => {
         dispatch({

@@ -72,7 +72,9 @@ class Routes extends React.Component {
 	componentDidMount() {
 	  auth.onAuthStateChanged((user) => {
 	    if (user) {
-	      this.props.authenticateById(user.uid);
+
+
+	     // this.props.authenticateById(user.uid);
 	    } else {
 	      this.props.unauthenticate();
 	    }

@@ -80,21 +80,41 @@ export async function removeUser(password) {
   await removeUserFromFirebase(password);
 }
 
-async function newGoogleLoginHappened(user) {
+export async function newGoogleLoginHappened(user) {
   if (user) {
     console.log('NewGoogleLoginInHappened, we already have a user', user);
-  } else {
-    console.log('NewGoogleLoginInHappened, we are about to create a google provider to redirect to');
-    const provider = new firebase.auth.GoogleAuthProvider();
-    firebase
-      .auth()
-      .signInWithRedirect(provider)
-      .then((result) => {
-        console.log('NewGoogleLoginInHappened,', result);
-      });
-  }
-}
 
-export async function signInWithGoogle(user) {
-  newGoogleLoginHappened(user);
+    const person = { firstName: user.displayName, email: user.email, uid: user.uid };
+    const token = user.getIdToken(true);
+    registerWithBackEnd(person, token);
+    return user;
+  }
+  const provider = new firebase.auth.GoogleAuthProvider();
+  await firebase
+    .auth()
+    .signInWithPopup(provider)
+    .then(() => {
+      firebase
+        .auth()
+        .getRedirectResult()
+        .then((result) => {
+          const user = result.user;
+          console.log('redirectResult user=', user);
+          // const person = { firstName: user.displayName, email: user.email };
+          // const token = getTokenForCurrentUser();
+          // registerWithBackEnd(person, token);
+          return user;
+        });
+    })
+    .catch((error) => {
+      // Handle Errors here.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // The email of the user's account used.
+      const email = error.email;
+      // The firebase.auth.AuthCredential type that was used.
+      const credential = error.credential;
+      console.log('Inside catch of NewGoogleLoginHappened', errorMessage);
+      // ...
+    });
 }
