@@ -27,7 +27,7 @@ namespace MovieTime.Web.Movies
         {
             var movieList = await _movieService.GetMoviesByTitle(title, page);
             
-            if (movieList == null || movieList.Count > 0) return NotFound();
+            if (movieList == null || movieList.Count < 0) return NotFound(new {message = $"Invalid title: {title}"});
             
             return Ok(movieList);
         }

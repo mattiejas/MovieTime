@@ -18,14 +18,11 @@ class SearchView extends React.Component {
 
   componentDidMount() {
     // do API call
-    searchMovies(this.props.match.params.query).then((movies) => {
-      movies.forEach(movie => getMovieByTitle(movie).then((data) => {
-        console.log(data);
-        const m = [data.title, data.year, data.runTime, data.genre, data.rated, null];
-        this.setState({
-          movies: [...this.state.movies, m],
-        });
-      }));
+    searchMovies(this.props.match.params.query).then((data) => {
+      console.log(data);
+      this.setState({
+        movies: [data],
+      });
     });
   }
 

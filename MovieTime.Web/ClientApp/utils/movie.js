@@ -34,11 +34,12 @@ export function getMovieByTitle(title) {
 }
 
 export function searchMovies(q) {
-  // return fetch(`/api/movie/search/${q}`);
-  console.log(q);
-  return new Promise(resolve => resolve([
-    'Thor',
-    'Thor: Ragnarok',
-    'Thor: The Dark World',
-  ]));
+  return fetch(`/api/movie/search/${q}`)
+    .then(response => response.json());
+  // console.log(q);
+  // return new Promise(resolve => resolve([
+  //   'Thor',
+  //   'Thor: Ragnarok',
+  //   'Thor: The Dark World',
+  // ]));
 }
