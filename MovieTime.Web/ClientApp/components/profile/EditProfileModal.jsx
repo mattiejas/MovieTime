@@ -111,7 +111,7 @@ class EditProfileModal extends React.Component {
           <hr style={{ marginTop: '20px' }} />
           <div className={styles.buttons}>
             <div>
-              <Button danger onClick={() => this.toggleLogin()} dark>Delete Me</Button>
+              <Button className={styles.button} danger onClick={() => this.toggleLogin()} dark>Delete Me</Button>
             </div>
             <div>
               <Button className={styles.button} onClick={hideModal}>Cancel</Button>
