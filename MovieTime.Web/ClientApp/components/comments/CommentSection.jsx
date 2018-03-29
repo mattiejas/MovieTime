@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import cn from 'classnames';
-import _ from 'lodash';
+import _ from /* webpackChunkName: "lodash" */ 'lodash';
 
 import { getCommentsByUser, getCommentsOnMovie, postCommentOnMovie } from '../../utils/movie';
 

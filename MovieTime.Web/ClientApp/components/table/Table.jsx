@@ -1,5 +1,5 @@
 import React from 'react';
-import _ from 'lodash';
+import _ from /* webpackChunkName: "lodash" */ 'lodash';
 import PropTypes from 'prop-types';
 
 import styles from './Table.scss';

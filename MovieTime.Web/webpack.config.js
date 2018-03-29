@@ -4,14 +4,28 @@ const path = require('path');
 const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
-
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = (env) => {
   const isDevelopment = (env && env.dev) || (env && !env.prod) || true;
 
   return {
     mode: 'development',
-    entry: { main: ['@babel/polyfill', './ClientApp/boot.jsx'] },
+    entry: {
+      main: [
+        '@babel/polyfill',
+        './ClientApp/boot.jsx',
+      ],
+      vendor: [
+        'event-source-polyfill',
+        'isomorphic-fetch',
+        'react',
+        'firebase',
+        'react-dom',
+        'react-router-dom',
+        'font-awesome',
+      ],
+    },
     devtool: 'inline-source-map',
     resolve: { extensions: ['.js', '.jsx'] },
     module: {
@@ -28,8 +42,7 @@ module.exports = (env) => {
         },
         {
           test: /\.(js|jsx)$/,
-          include: /ClientApp/,
-          exclude: /(node_modules|bower_components)/,
+          exclude: /node_modules/,
           use: [
             {
               loader: 'babel-loader',
@@ -50,8 +63,21 @@ module.exports = (env) => {
           ],
         },
         {
+          test: /\.(woff|woff2|eot|ttf|otf)$/,
+          exclude: /node_modules/,
+          use: ['file-loader'],
+        },
+        {
+          test: /\.css$/,
+          exclude: /node_modules/,
+          use: [
+            'style-loader',
+            'css-loader',
+          ],
+        },
+        {
           test: /\.scss$/,
-          include: /ClientApp/,
+          exclude: /node_modules/,
           use: [
             {
               loader: 'style-loader',
@@ -81,9 +107,9 @@ module.exports = (env) => {
           ],
         },
         {
-          test: /\.(png|jpg|jpeg|gif|svg)$/,
-          include: /ClientApp/,
-          use: 'url-loader?limit=25000',
+          test: /\.(png|jpg|jpeg|svg|gif)$/,
+          exclude: /node_modules/,
+          use: ['file-loader'],
         },
       ],
     },
@@ -94,10 +120,16 @@ module.exports = (env) => {
         filename: path.resolve(__dirname, 'Views/Shared/_Layout.cshtml'),
         template: path.resolve(__dirname, 'Views/Shared/_Layout_Template.cshtml'),
       }),
+      new webpack.optimize.MinChunkSizePlugin({ minChunkSize: 4000 }),
+      new BundleAnalyzerPlugin(),
     ],
+    optimization: {
+      minimize: true,
+    },
     output: {
       path: path.resolve(__dirname, 'wwwroot', 'dist'),
-      filename: '[name].js',
+      filename: '[name].bundle.js',
+      chunkFilename: '[name].bundle.js',
       publicPath: 'dist/',
     },
   };
