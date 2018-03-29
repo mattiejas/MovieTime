@@ -36,7 +36,12 @@ module.exports = (env) => {
               options: {
                 babelrc: false,
                 presets: [
-                  ['@babel/preset-env', { shippedProposals: true }],
+                  [
+                    '@babel/preset-env',
+                    {
+                      shippedProposals: true,
+                    },
+                  ],
                   '@babel/preset-react',
                 ],
                 plugins: ['@babel/plugin-proposal-class-properties'],
@@ -82,13 +87,12 @@ module.exports = (env) => {
         },
       ],
     },
-    optimization: {
-      splitChunks: {},
-    },
     plugins: [
       new CleanWebpackPlugin([path.resolve(__dirname, 'wwwroot', 'dist')]),
       new HTMLWebpackPlugin({
-        title: 'Code Splitting',
+        inject: true,
+        filename: path.resolve(__dirname, 'Views/Shared/_Layout.cshtml'),
+        template: path.resolve(__dirname, 'Views/Shared/_Layout_Template.cshtml'),
       }),
     ],
     output: {
