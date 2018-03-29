@@ -7,6 +7,8 @@ namespace MovieTime.Web.Genres
     {
         public string Name { get; set; }
         
+        public string TestMigration { get; set; }
+        
         public ICollection<MovieGenre> Movies { get; set; }
 
     }
