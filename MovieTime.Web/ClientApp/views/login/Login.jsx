@@ -60,24 +60,29 @@ class Login extends Component {
             <div className={styles.error}>{this.state.error}</div>
             <hr />
             <form onSubmit={this.handleSubmit}>
-              <div>
-                <Input label="Email" name="email" type="email" onChange={e => this.handleInputChange(e)} value={this.state.email} />
-                <Input
-                  label="Password"
-                  name="password"
-                  type="password"
-                  onChange={e => this.handleInputChange(e)}
-                  value={this.state.password}
-                />
-              </div>
-              <div className={styles.buttons__container}>
-                <div className={styles.buttons}>
+              <div className={styles.JustifyDiv__container}>
+                <div>
+                  <Input label="Email" name="email" type="email" onChange={e => this.handleInputChange(e)} value={this.state.email} />
+                  <Input
+                    label="Password"
+                    name="password"
+                    type="password"
+                    onChange={e => this.handleInputChange(e)}
+                    value={this.state.password}
+                  />
                   <Button dark className={styles.button} onClick={e => this.handleSubmit(e)}>
-										Login
+  										Login
                   </Button>
-                  <Button danger className={styles.button} onClick={e => this.handleSignInWithGoogle(e)}>
-										Sign In With Google
-                  </Button>
+                </div>
+                <div className={styles.buttons__container}>
+                  <div className={styles.buttons}>
+                    <Button dark icon="fal fa-envelope" className={styles.button} to="/register" >
+  										Sign up with e-mail
+                    </Button>
+                    <Button danger icon="fab fa-google" className={styles.button} onClick={e => this.handleSignInWithGoogle(e)}>
+  										Sign In With Google
+                    </Button>
+                  </div>
                 </div>
               </div>
             </form>

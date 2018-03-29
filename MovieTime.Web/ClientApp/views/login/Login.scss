@@ -51,16 +51,24 @@
 		}
 	}
 }
-
+.JustifyDiv__container {
+	display: flex;
+	width: 50%;
+	justify-content: space-between;
+}
 .buttons__container {
+	border-left: solid thin #ababab;
+
 	.buttons {
 		background-color: #ffffff;
 		width: 100%;
 		margin-top: -25px;
 		display: flex;
-		justify-content: flex-end;
+		flex-direction: column;
+		justify-content: center;
 		padding-right: 20px;
 		padding-bottom: 20px;
+		margin-left: 25px;
 	}
 }
 
