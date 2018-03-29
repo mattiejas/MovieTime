@@ -68,11 +68,14 @@
 		flex-direction: column;
 		justify-content: center;
 		flex-grow: 2;
-		.icon {
-			width: 40px;
-		}
-		.text {
-			width: calc(100% - 40px);
+		.sign-up-button {
+			margin-bottom: 20px;
+			.icon {
+				width: 40px;
+			}
+			.text {
+				width: calc(100% - 40px);
+			}
 		}
 		hr {
 			position: relative;

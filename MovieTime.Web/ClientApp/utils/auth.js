@@ -80,26 +80,14 @@ export async function removeUser(password) {
   await removeUserFromFirebase(password);
 }
 
-export async function newGoogleLoginHappened(user) {
+export async function newGoogleLoginHappened() {
   const provider = new firebase.auth.GoogleAuthProvider();
   await firebase
     .auth()
-    .signInWithRedirect(provider)
-    .catch((error) => {
-      // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // The email of the user's account used.
-      const email = error.email;
-      // The firebase.auth.AuthCredential type that was used.
-      const credential = error.credential;
-      console.log('Inside catch of NewGoogleLoginHappened', errorMessage);
-      // ...
-    });
+    .signInWithRedirect(provider);
 }
 
 export async function registerAfterGoogleSignIn(user) {
-  console.log('registerAfterGoogleSign', user);
   if (user.providerData[0].providerId === 'google.com') {
     const first = user.displayName.substring(0, user.displayName.indexOf(' '));
     const last = user.displayName.substring(first.length);
@@ -111,6 +99,5 @@ export async function registerAfterGoogleSignIn(user) {
     const token = await getTokenForCurrentUser();
 
     await registerWithBackEnd(person, token);
-    console.log('register');
   }
 }

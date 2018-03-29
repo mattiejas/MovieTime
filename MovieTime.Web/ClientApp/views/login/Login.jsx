@@ -10,7 +10,7 @@ import Button from '../../components/button/Button';
 
 import styles from './Login.scss';
 import ButtonGroup from '../../components/button/ButtonGroup';
-import Icon from '../../components/icon/Icon';
+import Spinner from '../../components/spinner/Spinner';
 
 class Login extends Component {
   constructor(props) {
@@ -20,11 +20,24 @@ class Login extends Component {
       email: '',
       password: '',
       error: null,
+      isLoading: true,
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSignInWithGoogle = this.handleSignInWithGoogle.bind(this);
+  }
+
+  componentDidMount() {
+    auth.getRedirectResult().then((result) => {
+      if (result.user) {
+        this.props.history.push(`/users/${result.user.uid}`);
+      } else {
+        this.setState({
+          isLoading: false,
+        });
+      }
+    });
   }
 
   handleSubmit(event) {
@@ -53,6 +66,18 @@ class Login extends Component {
   }
 
   render() {
+    if (this.state.isLoading) {
+      return (
+        <div>
+          <div className={styles.view__background} />
+          <div className={styles['view__content--wrapper']}>
+            <div className={styles.view__content}>
+              <Spinner />
+            </div>
+          </div>
+        </div>
+      );
+    }
     return (
       <div>
         <div className={styles.view__background} />
@@ -77,14 +102,14 @@ class Login extends Component {
                   </Button>
                 </div>
                 <div className={styles.buttons}>
-                  <ButtonGroup>
+                  <ButtonGroup className={styles['sign-up-button']}>
                     <Button danger className={styles.icon} icon="google" onClick={e => this.handleSignInWithGoogle(e)} />
                     <Button danger className={styles.text} onClick={e => this.handleSignInWithGoogle(e)}>
                         Sign In With Google
                     </Button>
                   </ButtonGroup>
                   <hr />
-                  <ButtonGroup>
+                  <ButtonGroup className={styles['sign-up-button']}>
                     <Button dark className={styles.icon} icon="envelope" to="/register" />
                     <Button dark className={styles.text} to="/register" >
                         Sign up with e-mail
@@ -102,6 +127,7 @@ class Login extends Component {
 
 Login.propTypes = {
   location: PropTypes.objectOf(PropTypes.any).isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
   authenticate: PropTypes.func.isRequired,
   authenticateWithGoogle: PropTypes.func.isRequired,
 };

@@ -21,14 +21,14 @@ export const authenticate = (username, password) => (dispatch) => {
 };
 
 export const authenticateWithGoogle = user => (dispatch) => {
-  if (user) return;
+  if (user) return null;
   dispatch({ type: 'AUTHENTICATE_REQUEST' });
-  return newGoogleLoginHappened(user).then((user) => {
-    getUserData(user.uid)
+  return newGoogleLoginHappened(user).then((usr) => {
+    getUserData(usr.uid)
       .then((response) => {
         dispatch({
           type: 'AUTHENTICATE_SUCCESS',
-          payload: { ...response, id: user.uid },
+          payload: { ...response, id: usr.uid },
         });
         return response;
       })
