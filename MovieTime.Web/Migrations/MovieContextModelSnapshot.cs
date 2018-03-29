@@ -103,7 +103,7 @@ namespace MovieTime.Web.Migrations
                     b.ToTable("Review");
                 });
 
-            modelBuilder.Entity("MovieTime.Web.Tracked.Models.TrackedMovie", b =>
+            modelBuilder.Entity("MovieTime.Web.TrackedMovies.Models.TrackedMovie", b =>
                 {
                     b.Property<string>("MovieId");
 

@@ -97,18 +97,12 @@ namespace MovieTime.Web
                     ReactHotModuleReplacement = true
                 });
 
-                var setDbToInitialState = Configuration.GetConnectionString("clear_local_db");
-                if (string.IsNullOrWhiteSpace(setDbToInitialState) || setDbToInitialState.ToLower() == "true")
-                {
-                    movieContext.SeedContextWithoutMigration(env);
-                    // You can also use SeedContext() to use migrations instead of EnsureCreated().
-                    // movieContext.SeedContext(env);
-                }
+                ConfigureLocalDatabase(env, movieContext);
             }
             else
             {
-                StartMigration(movieContext);
-                
+                movieContext.MigratePendingChanges();
+
                 app.UseMiddleware<SerilogMiddleware>();
                 //app.UseExceptionHandler("/Home/Error");
                 app.UseExceptionHandler(appBuilder =>
@@ -142,33 +136,35 @@ namespace MovieTime.Web
             });
         }
 
-        /**
-         * Applies all pending migrations automatically.
-         *
-         * Instructions:
-         * In order to update the database, you have to create a migration first.
-         * One of the possible approach for this project is to create migration in the master branch before deploying it.
-         * 
-         * The instructions to create a new migration:
-         * ----------------------------------------------------------
-         * cd ....MovieTime.Web (locate to the web project)
-         * dotnet restore
-         * dotnet ef migrations add <Name_Migration>
-         * ----------------------------------------------------------
-         *
-         * In the migration folder, the <name_migration> shows down and up methods.
-         * If both methods are empty, migration can be deleted since no changes in entities occured.
-         * ----------------------------------------------------------
-         * dotnet ef migrations remove
-         * ----------------------------------------------------------
-         *
-         * The migration will be applied by this method. So there is no need to call 'dotnet ef database update' command.
-         *
-         * Todo: In production, it's recommended to run migration scripts instead.
-         */
-        private void StartMigration(MovieContext movieContext)
+        private void ConfigureLocalDatabase(IHostingEnvironment env, MovieContext movieContext)
         {
-            movieContext.Database.Migrate();
+            var clearLocalDbOnRun = Configuration.GetConnectionString("clearLocalDbOnRun");
+            var setDbToInitialState =
+                string.IsNullOrWhiteSpace(clearLocalDbOnRun) || clearLocalDbOnRun.ToLower() == "true";
+
+            var useMigration = Configuration.GetConnectionString("useMigration");
+            var applyMigration = string.IsNullOrWhiteSpace(useMigration) ||
+                                             useMigration.ToLower() == "true";
+
+            if (setDbToInitialState)
+            {
+                if (applyMigration)
+                {
+                    movieContext.SeedContextWithMigration(env);
+                }
+                else
+                {
+                    movieContext.SeedContextWithoutMigration(env);
+                }
+            }
+            else if (applyMigration)
+            {
+                movieContext.PrepareDatabaseWithMigration(env);
+            }
+            else
+            {
+                movieContext.PrepareDatabaseWithoutMigration(env);
+            }
         }
     }
 }

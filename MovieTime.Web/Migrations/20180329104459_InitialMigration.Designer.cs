@@ -11,8 +11,8 @@ using System;
 namespace MovieTime.Web.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20180327210559_Initial_Migration")]
-    partial class Initial_Migration
+    [Migration("20180329104459_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -104,7 +104,7 @@ namespace MovieTime.Web.Migrations
                     b.ToTable("Review");
                 });
 
-            modelBuilder.Entity("MovieTime.Web.Tracked.Models.TrackedMovie", b =>
+            modelBuilder.Entity("MovieTime.Web.TrackedMovies.Models.TrackedMovie", b =>
                 {
                     b.Property<string>("MovieId");
 

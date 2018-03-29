@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -8,34 +10,122 @@ using Microsoft.EntityFrameworkCore.Storage;
 using MovieTime.Web.Genres;
 using MovieTime.Web.Movies.Models;
 using MovieTime.Web.Users;
+using Serilog;
 
 namespace MovieTime.Web.Database
 {
     public static class MovieContextExtensions
     {
         /**
-         * Set the database to initial state with mockup data.
-         * No migrations needed since EnsureCreated is used instead
+         * Applies all pending migrations automatically.
+         *
+         * Instructions:
+         * In order to update the database, you have to create a migration first.
+         * One of the possible approach for this project is to create migration in the master branch before deploying it.
+         * 
+         * The instructions to create a new migration:
+         * ----------------------------------------------------------
+         * cd ....MovieTime.Web (locate to the web project)
+         * dotnet restore
+         * dotnet ef migrations add <Name_Migration>
+         * ----------------------------------------------------------
+         *
+         * In the migration folder, the <name_migration> shows down and up methods.
+         * If both methods are empty, migration can be deleted since no changes in entities occured.
+         * ----------------------------------------------------------
+         * dotnet ef migrations remove
+         * ----------------------------------------------------------
+         *
+         * The migration will be applied by this method. So there is no need to call 'dotnet ef database update' command.
+         *
+         * Todo: In production, it's recommended to run migration scripts instead.
+         */
+        public static void MigratePendingChanges(this MovieContext context)
+        {
+            context.Database.Migrate();
+        }
+
+        //DEVELOPMENT ONLY!
+        private static void EnsureApplicationIsRunningInDev(IHostingEnvironment env)
+        {
+            if (env == null || !env.IsDevelopment())
+            {
+                throw new ConstraintException("Dropping database is not allowed in non development environment.");
+            }
+        }
+
+        /**
+         * Recreates database without migration when the database doesn't exists or when the database is previously created through migration.
+         * All current data will be replaced by initial mockup data.
+         */
+        public static void PrepareDatabaseWithoutMigration(this MovieContext context, IHostingEnvironment env)
+        {
+            EnsureApplicationIsRunningInDev(env);
+
+            // If no migrations are found in the database, the db is already created without migration. No need for changes.
+            var migrations = context.Database.GetAppliedMigrations();
+            if (!migrations.Any()) return;
+
+            SeedContextWithoutMigration(context, env);
+        }
+
+        /**
+         * Recreates database with migration when the database doesn't exists or when the database is previously created without migration.
+         * All current data will be replaced by initial mockup data.
+         */
+        public static void PrepareDatabaseWithMigration(this MovieContext context, IHostingEnvironment env)
+        {
+            EnsureApplicationIsRunningInDev(env);
+
+            var appliedMigration = context.Database.GetAppliedMigrations();
+            var allMigrations = context.Database.GetMigrations();
+            var pendingMigrations = context.Database.GetPendingMigrations();
+
+            if (!allMigrations.Any())
+            {
+                throw new FileNotFoundException("Missing applyable migrations. Please create a migration first. \n" +
+                                                "Execute the next commands in terminal to create a new migratin: \n" +
+                                                "---------------------------------------------------------------\n" +
+                                                "cd ...../...../MovieTime.Web (locate to your project project folder) \n" +
+                                                "dotnet restore \n" +
+                                                "dotnet ef migrations add <NewMigrationName> \n" +
+                                                "---------------------------------------------------------------\n" +
+                                                "Do not apply the update manually with 'dotnet ef database update' command");
+            }
+            
+            // Database is up to date, do nothing.
+            // Todo, it's possible that local db has old migrations that don't exist in project anymore
+            // Todo, in that case, we have to compare the migrations with eachother.
+            if (!pendingMigrations.Any() && appliedMigration.Any()) return;
+
+            if (pendingMigrations.Any() && !appliedMigration.Any())
+            {
+                SeedContextWithMigration(context, env);
+            }
+            else if (pendingMigrations.Any() && appliedMigration.Any())
+            {
+                MigratePendingChanges(context);
+            }
+        }
+
+        /**
+         * Set the database to initial state with mockup data. This method can only be used in development environment.
+         * No migration needed since EnsureCreated is used instead to update database structure.
          */
         public static void SeedContextWithoutMigration(this MovieContext context, IHostingEnvironment env)
         {
-            // FOR DEVELOPMENT ONLY!
-            if (!env.IsDevelopment()) return;
-            
-            // BACKUP DATA
-            // Making backup while db or entity doesn't exits will lead to uncatchable exception. So ensure db is created.
-            context.Database.EnsureCreated();
+            EnsureApplicationIsRunningInDev(env);
 
+            // Making backup while db or entity doesn't exits will lead to uncatchable exception. So ensure db is created before making backup.
+            context.Database.EnsureCreated();
             var usersBackup = new List<User>();
             if (context.Users.Any()) usersBackup = context.Users.ToList();
 
-            // DELETE DATABASE
+            // Recreate database to set the state of the database to the current structure.
             context.Database.EnsureDeleted();
-
-            // INIT DATABASE
             context.Database.EnsureCreated();
 
-            // INSERT DATA
+            // Insert the database with mockup data.
             var genres = GetGenresSampleData();
             var movies = GetMoviesSampleData();
             var movieGenre = GetMovieGenresSampleData(movies, genres);
@@ -49,23 +139,26 @@ namespace MovieTime.Web.Database
         }
 
         /**
-         * Set the database to initial state with mockup data.
+         * Set the database to initial state with mockup data. This method can only be used in development environment.
          * Migrations are used to initialise database. Ensure at least one migration is created before using this method.
          *
-         * In case you manually update the database (via cdm) by applying migration,
+         * In case you manually update the database by applying migration (via cmd),
          * you may get an 'object <Entity> already exists' error.
-         * When that problem occurs, manually delete your database first. Databases created by EnsureCreated() ignores
+         * When this problem occurs, manually delete your database first. Databases created by EnsureCreated() ignores
          * migration, which can lead to conflict when migration occurs afterwards.
          */
-        public static void SeedContext(this MovieContext context, IHostingEnvironment env)
+        public static void SeedContextWithMigration(this MovieContext context, IHostingEnvironment env)
         {
-            // FOR DEVELOPMENT ONLY!
-            if (!env.IsDevelopment()) return;
-            
+            EnsureApplicationIsRunningInDev(env);
+
+            // MIGRATION MUST EXIST
+            var migrations = context.Database.GetMigrations();
+            if (!migrations.Any()) throw new FileNotFoundException();
+
             // BACKUP DATA
             // Making backup while db or entity doesn't exits will lead to uncatchable exception. Ensure db is created.
             context.Database.EnsureCreated();
-            
+
             var usersBackup = new List<User>();
             if (context.Users.Any()) usersBackup = context.Users.ToList();
 
@@ -73,7 +166,7 @@ namespace MovieTime.Web.Database
             context.Database.EnsureDeleted();
 
             // INIT DATABASE
-            context.Database.Migrate();
+            context.MigratePendingChanges();
 
             // INSERT DATA
             var genres = GetGenresSampleData();
