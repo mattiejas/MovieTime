@@ -1,4 +1,5 @@
 ﻿using MovieTime.Web.Genres;
+using MovieTime.Web.TrackedMovies.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -29,5 +30,7 @@ namespace MovieTime.Web.Movies.Models
         public string Actors { get; set; }
 
         public string Plot { get; set; }
+
+        public ICollection<TrackedMovie> TrackedMovies { get; set; }
     }
 }
