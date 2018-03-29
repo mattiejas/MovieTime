@@ -2,7 +2,6 @@ import { getUserData } from '../utils/user';
 import { login, logout } from '../utils/auth';
 
 // Actions
-
 export const authenticate = (username, password) => (dispatch) => {
   dispatch({ type: 'AUTHENTICATE_REQUEST' });
   return login(username, password).then(user =>

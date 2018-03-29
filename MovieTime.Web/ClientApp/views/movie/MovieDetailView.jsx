@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import { getUser } from '../../utils/auth';
 import { requestMovieByTitle } from '../../modules/movies';
-import { trackMovie, untrackMovie, isMovieTracked } from '../../utils/movie';
+import { trackMovie, untrackMovie, isMovieTracked, toggleWatchStatus } from '../../utils/movie';
 
 import MoviePoster from '../../components/movie/MoviePoster';
 import MovieHeading from '../../components/movie/MovieHeading';
@@ -14,6 +14,7 @@ import MovieAttributes from '../../components/movie/MovieAttributes';
 import Placeholder from '../../components/placeholder/Placeholder';
 import ParagraphPlaceholder from '../../components/placeholder/ParagraphPlaceholder';
 import Button from '../../components/button/Button';
+import ButtonGroup from '../../components/button/ButtonGroup';
 
 import styles from './MovieDetailView.scss';
 import CommentSection from '../../components/comments/CommentSection';
@@ -26,12 +27,14 @@ class MovieDetailView extends React.Component {
       movie: {},
       isDisabled: false,
       isTracking: false,
+      isWatched: false,
       backgroundColor: null,
       isLoading: true,
     };
 
     this.handleTracking = this.handleTracking.bind(this);
     this.handleUntracking = this.handleUntracking.bind(this);
+    this.handleWatching = this.handleWatching.bind(this);
     this.loadMovieDetails = this.loadMovieDetails.bind(this);
   }
 
@@ -67,6 +70,7 @@ class MovieDetailView extends React.Component {
         movie,
         isTracking: track.isTracked,
         isLoading: false,
+        isWatched: track.isWatched,
       });
       if (movie.poster && movie.poster !== 'N/A') {
         this.setBackgroundColor(movie.poster);
@@ -93,6 +97,20 @@ class MovieDetailView extends React.Component {
       .catch(err => err);
   }
 
+  handleWatching(event) {
+    event.preventDefault();
+    this.setState({
+      isWatchDisabled: true,
+    });
+    toggleWatchStatus(this.state.movie.imdbId)
+      .then((response) => {
+        this.setState({
+          isWatched: response.watched,
+          isWatchDisabled: false,
+        });
+      });
+  }
+
   handleUntracking(event) {
     event.preventDefault();
     this.setState({
@@ -115,7 +133,7 @@ class MovieDetailView extends React.Component {
       title = '',
       year = '',
       poster,
-      runTime = '0 m',
+      runTime = 0,
       genre = '',
       director = '',
       writer = '',
@@ -153,7 +171,7 @@ class MovieDetailView extends React.Component {
                     </Placeholder>
                   </div>
                   <Placeholder isReady={!this.state.isLoading}>
-                    <MovieAttributes rating={0} time={runTime || 'N/A'} genres={genre || 'N/A'} />
+                    <MovieAttributes rating={0} time={runTime} genres={genre || 'N/A'} />
                   </Placeholder>
                 </div>
               </div>
@@ -171,9 +189,21 @@ class MovieDetailView extends React.Component {
                     </Button>
                   }
                   {this.state.isTracking &&
-                    <Button dark disabled={this.state.isDisabled ? 'disabled' : ''} onClick={this.handleUntracking}>
-                      Tracking
-                    </Button>
+                    <ButtonGroup>
+                      <Button dark disabled={this.state.isDisabled ? 'disabled' : ''} onClick={this.handleUntracking}>
+                        Tracking
+                      </Button>
+                      {!this.state.isWatched &&
+                        <Button icon="eye" dark disabled={this.state.isWatchDisabled ? 'disabled' : ''} onClick={this.handleWatching}>
+                          Mark as watched
+                        </Button>
+                      }
+                      {this.state.isWatched &&
+                        <Button icon="eye-slash" dark disabled={this.state.isWatchDisabled ? 'disabled' : ''} onClick={this.handleWatching}>
+                          Mark as unwatched
+                        </Button>
+                      }
+                    </ButtonGroup>
                   }
                   <table className={styles.view__content__involved}>
                     <tbody>
@@ -209,7 +239,7 @@ class MovieDetailView extends React.Component {
             <Placeholder
               isReady={!this.state.isLoading}
             >
-              <CommentSection type="movie" id={imdbId} title="Comments" showSpoilerWarning={!this.state.isTracking} />
+              <CommentSection type="movie" id={imdbId} title="Comments" showSpoilerWarning={!this.state.isWatched} />
             </Placeholder>
           }
         </div>

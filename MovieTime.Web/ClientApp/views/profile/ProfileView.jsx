@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import { updateUser, getUser } from '../../modules/users';
 import { authenticateById } from '../../modules/auth';
 
+import { getTrackedMoviesByUser } from '../../utils/user';
+
 import ListWidget from '../../components/list-widget/ListWidget';
 import Placeholder from '../../components/placeholder/Placeholder';
 import Button from '../../components/button/Button';
@@ -13,7 +15,6 @@ import EditProfileModal from '../../components/profile/EditProfileModal';
 
 import styles from './ProfileView.scss';
 import CommentSection from '../../components/comments/CommentSection';
-import SpoilerWarning from '../../components/comments/SpoilerWarning';
 
 class ProfileView extends React.Component {
   constructor(props) {
@@ -22,19 +23,24 @@ class ProfileView extends React.Component {
       isOwner: props.authId === (props.user && props.user.id),
       isLoading: true,
       isEditing: false,
-      movies: [
-        'Thor: Ragnarok',
-        'Thor: Ragnarok',
-        'Thor: Ragnarok',
-        'Thor: Ragnarok',
-        'Thor: Ragnarok',
-      ],
+      watchedMovies: [],
+      unwatchedMovies: [],
     };
   }
 
   componentDidMount() {
     const { id } = this.props.match.params;
-    this.props.getUser(id);
+    this.props.getUser(id).then(() => {
+      getTrackedMoviesByUser(id)
+        .then((response) => {
+          const watchedMovies = response.filter(x => x.watched).slice(0, 4);
+          const unwatchedMovies = response.filter(x => !x.watched).slice(0, 4);
+          this.setState({
+            watchedMovies,
+            unwatchedMovies,
+          });
+        });
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -120,12 +126,12 @@ class ProfileView extends React.Component {
           <div className={styles.content}>
             <ListWidget
               title="Wants to watch"
-              movies={this.state.movies}
+              movies={this.state.unwatchedMovies}
               history={this.props.history}
             />
             <ListWidget
               title="Has watched"
-              movies={this.state.movies}
+              movies={this.state.watchedMovies}
               history={this.props.history}
             />
             <CommentSection
