@@ -10,7 +10,7 @@ const Table = ({ headers, rows, onRowClicked }) => (
       <thead>
         <tr>
           {
-            _.map(headers, (heading, i) => (<th key={`header-data--${i}`}>{heading.columnName}</th>))
+            _.map(headers, (heading, i) => (<th key={`header-data--${i}`}>{heading}</th>))
           }
         </tr>
       </thead>
@@ -19,7 +19,7 @@ const Table = ({ headers, rows, onRowClicked }) => (
           _.map(rows, (row, i) => (
             <tr key={`table-row--${i}`} onClick={() => onRowClicked(row)}>
               {
-                  _.forEach(headers, (heading, j) => <td key={`table-data--${j}`}>{row[heading.objectPropertyName]}</td>)
+                  _.map(Object.keys(headers), (heading, j) => <td key={`table-data--${j}`}>{row[heading]}</td>)
               }
             </tr>))
         }
@@ -28,20 +28,8 @@ const Table = ({ headers, rows, onRowClicked }) => (
   </div>
 );
 
-// Row
-  // items
-// {
-//     console.log(row);
-//     console.log(heading.objectPropertyName, ' === ', row.key);
-//
-//     if (heading.objectPropertyName === row.key) {
-//         return <td key={`table-data--${j}`}>{item[heading.objectPropertyName]}</td>;
-//     }
-//     return <span />;
-// });
-
 Table.propTypes = {
-  headers: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired,
+  headers: PropTypes.objectOf(PropTypes.any).isRequired,
   rows: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired,
   onRowClicked: PropTypes.func,
 };

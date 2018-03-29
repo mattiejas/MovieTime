@@ -17,11 +17,19 @@ class SearchView extends React.Component {
   };
 
   componentDidMount() {
+    this.search(this.props.match.params.query);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.match.params.query !== nextProps.match.params.query) {
+      this.search(nextProps.match.params.query);
+    }
+  }
+
+  search(query) {
     // do API call
-    searchMovies(this.props.match.params.query).then((data) => {
+    searchMovies(query).then((data) => {
       console.log(data);
-      // const mappedData = _.map(data, m => [m.title, m.year, m.genre, m.rating, m.runTimeInMinutes]);
-      // console.log(mappedData);
       this.setState({
         movies: data,
       });
@@ -35,13 +43,14 @@ class SearchView extends React.Component {
         <div className={styles.view__content}>
           <h4>Search on &#39;{this.props.match.params.query}&#39;</h4>
           <Table
-            headers={[{ columnName: 'Title', objectPropertyName: 'title' },
-            { columnName: 'Length', objectPropertyName: 'runTimeInMinutes' },
-            { columnName: 'Year', objectPropertyName: 'year' },
-            { columnName: 'Genre', objectPropertyName: 'genre' },
-            { columnName: 'Rating', objectPropertyName: 'rating' },
-            { columnName: 'icon', objectPropertyName: 'title' },
-           ]}
+            headers={{
+              title: 'Title',
+              runTimeInMinutes: 'Length',
+              year: 'Year',
+              genre: 'Genre',
+              rating: 'Rating',
+              watched: 'icon',
+            }}
             rows={this.state.movies}
           />
         </div>
