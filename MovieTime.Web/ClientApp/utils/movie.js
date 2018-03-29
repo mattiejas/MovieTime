@@ -26,5 +26,14 @@ export function isMovieTracked(userId, movieId) {
     .then(response => response.json());
 }
 
+export function toggleWatchStatus(movieId) {
+  return getTokenAndRequestHeader()
+    .then(requestHeader => fetch(`/api/watch/movie/${movieId}`, {
+      method: 'post',
+      headers: requestHeader,
+    }))
+    .then(response => response.json());
+}
+
 export const getMovieByTitle = title =>
   betterFetch(`/api/movie/title/${title}`);

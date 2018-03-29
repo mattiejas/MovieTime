@@ -30,10 +30,9 @@ namespace MovieTime.Web.TrackedMovies
             return result > 0;
         }
 
-        public async Task<bool> IsMovieTrackedByUser(string userId, string movieId)
+        public async Task<TrackedMovie> IsMovieTrackedByUser(string userId, string movieId)
         {
-            var result = await _trackRepository.Find(t => t.UserId == userId && t.MovieId == movieId);
-            return result != null;
+            return await _trackRepository.Find(t => t.UserId == userId && t.MovieId == movieId);
         }
 
         public async Task<ICollection<TrackedMovie>> GetTrackedMoviesByUser(string userId)

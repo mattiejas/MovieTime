@@ -76,6 +76,8 @@ namespace MovieTime.Web.TrackedMovies
             }
         }
 
+        // TODO: Check if movieId exists, otherwise return a BadRequest.
+        // Also create a DTO and rename the method so that it makes more sense in the new workflow.
         [HttpGet("tracked/movie/{movieId}")]
         public async Task<IActionResult> IsMovieTrackedByUser(string movieId)
         {
@@ -88,7 +90,7 @@ namespace MovieTime.Web.TrackedMovies
                 }
 
                 var result = await _trackService.IsMovieTrackedByUser(userIdFromToken, movieId);
-                return Ok(new { isTracked = result });
+                return Ok(new { isTracked = result != null, isWatched = result != null ? result.Watched : false });
             }
             catch (Exception err)
             {

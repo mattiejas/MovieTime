@@ -52,7 +52,7 @@ class ListWidget extends React.Component {
 }
 
 ListWidget.propTypes = {
-  movies: PropTypes.objectOf(PropTypes.any).isRequired,
+  movies: PropTypes.arrayOf(PropTypes.any).isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
   title: PropTypes.string.isRequired,
 };
