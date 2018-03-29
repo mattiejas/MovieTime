@@ -54,10 +54,10 @@ namespace MovieTime.Web.Movies
 
         private async Task<ShortMovieDto> FillShortMovieDto(ShortMovieDto shortMovie)
         {
-            Log.Error($"Hallo0");
             var movie = await GetMovieById(shortMovie.Id, false);
-            shortMovie.RunTimeInMinutes = movie.RunTimeInMinutes;
+            shortMovie.RunTimeInMinutes = movie.RunTimeInMinutes > 0 ? movie.RunTimeInMinutes : 90;
             shortMovie.Rating = "5.0";
+            shortMovie.Genre = "Action";
             return shortMovie;
         }
         
