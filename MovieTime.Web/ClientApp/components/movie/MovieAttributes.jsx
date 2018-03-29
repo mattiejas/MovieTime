@@ -14,7 +14,7 @@ const MovieAttributes = props => (
 
 MovieAttributes.propTypes = {
   rating: PropTypes.number.isRequired,
-  time: PropTypes.string.isRequired,
+  time: PropTypes.number.isRequired,
   genres: PropTypes.string.isRequired,
 };
 
