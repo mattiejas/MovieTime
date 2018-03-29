@@ -30,6 +30,7 @@ class Registration extends React.Component {
     this.onInputChange = this.onInputChange.bind(this);
     this.isFormInputInvalid = this.isFormInputInvalid.bind(this);
     this.isPassword = this.isPassword.bind(this);
+    this.isName = this.isName.bind(this);
   }
 
   async onFormSubmit(event) {
@@ -83,17 +84,28 @@ class Registration extends React.Component {
 
     const errMessages = Object.keys(fieldErrors)
       .filter(k => fieldErrors[k]);
-    await this.isPassword(fields.password);
+    await this.isPassword(fields.password, fields['repeat-password']);
     if (this.state.fieldError) return true;
     if (errMessages.length) return true;
     return false;
   }
 
-  async isPassword(val) {
-    const breachCount = await checkPassword(val);
-    if (breachCount > 100) {
-      this.setState({ fieldError: 'This password has been cracked over a 100 times, please come up with a stronger password.' });
+  async isPassword(password, repeatPassword) {
+    if (password !== repeatPassword) {
+      this.setState({ fieldError: 'Password does not match' });
+    } else if (password.length < 6 || repeatPassword.length < 6) {
+      return false;
+    } else {
+      const breachCount = await checkPassword(password);
+      if (breachCount > 100) {
+        this.setState({ fieldError: 'This password has been cracked over a 100 times, please come up with a stronger password.' });
+      }
     }
+  }
+
+  isName(value) {
+    name = value.replace(/^([a-z\u00C0-\u02AB'´`]{1,}\.?\s?)([a-z\u00C0-\u02AB'´`]?\.?\s?)+$/i, ' ');
+    return name === ' ' && name.length > 35;
   }
 
   render() {
@@ -112,14 +124,14 @@ class Registration extends React.Component {
                   name="first-name"
                   value={this.state.fields['first-name']}
                   onChange={(e, error) => this.onInputChange(e, error)}
-                  validate={value => (value.length <= 0 ? 'First Name is required' : null)}
+                  validate={value => (this.isName(value) ? null : 'Name must be less than 35 characters and contain only common letters and symbols')}
                 />
                 <Input
                   label="Last Name"
                   name="last-name"
                   value={this.state.fields['last-name']}
                   onChange={(e, error) => this.onInputChange(e, error)}
-                  validate={value => (value.length <= 0 ? 'Last Name is required' : null)}
+                  validate={value => (this.isName(value) ? null : 'Name must be less than 35 characters and contain only common letters and symbols')}
                 />
               </div>
               <Input
