@@ -5,6 +5,7 @@ import cn from 'classnames';
 
 import styles from './Button.scss';
 import Icon from '../icon/Icon';
+import history from '../../utils/history';
 
 const Button = ({
   to, dark, danger, className, children, icon, ...rest

@@ -1,4 +1,5 @@
 import { getUserData, updateUserData } from '../utils/user';
+import history from '../utils/history';
 
 // Actions
 export const updateUser = user => (dispatch) => {
@@ -29,6 +30,7 @@ export const getUser = id => (dispatch) => {
     })
     .catch((err) => {
       dispatch({ type: 'FETCH_USER_ERROR' });
+      history.push('/404');
       return err;
     });
 };

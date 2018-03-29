@@ -60,22 +60,22 @@ namespace MovieTime.Web.Database
             return await _context.Set<T>().SingleOrDefaultAsync(match);
         }
 
-        // TODO: FindAll & FindBy are the same methods
         public virtual async Task<ICollection<T>> FindAll(Expression<Func<T, bool>> match)
         {
             return await _context.Set<T>().Where(match).ToListAsync();
         }
-
-        // TODO: FindAll & FindBy are the same methods
-        public virtual async Task<ICollection<T>> FindBy(Expression<Func<T, bool>> predicate)
-        {
-            return await _context.Set<T>().Where(predicate).ToListAsync();
-        }
+        
+        public virtual IQueryable<T> FindBy(Expression<Func<T, bool>> predicate)  
+        {  
+            IQueryable<T> query = _context.Set<T>().Where(predicate);  
+            return query;  
+        }  
 
         public virtual async Task<T> Get(int id)
         {
             return await _context.Set<T>().FindAsync(id);
         }
+        
 
         public virtual IQueryable<T> GetDbSet()
         {
@@ -115,6 +115,16 @@ namespace MovieTime.Web.Database
             }
 
             return exist;
+        }
+
+        public virtual async Task<T> Update(T t)
+        {
+            if (t == null) return null;
+           
+            T entry = _context.Update(t).Entity;
+            await _context.SaveChangesAsync();
+
+            return entry;
         }
 
         public void Dispose()

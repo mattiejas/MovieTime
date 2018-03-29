@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-
+﻿using System;
+using MovieTime.Web.Movies.Models;
+using System.Collections;
 namespace MovieTime.Web.TrackedMovies.Models
 {
     public class TrackedMoviesDto
     {
-        public string userId { get; set; }        
-        public ICollection<string> movieIds { get; set; }
+        public string Title { get; set; }
+        public DateTime Year { get; set; }
+        public string Length { get; set; }
+        public string Poster { get; set; }
+        public bool Watched { get; set; } 
     }
 }

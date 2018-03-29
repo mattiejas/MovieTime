@@ -2,18 +2,19 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using MovieTime.Web.TrackedMovies.Models;
+using MovieTime.Web.Users;
+using MovieTime.Web.Movies;
+using System.Collections.Generic;
 
 namespace MovieTime.Web.TrackedMovies
 {
     public class TrackService : ITrackService
     {
         private readonly ITrackRepository _trackRepository;
-        private IMapper _mapper;
         
-        public TrackService(ITrackRepository trackRepository, IMapper mapper)
+        public TrackService(ITrackRepository trackRepository)
         {
             _trackRepository = trackRepository;
-            _mapper = mapper;
         }
 
         public async Task<bool> TrackMovie(TrackedMovie model)
@@ -32,6 +33,25 @@ namespace MovieTime.Web.TrackedMovies
         {
             var result = await _trackRepository.Find(t => t.UserId == userId && t.MovieId == movieId);
             return result != null;
+        }
+
+        public async Task<ICollection<TrackedMovie>> GetTrackedMoviesByUser(string userId)
+        {
+            return await _trackRepository.FindAll(t => t.UserId == userId);
+        }
+
+        public async Task<TrackedMovie> ToggleMovieWatchedStatus(string movieId, string userId)
+        {
+            TrackedMovie track = await _trackRepository.Find(t => t.MovieId == movieId && t.UserId == userId);
+
+            if (track == null) 
+            {
+                return null;
+            }
+            track.Watched = !track.Watched;
+
+            var result = await _trackRepository.Update(track);
+            return result;
         }
     }
 }

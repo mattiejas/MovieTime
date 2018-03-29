@@ -1,11 +1,13 @@
 ﻿using System;
 using AutoMapper;
+using MovieTime.Web.Comments;
 using MovieTime.Web.Helpers;
 using MovieTime.Web.Movies.Models;
 using MovieTime.Web.ThirdPartyServices.OMDB.MovieList;
 using MovieTime.Web.ThirdPartyServices.OMDB.Movies;
 using MovieTime.Web.Users;
 using MovieTime.Web.Users.Models;
+using MovieTime.Web.TrackedMovies.Models;
 
 namespace MovieTime.Web.Utilities
 {
@@ -24,13 +26,26 @@ namespace MovieTime.Web.Utilities
             
             CreateMap<MovieCreateDto, Movie>();
 
-
             CreateMap<UserCreateDto, User>();
             CreateMap<UserUpdateDto, User>();
             CreateMap<UserGetDto, User>();
             CreateMap<User, UserGetDto>();
 
+            CreateMap<CommentCreateDto, Comment>();
+            CreateMap<Comment, CommentGetByUserDto>();
+            CreateMap<Comment, CommentGetOnMovieDto>();
+
             CreateMap<SearchResultsModel, ShortMovieModel>();
+
+            CreateMap<TrackedMovieDto, TrackedMovie>();
+            CreateMap<TrackedMovieCreateDto, TrackedMovie>();
+            CreateMap<TrackedMoviesDto, TrackedMovie>()
+                .ForPath(dest => dest.Movie.Title, opt => opt.MapFrom(src => src.Title))
+                .ForPath(dest => dest.Movie.Year, opt => opt.MapFrom(src => src.Year))
+                .ForPath(dest => dest.Movie.RunTimeInMinutes, opt => opt.MapFrom(src => src.Length))
+                .ForPath(dest => dest.Movie.Poster, opt => opt.MapFrom(src => src.Poster))
+                .ForPath(dest => dest.Watched, opt => opt.MapFrom(src => src.Watched))
+                .ReverseMap();
         }
     }
 }

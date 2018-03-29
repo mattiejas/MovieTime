@@ -31,7 +31,7 @@
   color: $secondary-color;
   font-weight: 400;
   border-radius: 5px;
-  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.20);
+  box-shadow: 0 5px 20px 0 rgba(55, 55, 55, 0.1);
   &:hover {
     background-color: darken($button-default-color, 3);
   }
@@ -41,6 +41,7 @@
   &.dark {
     background-color: $secondary-dark-color;
     color: $light-color;
+    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.20);
     i {
       color: $light-color;
     }
@@ -53,9 +54,10 @@
   }
   &.danger {
     background-color: $danger-color;
-    color: $light-color;
+    box-shadow: 0 5px 20px 0 rgba(227, 89, 75, 0.20);
+    color: #ffffff;
     i {
-      color: $light-color;
+      color: #ffffff;
     }
     &:hover {
       background-color: lighten($danger-color, 10);

@@ -1,0 +1,28 @@
+@import "../../styles/core";
+
+.spoiler {
+  max-width: 1200px;
+  margin: 0 auto;
+  h4 {
+    font-size: 1.5em;
+    margin: 20px 0 0 20px;
+    letter-spacing: 0.025em;
+  }
+  .spoiler__container {
+    margin: 20px;
+    background-color: #ffffff;
+    padding: 30px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    p {
+      width: 100%;
+      text-align: center;
+    }
+    .button {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+  }
+}

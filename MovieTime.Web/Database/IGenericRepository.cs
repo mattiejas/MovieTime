@@ -16,12 +16,13 @@ namespace MovieTime.Web.Database
         Task<int> Delete(T entity);
         Task<T> Find(Expression<Func<T, bool>> match);
         Task<ICollection<T>> FindAll(Expression<Func<T, bool>> match);
-        Task<ICollection<T>> FindBy(Expression<Func<T, bool>> predicate);
+        IQueryable<T> FindBy(Expression<Func<T, bool>> predicate);
         Task<T> Get(int id);
         IQueryable<T> GetDbSet();
         Task<ICollection<T>> GetAll();
         IQueryable<T> GetAllIncluding(params Expression<Func<T, object>>[] includeProperties);
         Task<T> Update(T t, object key);
+        Task<T> Update(T t);
         Task<int> Save();
         void Dispose();
     }
