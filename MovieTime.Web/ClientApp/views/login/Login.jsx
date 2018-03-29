@@ -9,6 +9,8 @@ import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
 
 import styles from './Login.scss';
+import ButtonGroup from '../../components/button/ButtonGroup';
+import Icon from '../../components/icon/Icon';
 
 class Login extends Component {
   constructor(props) {
@@ -60,8 +62,8 @@ class Login extends Component {
             <div className={styles.error}>{this.state.error}</div>
             <hr />
             <form onSubmit={this.handleSubmit}>
-              <div className={styles.JustifyDiv__container}>
-                <div>
+              <div className={styles['form-container']}>
+                <div className={styles.form}>
                   <Input label="Email" name="email" type="email" onChange={e => this.handleInputChange(e)} value={this.state.email} />
                   <Input
                     label="Password"
@@ -71,18 +73,23 @@ class Login extends Component {
                     value={this.state.password}
                   />
                   <Button dark className={styles.button} onClick={e => this.handleSubmit(e)}>
-  										Login
+                    Login
                   </Button>
                 </div>
-                <div className={styles.buttons__container}>
-                  <div className={styles.buttons}>
-                    <Button dark icon="fal fa-envelope" className={styles.button} to="/register" >
-  										Sign up with e-mail
+                <div className={styles.buttons}>
+                  <ButtonGroup>
+                    <Button danger className={styles.icon} icon="google" onClick={e => this.handleSignInWithGoogle(e)} />
+                    <Button danger className={styles.text} onClick={e => this.handleSignInWithGoogle(e)}>
+                        Sign In With Google
                     </Button>
-                    <Button danger icon="fab fa-google" className={styles.button} onClick={e => this.handleSignInWithGoogle(e)}>
-  										Sign In With Google
+                  </ButtonGroup>
+                  <hr />
+                  <ButtonGroup>
+                    <Button dark className={styles.icon} icon="envelope" to="/register" />
+                    <Button dark className={styles.text} to="/register" >
+                        Sign up with e-mail
                     </Button>
-                  </div>
+                  </ButtonGroup>
                 </div>
               </div>
             </form>

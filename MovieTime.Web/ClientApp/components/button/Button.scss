@@ -74,8 +74,10 @@
 }
 
 .group {
-  display: flex;
+  border-radius: 5px;
+  display: inline-flex;
   box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.20);
+  margin-bottom: 20px;
 
   .button {
     border-radius: 0;
