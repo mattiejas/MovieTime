@@ -125,15 +125,6 @@ class Navigation extends Component {
                     Home
                   </NavLink>
                 </li>
-                <li>
-                  <NavLink
-                    activeClassName={styles['navigation__item--active']}
-                    to="/register"
-                    onClick={() => this.toggleMenu()}
-                  >
-                    Register
-                  </NavLink>
-                </li>
                 <li className={styles['login-mobile']}>
                   <Button icon="user" to="/login">Login</Button>
                 </li>
