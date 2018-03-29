@@ -53,5 +53,13 @@ export function postCommentOnMovie(movieId, comment) {
     }));
 }
 
+export function toggleWatchStatus(movieId) {
+  return getTokenAndRequestHeader()
+    .then(requestHeader => betterFetch(`/api/watch/movie/${movieId}`, {
+      method: 'post',
+      headers: requestHeader,
+    }));
+}
+
 export const getMovieByTitle = title =>
   betterFetch(`/api/movie/title/${title}`);

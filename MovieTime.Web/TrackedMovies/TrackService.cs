@@ -5,6 +5,7 @@ using MovieTime.Web.TrackedMovies.Models;
 using MovieTime.Web.Users;
 using MovieTime.Web.Movies;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace MovieTime.Web.TrackedMovies
 {
@@ -29,15 +30,18 @@ namespace MovieTime.Web.TrackedMovies
             return result > 0;
         }
 
-        public async Task<bool> IsMovieTrackedByUser(string userId, string movieId)
+        public async Task<TrackedMovie> IsMovieTrackedByUser(string userId, string movieId)
         {
-            var result = await _trackRepository.Find(t => t.UserId == userId && t.MovieId == movieId);
-            return result != null;
+            return await _trackRepository.Find(t => t.UserId == userId && t.MovieId == movieId);
         }
 
         public async Task<ICollection<TrackedMovie>> GetTrackedMoviesByUser(string userId)
         {
-            return await _trackRepository.FindAll(t => t.UserId == userId);
+            return await _trackRepository.FindBy(t => t.UserId == userId)
+                .Include(t => t.User)
+                .Include(t => t.Movie)                                         
+                .OrderByDescending(t => t.CreatedTime)
+                .ToListAsync();
         }
 
         public async Task<TrackedMovie> ToggleMovieWatchedStatus(string movieId, string userId)
