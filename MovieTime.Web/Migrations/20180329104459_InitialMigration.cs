@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace MovieTime.Web.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -25,13 +25,13 @@ namespace MovieTime.Web.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    Actors = table.Column<string>(maxLength: 200, nullable: false),
-                    Director = table.Column<string>(maxLength: 200, nullable: false),
-                    Plot = table.Column<string>(maxLength: 2000, nullable: false),
+                    Actors = table.Column<string>(maxLength: 2000, nullable: false),
+                    Director = table.Column<string>(maxLength: 2000, nullable: false),
+                    Plot = table.Column<string>(maxLength: 4000, nullable: false),
                     Poster = table.Column<string>(nullable: false),
                     RunTimeInMinutes = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(maxLength: 40, nullable: false),
-                    Writer = table.Column<string>(maxLength: 200, nullable: false),
+                    Title = table.Column<string>(maxLength: 2000, nullable: false),
+                    Writer = table.Column<string>(maxLength: 2000, nullable: false),
                     Year = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -96,7 +96,7 @@ namespace MovieTime.Web.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AddedDateTime = table.Column<DateTime>(nullable: false),
                     EditedDateTime = table.Column<DateTime>(nullable: false),
                     IsConcept = table.Column<bool>(nullable: false),
