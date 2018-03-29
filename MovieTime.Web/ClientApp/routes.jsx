@@ -47,7 +47,7 @@ const PublicRoute = ({ component: Component, isAuthenticated, ...rest }) => (
     render={props =>
             (isAuthenticated === false
                 ? <Component {...props} />
-        : <Redirect to="/" />)}
+        : <Redirect to={props.location.state.from || '/'} />)}
   />
 );
 

@@ -12,12 +12,14 @@ import ProfilePicture from '../../components/profile/ProfilePicture';
 import EditProfileModal from '../../components/profile/EditProfileModal';
 
 import styles from './ProfileView.scss';
+import CommentSection from '../../components/comments/CommentSection';
+import SpoilerWarning from '../../components/comments/SpoilerWarning';
 
 class ProfileView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      canEditProfile: props.authId === (props.user && props.user.id),
+      isOwner: props.authId === (props.user && props.user.id),
       isLoading: true,
       isEditing: false,
       movies: [
@@ -39,7 +41,7 @@ class ProfileView extends React.Component {
     if (Object.prototype.hasOwnProperty.call(nextProps.user, 'firstName')) {
       this.setState({
         isLoading: false,
-        canEditProfile: nextProps.authId === (nextProps.user && nextProps.user.id),
+        isOwner: nextProps.authId === (nextProps.user && nextProps.user.id),
       });
     }
   }
@@ -66,7 +68,7 @@ class ProfileView extends React.Component {
   }
 
   render() {
-    const { canEditProfile, isLoading } = this.state;
+    const { isOwner, isLoading } = this.state;
     const { firstName, lastName } = this.props.user;
     const { id } = this.props.match.params;
 
@@ -100,15 +102,14 @@ class ProfileView extends React.Component {
           </div>
           <div className={styles.buttons__container}>
             <div className={styles.buttons}>
-              {canEditProfile &&
+              {isOwner &&
               <Button
                 dark
                 icon="pencil"
                 onClick={() => this.onEdit()}
               >
-                                    Edit
+                Edit
               </Button>}
-              {/* <Button dark icon="user">Follow</Button> */}
             </div>
           </div>
           <div className={styles.content}>
@@ -121,6 +122,12 @@ class ProfileView extends React.Component {
               title="Has watched"
               movies={this.state.movies}
               history={this.props.history}
+            />
+            <CommentSection
+              type="user"
+              id={this.props.user.id}
+              title="Recent Comments"
+              showSpoilerWarning={!isOwner}
             />
           </div>
         </div>

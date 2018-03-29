@@ -26,5 +26,32 @@ export function isMovieTracked(userId, movieId) {
     .then(response => response.json());
 }
 
+export function getCommentsOnMovie(movieId) {
+  return getTokenAndRequestHeader()
+    .then(requestHeader => betterFetch(`/api/comments/movie/${movieId}`, {
+      method: 'get',
+      headers: requestHeader,
+    }));
+}
+
+export function getCommentsByUser(userId) {
+  return getTokenAndRequestHeader()
+    .then(requestHeader => betterFetch(`/api/comments/user/${userId}`, {
+      method: 'get',
+      headers: requestHeader,
+    }));
+}
+
+export function postCommentOnMovie(movieId, comment) {
+  return getTokenAndRequestHeader()
+    .then(requestHeader => betterFetch(`/api/comments/movie/${movieId}`, {
+      method: 'post',
+      headers: requestHeader,
+      body: JSON.stringify({
+        value: comment,
+      }),
+    }));
+}
+
 export const getMovieByTitle = title =>
   betterFetch(`/api/movie/title/${title}`);
