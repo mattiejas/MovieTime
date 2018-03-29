@@ -99,7 +99,7 @@ class Navigation extends Component {
                   onClick={() => this.toggleSearch()}
                 />
                 <ButtonGroup>
-                  <Button useHistory icon="user" to={`/users/${this.props.user.id}`}>
+                  <Button icon="user" to={`/users/${this.props.user.id}`}>
                     {`${this.props.user.firstName} ${this.props.user.lastName}`}
                   </Button>
                   <Button icon="power-off" onClick={() => logout()} />
@@ -150,6 +150,7 @@ class Navigation extends Component {
 }
 
 Navigation.propTypes = {
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
   user: PropTypes.objectOf(PropTypes.any),
   isAuthenticated: PropTypes.bool,
 };

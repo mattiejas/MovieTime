@@ -8,15 +8,9 @@ import Icon from '../icon/Icon';
 import history from '../../utils/history';
 
 const Button = ({
-  to, useHistory, dark, danger, className, children, icon, ...rest
+  to, dark, danger, className, children, icon, ...rest
 }) => {
   if (to) {
-    if (useHistory) {
-      console.log(useHistory);
-      console.log(to);
-      history.push(to);
-      useHistory = false;
-    }
     return (
       <Link
         className={cn(styles.button, dark ? styles.dark : '', danger ? styles.danger : '', className)}
@@ -64,7 +58,6 @@ Button.propTypes = {
   danger: PropTypes.bool,
   className: PropTypes.string,
   to: PropTypes.string,
-  useHistory: PropTypes.bool,
 };
 
 Button.defaultProps = {
@@ -79,7 +72,6 @@ Button.defaultProps = {
   danger: false,
   className: '',
   to: undefined,
-  useHistory: false,
 };
 
 export default Button;
