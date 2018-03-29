@@ -26,13 +26,39 @@ export function isMovieTracked(userId, movieId) {
     .then(response => response.json());
 }
 
-export function toggleWatchStatus(movieId) {
+export function getCommentsOnMovie(movieId) {
   return getTokenAndRequestHeader()
-    .then(requestHeader => fetch(`/api/watch/movie/${movieId}`, {
+    .then(requestHeader => betterFetch(`/api/comments/movie/${movieId}`, {
+      method: 'get',
+      headers: requestHeader,
+    }));
+}
+
+export function getCommentsByUser(userId) {
+  return getTokenAndRequestHeader()
+    .then(requestHeader => betterFetch(`/api/comments/user/${userId}`, {
+      method: 'get',
+      headers: requestHeader,
+    }));
+}
+
+export function postCommentOnMovie(movieId, comment) {
+  return getTokenAndRequestHeader()
+    .then(requestHeader => betterFetch(`/api/comments/movie/${movieId}`, {
       method: 'post',
       headers: requestHeader,
-    }))
-    .then(response => response.json());
+      body: JSON.stringify({
+        value: comment,
+      }),
+    }));
+}
+
+export function toggleWatchStatus(movieId) {
+  return getTokenAndRequestHeader()
+    .then(requestHeader => betterFetch(`/api/watch/movie/${movieId}`, {
+      method: 'post',
+      headers: requestHeader,
+    }));
 }
 
 export const getMovieByTitle = title =>

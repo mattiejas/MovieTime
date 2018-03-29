@@ -1,0 +1,75 @@
+@import "../../styles/core";
+
+.wrapper {
+  max-width: 1200px;
+  margin: 40px auto;
+  h4 {
+    font-size: 1.5em;
+    margin: 0 0 0 25px;
+    letter-spacing: 0.025em;
+  }
+  .comment-section {
+    margin: 20px;
+    padding: 25px;
+    .content {
+      background-color: #ffffff;
+      border-radius: 5px;
+      width: 100%;
+      padding: 20px;
+      .place-comment {
+        display: flex;
+        margin-bottom: 20px;
+        .input-container {
+          flex-grow: 1;
+          display: flex;
+          flex-direction: column;
+          .comment-input {
+            margin-right: 20px;
+          }
+          span {
+            padding-top: 10px;
+            font-size: 0.8em;
+            font-style: italic;
+            &.error {
+              color: $danger-color;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.wrapper {
+  &.movie {
+    h4 {
+      margin: 0 0 0 20px;
+    }
+    .comment-section {
+      background-color: #ffffff;
+      border-radius: 5px;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      h4 {
+        margin: 20px 0 0 30px;
+      }
+    }
+  }
+}
+
+.wrapper {
+  &.user {
+    margin: 0;
+    h4 {
+      margin: 0 0 0 25px;
+    }
+    .comment-section {
+      margin: 0;
+      .content {
+        background-color: #ffffff;
+        width: 100%;
+        padding: 30px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+}

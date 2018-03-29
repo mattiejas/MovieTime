@@ -1,5 +1,6 @@
 ﻿using System;
 using AutoMapper;
+using MovieTime.Web.Comments;
 using MovieTime.Web.Helpers;
 using MovieTime.Web.Movies.Models;
 using MovieTime.Web.ThirdPartyServices.OMDB.MovieList;
@@ -30,6 +31,10 @@ namespace MovieTime.Web.Utilities
             CreateMap<UserUpdateDto, User>();
             CreateMap<UserGetDto, User>();
             CreateMap<User, UserGetDto>();
+
+            CreateMap<CommentCreateDto, Comment>();
+            CreateMap<Comment, CommentGetByUserDto>();
+            CreateMap<Comment, CommentGetOnMovieDto>();
 
             CreateMap<SearchResultsModel, ShortMovieModel>();
 

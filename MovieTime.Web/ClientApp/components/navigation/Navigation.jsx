@@ -150,6 +150,7 @@ class Navigation extends Component {
 }
 
 Navigation.propTypes = {
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
   user: PropTypes.objectOf(PropTypes.any),
   isAuthenticated: PropTypes.bool,
 };

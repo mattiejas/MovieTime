@@ -24,6 +24,12 @@ class Login extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.authId) {
+      this.props.history.push(`/users/${nextProps.authId}`);
+    }
+  }
+
   handleSubmit(event) {
     event.preventDefault();
 
@@ -83,11 +89,21 @@ class Login extends Component {
 
 Login.propTypes = {
   location: PropTypes.objectOf(PropTypes.any).isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
   authenticate: PropTypes.func.isRequired,
+  authId: PropTypes.string,
 };
+
+Login.defaultProps = {
+  authId: null,
+};
+
+const mapPropsToState = state => ({
+  authId: state.auth.user && state.auth.user.id,
+});
 
 const mapDispatchToProps = {
   authenticate,
 };
 
-export default withRouter(connect(null, mapDispatchToProps)(Login));
+export default withRouter(connect(mapPropsToState, mapDispatchToProps)(Login));

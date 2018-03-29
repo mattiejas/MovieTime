@@ -17,6 +17,7 @@ import Button from '../../components/button/Button';
 import ButtonGroup from '../../components/button/ButtonGroup';
 
 import styles from './MovieDetailView.scss';
+import CommentSection from '../../components/comments/CommentSection';
 
 class MovieDetailView extends React.Component {
   constructor(props) {
@@ -138,6 +139,7 @@ class MovieDetailView extends React.Component {
       writer = '',
       actors = '',
       plot = '',
+      imdbId,
     } = this.state.movie;
     return (
       <div className={styles.view}>
@@ -232,6 +234,14 @@ class MovieDetailView extends React.Component {
               </div>
             </div>
           </div>
+          {
+            this.props.isAuthenticated &&
+            <Placeholder
+              isReady={!this.state.isLoading}
+            >
+              <CommentSection type="movie" id={imdbId} title="Comments" showSpoilerWarning={!this.state.isTracking} />
+            </Placeholder>
+          }
         </div>
       </div>
     );
@@ -241,9 +251,15 @@ class MovieDetailView extends React.Component {
 MovieDetailView.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
   requestMovieByTitle: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
+};
+
+MovieDetailView.defaultProps = {
+  isAuthenticated: false,
 };
 
 const mapStateToProps = (state, props) => ({
+  isAuthenticated: state.auth.authenticated,
   movie: state.movies[props.match.params.title] || {},
 });
 

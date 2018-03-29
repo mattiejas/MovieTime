@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using MovieTime.Web.Users;
 using MovieTime.Web.Movies.Models;
 using MovieTime.Web.Genres;
+using MovieTime.Web.Comments;
 using MovieTime.Web.TrackedMovies.Models;
 
 namespace MovieTime.Web.Database
@@ -15,9 +16,10 @@ namespace MovieTime.Web.Database
         public virtual DbSet<Genre> Genres { get; set; }
         public virtual DbSet<MovieGenre> MovieGenre { get; set; }
         public virtual DbSet<TrackedMovie> TrackedMovies { get; set; }
-        
+        public virtual DbSet<Comment> Comments { get; set; }
+
         public virtual DbSet<User> Users { get; set; }
-//        public virtual DbSet<Review> Reviews { get; set; }
+        //        public virtual DbSet<Review> Reviews { get; set; }
 
         public MovieContext(DbContextOptions<MovieContext> options) : base(options) { }
 
