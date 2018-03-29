@@ -29,12 +29,6 @@ namespace MovieTime.Web.TrackedMovies
         {
             try
             {
-                var userIdFromToken = this.User.GetUserId();
-                if (userIdFromToken == null)
-                {
-                    return BadRequest(new { message = "User is not authenticated" });
-                }
-
                 var trackedMovies = await _trackService.GetTrackedMoviesByUser(userId);
                 var trackedMoviesDto = _mapper.Map<ICollection<TrackedMovie>, ICollection<TrackedMoviesGetDto>>(trackedMovies);
 

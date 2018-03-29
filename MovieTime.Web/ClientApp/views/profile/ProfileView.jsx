@@ -15,7 +15,6 @@ import EditProfileModal from '../../components/profile/EditProfileModal';
 
 import styles from './ProfileView.scss';
 import CommentSection from '../../components/comments/CommentSection';
-import SpoilerWarning from '../../components/comments/SpoilerWarning';
 
 class ProfileView extends React.Component {
   constructor(props) {
@@ -31,17 +30,17 @@ class ProfileView extends React.Component {
 
   componentDidMount() {
     const { id } = this.props.match.params;
-    this.props.getUser(id);
-
-    getTrackedMoviesByUser(id)
-      .then((response) => {
-        const watchedMovies = response.filter(x => x.watched).slice(0, 4);
-        const unwatchedMovies = response.filter(x => !x.watched).slice(0, 4);
-        this.setState({
-          watchedMovies,
-          unwatchedMovies,
+    this.props.getUser(id).then(() => {
+      getTrackedMoviesByUser(id)
+        .then((response) => {
+          const watchedMovies = response.filter(x => x.watched).slice(0, 4);
+          const unwatchedMovies = response.filter(x => !x.watched).slice(0, 4);
+          this.setState({
+            watchedMovies,
+            unwatchedMovies,
+          });
         });
-      });
+    });
   }
 
   componentWillReceiveProps(nextProps) {

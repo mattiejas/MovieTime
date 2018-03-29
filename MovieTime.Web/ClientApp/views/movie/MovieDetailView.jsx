@@ -239,7 +239,7 @@ class MovieDetailView extends React.Component {
             <Placeholder
               isReady={!this.state.isLoading}
             >
-              <CommentSection type="movie" id={imdbId} title="Comments" showSpoilerWarning={!this.state.isTracking} />
+              <CommentSection type="movie" id={imdbId} title="Comments" showSpoilerWarning={!this.state.isWatched} />
             </Placeholder>
           }
         </div>
