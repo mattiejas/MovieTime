@@ -38,11 +38,16 @@ class ProfileView extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (Object.prototype.hasOwnProperty.call(nextProps.user, 'firstName')) {
+    if (Object.prototype.hasOwnProperty.call(nextProps.user, 'id')) {
       this.setState({
         isLoading: false,
         isOwner: nextProps.authId === (nextProps.user && nextProps.user.id),
       });
+    } else if (this.props.user.id !== nextProps.match.params.id) {
+      this.setState({
+        isLoading: true,
+      });
+      this.props.getUser(nextProps.match.params.id);
     }
   }
 
