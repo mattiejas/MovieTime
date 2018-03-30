@@ -105,7 +105,7 @@ class Registration extends React.Component {
 
   isName(value) {
     name = value.replace(/^([a-z\u00C0-\u02AB'´`]{1,}\.?\s?)([a-z\u00C0-\u02AB'´`]?\.?\s?)+$/i, ' ');
-    return name === ' ' && name.length > 35;
+    return name === ' ' && name.length < 35;
   }
 
   render() {
