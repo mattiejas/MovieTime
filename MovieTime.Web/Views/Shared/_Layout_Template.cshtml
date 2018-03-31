@@ -9,9 +9,8 @@
     <base href="~/" />
 
     @Html.Raw(JavaScriptSnippet.FullScript)
-<link href="dist/main.css" rel="stylesheet"></head>
+</head>
 <body>
     @RenderBody()
     @RenderSection("scripts", required: false)
 </html>
-<script type="text/javascript" src="dist/vendor.js"></script><script type="text/javascript" src="dist/main.js"></script>
