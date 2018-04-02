@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MovieTime.Web.Genres.Models;
 
 namespace MovieTime.Web.Movies.Models
 {

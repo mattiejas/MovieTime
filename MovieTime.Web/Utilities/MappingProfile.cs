@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using AutoMapper;
 using MovieTime.Web.Comments;
 using MovieTime.Web.Helpers;
@@ -18,11 +19,13 @@ namespace MovieTime.Web.Utilities
             // Add as many of these lines as you need to map your objects
             CreateMap<OmdbMovieModel, Movie>()
                 .ForMember(dest => dest.Year, opt => opt.MapFrom(src => new DateTime(Convert.ToInt32(src.Year), 1, 1)))
+                .ForMember(dest => dest.Genres, opt => opt.MapFrom(src => DataConverterHelper.ConvertOmdbGenresToCollection(src.Genre, src.Id)))
                 .ForMember(dest => dest.RunTimeInMinutes, opt => opt.MapFrom(src => DataConverterHelper.ConvertOmdbRuntimeToInt(src.Runtime)));
 
             CreateMap<Movie, MovieGetDto>()
                 .ForMember(dest => dest.ImdbId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Year.Year.ToString()))
+                .ForMember(dest => dest.Genres, opt => opt.MapFrom(x => x.Genres.Select(y => y.DbGenreId).ToList()))
                 .ForMember(dest => dest.RunTime, opt => opt.MapFrom(src => src.RunTimeInMinutes));
             
             CreateMap<MovieCreateDto, Movie>();
