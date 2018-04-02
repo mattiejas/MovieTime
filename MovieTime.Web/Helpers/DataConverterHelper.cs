@@ -23,6 +23,9 @@ namespace MovieTime.Web.Helpers
             const string removeUnusedCharacter = " ";
             
             var genresArray = genres.Replace(removeUnusedCharacter, "").Split(seperator);
+
+            if (genresArray.Length <= 0) return null;
+            
             var movieGenres = new List<MovieGenre>();
             foreach (var genre in genresArray)
             {
