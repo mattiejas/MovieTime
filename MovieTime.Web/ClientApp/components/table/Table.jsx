@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import styles from './Table.scss';
 
-const Table = ({ headers, rows, onRowClicked }) => (
+const Table = ({ headers, rows, onRowClick }) => (
   <div className={styles['table-wrapper']}>
     <table className={styles.table}>
       <thead>
@@ -17,9 +17,9 @@ const Table = ({ headers, rows, onRowClicked }) => (
       <tbody>
         {
           _.map(rows, (row, i) => (
-            <tr key={`table-row--${i}`} onClick={() => onRowClicked(row)}>
+            <tr key={`table-row--${i}`} onClick={() => onRowClick(row)} style={{ cursor: onRowClick ? 'pointer' : null }}>
               {
-                  _.map(Object.keys(headers), (heading, j) => <td key={`table-data--${j}`}>{row[heading]}</td>)
+                _.map(Object.keys(headers), (heading, j) => <td key={`table-data--${j}`}>{row[heading]}</td>)
               }
             </tr>))
         }
@@ -31,11 +31,11 @@ const Table = ({ headers, rows, onRowClicked }) => (
 Table.propTypes = {
   headers: PropTypes.objectOf(PropTypes.any).isRequired,
   rows: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired,
-  onRowClicked: PropTypes.func,
+  onRowClick: PropTypes.func,
 };
 
 Table.defaultProps = {
-  onRowClicked: undefined,
+  onRowClick: undefined,
 };
 
 export default Table;

@@ -1,15 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 
 import Table from '../../components/table/Table';
 import Icon from '../../components/icon/Icon';
 
 import styles from './SearchView.scss';
-import { getMovieByTitle, searchMovies } from '../../utils/movie';
+import { searchMovies } from '../../utils/movie';
 
 class SearchView extends React.Component {
   static propTypes = {
     match: PropTypes.objectOf(PropTypes.any).isRequired,
+    history: PropTypes.objectOf(PropTypes.any).isRequired,
   };
 
   state = {
@@ -26,12 +28,24 @@ class SearchView extends React.Component {
     }
   }
 
+  onClick(movie) {
+    this.props.history.push(`/movies/${movie.id}`);
+  }
+
   search(query) {
     // do API call
     searchMovies(query).then((data) => {
       console.log(data);
       this.setState({
-        movies: data,
+        movies: _.map(data, m => ({
+          id: m.id,
+          title: m.title,
+          length: m.runTimeInMinutes,
+          year: m.year,
+          genre: m.genre,
+          rating: m.rating,
+          watched: <Icon type="eye" />,
+        })),
       });
     });
   }
@@ -45,13 +59,14 @@ class SearchView extends React.Component {
           <Table
             headers={{
               title: 'Title',
-              runTimeInMinutes: 'Length',
+              length: 'Length',
               year: 'Year',
               genre: 'Genre',
               rating: 'Rating',
-              watched: 'icon',
+              watched: <Icon type="eye" />,
             }}
             rows={this.state.movies}
+            onRowClick={m => this.onClick(m)}
           />
         </div>
       </div>
