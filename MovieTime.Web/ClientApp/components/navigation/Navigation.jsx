@@ -115,6 +115,7 @@ class Navigation extends Component {
                 this.state.inTransition ? styles['navigation--transistion'] : '',
               )}
               >
+                <li className={styles['search-mobile']}><SearchInput onSearch={() => this.toggleMenu()} /></li>
                 <li>
                   <NavLink
                     exact
@@ -139,6 +140,10 @@ class Navigation extends Component {
                 </li>
               </ul>
               <div className={styles.buttons}>
+                <SearchInput
+                  className={cn(styles['search-desktop'], this.state.searchIsOpen ? styles['is-open'] : null)}
+                  onClick={() => this.toggleSearch()}
+                />
                 <Button icon="user" to="/login">Login</Button>
               </div>
             </div>

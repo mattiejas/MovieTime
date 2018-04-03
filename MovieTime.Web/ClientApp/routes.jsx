@@ -87,7 +87,7 @@ class Routes extends React.Component {
       <Layout>
         <Switch>
           <Route exact path="/" component={Home} />
-          <PrivateRoute
+          <Route
             path="/movies/:title"
             isAuthenticated={this.props.isAuthenticated}
             component={MovieDetailView}

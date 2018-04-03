@@ -61,17 +61,25 @@ class MovieDetailView extends React.Component {
   async loadMovieDetails(movieTitle) {
     try {
       const movie = await this.props.requestMovieByTitle(movieTitle);
-      const user = await getUser();
-      const track = await isMovieTracked(user.uid, movie.imdbId);
 
-      // Using this.setState is correct, because we are using ES2017 async instead of Promises.
-      // eslint-disable-next-line react/no-did-mount-set-state
       this.setState({
         movie,
-        isTracking: track.isTracked,
         isLoading: false,
-        isWatched: track.isWatched,
       });
+
+      if (this.props.isAuthenticated) {
+        const user = await getUser();
+        const track = await isMovieTracked(user.uid, movie.imdbId);
+
+        // Using this.setState is correct, because we are using ES2017 async instead of Promises.
+        // eslint-disable-next-line react/no-did-mount-set-state
+        this.setState({
+          isTracking: track.isTracked,
+          isLoading: false,
+          isWatched: track.isWatched,
+        });
+      }
+
       if (movie.poster && movie.poster !== 'N/A') {
         this.setBackgroundColor(movie.poster);
       }
@@ -184,12 +192,12 @@ class MovieDetailView extends React.Component {
                   lineHeight={1.8}
                   lines={3}
                 >
-                  {!this.state.isTracking &&
+                  {!this.state.isTracking && this.props.isAuthenticated &&
                     <Button dark disabled={this.state.isDisabled ? 'disabled' : ''} onClick={this.handleTracking}>
                       Track
                     </Button>
                   }
-                  {this.state.isTracking &&
+                  {this.state.isTracking && this.props.isAuthenticated &&
                     <ButtonGroup>
                       <Button dark disabled={this.state.isDisabled ? 'disabled' : ''} onClick={this.handleUntracking}>
                         Tracking
