@@ -205,5 +205,16 @@ namespace MovieTime.Web.Movies
 
             return trending;
         }
+        
+        public async Task<ICollection<Movie>> GetRecentTrackedMovies(int count)
+        {
+            var trending = await _trackRepository.GetDbSet()
+                .OrderByDescending(z => z.CreatedTime)
+                .Select(m => m.Movie)
+                .Take(count)
+                .ToListAsync();
+
+            return trending;
+        }
     }
 }

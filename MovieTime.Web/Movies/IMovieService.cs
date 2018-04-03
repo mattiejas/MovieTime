@@ -14,5 +14,6 @@ namespace MovieTime.Web.Movies
         Task<bool> AddMovie(Movie movie);
         Task<bool> MovieExistById(string movieId);
         Task<ICollection<Movie>> GetTrendingMovies(int count);
+        Task<ICollection<Movie>> GetRecentTrackedMovies(int count);
     }
 }

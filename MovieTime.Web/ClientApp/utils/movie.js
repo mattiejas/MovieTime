@@ -66,3 +66,6 @@ export const getMovieByTitle = title =>
 
 export const getTrendingMovies = count =>
   betterFetch(`/api/movie/trending/${count}`);
+
+export const getRecentlyTrackedMovies = count =>
+  betterFetch(`/api/movie/trending/tracked/${count}`);

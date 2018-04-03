@@ -2,16 +2,21 @@ import React from 'react';
 
 import styles from './Home.scss';
 import ListWidget from '../../components/list-widget/ListWidget';
-import { getTrendingMovies } from '../../utils/movie';
+import { getRecentlyTrackedMovies, getTrendingMovies } from '../../utils/movie';
 
 class Home extends React.Component {
   state = {
     trending: [],
+    recentlyTracked: [],
   };
 
   componentDidMount() {
     getTrendingMovies(4).then(movies => this.setState({
       trending: movies,
+    }));
+
+    getRecentlyTrackedMovies(4).then(movies => this.setState({
+      recentlyTracked: movies,
     }));
   }
 
@@ -25,6 +30,7 @@ class Home extends React.Component {
             <p>Because there a so many good movies and there is so little time</p>
           </div>
           <ListWidget movies={this.state.trending} title="Trending" />
+          <ListWidget movies={this.state.recentlyTracked} title="Recently Tracked" />
         </div>
       </div>
     );

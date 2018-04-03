@@ -64,6 +64,17 @@ namespace MovieTime.Web.Movies
 
             return Ok(movieGetDto);
         }
+        
+        [HttpGet("trending/tracked/{count}")]
+        public async Task<IActionResult> GetRecentTrackedMovies(int count = 4)
+        {
+            var movies = await _movieService.GetRecentTrackedMovies(count);
+            if (movies == null) return NotFound();
+
+            var movieGetDto = _mapper.Map<ICollection<Movie>, ICollection<MovieGetDto>>(movies);
+
+            return Ok(movieGetDto);
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreateMovie([FromBody] MovieCreateDto movieCreateDto)
