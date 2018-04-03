@@ -30,6 +30,9 @@ namespace MovieTime.Web.Movies.Models
         public string Actors { get; set; }
 
         public string Plot { get; set; }
+        
+        //Todo: Show IMDB rating untill our own rating system is implemented
+        public string ImdbRating { get; set; }
 
         public ICollection<TrackedMovie> TrackedMovies { get; set; }
     }
