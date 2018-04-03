@@ -19,11 +19,11 @@ export function untrackMovie(movieId) {
 
 export function isMovieTracked(userId, movieId) {
   return getTokenAndRequestHeader()
-    .then(requestHeader => fetch(`/api/tracked/movie/${movieId}`, {
+    .then(requestHeader => betterFetch(`/api/tracked/movie/${movieId}`, {
       method: 'get',
       headers: requestHeader,
     }))
-    .then(response => response.json());
+    .then(response => ({ ...response, id: movieId }));
 }
 
 export const getMovieByTitle = title =>
