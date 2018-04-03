@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.KeyVault.Models;
 using MovieTime.Web.Auth;
+using MovieTime.Web.Comments;
+using MovieTime.Web.TrackedMovies;
 using MovieTime.Web.Users.Models;
 using Serilog;
 
@@ -16,12 +18,16 @@ namespace MovieTime.Web.Users
     public class UserController : Controller
     {
         private readonly IUserService _userService;
+        private readonly ITrackService _trackService;
+        private readonly ICommentService _commentService;
         private readonly IMapper _mapper;
         private const string GetUserRoute = "GetUser";
 
-        public UserController(IUserService userService, IMapper mapper)
+        public UserController(IUserService userService, ITrackService trackService, ICommentService commentService, IMapper mapper)
         {
             _userService = userService;
+            _trackService = trackService;
+            _commentService = commentService;
             _mapper = mapper;
         }
 
@@ -58,6 +64,22 @@ namespace MovieTime.Web.Users
             var routeValue = new {id = user.Id};
 
             return CreatedAtRoute(GetUserRoute, routeValue, userToReturn);
+        }
+
+        [HttpGet("info")]
+        public async Task<IActionResult> GetAllUserInformation()
+        {
+            var userIdFromToken = this.User.GetUserId();
+            if (userIdFromToken == null) return Unauthorized();
+
+            var userExists = await _userService.UserExist(userIdFromToken);
+            if (!userExists) return NotFound();
+
+            var trackedMovies = await _trackService.GetTrackedMoviesByUser(userIdFromToken);
+            var writtenComments = await _commentService.AllCommentsByUser(userIdFromToken);
+//            var user = writtenComments.
+
+            return null;
         }
 
         [HttpPut("{id}")]
