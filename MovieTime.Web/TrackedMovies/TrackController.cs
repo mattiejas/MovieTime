@@ -25,8 +25,9 @@ namespace MovieTime.Web.TrackedMovies
             _mapper = mapper;
         }
 
+        /* Return a list of all tracked movies of the specified user. */
         [HttpGet("tracks/user/{userId}")]
-        public async Task<IActionResult> GetAllTrackedMovies(string userId)
+        public async Task<IActionResult> GetAllTrackedMoviesByUserId(string userId)
         {
             try
             {
@@ -47,7 +48,8 @@ namespace MovieTime.Web.TrackedMovies
                 return BadRequest(new { message = err.Message });
             }
         }
-        
+
+        /* Track a specified movie with the userId (retrieved from the request header). */
         [HttpPost("tracks/movie/{movieId}")]
         public async Task<IActionResult> TrackMovie(string movieId)
         {
@@ -61,7 +63,7 @@ namespace MovieTime.Web.TrackedMovies
                 
                 var userIdFromToken = this.User.GetUserId();
                 var trackedMovie = new TrackedMovie { MovieId = movieId, UserId = userIdFromToken, Watched = false };
-                trackedMovie.CreatedTime = DateTime.Now;
+                trackedMovie.CreatedTime = DateTime.Now; // CreatedTime is used to sort the trackedMovies in the DTO.
                 await _trackService.TrackMovie(trackedMovie);
                 
                 return NoContent();      
@@ -73,6 +75,7 @@ namespace MovieTime.Web.TrackedMovies
             }
         }
 
+        /* Check whether the current movie is tracked by the user. */
         [HttpGet("tracked/movie/{movieId}")]
         public async Task<IActionResult> IsMovieTrackedByUser(string movieId)
         {
@@ -95,6 +98,7 @@ namespace MovieTime.Web.TrackedMovies
             }
         }
 
+        /* Untrack a specified movie with the userId (retrieved from the request header). */
         [HttpPost("untrack/movie/{movieId}")]
         public async Task<IActionResult> UntrackMovie(string movieId)
         {         
@@ -119,6 +123,7 @@ namespace MovieTime.Web.TrackedMovies
             }
         }  
 
+        /* Toggle the watch status with the specified movie and userId (retrieved from the request header). */
         [HttpPost("watch/movie/{movieId}")]
         public async Task<IActionResult> ToggleMovieWatchedStatus(string movieId)
         {         
