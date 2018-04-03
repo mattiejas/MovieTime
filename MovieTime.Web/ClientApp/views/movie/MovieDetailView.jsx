@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 
 import { getUser } from '../../utils/auth';
-import { requestMovieByTitle } from '../../modules/movies';
+import { requestMovieById } from '../../modules/movies';
 import { trackMovie, untrackMovie, isMovieTracked, toggleWatchStatus } from '../../utils/movie';
 
 import MoviePoster from '../../components/movie/MoviePoster';
@@ -60,20 +60,28 @@ class MovieDetailView extends React.Component {
 
   async loadMovieDetails(id) {
     try {
-      const movie = await this.props.requestMovieByTitle(movieTitle);
+      let newMovie;
+      if (!this.props.movie.title) {
+        // fetch movie from backend
+        newMovie = await this.props.requestMovieById(id);
+      } else {
+        // movie is not 'new', get it from cache
+        newMovie = this.props.movie;
+      }
+
       const user = await getUser();
-      const track = await isMovieTracked(user.uid, movie.imdbId);
+      const track = await isMovieTracked(user.uid, newMovie.imdbId);
 
       // Using this.setState is correct, because we are using ES2017 async instead of Promises.
       // eslint-disable-next-line react/no-did-mount-set-state
       this.setState({
-        movie,
+        movie: newMovie,
         isTracking: track.isTracked,
         isLoading: false,
         isWatched: track.isWatched,
       });
-      if (movie.poster && movie.poster !== 'N/A') {
-        this.setBackgroundColor(movie.poster);
+      if (newMovie.poster && newMovie.poster !== 'N/A') {
+        this.setBackgroundColor(newMovie.poster);
       }
     } catch (err) {
       throw err;
@@ -251,8 +259,13 @@ class MovieDetailView extends React.Component {
 
 MovieDetailView.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
-  requestMovieByTitle: PropTypes.func.isRequired,
+  movie: PropTypes.objectOf(PropTypes.any),
+  requestMovieById: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
+};
+
+MovieDetailView.defaultProps = {
+  movie: {},
 };
 
 MovieDetailView.defaultProps = {
@@ -261,11 +274,11 @@ MovieDetailView.defaultProps = {
 
 const mapStateToProps = (state, props) => ({
   isAuthenticated: state.auth.authenticated,
-  movie: state.movies[props.match.params.title] || {},
+  movie: state.movies[props.match.params.id] || {},
 });
 
 const mapDispatchToProps = {
-  requestMovieByTitle,
+  requestMovieById,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MovieDetailView);

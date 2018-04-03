@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import Table from '../../components/table/Table';
@@ -32,6 +33,11 @@ class SearchView extends React.Component {
     this.props.history.push(`/movies/${movie.id}`);
   }
 
+  onEyeClick(e, id) {
+    e.stopPropagation();
+    console.log('movie:', id);
+  }
+
   search(query) {
     // do API call
     searchMovies(query).then((data) => {
@@ -44,7 +50,7 @@ class SearchView extends React.Component {
           year: m.year,
           genre: m.genre,
           rating: m.rating,
-          watched: <Icon type="eye" />,
+          watched: <Icon type="eye" onClick={e => this.onEyeClick(e, m.id)} />,
         })),
       });
     });
@@ -74,4 +80,8 @@ class SearchView extends React.Component {
   }
 }
 
-export default SearchView;
+const mapStateToProps = state => ({
+  authId: (state.auth.user && state.auth.user.id) || null,
+});
+
+export default connect(mapStateToProps)(SearchView);
