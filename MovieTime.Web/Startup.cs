@@ -14,6 +14,7 @@ using MovieTime.Web.Comments;
 using MovieTime.Web.Users;
 using MovieTime.Web.Utilities;
 using MovieTime.Web.Database;
+using MovieTime.Web.Genres;
 using MovieTime.Web.Movies;
 using MovieTime.Web.ThirdPartyServices;
 using MovieTime.Web.ThirdPartyServices.OMDB.Movies;
@@ -87,6 +88,8 @@ namespace MovieTime.Web
 
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<ICommentRepository, CommentRepository>();
+
+            services.AddScoped<IGenreRepository, GenreRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using MovieTime.Web.Genres;
+using MovieTime.Web.Genres.Models;
 using MovieTime.Web.Movies.Models;
 using MovieTime.Web.Users;
 using Serilog;
