@@ -7,6 +7,8 @@
   left: 0;
   background-color: $secondary-dark-color;
   height: 30vh;
+  min-height: 200px;
+  max-height: 200px;
   width: 100%;
   z-index: 1;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.10);
@@ -16,10 +18,10 @@
   display: none;
 }
 
-.view__header {
-  position: absolute;
-  top: 50px;
-  z-index: 2;
+.view__content {
+  position: relative;
+  z-index: 5;
+  margin-top: 220px;
 }
 
 .header {
@@ -33,12 +35,17 @@
 }
 
 .header__content {
+  max-height: 100px;
 }
 
 .header__picture {
   display: flex;
   align-items: center;
   height: 30vh;
+  min-height: 210px;
+  max-height: 210px;
+  position: relative;
+  z-index: 6;
   .picture {
     border: 3px solid lighten($light-color, 5);
     height: auto;
@@ -48,6 +55,8 @@
 
 .name {
   height: 30vh;
+  min-height: 210px;
+  max-height: 210px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -79,12 +88,18 @@
 
 .content {
   max-width: 1200px;
-  margin: 10px auto 50px auto;
+  margin: 20px auto 50px;
 }
 
 @media (min-width: $grid-sm) {
   .view__background {
     border-top: 10px solid $secondary-dark-color;
+    min-height: 200px;
+    max-height: 300px;
+  }
+
+  .view__content {
+    margin-top: 280px;
   }
 
   .header {
@@ -98,6 +113,11 @@
   .buttons__container {
     grid-template-columns: 240px 1fr;
     grid-template-areas: " buttons";
+    height: 6vh;
+    min-height: 10px;
+    max-height: 70px;
+    display: flex;
+    flex-direction: column-reverse;
     .buttons {
       display: block;
       grid-area: buttons;
@@ -121,6 +141,8 @@
 
   .header__picture {
     margin-top: 40px;
+    min-height: 200px;
+    max-height: 300px;
     .picture {
       border: 10px solid lighten($light-color, 5);
     }
@@ -128,6 +150,8 @@
 
   .name {
     justify-content: flex-end;
+    min-height: 200px;
+    max-height: 300px;
     h1 {
       font-size: 1.8em;
       margin-bottom: 10px;
