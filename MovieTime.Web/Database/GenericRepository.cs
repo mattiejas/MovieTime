@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace MovieTime.Web.Database
 {
@@ -18,11 +19,25 @@ namespace MovieTime.Web.Database
             disposed = false;
         }
 
-        public virtual async Task<T> Add(T t, bool save = true)
+        public virtual async Task<bool> Add(T t, bool save = true)
         {
             _context.Set<T>().Add(t);
-            if (save) await _context.SaveChangesAsync();
-            return t;
+            try
+            {
+              if (save) return await _context.SaveChangesAsync() > 0;
+              return true;
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message);
+            }
+            return false;
+        }
+
+        public virtual async Task<bool> AddIfNotExists(T entity, Expression<Func<T, bool>> match)
+        {
+            var exists = _context.Set<T>().Any(match);
+            return exists || await Add(entity);
         }
 
         public virtual async Task<int> CountAll()
@@ -50,16 +65,17 @@ namespace MovieTime.Web.Database
         {
             return await _context.Set<T>().Where(match).ToListAsync();
         }
-
-        public virtual async Task<ICollection<T>> FindBy(Expression<Func<T, bool>> predicate)
-        {
-            return await _context.Set<T>().Where(predicate).ToListAsync();
-        }
-
+        
+        public virtual IQueryable<T> FindBy(Expression<Func<T, bool>> predicate)  
+        {  
+            IQueryable<T> query = _context.Set<T>().Where(predicate);  
+            return query;  
+        }  
         public virtual async Task<T> Get(int id)
         {
             return await _context.Set<T>().FindAsync(id);
         }
+        
 
         public virtual IQueryable<T> GetDbSet()
         {
@@ -99,6 +115,16 @@ namespace MovieTime.Web.Database
             }
 
             return exist;
+        }
+
+        public virtual async Task<T> Update(T t)
+        {
+            if (t == null) return null;
+           
+            T entry = _context.Update(t).Entity;
+            await _context.SaveChangesAsync();
+
+            return entry;
         }
 
         public void Dispose()

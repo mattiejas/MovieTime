@@ -1,22 +1,24 @@
 import betterFetch from './better-fetch';
 import { getTokenAndRequestHeader } from './auth';
 
-const usersAPI = '/api/users/';
+const API = '/api/users/';
 
 export function getUserData(id) {
-  return betterFetch(usersAPI + id);
+  return betterFetch(API + id);
 }
 
-export function updateUserData(user, id) {
-  const updateUserDto = {
-    ...user,
-    id,
-  };
-
+export function getTrackedMoviesByUser(userId) {
   return getTokenAndRequestHeader()
-    .then(requestHeader => fetch(usersAPI + id, {
+    .then(requestHeader => betterFetch(`/api/tracks/user/${userId}`, {
+      headers: requestHeader,
+      method: 'GET',
+    }));
+}
+
+export const updateUserData = user =>
+  getTokenAndRequestHeader()
+    .then(requestHeader => betterFetch(API + user.id, {
       headers: requestHeader,
       method: 'PUT',
-      body: JSON.stringify(updateUserDto),
-    }).then(response => response));
-}
+      body: JSON.stringify(user),
+    }));

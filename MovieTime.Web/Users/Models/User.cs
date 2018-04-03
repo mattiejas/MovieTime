@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using MovieTime.Web.TrackedMovies.Models;
 
 namespace MovieTime.Web.Users
 {
@@ -12,5 +14,7 @@ namespace MovieTime.Web.Users
         public string LastName { get; set; }
         public string Email { get; set; }
         public string ImageUrl { get; set; }
+
+        public ICollection<TrackedMovie> TrackedMovies { get; set; }
     }
 }

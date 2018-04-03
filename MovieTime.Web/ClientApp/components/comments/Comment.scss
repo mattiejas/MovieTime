@@ -1,0 +1,24 @@
+@import "../../styles/core";
+
+.comment {
+  margin: 10px 0;
+  h3 {
+    display: inline-block;
+    font-size: 1em;
+    margin: 0 0 5px;
+    a {
+      color: $secondary-color;
+    }
+  }
+  span {
+    font-size: 0.8em;
+    font-style: italic;
+    margin-left: 10px;
+  }
+  p {
+    margin: 0;
+    padding: 0 0 0 10px;
+    border-left: 2px solid $light-accent-color;
+    font-size: 0.9em;
+  }
+}

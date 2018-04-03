@@ -1,4 +1,4 @@
-﻿namespace MovieTime.Web.Genres
+﻿namespace MovieTime.Web.Genres.Models
 {
     public class GenreCreateDto
     {

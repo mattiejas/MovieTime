@@ -3,34 +3,38 @@ import betterFetch from './better-fetch';
 
 export function trackMovie(movieId) {
   return getTokenAndRequestHeader()
-    .then(requestHeader => fetch('/api/track/', {
+    .then(requestHeader => fetch(`/api/tracks/movie/${movieId}`, {
       method: 'post',
       headers: requestHeader,
-      body: JSON.stringify({ movieId }),
     }));
 }
 
 export function untrackMovie(movieId) {
   return getTokenAndRequestHeader()
-    .then(requestHeader => fetch('/api/track/untrack', {
+    .then(requestHeader => fetch(`/api/untrack/movie/${movieId}`, {
       method: 'post',
       headers: requestHeader,
-      body: JSON.stringify({ movieId }),
     }));
 }
 
 export function isMovieTracked(userId, movieId) {
   return getTokenAndRequestHeader()
-    .then(requestHeader => fetch(`/api/track/user/${userId}/movie/${movieId}`, {
+    .then(requestHeader => fetch(`/api/tracked/movie/${movieId}`, {
       method: 'get',
       headers: requestHeader,
     }))
     .then(response => response.json());
 }
 
-export function getMovieByTitle(title) {
-  return fetch(`/api/movies/title/${title}`)
-    .then(response => response.json());
+export const getMovieByTitle = title =>
+  betterFetch(`/api/movie/title/${title}`);
+
+export function getCommentsOnMovie(movieId) {
+  return getTokenAndRequestHeader()
+    .then(requestHeader => betterFetch(`/api/comments/movie/${movieId}`, {
+      method: 'get',
+      headers: requestHeader,
+    }));
 }
 
 export function getMovieById(id) {
@@ -46,4 +50,31 @@ export function searchMovies(q) {
   //   'Thor: Ragnarok',
   //   'Thor: The Dark World',
   // ]));
+}
+
+export function getCommentsByUser(userId) {
+  return getTokenAndRequestHeader()
+    .then(requestHeader => betterFetch(`/api/comments/user/${userId}`, {
+      method: 'get',
+      headers: requestHeader,
+    }));
+}
+
+export function postCommentOnMovie(movieId, comment) {
+  return getTokenAndRequestHeader()
+    .then(requestHeader => betterFetch(`/api/comments/movie/${movieId}`, {
+      method: 'post',
+      headers: requestHeader,
+      body: JSON.stringify({
+        value: comment,
+      }),
+    }));
+}
+
+export function toggleWatchStatus(movieId) {
+  return getTokenAndRequestHeader()
+    .then(requestHeader => betterFetch(`/api/watch/movie/${movieId}`, {
+      method: 'post',
+      headers: requestHeader,
+    }));
 }
