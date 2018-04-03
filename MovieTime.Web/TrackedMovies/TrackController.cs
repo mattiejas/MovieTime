@@ -9,10 +9,11 @@ using Serilog;
 using System.Linq;
 using System.Collections;
 using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MovieTime.Web.TrackedMovies
 {
-    [Route("api")]
+    [Route("api"), Authorize]
     public class TrackController : Controller
     {
         private readonly ITrackService _trackService;
@@ -29,6 +30,12 @@ namespace MovieTime.Web.TrackedMovies
         {
             try
             {
+                var userExist = await _trackService.UserExist(userId);
+                if (!userExist)
+                {
+                    return NotFound();
+                }
+
                 var trackedMovies = await _trackService.GetTrackedMoviesByUser(userId);
                 var trackedMoviesDto = _mapper.Map<ICollection<TrackedMovie>, ICollection<TrackedMoviesGetDto>>(trackedMovies);
 
@@ -46,17 +53,13 @@ namespace MovieTime.Web.TrackedMovies
         {
             try
             {
-                if (movieId == null)
+                var movieExists = await _trackService.MovieExist(movieId);
+                if (!movieExists)
                 {
-                    return BadRequest(new { message = "Identity of the movie is missing" });
+                    return NotFound();
                 }
                 
                 var userIdFromToken = this.User.GetUserId();
-                if (userIdFromToken == null)
-                {
-                    return BadRequest(new { message = "User is not authenticated" });
-                }
-
                 var trackedMovie = new TrackedMovie { MovieId = movieId, UserId = userIdFromToken, Watched = false };
                 trackedMovie.CreatedTime = DateTime.Now;
                 await _trackService.TrackMovie(trackedMovie);
@@ -70,19 +73,18 @@ namespace MovieTime.Web.TrackedMovies
             }
         }
 
-        // TODO: Check if movieId exists, otherwise return a BadRequest.
-        // Also create a DTO and rename the method so that it makes more sense in the new workflow.
         [HttpGet("tracked/movie/{movieId}")]
         public async Task<IActionResult> IsMovieTrackedByUser(string movieId)
         {
             try
             {
-                var userIdFromToken = this.User.GetUserId();
-                if (userIdFromToken == null)
+                var movieExists = await _trackService.MovieExist(movieId);
+                if (!movieExists)
                 {
-                    return BadRequest(new { message = "User is not authenticated" });
+                    return NotFound();
                 }
 
+                var userIdFromToken = this.User.GetUserId();
                 var result = await _trackService.IsMovieTrackedByUser(userIdFromToken, movieId);
                 return Ok(new { isTracked = result != null, isWatched = result != null ? result.Watched : false });
             }
@@ -98,17 +100,13 @@ namespace MovieTime.Web.TrackedMovies
         {         
             try
             {
-                if (movieId == null)
+                var movieExists = await _trackService.MovieExist(movieId);
+                if (!movieExists)
                 {
-                    return BadRequest(new { message = "Identity of the movie is missing" });
+                    return NotFound();
                 }
                 
                 var userIdFromToken = this.User.GetUserId();
-                if (userIdFromToken == null)
-                {
-                    return BadRequest(new { message = "User is not authenticated" });
-                }
-
                 var trackedMovie = new TrackedMovie { MovieId = movieId, UserId = userIdFromToken };
                 await _trackService.UntrackMovie(trackedMovie); 
 
@@ -126,17 +124,13 @@ namespace MovieTime.Web.TrackedMovies
         {         
             try
             {
-                if (movieId == null)
+                var movieExists = await _trackService.MovieExist(movieId);
+                if (!movieExists)
                 {
-                    return BadRequest(new { message = "Identity of the movie is missing" });   
+                    return NotFound();
                 }
                 
                 var userIdFromToken = this.User.GetUserId();
-                if (userIdFromToken == null)
-                {
-                    return BadRequest(new { message = "User is not authenticated" });
-                }
-
                 var result = await _trackService.ToggleMovieWatchedStatus(movieId, userIdFromToken);
                 if (result == null) 
                 {
