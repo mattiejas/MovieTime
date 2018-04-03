@@ -63,3 +63,6 @@ export function toggleWatchStatus(movieId) {
 
 export const getMovieByTitle = title =>
   betterFetch(`/api/movie/title/${title}`);
+
+export const getTrendingMovies = count =>
+  betterFetch(`/api/movie/trending/${count}`);

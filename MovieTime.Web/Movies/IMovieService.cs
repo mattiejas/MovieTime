@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MovieTime.Web.Movies.Models;
 using MovieTime.Web.ThirdPartyServices.OMDB.MovieList;
@@ -12,5 +13,6 @@ namespace MovieTime.Web.Movies
         Task<SearchResultsModel> GetMoviesByTitle(string title);
         Task<bool> AddMovie(Movie movie);
         Task<bool> MovieExistById(string movieId);
+        Task<ICollection<Movie>> GetTrendingMovies(int count);
     }
 }
