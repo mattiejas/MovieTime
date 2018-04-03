@@ -108,7 +108,7 @@ export default class Router extends React.Component {
         <Switch>
           <Route exact path="/" component={Home} />
           <PrivateRoute
-            path="/movies/:title"
+            path="/movies/:id"
             isAuthenticated={this.state.isAuthenticated}
             component={MovieDetailView}
           />

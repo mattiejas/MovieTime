@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Vibrant from 'node-vibrant';
 
 import { getUser } from '../../utils/auth';
-import { getMovieByTitle, trackMovie, untrackMovie, isMovieTracked } from '../../utils/movie';
+import { getMovieById, trackMovie, untrackMovie, isMovieTracked } from '../../utils/movie';
 
 import MoviePoster from '../../components/movie/MoviePoster';
 import MovieHeading from '../../components/movie/MovieHeading';
@@ -32,12 +32,12 @@ class MovieDetailView extends React.Component {
   }
 
   async componentDidMount() {
-    await this.loadMovieDetails(this.props.match.params.title);
+    await this.loadMovieDetails(this.props.match.params.id);
   }
 
   async componentWillReceiveProps(props) {
-    if (this.props.match.params.title !== props.match.params.title) {
-      await this.loadMovieDetails(props.match.params.title);
+    if (this.props.match.params.id !== props.match.params.id) {
+      await this.loadMovieDetails(props.match.params.id);
     }
   }
 
@@ -51,9 +51,9 @@ class MovieDetailView extends React.Component {
       });
   }
 
-  async loadMovieDetails(movieTitle) {
+  async loadMovieDetails(id) {
     try {
-      const movie = await getMovieByTitle(movieTitle);
+      const movie = await getMovieById(id);
       const user = await getUser();
       const track = await isMovieTracked(user.uid, movie.imdbId);
 

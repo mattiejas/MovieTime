@@ -9,7 +9,7 @@ using MovieTime.Web.Movies.Models;
 
 namespace MovieTime.Web.Movies
 {
-    [Route("api/movie")] //todo change movie to movies
+    [Route("api/movies")]
     public class MovieController : Controller
     {
         private const string GetMovieByIdRoute = "GetMovieById";

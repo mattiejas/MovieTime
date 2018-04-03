@@ -29,12 +29,16 @@ export function isMovieTracked(userId, movieId) {
 }
 
 export function getMovieByTitle(title) {
-  return fetch(`/api/movie/title/${title}`)
+  return fetch(`/api/movies/title/${title}`)
     .then(response => response.json());
 }
 
+export function getMovieById(id) {
+  return betterFetch(`/api/movies/${id}`);
+}
+
 export function searchMovies(q) {
-  return fetch(`/api/movie/search/${q}`)
+  return fetch(`/api/movies/search/${q}`)
     .then(response => response.json());
   // console.log(q);
   // return new Promise(resolve => resolve([
