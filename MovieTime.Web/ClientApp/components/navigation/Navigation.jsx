@@ -74,15 +74,6 @@ class Navigation extends Component {
                     Home
                   </NavLink>
                 </li>
-                <li>
-                  <NavLink
-                    activeClassName={styles['navigation__item--active']}
-                    to="/movies/Thor: Ragnarok"
-                    onClick={() => this.toggleMenu()}
-                  >
-                    Thor: Ragnarok
-                  </NavLink>
-                </li>
                 <li className={styles['logout-mobile']}>
                   <ButtonGroup>
                     <Button icon="user" to={`/users/${this.props.user.id}`}>
