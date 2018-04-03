@@ -7,12 +7,17 @@ import Table from '../../components/table/Table';
 import Icon from '../../components/icon/Icon';
 
 import styles from './SearchView.scss';
-import { searchMovies } from '../../utils/movie';
+import { searchMovies, isMovieTracked, trackMovie, untrackMovie, toggleWatchStatus } from '../../utils/movie';
 
 class SearchView extends React.Component {
   static propTypes = {
     match: PropTypes.objectOf(PropTypes.any).isRequired,
     history: PropTypes.objectOf(PropTypes.any).isRequired,
+    authId: PropTypes.string,
+  };
+
+  static defaultProps = {
+    authId: null,
   };
 
   state = {
@@ -24,7 +29,7 @@ class SearchView extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.match.params.query !== nextProps.match.params.query) {
+    if (!this.props.authId || this.props.match.params.query !== nextProps.match.params.query) {
       this.search(nextProps.match.params.query);
     }
   }
@@ -33,26 +38,82 @@ class SearchView extends React.Component {
     this.props.history.push(`/movies/${movie.id}`);
   }
 
-  onEyeClick(e, id) {
+  replaceMovie(movie, replacement) {
+    const index = _.findIndex(this.state.movies, m => m.id === movie.id);
+
+    this.setState({
+      movies: [
+        ...this.state.movies.slice(0, index),
+        replacement,
+        ...this.state.movies.slice(index + 1),
+      ],
+    });
+  }
+
+  toggleMovieState(e, movie) {
     e.stopPropagation();
-    console.log('movie:', id);
+
+    if (movie.isTracked && movie.isWatched) {
+      untrackMovie(movie.id).then(() => {
+        const untracked = {
+          ...movie,
+          isTracked: false,
+          isWatched: false,
+        };
+        untracked.watched = <Icon type="plus" onClick={x => this.toggleMovieState(x, untracked)} />;
+        this.replaceMovie(movie, untracked);
+      });
+    } else if (movie.isTracked && !movie.isWatched) {
+      toggleWatchStatus(movie.id).then(() => {
+        const watched = {
+          ...movie,
+          isTracked: true,
+          isWatched: true,
+        };
+        watched.watched = <Icon type="eye-slash" onClick={x => this.toggleMovieState(x, watched)} />;
+        this.replaceMovie(movie, watched);
+      });
+    } else {
+      trackMovie(movie.id).then(() => {
+        const tracked = {
+          ...movie,
+          isTracked: true,
+          isWatched: false,
+        };
+        tracked.watched = <Icon type="eye" onClick={x => this.toggleMovieState(x, tracked)} />;
+        this.replaceMovie(movie, tracked);
+      });
+    }
+
+    console.log('movie:', movie.id);
   }
 
   search(query) {
     // do API call
     searchMovies(query).then((data) => {
-      console.log(data);
-      this.setState({
-        movies: _.map(data, m => ({
-          id: m.id,
-          title: m.title,
-          length: m.runTimeInMinutes,
-          year: m.year,
-          genre: m.genre,
-          rating: m.rating,
-          watched: <Icon type="eye" onClick={e => this.onEyeClick(e, m.id)} />,
-        })),
-      });
+      if (this.props.authId) {
+        const areMoviedTracked = _.map(data, m => isMovieTracked(this.props.authId, m.id));
+        Promise.all(areMoviedTracked).then((tracked) => {
+          const movies = [];
+          tracked.forEach((t) => {
+            movies.push({ ..._.find(data, x => x.id === t.id), ...t });
+          });
+
+          console.log(movies);
+
+          this.setState({
+            movies: _.map(movies, m => ({
+              id: m.id,
+              title: m.title,
+              length: m.runTimeInMinutes,
+              year: m.year,
+              genre: m.genre,
+              rating: m.rating,
+              watched: <Icon type={m.isTracked ? 'eye' : 'plus'} onClick={e => this.toggleMovieState(e, m)} />,
+            })),
+          });
+        });
+      }
     });
   }
 
