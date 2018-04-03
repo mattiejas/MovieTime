@@ -134,10 +134,11 @@ class MovieDetailView extends React.Component {
       year = '',
       poster,
       runTime = 0,
-      genre = '',
+      genres = [],
       director = '',
       writer = '',
       actors = '',
+      imdbRating = '',
       plot = '',
       imdbId,
     } = this.state.movie;
@@ -171,7 +172,7 @@ class MovieDetailView extends React.Component {
                     </Placeholder>
                   </div>
                   <Placeholder isReady={!this.state.isLoading}>
-                    <MovieAttributes rating={0} time={runTime} genres={genre || 'N/A'} />
+                    <MovieAttributes rating={imdbRating} time={runTime} genres={genres} />
                   </Placeholder>
                 </div>
               </div>
