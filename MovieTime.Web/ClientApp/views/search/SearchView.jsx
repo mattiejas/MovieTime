@@ -84,13 +84,11 @@ class SearchView extends React.Component {
         this.replaceMovie(movie, tracked);
       });
     }
-
-    console.log('movie:', movie.id);
   }
 
   search(query) {
-    // do API call
     searchMovies(query).then((data) => {
+      // when authenticated show track state of the movie
       if (this.props.authId) {
         const areMoviedTracked = _.map(data, m => isMovieTracked(this.props.authId, m.id));
         Promise.all(areMoviedTracked).then((tracked) => {
@@ -98,8 +96,6 @@ class SearchView extends React.Component {
           tracked.forEach((t) => {
             movies.push({ ..._.find(data, x => x.id === t.id), ...t });
           });
-
-          console.log(movies);
 
           this.setState({
             movies: _.map(movies, m => ({
@@ -109,29 +105,54 @@ class SearchView extends React.Component {
               year: m.year,
               genre: m.genre,
               rating: m.rating,
-              watched: <Icon type={m.isTracked ? 'eye' : 'plus'} onClick={e => this.toggleMovieState(e, m)} />,
+              watched: (
+                <Icon
+                  // oh baby, it's a double 🤷‍♀️
+                  // eslint-disable-next-line no-nested-ternary
+                  type={m.isTracked ? (m.isWatched ? 'eye-slash' : 'eye') : 'plus'}
+                  onClick={e => this.toggleMovieState(e, m)}
+                />
+              ),
             })),
           });
+        });
+
+      // don't show track state when not authenticated
+      } else {
+        this.setState({
+          movies: _.map(data, m => ({
+            id: m.id,
+            title: m.title,
+            length: m.runTimeInMinutes,
+            year: m.year,
+            genre: m.genre,
+            rating: m.rating,
+          })),
         });
       }
     });
   }
 
   render() {
+    const headers = {
+      title: 'Title',
+      length: 'Length',
+      year: 'Year',
+      genre: 'Genre',
+      rating: 'Rating',
+    };
+
+    if (this.props.authId) {
+      headers.watched = <Icon type="eye" />;
+    }
+
     return (
       <div>
         <div className={styles.view__background} />
         <div className={styles.view__content}>
           <h4>Search on &#39;{this.props.match.params.query}&#39;</h4>
           <Table
-            headers={{
-              title: 'Title',
-              length: 'Length',
-              year: 'Year',
-              genre: 'Genre',
-              rating: 'Rating',
-              watched: <Icon type="eye" />,
-            }}
+            headers={headers}
             rows={this.state.movies}
             onRowClick={m => this.onClick(m)}
           />
