@@ -17,7 +17,7 @@ const Table = ({ headers, rows, onRowClick }) => (
       <tbody>
         {
           _.map(rows, (row, i) => (
-            <tr key={`table-row--${i}`} onClick={() => onRowClick(row)} style={{ cursor: onRowClick ? 'pointer' : null }}>
+            <tr key={`table-row--${i}`} onClick={e => onRowClick(e, row)} style={{ cursor: onRowClick ? 'pointer' : null }}>
               {
                 _.map(Object.keys(headers), (heading, j) => <td key={`table-data--${j}`}>{row[heading]}</td>)
               }

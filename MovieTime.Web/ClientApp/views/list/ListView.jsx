@@ -1,22 +1,41 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import queryString from 'query-string';
+import moment from 'moment';
 
 import { getTrackedMoviesByUser } from '../../utils/user';
 import Table from '../../components/table/Table';
+import Icon from '../../components/icon/Icon';
 
 import styles from './ListView.scss';
 
 class ListView extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      movies: [],
-    };
+  static propTypes = {
+    history: PropTypes.objectOf(PropTypes.any).isRequired,
+    type: PropTypes.string,
   }
 
+  static defaultProps = {
+    type: 'TO_WATCH',
+  };
+
+  static mapResponseToMovie = element => ({
+    id: element.movieId,
+    title: element.title,
+    length: `${element.runTime} minutes`,
+    year: moment(element.year).year(),
+    rating: element.imdbRating,
+    toggleWatch: <Icon type="eye" />,
+    delete: <Icon type="trash" />,
+  });
+
+  state = {
+    movies: [],
+  };
+
   componentDidMount() {
-    const { type, userId } = queryString.parse(this.props.location.search);
+    const { type, userId } = queryString.parse(this.props.history.location.search);
     getTrackedMoviesByUser(userId)
       .then((response) => {
         console.log(response);
@@ -24,26 +43,21 @@ class ListView extends Component {
           this.setState({
             movies: response
               .filter(x => !x.watched)
-              .map(element => ({
-                title: element.title,
-                length: element.runTime,
-                year: element.year,
-                rating: element.imdbRating,
-              })),
+              .map(m => ListView.mapResponseToMovie(m)),
           });
         } else if (type === 'WATCHED') {
           this.setState({
             movies: response
               .filter(x => x.watched)
-              .map(element => ({
-                title: element.title,
-                length: element.runTime,
-                year: element.year,
-                rating: element.imdbRating,
-              })),
+              .map(m => ListView.mapResponseToMovie(m)),
           });
         }
       });
+  }
+
+  onClick(e, movie) {
+    e.stopPropagation();
+    this.props.history.push(`/movies/${movie.id}`);
   }
 
   render() {
@@ -55,6 +69,8 @@ class ListView extends Component {
       length: 'Length',
       year: 'Year',
       rating: 'Rating',
+      toggleWatch: <Icon type="eye" />,
+      delete: <Icon type="trash" />,
     };
     return (
       <div>
@@ -69,6 +85,7 @@ class ListView extends Component {
           <Table
             headers={headers}
             rows={this.state.movies}
+            onRowClick={(e, movie) => this.onClick(e, movie)}
           />
         </div>
       </div>
@@ -76,4 +93,4 @@ class ListView extends Component {
   }
 }
 
-export default ListView;
+export default withRouter(ListView);

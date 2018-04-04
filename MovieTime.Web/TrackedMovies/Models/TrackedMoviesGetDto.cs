@@ -7,6 +7,7 @@ namespace MovieTime.Web.TrackedMovies.Models
 {
     public class TrackedMoviesGetDto
     {
+        public string MovieId { get; set; }
         public string Title { get; set; }
         public DateTime Year { get; set; }
         public int RunTime { get; set; }
