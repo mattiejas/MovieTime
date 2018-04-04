@@ -1,5 +1,5 @@
 import { getUserData } from '../utils/user';
-import { login, logout } from '../utils/auth';
+import { login, logout, newGoogleLoginHappened } from '../utils/auth';
 
 // Actions
 export const authenticate = (username, password) => (dispatch) => {
@@ -19,7 +19,26 @@ export const authenticate = (username, password) => (dispatch) => {
       }));
 };
 
-export const authenticateById = id => (dispatch) => {
+export const authenticateWithGoogle = user => (dispatch) => {
+  if (user) return null;
+  dispatch({ type: 'AUTHENTICATE_REQUEST' });
+  return newGoogleLoginHappened(user).then((usr) => {
+    getUserData(usr.uid)
+      .then((response) => {
+        dispatch({
+          type: 'AUTHENTICATE_SUCCESS',
+          payload: { ...response, id: usr.uid },
+        });
+        return response;
+      })
+      .catch((err) => {
+        dispatch({ type: 'AUTHENTICATE_ERROR' });
+        return err;
+      });
+  });
+};
+
+export const authenticateById = (id, onError) => (dispatch) => {
   dispatch({ type: 'AUTHENTICATE_REQUEST' });
   return getUserData(id)
     .then((response) => {
@@ -31,17 +50,19 @@ export const authenticateById = id => (dispatch) => {
     })
     .catch((err) => {
       dispatch({ type: 'AUTHENTICATE_ERROR' });
+      if (onError) onError();
       return err;
     });
 };
 
 export const unauthenticate = () => (dispatch) => {
   dispatch({ type: 'UNAUTHENTICATE_REQUEST' });
-  return logout().then(() => {
-    dispatch({
-      type: 'UNAUTHENTICATE_SUCCESS',
-    });
-  })
+  return logout()
+    .then(() => {
+      dispatch({
+        type: 'UNAUTHENTICATE_SUCCESS',
+      });
+    })
     .catch((err) => {
       dispatch({ type: 'UNAUTHENTICATE_ERROR' });
       return err;

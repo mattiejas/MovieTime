@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
-namespace MovieTime.Web.Genres
+namespace MovieTime.Web.Genres.Models
 {
     public class Genre
     {

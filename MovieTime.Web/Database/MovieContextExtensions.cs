@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using MovieTime.Web.Genres;
+using MovieTime.Web.Genres.Models;
 using MovieTime.Web.Movies.Models;
 using MovieTime.Web.Users;
 using Serilog;
@@ -62,9 +63,25 @@ namespace MovieTime.Web.Database
         {
             EnsureApplicationIsRunningInDev(env);
 
-            // If no migrations are found in the database, the db is already created without migration. No need for changes.
+            context.Database.EnsureCreated();
+
+            // Todo: A check we are missing is whether or not the db schema's are in sync with the EF entities.
+            // Todo: If not, recreate the database. However, there is no efficient way to compare them right now.
+            // Todo: As compensation, we inform the programmer with the next log.
+
+            Log.Information(
+                "The project is configured not to drop the (dev) database on every run.\n" +
+                "Retaining records however means that (code first) changes in entities won't \n" +
+                "be applied automatically to the database untill you recreate the database.\n" +
+                "You can set 'clearLocalDbOnRun' in appsettings to true to recreate/seed the database.\n" +
+                "Run the project to apply the changes. 'clearLocalDbOnRun' can be set to false afterwards.\n" +
+                "Another way is to drop the database manually or set 'useMigration' in appsettings to true\n" +
+                "to use migrations instead. Create a migration manually to apply changes.");
+
+            // By checking if the database has a migration table, we can determine whether or not action is required. 
             var migrations = context.Database.GetAppliedMigrations();
             if (!migrations.Any()) return;
+            
 
             SeedContextWithoutMigration(context, env);
         }
@@ -83,19 +100,20 @@ namespace MovieTime.Web.Database
 
             if (!allMigrations.Any())
             {
-                throw new FileNotFoundException("Missing applyable migrations. Please create a migration first. \n" +
-                                                "Execute the next commands in terminal to create a new migratin: \n" +
-                                                "---------------------------------------------------------------\n" +
-                                                "cd ...../...../MovieTime.Web (locate to your project project folder) \n" +
-                                                "dotnet restore \n" +
-                                                "dotnet ef migrations add <NewMigrationName> \n" +
-                                                "---------------------------------------------------------------\n" +
-                                                "Do not apply the update manually with 'dotnet ef database update' command");
+                throw new FileNotFoundException(
+                    "Missing applyable migrations. Please create a migration first.\n" +
+                    "Execute the next commands in terminal to create a new migratin:\n" +
+                    "---------------------------------------------------------------\n" +
+                    "cd ...../...../MovieTime.Web (locate to your project project folder)\n" +
+                    "dotnet restore\n" +
+                    "dotnet ef migrations add <NewMigrationName>\n" +
+                    "---------------------------------------------------------------\n" +
+                    "Do not apply the update manually with 'dotnet ef database update' command");
             }
-            
+
             // Database is up to date, do nothing.
-            // Todo, it's possible that local db has old migrations that don't exist in project anymore
-            // Todo, in that case, we have to compare the migrations with eachother.
+            // Todo, it's possible that local db has old migrations that don't exist in project anymore.
+            // Todo, In that case, we have to compare the migrations with eachother.
             if (!pendingMigrations.Any() && appliedMigration.Any()) return;
 
             if (pendingMigrations.Any() && !appliedMigration.Any())

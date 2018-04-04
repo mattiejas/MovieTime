@@ -12,5 +12,7 @@ namespace MovieTime.Web.TrackedMovies
         Task<TrackedMovie> IsMovieTrackedByUser(string userId, string movieId);
         Task<TrackedMovie> ToggleMovieWatchedStatus(string movieId, string userId);
         Task<ICollection<TrackedMovie>> GetTrackedMoviesByUser(string userId);
+        Task<bool> UserExist(string userId);
+        Task<bool> MovieExist(string movieId);
 	}
 }

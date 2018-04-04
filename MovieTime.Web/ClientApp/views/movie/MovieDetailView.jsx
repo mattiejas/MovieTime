@@ -134,10 +134,11 @@ class MovieDetailView extends React.Component {
       year = '',
       poster,
       runTime = 0,
-      genre = '',
+      genres = [],
       director = '',
       writer = '',
       actors = '',
+      imdbRating = '',
       plot = '',
       imdbId,
     } = this.state.movie;
@@ -159,7 +160,12 @@ class MovieDetailView extends React.Component {
                 </Placeholder>
               </div>
               {poster && poster !== 'N/A' &&
-                <MoviePoster source={poster} alt={`${title} poster`} />
+                <Placeholder isReady={!this.state.isLoading}>
+                  <MoviePoster source={poster} alt={`${title} poster`} />
+                </Placeholder>
+              }
+              {poster === 'N/A' &&
+                <img src="/assets/poster-placeholder.jpg" alt={title} className={styles['fallback-image']} />
               }
             </div>
             <div className="*column">
@@ -171,7 +177,7 @@ class MovieDetailView extends React.Component {
                     </Placeholder>
                   </div>
                   <Placeholder isReady={!this.state.isLoading}>
-                    <MovieAttributes rating={0} time={runTime} genres={genre || 'N/A'} />
+                    <MovieAttributes rating={imdbRating} time={runTime} genres={genres} />
                   </Placeholder>
                 </div>
               </div>
