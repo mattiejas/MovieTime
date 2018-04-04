@@ -43,6 +43,12 @@ class Navigation extends Component {
     });
   }
 
+  handleLogout() {
+    logout().then(() => {
+      this.props.history.go('/');
+    });
+  }
+
   render() {
     return (
       <div className={cn(styles.navigation)}>
@@ -79,7 +85,7 @@ class Navigation extends Component {
                     <Button icon="user" to={`/users/${this.props.user.id}`}>
                       {`${this.props.user.firstName} ${this.props.user.lastName}`}
                     </Button>
-                    <Button icon="power-off" onClick={() => logout()} />
+                    <Button icon="power-off" onClick={() => this.handleLogout()} />
                   </ButtonGroup>
                 </li>
               </ul>
@@ -93,7 +99,7 @@ class Navigation extends Component {
                   <Button icon="user" to={`/users/${this.props.user.id}`}>
                     {`${this.props.user.firstName} ${this.props.user.lastName}`}
                   </Button>
-                  <Button icon="power-off" onClick={() => logout()} />
+                  <Button icon="power-off" onClick={() => this.handleLogout()} />
                 </ButtonGroup>
               </div>
             </div>
@@ -115,15 +121,6 @@ class Navigation extends Component {
                     onClick={() => this.toggleMenu()}
                   >
                     Home
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    activeClassName={styles['navigation__item--active']}
-                    to="/register"
-                    onClick={() => this.toggleMenu()}
-                  >
-                    Register
                   </NavLink>
                 </li>
                 <li className={styles['login-mobile']}>

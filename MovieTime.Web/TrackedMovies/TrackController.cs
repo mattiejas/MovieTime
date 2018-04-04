@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace MovieTime.Web.TrackedMovies
 {
-    [Route("api"), Authorize]
+    [Route("api")]
     public class TrackController : Controller
     {
         private readonly ITrackService _trackService;
@@ -50,6 +50,7 @@ namespace MovieTime.Web.TrackedMovies
         }
 
         /* Track a specified movie with the userId (retrieved from the request header). */
+        [Authorize]
         [HttpPost("tracks/movie/{movieId}")]
         public async Task<IActionResult> TrackMovie(string movieId)
         {
@@ -76,6 +77,7 @@ namespace MovieTime.Web.TrackedMovies
         }
 
         /* Check whether the current movie is tracked by the user. */
+        [Authorize]
         [HttpGet("tracked/movie/{movieId}")]
         public async Task<IActionResult> IsMovieTrackedByUser(string movieId)
         {
@@ -99,6 +101,7 @@ namespace MovieTime.Web.TrackedMovies
         }
 
         /* Untrack a specified movie with the userId (retrieved from the request header). */
+        [Authorize]
         [HttpPost("untrack/movie/{movieId}")]
         public async Task<IActionResult> UntrackMovie(string movieId)
         {         
@@ -124,6 +127,7 @@ namespace MovieTime.Web.TrackedMovies
         }  
 
         /* Toggle the watch status with the specified movie and userId (retrieved from the request header). */
+        [Authorize]
         [HttpPost("watch/movie/{movieId}")]
         public async Task<IActionResult> ToggleMovieWatchedStatus(string movieId)
         {         
