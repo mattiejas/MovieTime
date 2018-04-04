@@ -1,22 +1,10 @@
-import _ from 'lodash';
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import queryString from 'query-string';
 
 import { getTrackedMoviesByUser } from '../../utils/user';
 import Table from '../../components/table/Table';
-import Icon from '../../components/icon/Icon';
 
 import styles from './ListView.scss';
-
-// const movies = [
-//   'Thor: Ragnarok',
-//   '2017',
-//   '130 min',
-//   'Comedy',
-//   <span>4/5 <Icon type="star" /></span>,
-//   <Icon type="eye-slash" onClick={handleClick} />,
-// ];
 
 class ListView extends Component {
   constructor(props) {
@@ -86,9 +74,5 @@ class ListView extends Component {
     );
   }
 }
-
-ListView.propTypes = {
-};
-
 
 export default ListView;
