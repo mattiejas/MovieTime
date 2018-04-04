@@ -126,11 +126,15 @@ class ProfileView extends React.Component {
           <div className={styles.content}>
             <ListWidget
               title="Wants to watch"
+              type="TO_WATCH"
+              userId={id}
               movies={this.state.unwatchedMovies}
               history={this.props.history}
             />
             <ListWidget
               title="Has watched"
+              type="WATCHED"
+              userId={id}
               movies={this.state.watchedMovies}
               history={this.props.history}
             />

@@ -32,7 +32,7 @@ class ListWidget extends React.Component {
                 className={cn(styles.poster, styles['last-poster'])}
                 source={element.poster}
                 alt={`${element.title} poster`}
-                onClick={() => this.onClick('/list')}
+                onClick={() => this.onClick(`/list?userId=${this.props.userId}&type=${this.props.type}`)}
               />
               );
             }

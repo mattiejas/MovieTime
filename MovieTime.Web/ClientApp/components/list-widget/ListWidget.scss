@@ -32,6 +32,13 @@
       height: 100% !important;
       width: auto !important;
     }
+    &:not(.last-poster) {
+      background-image: url('/assets/poster-placeholder.jpg');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-color: #e9eef1;
+    }
     &.last-poster {
       background-color: #000000;
       position: relative;

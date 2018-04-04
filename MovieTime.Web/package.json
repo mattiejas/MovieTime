@@ -56,14 +56,15 @@
     "moment": "^2.21.0",
     "node-vibrant": "^3.0.0",
     "prop-types": "^15.6.0",
+    "query-string": "^6.0.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-hot-loader": "next",
     "react-redux": "^5.0.7",
     "react-router-dom": "4.1.1",
     "react-router-redux": "^5.0.0-alpha.9",
-    "redux-devtools-extension": "^2.13.2",
     "redux": "^3.7.2",
+    "redux-devtools-extension": "^2.13.2",
     "redux-thunk": "^2.2.0",
     "validator": "9.4.1"
   }

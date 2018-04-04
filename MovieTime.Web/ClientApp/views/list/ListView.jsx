@@ -1,349 +1,94 @@
-import React from 'react';
+import _ from 'lodash';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import queryString from 'query-string';
 
+import { getTrackedMoviesByUser } from '../../utils/user';
 import Table from '../../components/table/Table';
 import Icon from '../../components/icon/Icon';
 
 import styles from './ListView.scss';
 
-function handleClick() {
-  // Hello there!
+// const movies = [
+//   'Thor: Ragnarok',
+//   '2017',
+//   '130 min',
+//   'Comedy',
+//   <span>4/5 <Icon type="star" /></span>,
+//   <Icon type="eye-slash" onClick={handleClick} />,
+// ];
+
+class ListView extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      movies: [],
+    };
+  }
+
+  componentDidMount() {
+    const { type, userId } = queryString.parse(this.props.location.search);
+    getTrackedMoviesByUser(userId)
+      .then((response) => {
+        if (type === 'TO_WATCH') {
+          this.setState({
+            movies: response
+              .filter(x => !x.watched)
+              .map(element => ({
+                title: element.title,
+                length: element.runTime,
+                year: element.year,
+                rating: element.imdbRating,
+              })),
+          });
+        } else if (type === 'WATCHED') {
+          this.setState({
+            movies: response
+              .filter(x => x.watched)
+              .map(element => ({
+                title: element.title,
+                length: element.runTimeInMinutes,
+                year: element.year,
+                rating: element.imdbRating,
+              })),
+          });
+        }
+      });
+  }
+
+  render() {
+    if (this.state === null) {
+      return null;
+    }
+    const headers = {
+      title: 'Title',
+      length: 'Length',
+      year: 'Year',
+      rating: 'Rating',
+    };
+    return (
+      <div>
+        <div className={styles.view__background} />
+        <div className={styles.view__content}>
+          {this.props.type && this.props.type === 'TO_WATCH' &&
+            <h4>Has to watch</h4>
+          }
+          {this.props.type && this.props.type === 'WATCHED' &&
+            <h4>Has watched</h4>
+          }
+          <Table
+            headers={headers}
+            rows={this.state.movies}
+          />
+        </div>
+      </div>
+    );
+  }
 }
 
-const ListView = () => (
-  <div>
-    <div className={styles.view__background} />
-    <div className={styles.view__content}>
-      <h4>Peter Parker wants to watch</h4>
-      <Table
-        headers={['Title', 'Year', 'Length', 'Genre', 'Rating', <Icon type="eye" />]}
-        rows={[
-          [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ], [
-            'Thor: Ragnarok',
-            '2017',
-            '130 min',
-            'Comedy',
-            <span>4/5 <Icon type="star" /></span>,
-            <Icon type="eye-slash" onClick={handleClick} />,
-          ],
-        ]}
-      />
-    </div>
-  </div>
-);
+ListView.propTypes = {
+};
+
 
 export default ListView;
