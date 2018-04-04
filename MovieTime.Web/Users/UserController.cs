@@ -82,7 +82,7 @@ namespace MovieTime.Web.Users
 
             var trackedMovies = await _trackService.GetTrackedMoviesByUser(userIdFromToken);
             var writtenComments = await _commentService.AllCommentsByUser(userIdFromToken);
-            var user = writtenComments.Select(comment => comment.User).FirstOrDefault();
+            var user = await _userService.GetUser(userIdFromToken);
 
             var trackedMoviesToReturn = _mapper.Map<ICollection<TrackedMovie>, List<MovieTrackGdprDto>>(trackedMovies);
             var writtenCommentsToReturn = _mapper.Map<ICollection<Comment>, List<MovieCommentGdprDto>>(writtenComments);

@@ -26,11 +26,10 @@ namespace MovieTime.Web.Users
             return userDto;
         }
 
-        public async Task<UserGetDto> GetUser(string id)
+        public async Task<User> GetUser(string id)
         {
             var user = await _userRepository.Find(x => x.Id == id);
-            var userDto = _mapper.Map<User, UserGetDto>(user);
-            return userDto;
+            return user;
         }
 
         public async Task<bool> UpdateUser(UserUpdateDto userDto)

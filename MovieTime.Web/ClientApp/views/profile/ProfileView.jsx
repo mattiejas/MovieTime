@@ -1,3 +1,4 @@
+import FileSaver from 'file-saver';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -5,7 +6,7 @@ import PropTypes from 'prop-types';
 import { updateUser, getUser } from '../../modules/users';
 import { authenticateById } from '../../modules/auth';
 
-import { getTrackedMoviesByUser } from '../../utils/user';
+import { getTrackedMoviesByUser, downloadUserData } from '../../utils/user';
 
 import ListWidget from '../../components/list-widget/ListWidget';
 import Placeholder from '../../components/placeholder/Placeholder';
@@ -17,6 +18,14 @@ import styles from './ProfileView.scss';
 import CommentSection from '../../components/comments/CommentSection';
 
 class ProfileView extends React.Component {
+  static downloadInformation() {
+    downloadUserData()
+      .then((responseData) => {
+        const blob = new Blob([JSON.stringify(responseData)], { type: 'application/json' });
+        FileSaver.saveAs(blob);
+      });
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -62,6 +71,7 @@ class ProfileView extends React.Component {
       isEditing: true,
     });
   }
+
 
   onDiscard() {
     this.setState({
@@ -121,6 +131,9 @@ class ProfileView extends React.Component {
               >
                 Edit
               </Button>}
+              <Button icon="download" dark onClick={() => ProfileView.downloadInformation()}>
+                Download my information
+              </Button>
             </div>
           </div>
           <div className={styles.content}>
