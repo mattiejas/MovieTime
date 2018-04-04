@@ -9,6 +9,7 @@ using MovieTime.Web.ThirdPartyServices.OMDB.Movies;
 using MovieTime.Web.Users;
 using MovieTime.Web.Users.Models;
 using MovieTime.Web.TrackedMovies.Models;
+using MovieTime.Web.Users.Models.GDPR;
 
 namespace MovieTime.Web.Utilities
 {
@@ -50,6 +51,12 @@ namespace MovieTime.Web.Utilities
                 .ForPath(dest => dest.Watched, opt => opt.MapFrom(src => src.Watched))
                 .ForPath(dest => dest.CreatedTime, opt => opt.MapFrom(src => src.CreatedTime))
                 .ReverseMap();
+
+            CreateMap<User, UserGdprDto>();
+            CreateMap<Comment, MovieCommentGdprDto>()
+                .ForMember(dest => dest.MovieTitle, opt => opt.MapFrom(src => src.Movie.Title));
+            CreateMap<TrackedMovie, MovieTrackGdprDto>()
+                .ForMember(dest => dest.MovieTitle, opt => opt.MapFrom(src => src.Movie.Title));
         }
     }
 }

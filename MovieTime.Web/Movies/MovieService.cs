@@ -91,7 +91,7 @@ namespace MovieTime.Web.Movies
                 {
                     genre = new Genre()
                     {
-                        Name = genreId
+                        Name = genreId,
                     };
                     await _genreRepository.Add(genre);
                 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -9,7 +10,9 @@ using Microsoft.Azure.KeyVault.Models;
 using MovieTime.Web.Auth;
 using MovieTime.Web.Comments;
 using MovieTime.Web.TrackedMovies;
+using MovieTime.Web.TrackedMovies.Models;
 using MovieTime.Web.Users.Models;
+using MovieTime.Web.Users.Models.GDPR;
 using Serilog;
 
 namespace MovieTime.Web.Users
@@ -69,6 +72,8 @@ namespace MovieTime.Web.Users
         [HttpGet("info")]
         public async Task<IActionResult> GetAllUserInformation()
         {
+            //Todo: Firebase stores information like created date. I don't know how to retrieve those information.
+            
             var userIdFromToken = this.User.GetUserId();
             if (userIdFromToken == null) return Unauthorized();
 
@@ -77,9 +82,20 @@ namespace MovieTime.Web.Users
 
             var trackedMovies = await _trackService.GetTrackedMoviesByUser(userIdFromToken);
             var writtenComments = await _commentService.AllCommentsByUser(userIdFromToken);
-//            var user = writtenComments.
+            var user = writtenComments.Select(comment => comment.User).FirstOrDefault();
 
-            return null;
+            var trackedMoviesToReturn = _mapper.Map<ICollection<TrackedMovie>, List<MovieTrackGdprDto>>(trackedMovies);
+            var writtenCommentsToReturn = _mapper.Map<ICollection<Comment>, List<MovieCommentGdprDto>>(writtenComments);
+            var userToReturn = _mapper.Map<User, UserGdprDto>(user);
+            
+            var bundledInfoToReturn = new UserAllDataGetDto()
+            {
+                User = userToReturn,
+                TrackedMovies = trackedMoviesToReturn,
+                Comments = writtenCommentsToReturn
+            };
+            
+            return Ok(bundledInfoToReturn);
         }
 
         [HttpPut("{id}")]
