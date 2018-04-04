@@ -40,6 +40,12 @@ class Login extends Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.authId) {
+      this.props.history.push(`/users/${nextProps.authId}`);
+    }
+  }
+
   handleSubmit(event) {
     event.preventDefault();
 
@@ -130,11 +136,20 @@ Login.propTypes = {
   history: PropTypes.objectOf(PropTypes.any).isRequired,
   authenticate: PropTypes.func.isRequired,
   authenticateWithGoogle: PropTypes.func.isRequired,
+  authId: PropTypes.string,
 };
+
+Login.defaultProps = {
+  authId: null,
+};
+
+const mapPropsToState = state => ({
+  authId: state.auth.user && state.auth.user.id,
+});
 
 const mapDispatchToProps = {
   authenticate,
   authenticateWithGoogle,
 };
 
-export default withRouter(connect(null, mapDispatchToProps)(Login));
+export default withRouter(connect(mapPropsToState, mapDispatchToProps)(Login));

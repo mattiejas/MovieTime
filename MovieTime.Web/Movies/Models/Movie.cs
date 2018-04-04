@@ -1,10 +1,12 @@
 ﻿using MovieTime.Web.Genres;
+using MovieTime.Web.TrackedMovies.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MovieTime.Web.Genres.Models;
 
 namespace MovieTime.Web.Movies.Models
 {
@@ -29,5 +31,10 @@ namespace MovieTime.Web.Movies.Models
         public string Actors { get; set; }
 
         public string Plot { get; set; }
+        
+        //Todo: Show IMDB rating untill our own rating system is implemented
+        public string ImdbRating { get; set; }
+
+        public ICollection<TrackedMovie> TrackedMovies { get; set; }
     }
 }

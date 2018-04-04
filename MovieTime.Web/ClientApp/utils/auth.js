@@ -12,9 +12,9 @@ export async function getUser() {
   return auth.currentUser;
 }
 
-async function getTokenForCurrentUser() {
-  return getUser().then(user => user.getIdToken(true));
-}
+const getTokenForCurrentUser = () =>
+  getUser().then(user =>
+    (user ? user.getIdToken(true) : null));
 
 function getRequestHeader(token) {
   return {

@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieTime.Web.Database;
-using MovieTime.Web.Movies.Models;
-using MovieTime.Web.Tracked.Models;
 
 namespace MovieTime.Web.TrackedMovies.Models
 {
@@ -11,16 +9,24 @@ namespace MovieTime.Web.TrackedMovies.Models
         {
             MapProperties(builder);
             MapRelations(builder);
-        }
+        }       
 
         public void MapRelations(ModelBuilder builder)
         {
+            var trackedMovie = builder.Entity<TrackedMovie>();
+
+            trackedMovie.HasOne(m => m.Movie)
+                .WithMany(m => m.TrackedMovies)
+                .HasForeignKey(t => t.MovieId);
+
+            trackedMovie.HasOne(u => u.User)
+                .WithMany(u => u.TrackedMovies)
+                .HasForeignKey(t => t.UserId);
         }
 
         public void MapProperties(ModelBuilder builder)
         {
-            builder.Entity<TrackedMovie>()
-                .HasKey(t => new { t.MovieId, t.UserId });
+            builder.Entity<TrackedMovie>().HasKey(t => new { t.MovieId, t.UserId });
         }
 
     }

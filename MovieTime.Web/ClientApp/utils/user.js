@@ -7,6 +7,14 @@ export function getUserData(id) {
   return betterFetch(API + id);
 }
 
+export function getTrackedMoviesByUser(userId) {
+  return getTokenAndRequestHeader()
+    .then(requestHeader => betterFetch(`/api/tracks/user/${userId}`, {
+      headers: requestHeader,
+      method: 'GET',
+    }));
+}
+
 export const updateUserData = user =>
   getTokenAndRequestHeader()
     .then(requestHeader => betterFetch(API + user.id, {

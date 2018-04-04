@@ -17,8 +17,32 @@ namespace MovieTime.Web.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.0.1-rtm-125");
+                .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("MovieTime.Web.Comments.Comment", b =>
+                {
+                    b.Property<string>("CommentId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<string>("MovieId");
+
+                    b.Property<string>("UserId");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(2000);
+
+                    b.HasKey("CommentId");
+
+                    b.HasIndex("MovieId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
+                });
 
             modelBuilder.Entity("MovieTime.Web.Genres.Genre", b =>
                 {
@@ -49,15 +73,17 @@ namespace MovieTime.Web.Migrations
 
                     b.Property<string>("Actors")
                         .IsRequired()
-                        .HasMaxLength(200);
+                        .HasMaxLength(2000);
 
                     b.Property<string>("Director")
                         .IsRequired()
-                        .HasMaxLength(200);
+                        .HasMaxLength(2000);
+
+                    b.Property<string>("ImdbRating");
 
                     b.Property<string>("Plot")
                         .IsRequired()
-                        .HasMaxLength(2000);
+                        .HasMaxLength(4000);
 
                     b.Property<string>("Poster")
                         .IsRequired();
@@ -66,11 +92,11 @@ namespace MovieTime.Web.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(40);
+                        .HasMaxLength(2000);
 
                     b.Property<string>("Writer")
                         .IsRequired()
-                        .HasMaxLength(200);
+                        .HasMaxLength(2000);
 
                     b.Property<DateTime>("Year");
 
@@ -103,13 +129,19 @@ namespace MovieTime.Web.Migrations
                     b.ToTable("Review");
                 });
 
-            modelBuilder.Entity("MovieTime.Web.Tracked.Models.TrackedMovie", b =>
+            modelBuilder.Entity("MovieTime.Web.TrackedMovies.Models.TrackedMovie", b =>
                 {
                     b.Property<string>("MovieId");
 
                     b.Property<string>("UserId");
 
+                    b.Property<DateTime>("CreatedTime");
+
+                    b.Property<bool>("Watched");
+
                     b.HasKey("MovieId", "UserId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("TrackedMovies");
                 });
@@ -140,6 +172,17 @@ namespace MovieTime.Web.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("MovieTime.Web.Comments.Comment", b =>
+                {
+                    b.HasOne("MovieTime.Web.Movies.Models.Movie", "Movie")
+                        .WithMany()
+                        .HasForeignKey("MovieId");
+
+                    b.HasOne("MovieTime.Web.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("MovieTime.Web.Genres.MovieGenre", b =>
                 {
                     b.HasOne("MovieTime.Web.Genres.Genre", "Genre")
@@ -162,6 +205,19 @@ namespace MovieTime.Web.Migrations
                     b.HasOne("MovieTime.Web.Users.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("MovieTime.Web.TrackedMovies.Models.TrackedMovie", b =>
+                {
+                    b.HasOne("MovieTime.Web.Movies.Models.Movie", "Movie")
+                        .WithMany("TrackedMovies")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("MovieTime.Web.Users.User", "User")
+                        .WithMany("TrackedMovies")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

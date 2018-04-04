@@ -46,7 +46,13 @@ PrivateRoute.defaultProps = {
 };
 
 const PublicRoute = ({ component: Component, isAuthenticated, ...rest }) => (
-  <Route {...rest} render={props => (isAuthenticated === false ? <Component {...props} /> : <Redirect to="/" />)} />
+  <Route
+    {...rest}
+    render={props =>
+            (isAuthenticated === false
+                ? <Component {...props} />
+        : <Redirect to={props.location.state.from || '/'} />)}
+  />
 );
 
 PublicRoute.propTypes = {

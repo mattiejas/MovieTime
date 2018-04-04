@@ -4,20 +4,19 @@ import { login, logout, newGoogleLoginHappened } from '../utils/auth';
 // Actions
 export const authenticate = (username, password) => (dispatch) => {
   dispatch({ type: 'AUTHENTICATE_REQUEST' });
-  return login(username, password).then((user) => {
+  return login(username, password).then(user =>
     getUserData(user.uid)
       .then((response) => {
         dispatch({
           type: 'AUTHENTICATE_SUCCESS',
-          payload: { ...response, id: user.uid },
+          payload: response,
         });
         return response;
       })
       .catch((err) => {
         dispatch({ type: 'AUTHENTICATE_ERROR' });
         return err;
-      });
-  });
+      }));
 };
 
 export const authenticateWithGoogle = user => (dispatch) => {

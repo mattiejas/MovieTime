@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import { updateUser, getUser } from '../../modules/users';
 import { authenticateById } from '../../modules/auth';
 
+import { getTrackedMoviesByUser } from '../../utils/user';
+
 import ListWidget from '../../components/list-widget/ListWidget';
 import Placeholder from '../../components/placeholder/Placeholder';
 import Button from '../../components/button/Button';
@@ -12,35 +14,46 @@ import ProfilePicture from '../../components/profile/ProfilePicture';
 import EditProfileModal from '../../components/profile/EditProfileModal';
 
 import styles from './ProfileView.scss';
+import CommentSection from '../../components/comments/CommentSection';
 
 class ProfileView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      canEditProfile: props.authId === (props.user && props.user.id),
+      isOwner: props.authId === (props.user && props.user.id),
       isLoading: true,
       isEditing: false,
-      movies: [
-        'Thor: Ragnarok',
-        'Thor: Ragnarok',
-        'Thor: Ragnarok',
-        'Thor: Ragnarok',
-        'Thor: Ragnarok',
-      ],
+      watchedMovies: [],
+      unwatchedMovies: [],
     };
   }
 
   componentDidMount() {
     const { id } = this.props.match.params;
-    this.props.getUser(id);
+    this.props.getUser(id).then(() => {
+      getTrackedMoviesByUser(id)
+        .then((response) => {
+          const watchedMovies = response.filter(x => x.watched).slice(0, 4);
+          const unwatchedMovies = response.filter(x => !x.watched).slice(0, 4);
+          this.setState({
+            watchedMovies,
+            unwatchedMovies,
+          });
+        });
+    });
   }
 
   componentWillReceiveProps(nextProps) {
-    if (Object.prototype.hasOwnProperty.call(nextProps.user, 'firstName')) {
+    if (Object.prototype.hasOwnProperty.call(nextProps.user, 'id')) {
       this.setState({
         isLoading: false,
-        canEditProfile: nextProps.authId === (nextProps.user && nextProps.user.id),
+        isOwner: nextProps.authId === (nextProps.user && nextProps.user.id),
       });
+    } else if (this.props.user.id !== nextProps.match.params.id) {
+      this.setState({
+        isLoading: true,
+      });
+      this.props.getUser(nextProps.match.params.id);
     }
   }
 
@@ -66,7 +79,7 @@ class ProfileView extends React.Component {
   }
 
   render() {
-    const { canEditProfile, isLoading } = this.state;
+    const { isOwner, isLoading } = this.state;
     const { firstName, lastName } = this.props.user;
     const { id } = this.props.match.params;
 
@@ -100,27 +113,32 @@ class ProfileView extends React.Component {
           </div>
           <div className={styles.buttons__container}>
             <div className={styles.buttons}>
-              {canEditProfile &&
+              {isOwner &&
               <Button
                 dark
                 icon="pencil"
                 onClick={() => this.onEdit()}
               >
-                                    Edit
+                Edit
               </Button>}
-              {/* <Button dark icon="user">Follow</Button> */}
             </div>
           </div>
           <div className={styles.content}>
             <ListWidget
               title="Wants to watch"
-              movies={this.state.movies}
+              movies={this.state.unwatchedMovies}
               history={this.props.history}
             />
             <ListWidget
               title="Has watched"
-              movies={this.state.movies}
+              movies={this.state.watchedMovies}
               history={this.props.history}
+            />
+            <CommentSection
+              type="user"
+              id={this.props.user.id}
+              title="Recent Comments"
+              showSpoilerWarning={!isOwner}
             />
           </div>
         </div>

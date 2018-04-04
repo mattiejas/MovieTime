@@ -1,12 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieTime.Web.Database;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace MovieTime.Web.Genres
+namespace MovieTime.Web.Genres.Models
 {
     public class GenreModelBuildingConfig : IEntityModelBuildingConfig
     {
