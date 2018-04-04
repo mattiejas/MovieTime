@@ -12,9 +12,9 @@ namespace MovieTime.Web.Movies
 {
     public class MovieService : IMovieService
     {
-        private readonly IThirdPartyMovieRepository _thirdPartyMovieRepository;
-        private readonly IMovieRespository _movieRespository;
-        private readonly IMapper _mapper;
+        private  IThirdPartyMovieRepository _thirdPartyMovieRepository;
+        private  IMovieRespository _movieRespository;
+        private  IMapper _mapper;
 
         public MovieService(IThirdPartyMovieRepository thirdPartyMovieRepository,
             IMovieRespository databaseMovieRespository, IMapper mapper)

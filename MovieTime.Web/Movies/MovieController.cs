@@ -13,7 +13,7 @@ namespace MovieTime.Web.Movies
     public class MovieController : Controller
     {
         private const string GetMovieByIdRoute = "GetMovieById";
-        private readonly IMovieService _movieService;
+        private IMovieService _movieService;
         private readonly IMapper _mapper;
 
         public MovieController(IMovieService movieService, IMapper mapper)

@@ -11,7 +11,7 @@ namespace MovieTime.Web.Reviews
     {
         private readonly IReviewRepository _reviewRepository;
         private readonly IUserRepository _userRepository;
-        private readonly IMovieRespository _movieRespository;
+        private IMovieRespository _movieRespository;
 
         public ReviewService(IReviewRepository reviewRepository, IUserRepository userRepository, IMovieRespository movieRespository)
         {

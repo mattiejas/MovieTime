@@ -22,6 +22,5 @@ namespace MovieTime.Web.Database
         IQueryable<T> GetAllIncluding(params Expression<Func<T, object>>[] includeProperties);
         Task<T> Update(T t, object key);
         Task<int> Save();
-        void Dispose();
     }
 }

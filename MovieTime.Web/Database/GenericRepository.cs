@@ -4,24 +4,26 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace MovieTime.Web.Database
 {
     public abstract class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         protected MovieContext _context;
-        private bool disposed;
+        private bool _disposed;
 
         public GenericRepository(MovieContext context)
         {
             _context = context;
-            disposed = false;
+            _disposed = false;
         }
 
         public virtual async Task<T> Add(T t, bool save = true)
         {
-            _context.Set<T>().Add(t);
-            if (save) await _context.SaveChangesAsync();
+            Log.Warning($"Add");
+            if(t != null) _context.Set<T>().Add(t);
+            if (save) await Save();
             return t;
         }
 
@@ -37,27 +39,32 @@ namespace MovieTime.Web.Database
 
         public virtual async Task<int> Delete(T entity)
         {
+            
             _context.Set<T>().Remove(entity);
             return await _context.SaveChangesAsync();
         }
 
         public virtual async Task<T> Find(Expression<Func<T, bool>> match)
         {
+            Log.Warning($"FindAll by match!");
             return await _context.Set<T>().SingleOrDefaultAsync(match);
         }
 
         public virtual async Task<ICollection<T>> FindAll(Expression<Func<T, bool>> match)
         {
+            Log.Warning($"FindAll by match!");
             return await _context.Set<T>().Where(match).ToListAsync();
         }
 
         public virtual async Task<ICollection<T>> FindBy(Expression<Func<T, bool>> predicate)
         {
+            Log.Warning($"Find by predicate!");
             return await _context.Set<T>().Where(predicate).ToListAsync();
         }
 
         public virtual async Task<T> Get(int id)
         {
+            Log.Warning($"Get by id!");
             return await _context.Set<T>().FindAsync(id);
         }
 
@@ -68,6 +75,7 @@ namespace MovieTime.Web.Database
 
         public virtual async Task<ICollection<T>> GetAll()
         {
+            Log.Warning($"Get all!");
             return await _context.Set<T>().ToListAsync();
         }
 
@@ -85,12 +93,13 @@ namespace MovieTime.Web.Database
         //todo why is there a save method if the update and add already implement it on their own?
         public virtual async Task<int> Save()
         {
+            Log.Warning($"Save changes async!");
             return await _context.SaveChangesAsync();
         }
 
         public virtual async Task<T> Update(T t, object key)
         {
-            if (t == null) return null;
+            Log.Warning($"Update call in GenericRepository<{t.GetType()}>");
             T exist = await _context.Set<T>().FindAsync(key);
             if (exist != null)
             {
@@ -99,25 +108,6 @@ namespace MovieTime.Web.Database
             }
 
             return exist;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    _context.Dispose();
-                }
-
-                this.disposed = true;
-            }
         }
     }
 }
