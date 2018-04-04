@@ -160,7 +160,9 @@ class MovieDetailView extends React.Component {
                 </Placeholder>
               </div>
               {poster && poster !== 'N/A' &&
-                <MoviePoster source={poster} alt={`${title} poster`} />
+                <Placeholder isReady={!this.state.isLoading}>
+                  <MoviePoster source={poster} alt={`${title} poster`} />
+                </Placeholder>
               }
             </div>
             <div className="*column">
