@@ -78,24 +78,10 @@ namespace MovieTime.Web.Movies
             return movieModel;
         }
 
-        private async Task<ShortMovieDto> FillShortMovieDto(ShortMovieDto shortMovie)
-        {
-            var movie = await GetMovieById(shortMovie.Id, false);
-            shortMovie.RunTimeInMinutes = movie.RunTimeInMinutes > 0 ? movie.RunTimeInMinutes : 90;
-            shortMovie.Rating = "5.0";
-            shortMovie.Genre = "Action";
-            return shortMovie;
-        }
-        
         public async Task<List<ShortMovieDto>> GetMoviesByTitle(string title, int page = 1)
         {
             var searchResultsModel = await _thirdPartyMovieRepository.GetMoviesByTitle(title, page);
             var shortMovieDtos = _mapper.Map<List<ShortMovieModel>, List<ShortMovieDto>>(searchResultsModel.Movies);
-
-            await shortMovieDtos.ToAsyncEnumerable()
-                .ForEachAsync(async shortMovie => await FillShortMovieDto(shortMovie));
-            
-            await _movieRespository.Save();
 
             return shortMovieDtos;
         }

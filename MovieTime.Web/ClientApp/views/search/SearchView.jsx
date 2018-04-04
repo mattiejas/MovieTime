@@ -136,10 +136,7 @@ class SearchView extends React.Component {
   render() {
     const headers = {
       title: 'Title',
-      length: 'Length',
       year: 'Year',
-      genre: 'Genre',
-      rating: 'Rating',
     };
 
     if (this.props.authId) {
