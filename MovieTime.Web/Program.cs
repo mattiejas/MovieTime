@@ -22,11 +22,14 @@ namespace MovieTime.Web
 
         public static void Main(string[] args)
         {
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(Configuration)
-                .WriteTo.Slack("https://hooks.slack.com/services/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", null, Serilog.Events.LogEventLevel.Error)
-                .CreateLogger();
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var isDevelopment = environment == EnvironmentName.Development;
 
+            var baseSerilogConfig = new LoggerConfiguration()
+                .ReadFrom.Configuration(Configuration);
+
+            Log.Logger = isDevelopment ? baseSerilogConfig.CreateLogger() : baseSerilogConfig.WriteTo.Slack("https://hooks.slack.com/services/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", null, Serilog.Events.LogEventLevel.Error)
+              .CreateLogger();
             try
             {
                 Log.Information("Starting web host");

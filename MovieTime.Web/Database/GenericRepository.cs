@@ -71,7 +71,7 @@ namespace MovieTime.Web.Database
             return query;  
         }  
 
-        public virtual async Task<T> Get(int id)
+        public virtual async Task<T> Get(string id)
         {
             return await _context.Set<T>().FindAsync(id);
         }

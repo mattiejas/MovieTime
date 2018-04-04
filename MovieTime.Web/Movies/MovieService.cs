@@ -1,16 +1,22 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.InteropServices.ComTypes;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using MovieTime.Web.Genres;
 using MovieTime.Web.Genres.Models;
 using MovieTime.Web.Movies.Models;
 using MovieTime.Web.ThirdPartyServices;
 using MovieTime.Web.ThirdPartyServices.OMDB.MovieList;
+using MovieTime.Web.TrackedMovies;
 using Serilog;
 
 namespace MovieTime.Web.Movies
@@ -21,15 +27,17 @@ namespace MovieTime.Web.Movies
         private readonly IMovieRespository _movieRespository;
         private readonly IGenreRepository _genreRepository;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly ITrackRepository _trackRepository;
 
         public MovieService(IThirdPartyMovieRepository thirdPartyMovieRepository,
             IMovieRespository databaseMovieRespository, IHostingEnvironment hostingEnvironment,
-            IGenreRepository genreRepository)
+            IGenreRepository genreRepository, ITrackRepository trackRepository)
         {
             _thirdPartyMovieRepository = thirdPartyMovieRepository;
             _movieRespository = databaseMovieRespository;
             _genreRepository = genreRepository;
-            
+            _trackRepository = trackRepository;
+
             _hostingEnvironment = hostingEnvironment;
         }
 
@@ -91,13 +99,14 @@ namespace MovieTime.Web.Movies
                 {
                     genre = new Genre()
                     {
-                        Name = genreId
+                        Name = genreId,
                     };
                     await _genreRepository.Add(genre);
                 }
+
                 genres.Add(genre);
             }
-            
+
             var movieGenres = new List<MovieGenre>();
             foreach (var genre in genres)
             {
@@ -114,7 +123,7 @@ namespace MovieTime.Web.Movies
         public async Task<bool> AddMovie(Movie movie)
         {
             if (movie == null) return false;
-            
+
             movie.Poster = await DownloadMoviePoster(movie);
 
             movie.Genres = await AddGenres(movie);
@@ -174,6 +183,38 @@ namespace MovieTime.Web.Movies
         {
             var countMatch = await _movieRespository.CountMatch(x => x.Id == movieId);
             return countMatch > 0;
+        }
+
+        public async Task<ICollection<Movie>> GetTrendingMovies(int count)
+        {
+            var trending = await _trackRepository.GetDbSet()
+                .GroupBy(x => new
+                {
+                    x.MovieId,
+                    x.Movie
+                })
+                .Select(y => new
+                {
+                    y.Key,
+                    Count = y.Count()
+                })
+                .OrderByDescending(z => z.Count)
+                .Select(m => m.Key.Movie)
+                .Take(count)
+                .ToListAsync();
+
+            return trending;
+        }
+        
+        public async Task<ICollection<Movie>> GetRecentTrackedMovies(int count)
+        {
+            var trending = await _trackRepository.GetDbSet()
+                .OrderByDescending(z => z.CreatedTime)
+                .Select(m => m.Movie)
+                .Take(count)
+                .ToListAsync();
+
+            return trending;
         }
     }
 }

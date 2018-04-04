@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Vibrant from 'node-vibrant';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-
 
 import { getUser } from '../../utils/auth';
 import { requestMovieByTitle } from '../../modules/movies';
@@ -30,6 +30,7 @@ class MovieDetailView extends React.Component {
       isWatched: false,
       backgroundColor: null,
       isLoading: true,
+      hasTrackedOnRedirect: false,
     };
 
     this.handleTracking = this.handleTracking.bind(this);
@@ -48,6 +49,28 @@ class MovieDetailView extends React.Component {
     }
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    // track movie if it was a redirect from login
+    if (nextProps.isAuthenticated
+      && nextProps.history.location.state
+      && nextProps.history.location.state.shouldTrackMovie
+      && nextState.movie.imdbId
+      && !nextState.hasTrackedOnRedirect
+    ) {
+      trackMovie(nextState.movie.imdbId)
+        .then((response) => {
+          if (response.ok) {
+            this.setState({
+              isTracking: true,
+              isDisabled: false,
+              hasTrackedOnRedirect: true,
+            });
+          }
+        })
+        .catch(err => err);
+    }
+  }
+
   setBackgroundColor(poster) {
     Vibrant.from(poster).getPalette()
       .then((palette) => {
@@ -61,17 +84,25 @@ class MovieDetailView extends React.Component {
   async loadMovieDetails(movieTitle) {
     try {
       const movie = await this.props.requestMovieByTitle(movieTitle);
-      const user = await getUser();
-      const track = await isMovieTracked(user.uid, movie.imdbId);
 
-      // Using this.setState is correct, because we are using ES2017 async instead of Promises.
-      // eslint-disable-next-line react/no-did-mount-set-state
       this.setState({
         movie,
-        isTracking: track.isTracked,
         isLoading: false,
-        isWatched: track.isWatched,
       });
+
+      if (this.props.isAuthenticated) {
+        const user = await getUser();
+        const track = await isMovieTracked(user.uid, movie.imdbId);
+
+        // Using this.setState is correct, because we are using ES2017 async instead of Promises.
+        // eslint-disable-next-line react/no-did-mount-set-state
+        this.setState({
+          isTracking: track.isTracked,
+          isLoading: false,
+          isWatched: track.isWatched,
+        });
+      }
+
       if (movie.poster && movie.poster !== 'N/A') {
         this.setBackgroundColor(movie.poster);
       }
@@ -160,7 +191,12 @@ class MovieDetailView extends React.Component {
                 </Placeholder>
               </div>
               {poster && poster !== 'N/A' &&
-                <MoviePoster source={poster} alt={`${title} poster`} />
+                <Placeholder isReady={!this.state.isLoading}>
+                  <MoviePoster source={poster} alt={`${title} poster`} />
+                </Placeholder>
+              }
+              {poster === 'N/A' &&
+                <img src="/assets/poster-placeholder.jpg" alt={title} className={styles['fallback-image']} />
               }
             </div>
             <div className="*column">
@@ -184,12 +220,12 @@ class MovieDetailView extends React.Component {
                   lineHeight={1.8}
                   lines={3}
                 >
-                  {!this.state.isTracking &&
+                  {!this.state.isTracking && this.props.isAuthenticated &&
                     <Button dark disabled={this.state.isDisabled ? 'disabled' : ''} onClick={this.handleTracking}>
                       Track
                     </Button>
                   }
-                  {this.state.isTracking &&
+                  {this.state.isTracking && this.props.isAuthenticated &&
                     <ButtonGroup>
                       <Button dark disabled={this.state.isDisabled ? 'disabled' : ''} onClick={this.handleUntracking}>
                         Tracking
@@ -205,6 +241,21 @@ class MovieDetailView extends React.Component {
                         </Button>
                       }
                     </ButtonGroup>
+                  }
+                  {
+                    !this.props.isAuthenticated &&
+                    <Button
+                      dark
+                      toState={{
+                      pathname: '/login',
+                      state: {
+                        redirectTo: this.props.history.location.pathname,
+                        redirectState: { shouldTrackMovie: true },
+                      },
+                      }}
+                    >
+                      Track
+                    </Button>
                   }
                   <table className={styles.view__content__involved}>
                     <tbody>
@@ -250,6 +301,7 @@ class MovieDetailView extends React.Component {
 }
 
 MovieDetailView.propTypes = {
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
   match: PropTypes.objectOf(PropTypes.any).isRequired,
   requestMovieByTitle: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
@@ -268,4 +320,4 @@ const mapDispatchToProps = {
   requestMovieByTitle,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MovieDetailView);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MovieDetailView));
