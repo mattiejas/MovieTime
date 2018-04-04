@@ -19,6 +19,7 @@ class ListView extends Component {
     const { type, userId } = queryString.parse(this.props.location.search);
     getTrackedMoviesByUser(userId)
       .then((response) => {
+        console.log(response);
         if (type === 'TO_WATCH') {
           this.setState({
             movies: response
@@ -36,7 +37,7 @@ class ListView extends Component {
               .filter(x => x.watched)
               .map(element => ({
                 title: element.title,
-                length: element.runTimeInMinutes,
+                length: element.runTime,
                 year: element.year,
                 rating: element.imdbRating,
               })),
