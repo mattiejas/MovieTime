@@ -43,6 +43,12 @@ class Navigation extends Component {
     });
   }
 
+  handleLogout() {
+    logout().then(() => {
+      this.props.history.go('/');
+    });
+  }
+
   render() {
     return (
       <div className={cn(styles.navigation)}>
@@ -79,7 +85,7 @@ class Navigation extends Component {
                     <Button icon="user" to={`/users/${this.props.user.id}`}>
                       {`${this.props.user.firstName} ${this.props.user.lastName}`}
                     </Button>
-                    <Button icon="power-off" onClick={() => logout()} />
+                    <Button icon="power-off" onClick={() => this.handleLogout()} />
                   </ButtonGroup>
                 </li>
               </ul>
@@ -93,7 +99,7 @@ class Navigation extends Component {
                   <Button icon="user" to={`/users/${this.props.user.id}`}>
                     {`${this.props.user.firstName} ${this.props.user.lastName}`}
                   </Button>
-                  <Button icon="power-off" onClick={() => logout()} />
+                  <Button icon="power-off" onClick={() => this.handleLogout()} />
                 </ButtonGroup>
               </div>
             </div>
@@ -106,6 +112,7 @@ class Navigation extends Component {
                 this.state.inTransition ? styles['navigation--transistion'] : '',
               )}
               >
+                <li className={styles['search-mobile']}><SearchInput onSearch={() => this.toggleMenu()} /></li>
                 <li>
                   <NavLink
                     exact
@@ -116,20 +123,15 @@ class Navigation extends Component {
                     Home
                   </NavLink>
                 </li>
-                <li>
-                  <NavLink
-                    activeClassName={styles['navigation__item--active']}
-                    to="/register"
-                    onClick={() => this.toggleMenu()}
-                  >
-                    Register
-                  </NavLink>
-                </li>
                 <li className={styles['login-mobile']}>
                   <Button icon="user" to="/login">Login</Button>
                 </li>
               </ul>
               <div className={styles.buttons}>
+                <SearchInput
+                  className={cn(styles['search-desktop'], this.state.searchIsOpen ? styles['is-open'] : null)}
+                  onClick={() => this.toggleSearch()}
+                />
                 <Button icon="user" to="/login">Login</Button>
               </div>
             </div>

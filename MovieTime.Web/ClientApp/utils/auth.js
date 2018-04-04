@@ -24,8 +24,7 @@ function getRequestHeader(token) {
 }
 
 export function getTokenAndRequestHeader() {
-  return getTokenForCurrentUser()
-    .then(token => getRequestHeader(token));
+  return getTokenForCurrentUser().then(token => getRequestHeader(token));
 }
 
 async function registerWithBackEnd(person, token) {
@@ -79,4 +78,26 @@ async function removeUserFromBackend() {
 export async function removeUser(password) {
   await removeUserFromBackend();
   await removeUserFromFirebase(password);
+}
+
+export async function registerAfterGoogleSignIn(user) {
+  if (user.providerData[0].providerId === 'google.com') {
+    const first = user.displayName.substring(0, user.displayName.indexOf(' '));
+    const last = user.displayName.substring(first.length);
+    const person = {
+      firstName: first,
+      lastName: last,
+      email: user.email,
+    };
+    const token = await getTokenForCurrentUser();
+
+    await registerWithBackEnd(person, token);
+  }
+}
+
+export async function newGoogleLoginHappened() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  await firebase
+    .auth()
+    .signInWithRedirect(provider);
 }

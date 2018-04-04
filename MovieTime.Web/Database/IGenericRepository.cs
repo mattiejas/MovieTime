@@ -17,7 +17,7 @@ namespace MovieTime.Web.Database
         Task<T> Find(Expression<Func<T, bool>> match);
         Task<ICollection<T>> FindAll(Expression<Func<T, bool>> match);
         IQueryable<T> FindBy(Expression<Func<T, bool>> predicate);
-        Task<T> Get(int id);
+        Task<T> Get(string id);
         IQueryable<T> GetDbSet();
         Task<ICollection<T>> GetAll();
         IQueryable<T> GetAllIncluding(params Expression<Func<T, object>>[] includeProperties);

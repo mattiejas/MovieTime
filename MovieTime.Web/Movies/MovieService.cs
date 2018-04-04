@@ -1,37 +1,45 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.InteropServices.ComTypes;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using MovieTime.Web.Genres;
 using MovieTime.Web.Genres.Models;
 using MovieTime.Web.Movies.Models;
 using MovieTime.Web.ThirdPartyServices;
 using MovieTime.Web.ThirdPartyServices.OMDB.MovieList;
+using MovieTime.Web.TrackedMovies;
 using Serilog;
 
 namespace MovieTime.Web.Movies
 {
     public class MovieService : IMovieService
     {
-        private  IHostingEnvironment _hostingEnvironment;
-        private  IGenreRepository _genreRepository;
-        private  IThirdPartyMovieRepository _thirdPartyMovieRepository;
-        private  IMovieRespository _movieRespository;
-        private  IMapper _mapper;
+        private readonly IThirdPartyMovieRepository _thirdPartyMovieRepository;
+        private readonly IMovieRespository _movieRespository;
+        private readonly IGenreRepository _genreRepository;
+        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly ITrackRepository _trackRepository;
+        private readonly IMapper _mapper;
 
         public MovieService(IThirdPartyMovieRepository thirdPartyMovieRepository,
             IMovieRespository databaseMovieRespository, IHostingEnvironment hostingEnvironment,
-            IGenreRepository genreRepository, IMapper mapper)
+            IGenreRepository genreRepository, ITrackRepository trackRepository, IMapper mapper)
         {
             _thirdPartyMovieRepository = thirdPartyMovieRepository;
             _movieRespository = databaseMovieRespository;
             _genreRepository = genreRepository;
             _mapper = mapper;
+            _trackRepository = trackRepository;
             _hostingEnvironment = hostingEnvironment;
         }
 
@@ -68,7 +76,7 @@ namespace MovieTime.Web.Movies
             }
 
             if (movieModel != null) return movieModel;
-            
+
             movieModel = await _thirdPartyMovieRepository.GetMovieByTitle(title);
             if (movieModel != null) movieModel.Poster = await DownloadMoviePoster(movieModel);
 
@@ -102,9 +110,10 @@ namespace MovieTime.Web.Movies
                     };
                     await _genreRepository.Add(genre);
                 }
+
                 genres.Add(genre);
             }
-            
+
             var movieGenres = new List<MovieGenre>();
             foreach (var genre in genres)
             {
@@ -121,7 +130,7 @@ namespace MovieTime.Web.Movies
         public async Task<bool> AddMovie(Movie movie, bool save = true)
         {
             if (movie == null) return false;
-            
+
             movie.Poster = await DownloadMoviePoster(movie);
             movie.Genres = await AddGenres(movie);
 
@@ -181,6 +190,38 @@ namespace MovieTime.Web.Movies
         {
             var countMatch = await _movieRespository.CountMatch(x => x.Id == movieId);
             return countMatch > 0;
+        }
+
+        public async Task<ICollection<Movie>> GetTrendingMovies(int count)
+        {
+            var trending = await _trackRepository.GetDbSet()
+                .GroupBy(x => new
+                {
+                    x.MovieId,
+                    x.Movie
+                })
+                .Select(y => new
+                {
+                    y.Key,
+                    Count = y.Count()
+                })
+                .OrderByDescending(z => z.Count)
+                .Select(m => m.Key.Movie)
+                .Take(count)
+                .ToListAsync();
+
+            return trending;
+        }
+
+        public async Task<ICollection<Movie>> GetRecentTrackedMovies(int count)
+        {
+            var trending = await _trackRepository.GetDbSet()
+                .OrderByDescending(z => z.CreatedTime)
+                .Select(m => m.Movie)
+                .Take(count)
+                .ToListAsync();
+
+            return trending;
         }
     }
 }

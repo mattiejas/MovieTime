@@ -13,5 +13,7 @@ namespace MovieTime.Web.Movies
         Task<List<ShortMovieDto>> GetMoviesByTitle(string title, int page);
         Task<bool> AddMovie(Movie movie, bool save = true);
         Task<bool> MovieExistById(string movieId);
+        Task<ICollection<Movie>> GetTrendingMovies(int count);
+        Task<ICollection<Movie>> GetRecentTrackedMovies(int count);
     }
 }

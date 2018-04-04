@@ -76,8 +76,8 @@ namespace MovieTime.Web.Database
             IQueryable<T> query = _context.Set<T>().Where(predicate);  
             return query;  
         }  
-            
-        public virtual async Task<T> Get(int id)
+
+        public virtual async Task<T> Get(string id)
         {
             Log.Warning($"Get by id!");
             return await _context.Set<T>().FindAsync(id);
