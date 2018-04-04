@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unused-state */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import cn from 'classnames';
 
 import styles from './ListWidget.scss';
@@ -42,7 +43,7 @@ class ListWidget extends React.Component {
               className={styles.poster}
               source={element.poster}
               alt={`${element.title} poster`}
-              onClick={() => this.onClick(`/movies/${element.title}`)}
+              onClick={() => this.onClick(`/movies/${element.movieId}`)}
             />);
           })}
         </div>
@@ -55,6 +56,13 @@ ListWidget.propTypes = {
   movies: PropTypes.arrayOf(PropTypes.any).isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
   title: PropTypes.string.isRequired,
+  userId: PropTypes.string,
+  type: PropTypes.string,
 };
 
-export default ListWidget;
+ListWidget.defaultProps = {
+  userId: '',
+  type: '',
+};
+
+export default withRouter(ListWidget);

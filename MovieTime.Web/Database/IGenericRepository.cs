@@ -10,7 +10,7 @@ namespace MovieTime.Web.Database
     public interface IGenericRepository<T> where T : class
     {
         Task<bool> AddIfNotExists(T entity, Expression<Func<T, bool>> match);
-        Task<bool> Add(T t);
+        Task<bool> Add(T t, bool save = true);
         Task<int> CountAll();
         Task<int> CountMatch(Expression<Func<T, bool>> match);
         Task<int> Delete(T entity);
@@ -24,6 +24,5 @@ namespace MovieTime.Web.Database
         Task<T> Update(T t, object key);
         Task<T> Update(T t);
         Task<int> Save();
-        void Dispose();
     }
 }
