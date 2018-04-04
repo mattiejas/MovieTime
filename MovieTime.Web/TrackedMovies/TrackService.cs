@@ -43,7 +43,8 @@ namespace MovieTime.Web.TrackedMovies
         {
             return await _trackRepository.FindBy(t => t.UserId == userId)
                 .Include(t => t.User)
-                .Include(t => t.Movie)                                         
+                .Include(t => t.Movie)
+                .Include(t => t.Movie.Genres)
                 .OrderByDescending(t => t.CreatedTime)
                 .ToListAsync();
         }
