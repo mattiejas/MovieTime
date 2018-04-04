@@ -22,3 +22,12 @@ export const updateUserData = user =>
       method: 'PUT',
       body: JSON.stringify(user),
     }));
+
+export function downloadUserData() {
+  return getTokenAndRequestHeader()
+    .then(requestHeader => betterFetch(`${API}info`, {
+      headers: requestHeader,
+      method: 'GET',
+    }));
+}
+
