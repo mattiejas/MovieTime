@@ -1,8 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import auth from '../../firebase';
-import { getUserData, updateUserData } from '../../utils/user';
+import { updateUser, getUser } from '../../modules/users';
+import { authenticateById } from '../../modules/auth';
+
+import { getTrackedMoviesByUser } from '../../utils/user';
 
 import ListWidget from '../../components/list-widget/ListWidget';
 import Placeholder from '../../components/placeholder/Placeholder';
@@ -11,42 +14,48 @@ import ProfilePicture from '../../components/profile/ProfilePicture';
 import EditProfileModal from '../../components/profile/EditProfileModal';
 
 import styles from './ProfileView.scss';
+import CommentSection from '../../components/comments/CommentSection';
 
 class ProfileView extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      canEditProfile: false,
-      user: {},
+      isOwner: props.authId === (props.user && props.user.id),
       isLoading: true,
       isEditing: false,
-      movies: [
-        'Thor: Ragnarok',
-        'Thor: Ragnarok',
-        'Thor: Ragnarok',
-        'Thor: Ragnarok',
-        'Thor: Ragnarok',
-      ],
+      watchedMovies: [],
+      unwatchedMovies: [],
     };
   }
 
   componentDidMount() {
     const { id } = this.props.match.params;
-    this.displayUserData(id);
-    // this.getProfileCanBeEdited();
-
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        this.setState({
-          canEditProfile: user.uid === id,
+    this.props.getUser(id).then(() => {
+      getTrackedMoviesByUser(id)
+        .then((response) => {
+          const watchedMovies = response.filter(x => x.watched).slice(0, 4);
+          const unwatchedMovies = response.filter(x => !x.watched).slice(0, 4);
+          this.setState({
+            watchedMovies,
+            unwatchedMovies,
+          });
         });
-      } else {
-        this.setState({ canEditProfile: false });
-      }
     });
   }
 
-  componentWillUpdate() {}
+  componentWillReceiveProps(nextProps) {
+    if (Object.prototype.hasOwnProperty.call(nextProps.user, 'id')) {
+      this.setState({
+        isLoading: false,
+        isOwner: nextProps.authId === (nextProps.user && nextProps.user.id),
+      });
+    } else if (this.props.user.id !== nextProps.match.params.id) {
+      this.setState({
+        isLoading: true,
+      });
+      this.props.getUser(nextProps.match.params.id);
+    }
+  }
 
   onEdit() {
     this.setState({
@@ -60,22 +69,18 @@ class ProfileView extends React.Component {
     });
   }
 
-  displayUserData(id) {
-    getUserData(id)
-      .then((data) => {
-        this.setState({
-          user: data,
-          isLoading: false,
-        });
-      })
-      .catch(() => {
-        this.props.history.push('/404');
-      });
+  onUpdate(user) {
+    this.props.updateUser(user).then(() => {
+      if (this.props.authId === user.id) {
+        // re-authenticate so username in navigation updates
+        this.props.authenticateById(this.props.authId);
+      }
+    });
   }
 
   render() {
-    const { firstName = '', lastName = '' } = this.state.user;
-    const { canEditProfile } = this.state;
+    const { isOwner, isLoading } = this.state;
+    const { firstName, lastName } = this.props.user;
     const { id } = this.props.match.params;
 
     return (
@@ -83,11 +88,8 @@ class ProfileView extends React.Component {
         <EditProfileModal
           hidden={!this.state.isEditing}
           hideModal={() => this.onDiscard()}
-          onUpdate={user =>
-            updateUserData(user, id).then(() => {
-                this.displayUserData(id);
-            })}
-          user={this.state.user}
+          onUpdate={user => this.onUpdate({ ...user, id })}
+          user={this.props.user}
         />
         <div className={styles.view__background} />
         <div className={styles.view__header}>
@@ -100,7 +102,7 @@ class ProfileView extends React.Component {
             </div>
             <div className={styles.header__content}>
               <div className={styles.name}>
-                <Placeholder isReady={!this.state.isLoading}>
+                <Placeholder isReady={!isLoading}>
                   <h1>{`${firstName} ${lastName}`}</h1>
                   <h3>
                     has watched ... movies worthy of ... hours and ... minutes
@@ -111,27 +113,32 @@ class ProfileView extends React.Component {
           </div>
           <div className={styles.buttons__container}>
             <div className={styles.buttons}>
-              {canEditProfile &&
+              {isOwner &&
               <Button
                 dark
                 icon="pencil"
                 onClick={() => this.onEdit()}
               >
-                                    Edit
+                Edit
               </Button>}
-              {/* <Button dark icon="user">Follow</Button> */}
             </div>
           </div>
           <div className={styles.content}>
             <ListWidget
               title="Wants to watch"
-              movies={this.state.movies}
+              movies={this.state.unwatchedMovies}
               history={this.props.history}
             />
             <ListWidget
               title="Has watched"
-              movies={this.state.movies}
+              movies={this.state.watchedMovies}
               history={this.props.history}
+            />
+            <CommentSection
+              type="user"
+              id={this.props.user.id}
+              title="Recent Comments"
+              showSpoilerWarning={!isOwner}
             />
           </div>
         </div>
@@ -143,6 +150,27 @@ class ProfileView extends React.Component {
 ProfileView.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
+  updateUser: PropTypes.func.isRequired,
+  getUser: PropTypes.func.isRequired,
+  authenticateById: PropTypes.func.isRequired,
+  user: PropTypes.objectOf(PropTypes.any),
+  authId: PropTypes.string,
 };
 
-export default ProfileView;
+ProfileView.defaultProps = {
+  user: {},
+  authId: null,
+};
+
+const mapStateToProps = (state, props) => ({
+  user: state.users[props.match.params.id] || {},
+  authId: state.auth.user && state.auth.user.id,
+});
+
+const mapDispatchToProps = {
+  updateUser,
+  getUser,
+  authenticateById,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileView);

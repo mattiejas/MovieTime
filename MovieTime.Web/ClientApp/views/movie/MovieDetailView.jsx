@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Vibrant from 'node-vibrant';
+import { connect } from 'react-redux';
+
 
 import { getUser } from '../../utils/auth';
-import { getMovieById, trackMovie, untrackMovie, isMovieTracked } from '../../utils/movie';
+import { requestMovieById } from '../../modules/movies';
+import { trackMovie, untrackMovie, isMovieTracked, toggleWatchStatus } from '../../utils/movie';
 
 import MoviePoster from '../../components/movie/MoviePoster';
 import MovieHeading from '../../components/movie/MovieHeading';
@@ -11,8 +14,10 @@ import MovieAttributes from '../../components/movie/MovieAttributes';
 import Placeholder from '../../components/placeholder/Placeholder';
 import ParagraphPlaceholder from '../../components/placeholder/ParagraphPlaceholder';
 import Button from '../../components/button/Button';
+import ButtonGroup from '../../components/button/ButtonGroup';
 
 import styles from './MovieDetailView.scss';
+import CommentSection from '../../components/comments/CommentSection';
 
 class MovieDetailView extends React.Component {
   constructor(props) {
@@ -22,12 +27,14 @@ class MovieDetailView extends React.Component {
       movie: {},
       isDisabled: false,
       isTracking: false,
+      isWatched: false,
       backgroundColor: null,
       isLoading: true,
     };
 
     this.handleTracking = this.handleTracking.bind(this);
     this.handleUntracking = this.handleUntracking.bind(this);
+    this.handleWatching = this.handleWatching.bind(this);
     this.loadMovieDetails = this.loadMovieDetails.bind(this);
   }
 
@@ -53,19 +60,28 @@ class MovieDetailView extends React.Component {
 
   async loadMovieDetails(id) {
     try {
-      const movie = await getMovieById(id);
+      let newMovie;
+      if (!this.props.movie.title) {
+        // fetch movie from backend
+        newMovie = await this.props.requestMovieById(id);
+      } else {
+        // movie is not 'new', get it from cache
+        newMovie = this.props.movie;
+      }
+
       const user = await getUser();
-      const track = await isMovieTracked(user.uid, movie.imdbId);
+      const track = await isMovieTracked(user.uid, newMovie.imdbId);
 
       // Using this.setState is correct, because we are using ES2017 async instead of Promises.
       // eslint-disable-next-line react/no-did-mount-set-state
       this.setState({
-        movie,
+        movie: newMovie,
         isTracking: track.isTracked,
         isLoading: false,
+        isWatched: track.isWatched,
       });
-      if (movie.poster && movie.poster !== 'N/A') {
-        this.setBackgroundColor(movie.poster);
+      if (newMovie.poster && newMovie.poster !== 'N/A') {
+        this.setBackgroundColor(newMovie.poster);
       }
     } catch (err) {
       throw err;
@@ -87,6 +103,20 @@ class MovieDetailView extends React.Component {
         }
       })
       .catch(err => err);
+  }
+
+  handleWatching(event) {
+    event.preventDefault();
+    this.setState({
+      isWatchDisabled: true,
+    });
+    toggleWatchStatus(this.state.movie.imdbId)
+      .then((response) => {
+        this.setState({
+          isWatched: response.watched,
+          isWatchDisabled: false,
+        });
+      });
   }
 
   handleUntracking(event) {
@@ -111,12 +141,14 @@ class MovieDetailView extends React.Component {
       title = '',
       year = '',
       poster,
-      runTime = '0 m',
-      genre = '',
+      runTime = 0,
+      genres = [],
       director = '',
       writer = '',
       actors = '',
+      imdbRating = '',
       plot = '',
+      imdbId,
     } = this.state.movie;
     return (
       <div className={styles.view}>
@@ -148,7 +180,7 @@ class MovieDetailView extends React.Component {
                     </Placeholder>
                   </div>
                   <Placeholder isReady={!this.state.isLoading}>
-                    <MovieAttributes rating={0} time={runTime || 'N/A'} genres={genre || 'N/A'} />
+                    <MovieAttributes rating={imdbRating} time={runTime} genres={genres} />
                   </Placeholder>
                 </div>
               </div>
@@ -166,9 +198,21 @@ class MovieDetailView extends React.Component {
                     </Button>
                   }
                   {this.state.isTracking &&
-                    <Button dark disabled={this.state.isDisabled ? 'disabled' : ''} onClick={this.handleUntracking}>
-                      Tracking
-                    </Button>
+                    <ButtonGroup>
+                      <Button dark disabled={this.state.isDisabled ? 'disabled' : ''} onClick={this.handleUntracking}>
+                        Tracking
+                      </Button>
+                      {!this.state.isWatched &&
+                        <Button icon="eye" dark disabled={this.state.isWatchDisabled ? 'disabled' : ''} onClick={this.handleWatching}>
+                          Mark as watched
+                        </Button>
+                      }
+                      {this.state.isWatched &&
+                        <Button icon="eye-slash" dark disabled={this.state.isWatchDisabled ? 'disabled' : ''} onClick={this.handleWatching}>
+                          Mark as unwatched
+                        </Button>
+                      }
+                    </ButtonGroup>
                   }
                   <table className={styles.view__content__involved}>
                     <tbody>
@@ -199,6 +243,14 @@ class MovieDetailView extends React.Component {
               </div>
             </div>
           </div>
+          {
+            this.props.isAuthenticated &&
+            <Placeholder
+              isReady={!this.state.isLoading}
+            >
+              <CommentSection type="movie" id={imdbId} title="Comments" showSpoilerWarning={!this.state.isWatched} />
+            </Placeholder>
+          }
         </div>
       </div>
     );
@@ -207,6 +259,26 @@ class MovieDetailView extends React.Component {
 
 MovieDetailView.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
+  movie: PropTypes.objectOf(PropTypes.any),
+  requestMovieById: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
 };
 
-export default MovieDetailView;
+MovieDetailView.defaultProps = {
+  movie: {},
+};
+
+MovieDetailView.defaultProps = {
+  isAuthenticated: false,
+};
+
+const mapStateToProps = (state, props) => ({
+  isAuthenticated: state.auth.authenticated,
+  movie: state.movies[props.match.params.id] || {},
+});
+
+const mapDispatchToProps = {
+  requestMovieById,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MovieDetailView);

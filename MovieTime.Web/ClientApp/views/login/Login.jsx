@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { login } from '../../utils/auth';
+import { authenticate } from '../../modules/auth';
 
 import Input from '../../components/input/Input';
 import Button from '../../components/button/Button';
 
 import styles from './Login.scss';
 
-export default class Login extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
 
@@ -22,14 +24,16 @@ export default class Login extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.authId) {
+      this.props.history.push(`/users/${nextProps.authId}`);
+    }
+  }
+
   handleSubmit(event) {
     event.preventDefault();
 
-    login(this.state.email, this.state.password)
-      .then(() => {
-        this.props.watchAuthenticationStateChange(true);
-        this.props.history.push(this.props.history.location);
-      })
+    this.props.authenticate(this.state.email, this.state.password)
       .catch((err) => {
         this.setState({ error: err.message });
       });
@@ -84,8 +88,22 @@ export default class Login extends Component {
 }
 
 Login.propTypes = {
-  watchAuthenticationStateChange: PropTypes.func.isRequired,
   location: PropTypes.objectOf(PropTypes.any).isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
+  authenticate: PropTypes.func.isRequired,
+  authId: PropTypes.string,
 };
 
+Login.defaultProps = {
+  authId: null,
+};
+
+const mapPropsToState = state => ({
+  authId: state.auth.user && state.auth.user.id,
+});
+
+const mapDispatchToProps = {
+  authenticate,
+};
+
+export default withRouter(connect(mapPropsToState, mapDispatchToProps)(Login));

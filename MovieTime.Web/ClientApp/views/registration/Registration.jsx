@@ -11,50 +11,49 @@ import Spinner from '../../components/spinner/Spinner';
 
 import styles from './Registration.scss';
 
-export default class Registration extends React.Component {
-  static propTypes = {
-    history: PropTypes.objectOf(PropTypes.any).isRequired,
-    watchAuthenticationStateChange: PropTypes.func.isRequired,
-  };
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      fields: {},
-      fieldErrors: {},
-      fieldError: null,
-      isLoading: false,
+class Registration extends React.Component {
+    static propTypes = {
+      history: PropTypes.objectOf(PropTypes.any).isRequired,
     };
 
-    this.onFormSubmit = this.onFormSubmit.bind(this);
-    this.onInputChange = this.onInputChange.bind(this);
-    this.isFormInputInvalid = this.isFormInputInvalid.bind(this);
-    this.isPassword = this.isPassword.bind(this);
-  }
+    static isName(value) {
+      // test to see if name contains numeric values
+      const containsNumeric = !value.match(/^([a-z\u00C0-\u02AB'´`]{1,}\.?\s?)([a-z\u00C0-\u02AB'´`]?\.?\s?)+$/i);
+      return !containsNumeric && value.length < 35;
+    }
 
-  componentDidMount() {
-    // temporarily disable watching for auth changes
-    // to give backend time to save user data
-    this.props.watchAuthenticationStateChange(false);
-  }
+    constructor(props) {
+      super(props);
 
-  async onFormSubmit(event) {
-    event.preventDefault();
-    const person = {
-      firstName: this.state.fields['first-name'],
-      lastName: this.state.fields['last-name'],
-      email: this.state.fields.email,
-      password: this.state.fields.password,
-    };
-    if (await this.isFormInputInvalid()) return;
+      this.state = {
+        fields: {},
+        fieldErrors: {},
+        fieldError: null,
+        isLoading: false,
+      };
 
-    this.setState({
-      isLoading: true,
-    });
+      this.onFormSubmit = this.onFormSubmit.bind(this);
+      this.onInputChange = this.onInputChange.bind(this);
+      this.isFormInputInvalid = this.isFormInputInvalid.bind(this);
+      this.isPassword = this.isPassword.bind(this);
+    }
 
-    register(person)
-      .then((response) => {
+    async onFormSubmit(event) {
+      event.preventDefault();
+
+      const person = {
+        firstName: this.state.fields['first-name'],
+        lastName: this.state.fields['last-name'],
+        email: this.state.fields.email,
+        password: this.state.fields.password,
+      };
+      if (await this.isFormInputInvalid()) return;
+
+      this.setState({
+        isLoading: true,
+      });
+
+      register(person).then((response) => {
         if (!response.success) {
           this.setState({
             fieldError: response.message,
@@ -62,112 +61,149 @@ export default class Registration extends React.Component {
           });
         } else {
           logout();
-          setTimeout(() => {
-            this.props.history.push('/login', { afterRegister: true });
-          }, 0);
+          this.props.history.push('/login', { afterRegister: true });
         }
       });
-  }
+    }
 
-  onInputChange(e, error) {
-    const { name, value } = e.target;
-    const { fields, fieldErrors } = this.state;
+    onInputChange(e, error) {
+      const { name, value } = e.target;
+      const { fields, fieldErrors } = this.state;
 
-    fields[name] = value;
-    fieldErrors[name] = error;
-    this.setState({
-      fields,
-      fieldErrors,
-      fieldError: null,
-    });
-  }
+      fields[name] = value;
+      fieldErrors[name] = error;
+      this.setState({
+        fields,
+        fieldErrors,
+        fieldError: null,
+      });
+    }
 
-  async isFormInputInvalid() {
-    const { fields, fieldErrors } = this.state;
-    if (!fields.email || !fields.password || !fields['repeat-password'] || !fields['first-name'] || !fields['last-name']) {
-      this.setState({ fieldError: 'Some required fields are still empty' });
+    async isFormInputInvalid() {
+      const { fields, fieldErrors } = this.state;
+      if (
+        !fields.email ||
+        !fields.password ||
+        !fields['repeat-password'] ||
+        !fields['first-name'] ||
+        !fields['last-name']
+      ) {
+        this.setState({
+          fieldError: 'Some required fields are still empty',
+        });
+        return true;
+      }
+
+      const errMessages = Object.keys(fieldErrors).filter(k => fieldErrors[k]);
+      await this.isPassword(fields.password, fields['repeat-password']);
+      if (this.state.fieldError) return true;
+      if (errMessages.length) return true;
+      return false;
+    }
+
+    async isPassword(password, repeatPassword) {
+      if (password !== repeatPassword) {
+        this.setState({ fieldError: 'Password does not match' });
+        return false;
+      } else if (password.length < 6 || repeatPassword.length < 6) {
+        return false;
+      }
+      const breachCount = await checkPassword(password);
+      if (breachCount > 100) {
+        this.setState({
+          fieldError: 'This password has been cracked over a 100 times, please come up with a stronger password.',
+        });
+        return false;
+      }
       return true;
     }
 
-    const errMessages = Object.keys(fieldErrors)
-      .filter(k => fieldErrors[k]);
-    await this.isPassword(fields.password);
-    if (this.state.fieldError) return true;
-    if (errMessages.length) return true;
-    return false;
-  }
-
-  async isPassword(val) {
-    const breachCount = await checkPassword(val);
-    if (breachCount > 100) {
-      this.setState({ fieldError: 'This password has been cracked over a 100 times, please come up with a stronger password.' });
-    }
-  }
-
-  render() {
-    return (
-      <div>
-        <div className={styles.view__background} />
-        <div className={styles['view__content--wrapper']}>
-          <div className={styles.view__content}>
-            <h1>Register</h1>
-            <hr />
-            <Spinner hidden={!this.state.isLoading} />
-            <form onSubmit={this.onFormSubmit}>
-              <div className={styles.group}>
+    render() {
+      return (
+        <div>
+          <div className={styles.view__background} />
+          <div className={styles['view__content--wrapper']}>
+            <div className={styles.view__content}>
+              <h1>Register</h1>
+              <hr />
+              <Spinner hidden={!this.state.isLoading} />
+              <form onSubmit={this.onFormSubmit}>
+                <div className={styles.group}>
+                  <Input
+                    label="First Name"
+                    name="first-name"
+                    value={this.state.fields['first-name']}
+                    onChange={(e, error) =>
+                      this.onInputChange(e, error)}
+                    validate={value =>
+                      (Registration.isName(value)
+                          ? null
+                          : 'Name must be less than 35 characters and contain only common letters and symbols')}
+                  />
+                  <Input
+                    label="Last Name"
+                    name="last-name"
+                    value={this.state.fields['last-name']}
+                    onChange={(e, error) =>
+                      this.onInputChange(e, error)}
+                    validate={value =>
+                      (Registration.isName(value)
+                          ? null
+                          : 'Name must be less than 35 characters and contain only common letters and symbols')}
+                  />
+                </div>
                 <Input
-                  label="First Name"
-                  name="first-name"
-                  value={this.state.fields['first-name']}
-                  onChange={(e, error) => this.onInputChange(e, error)}
-                  validate={value => (value.length <= 0 ? 'First Name is required' : null)}
+                  label="Email"
+                  name="email"
+                  value={this.state.fields.email}
+                  onChange={(e, error) =>
+                    this.onInputChange(e, error)}
+                  validate={val =>
+                    (isEmail(val) ? null : 'Email is invalid')}
                 />
-                <Input
-                  label="Last Name"
-                  name="last-name"
-                  value={this.state.fields['last-name']}
-                  onChange={(e, error) => this.onInputChange(e, error)}
-                  validate={value => (value.length <= 0 ? 'Last Name is required' : null)}
-                />
-              </div>
-              <Input
-                label="Email"
-                name="email"
-                value={this.state.fields.email}
-                onChange={(e, error) => this.onInputChange(e, error)}
-                validate={val => (isEmail(val) ? null : 'Email is invalid')}
-              />
-              <div className={styles.group}>
-                <Input
-                  label="Password"
-                  name="password"
-                  type="password"
-                  value={this.state.fields.password}
-                  onChange={(e, error) => this.onInputChange(e, error)}
-                  validate={value => (value.length <= 6 ? 'Password has to be at least 6 characters' : null)}
-                />
-                <Input
-                  label="Repeat Password"
-                  name="repeat-password"
-                  type="password"
-                  value={this.state.fields['repeat-password']}
-                  onChange={(e, error) => this.onInputChange(e, error)}
-                  validate={value => (value !== this.state.fields.password ? 'Password does not match' : null)}
-                />
-              </div>
-              <Button
-                dark
-                type="submit"
-                className={styles.button}
-                onClick={e => this.onFormSubmit(e)}
-              >
-                Register
-              </Button>
-              <span className={styles.error}>{this.state.fieldError}</span>
-            </form>
+                <div className={styles.group}>
+                  <Input
+                    label="Password"
+                    name="password"
+                    type="password"
+                    value={this.state.fields.password}
+                    onChange={(e, error) =>
+                      this.onInputChange(e, error)}
+                    validate={value =>
+                      (value.length < 6
+                          ? 'Password has to be at least 6 characters'
+                          : null)}
+                  />
+                  <Input
+                    label="Repeat Password"
+                    name="repeat-password"
+                    type="password"
+                    value={this.state.fields['repeat-password']}
+                    onChange={(e, error) =>
+                      this.onInputChange(e, error)}
+                    validate={value =>
+                      (value !== this.state.fields.password
+                          ? 'Password does not match'
+                          : null)}
+                  />
+                </div>
+                <Button
+                  dark
+                  type="submit"
+                  className={styles.button}
+                  onClick={e => this.onFormSubmit(e)}
+                >
+                  Register
+                </Button>
+                <span className={styles.error}>
+                  {this.state.fieldError}
+                </span>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-    );
-  }
+      );
+    }
 }
+
+export default Registration;

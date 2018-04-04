@@ -261,3 +261,7 @@ __pycache__/
 *.pyc
 .DS_Store
 MovieTime.Web/appsettings.Development.json
+.vscode/tasks.json
+.vscode/launch.json
+
+MovieTime\.Web/wwwroot/assets/posters/

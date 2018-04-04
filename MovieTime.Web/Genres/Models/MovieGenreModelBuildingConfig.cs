@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieTime.Web.Database;
 
-namespace MovieTime.Web.Genres
+namespace MovieTime.Web.Genres.Models
 {
     public class MovieGenreModelBuildingConfig : IEntityModelBuildingConfig
     {

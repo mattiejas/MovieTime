@@ -2,6 +2,10 @@
 
 .icon {
   cursor: pointer;
+  width: 20px;
+  display: inline-flex;
+  justify-content: center;
+  align-content: center;
   &:hover {
     color: $secondary-dark-color;
   }

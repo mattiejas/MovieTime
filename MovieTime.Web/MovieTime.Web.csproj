@@ -34,7 +34,7 @@
     <Content Remove="ClientApp\**" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Migrations" />
+    <Folder Include="wwwroot\assets\posters" />
     <Folder Include="wwwroot\assets\users" />
   </ItemGroup>
   <ItemGroup>
