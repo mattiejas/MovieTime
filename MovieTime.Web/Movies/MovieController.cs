@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -49,6 +50,28 @@ namespace MovieTime.Web.Movies
             if (movie == null) return NotFound();
 
             var movieGetDto = _mapper.Map<Movie, MovieGetDto>(movie);
+
+            return Ok(movieGetDto);
+        }        
+        
+        [HttpGet("trending/{count}")]
+        public async Task<IActionResult> GetTrendingMovies(int count = 4)
+        {
+            var movies = await _movieService.GetTrendingMovies(count);
+            if (movies == null) return NotFound();
+
+            var movieGetDto = _mapper.Map<ICollection<Movie>, ICollection<MovieGetDto>>(movies);
+
+            return Ok(movieGetDto);
+        }
+        
+        [HttpGet("trending/tracked/{count}")]
+        public async Task<IActionResult> GetRecentTrackedMovies(int count = 4)
+        {
+            var movies = await _movieService.GetRecentTrackedMovies(count);
+            if (movies == null) return NotFound();
+
+            var movieGetDto = _mapper.Map<ICollection<Movie>, ICollection<MovieGetDto>>(movies);
 
             return Ok(movieGetDto);
         }

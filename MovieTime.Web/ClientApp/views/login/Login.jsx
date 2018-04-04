@@ -49,9 +49,18 @@ class Login extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    this.props.authenticate(this.state.email, this.state.password).catch((err) => {
-      this.setState({ error: err.message });
-    });
+    this.props.authenticate(this.state.email, this.state.password)
+      .then(() => {
+        if (this.props.location.state && this.props.location.state.redirectTo) {
+          this.props.history.push({
+            pathname: this.props.location.state.redirectTo,
+            state: this.props.location.state.redirectState || {},
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({ error: err.message });
+      });
   }
 
   handleSignInWithGoogle(event) {

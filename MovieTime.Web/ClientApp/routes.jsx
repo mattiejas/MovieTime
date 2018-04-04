@@ -93,9 +93,25 @@ class Routes extends React.Component {
         <Layout>
           <Switch>
             <Route exact path="/" component={Home} />
-            <PrivateRoute path="/movies/:title" isAuthenticated={this.props.isAuthenticated} component={MovieDetailView} />
-            <PublicRoute path="/register" isAuthenticated={this.props.isAuthenticated} component={props => <Registration {...props} />} />
-            <PublicRoute path="/login" isAuthenticated={this.props.isAuthenticated} component={props => <Login {...props} />} />
+            <Route
+              path="/movies/:title"
+              isAuthenticated={this.props.isAuthenticated}
+              component={MovieDetailView}
+            />
+            <PublicRoute
+              path="/register"
+              isAuthenticated={this.props.isAuthenticated}
+              component={props => (
+                <Registration {...props} />
+            )}
+            />
+            <PublicRoute
+              path="/login"
+              isAuthenticated={this.props.isAuthenticated}
+              component={props => (
+                <Login {...props} />
+            )}
+            />
             <Route path="/list" component={ListView} />
             <Route path="/users/:id" component={ProfileView} />
             <Route component={NotFoundView} />

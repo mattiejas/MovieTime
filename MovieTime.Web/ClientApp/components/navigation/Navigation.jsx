@@ -80,15 +80,6 @@ class Navigation extends Component {
                     Home
                   </NavLink>
                 </li>
-                <li>
-                  <NavLink
-                    activeClassName={styles['navigation__item--active']}
-                    to="/movies/Thor: Ragnarok"
-                    onClick={() => this.toggleMenu()}
-                  >
-                    Thor: Ragnarok
-                  </NavLink>
-                </li>
                 <li className={styles['logout-mobile']}>
                   <ButtonGroup>
                     <Button icon="user" to={`/users/${this.props.user.id}`}>
@@ -121,6 +112,7 @@ class Navigation extends Component {
                 this.state.inTransition ? styles['navigation--transistion'] : '',
               )}
               >
+                <li className={styles['search-mobile']}><SearchInput onSearch={() => this.toggleMenu()} /></li>
                 <li>
                   <NavLink
                     exact
@@ -136,6 +128,10 @@ class Navigation extends Component {
                 </li>
               </ul>
               <div className={styles.buttons}>
+                <SearchInput
+                  className={cn(styles['search-desktop'], this.state.searchIsOpen ? styles['is-open'] : null)}
+                  onClick={() => this.toggleSearch()}
+                />
                 <Button icon="user" to="/login">Login</Button>
               </div>
             </div>

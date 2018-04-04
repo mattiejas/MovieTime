@@ -1,5 +1,6 @@
 /* eslint-disable react/no-unused-state */
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
@@ -26,7 +27,7 @@ class ListWidget extends React.Component {
         <h4>{this.props.title}</h4>
         <div className={styles['list-widget']}>
           {this.props.movies.map((element, index) => {
-            if (index === 3) {
+            if (this.props.movies.length > 4 && index === 3) {
               return (<MoviePoster
                 key={`movie-${element.title}`}
                 className={cn(styles.poster, styles['last-poster'])}
@@ -36,7 +37,6 @@ class ListWidget extends React.Component {
               />
               );
             }
-
             return (<MoviePoster
               key={`movie-${element.title}`}
               className={styles.poster}
@@ -57,4 +57,4 @@ ListWidget.propTypes = {
   title: PropTypes.string.isRequired,
 };
 
-export default ListWidget;
+export default withRouter(ListWidget);

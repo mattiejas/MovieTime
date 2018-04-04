@@ -31,4 +31,21 @@
     margin-bottom: 20px;
     border: none;
   }
+
+  // scrollbar
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: lighten($secondary-color, 10);
+    background-clip: padding-box;
+    border-radius: 5px;
+    border: 2px solid transparent;
+  }
 }

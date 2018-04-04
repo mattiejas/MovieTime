@@ -103,8 +103,7 @@ class ProfileView extends React.Component {
           onUpdate={user => this.onUpdate({ ...user, id })}
           user={this.props.user}
         />
-        <div className={styles.view__background} />
-        <div className={styles.view__header}>
+        <div className={styles.view__background}>
           <div className={styles.header}>
             <div className={styles.header__picture}>
               <ProfilePicture
@@ -123,6 +122,8 @@ class ProfileView extends React.Component {
               </div>
             </div>
           </div>
+        </div>
+        <div className={styles.view__content}>
           <div className={styles.buttons__container}>
             <div className={styles.buttons}>
               {isOwner &&
