@@ -7,5 +7,6 @@ namespace MovieTime.Web.Movies
     {
 //        public Movie
         
+//        https://github.com/JeremySkinner/FluentValidation/wiki/i.-ASP.NET-Core-integration
     }
 }
