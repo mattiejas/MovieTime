@@ -5,17 +5,16 @@ import cn from 'classnames';
 
 import styles from './Button.scss';
 import Icon from '../icon/Icon';
-import history from '../../utils/history';
 
 const Button = ({
-  to, dark, danger, className, children, icon, ...rest
+  to, toState, dark, danger, className, children, icon, ...rest
 }) => {
-  if (to) {
+  if (to || toState) {
     return (
       <Link
         className={cn(styles.button, dark ? styles.dark : '', danger ? styles.danger : '', className)}
-        to={to}
-        href={to}
+        to={to || toState}
+        href={to || toState.pathname}
         {...rest}
       >
         <div className={styles.button__inner}>
@@ -58,6 +57,7 @@ Button.propTypes = {
   danger: PropTypes.bool,
   className: PropTypes.string,
   to: PropTypes.string,
+  toState: PropTypes.objectOf(PropTypes.any),
 };
 
 Button.defaultProps = {
@@ -72,6 +72,7 @@ Button.defaultProps = {
   danger: false,
   className: '',
   to: undefined,
+  toState: undefined,
 };
 
 export default Button;

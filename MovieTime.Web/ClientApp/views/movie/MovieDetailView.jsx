@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Vibrant from 'node-vibrant';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-
 
 import { getUser } from '../../utils/auth';
 import { requestMovieByTitle } from '../../modules/movies';
@@ -30,6 +30,7 @@ class MovieDetailView extends React.Component {
       isWatched: false,
       backgroundColor: null,
       isLoading: true,
+      hasTrackedOnRedirect: false,
     };
 
     this.handleTracking = this.handleTracking.bind(this);
@@ -45,6 +46,28 @@ class MovieDetailView extends React.Component {
   async componentWillReceiveProps(props) {
     if (this.props.match.params.title !== props.match.params.title) {
       await this.loadMovieDetails(props.match.params.title);
+    }
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    // track movie if it was a redirect from login
+    if (nextProps.isAuthenticated
+      && nextProps.history.location.state
+      && nextProps.history.location.state.shouldTrackMovie
+      && nextState.movie.imdbId
+      && !nextState.hasTrackedOnRedirect
+    ) {
+      trackMovie(nextState.movie.imdbId)
+        .then((response) => {
+          if (response.ok) {
+            this.setState({
+              isTracking: true,
+              isDisabled: false,
+              hasTrackedOnRedirect: true,
+            });
+          }
+        })
+        .catch(err => err);
     }
   }
 
@@ -214,6 +237,21 @@ class MovieDetailView extends React.Component {
                       }
                     </ButtonGroup>
                   }
+                  {
+                    !this.props.isAuthenticated &&
+                    <Button
+                      dark
+                      toState={{
+                      pathname: '/login',
+                      state: {
+                        redirectTo: this.props.history.location.pathname,
+                        redirectState: { shouldTrackMovie: true },
+                      },
+                      }}
+                    >
+                      Track
+                    </Button>
+                  }
                   <table className={styles.view__content__involved}>
                     <tbody>
                       <tr>
@@ -258,6 +296,7 @@ class MovieDetailView extends React.Component {
 }
 
 MovieDetailView.propTypes = {
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
   match: PropTypes.objectOf(PropTypes.any).isRequired,
   requestMovieByTitle: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
@@ -276,4 +315,4 @@ const mapDispatchToProps = {
   requestMovieByTitle,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MovieDetailView);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MovieDetailView));
