@@ -64,6 +64,18 @@ class ProfileView extends React.Component {
       });
       this.props.getUser(nextProps.match.params.id);
     }
+
+    if (this.props.match.params.id !== nextProps.match.params.id) {
+      getTrackedMoviesByUser(nextProps.match.params.id)
+        .then((response) => {
+          const watchedMovies = response.filter(x => x.watched).slice(0, 4);
+          const unwatchedMovies = response.filter(x => !x.watched).slice(0, 4);
+          this.setState({
+            watchedMovies,
+            unwatchedMovies,
+          });
+        });
+    }
   }
 
   onEdit() {
@@ -101,8 +113,7 @@ class ProfileView extends React.Component {
           onUpdate={user => this.onUpdate({ ...user, id })}
           user={this.props.user}
         />
-        <div className={styles.view__background} />
-        <div className={styles.view__header}>
+        <div className={styles.view__background}>
           <div className={styles.header}>
             <div className={styles.header__picture}>
               <ProfilePicture
@@ -121,6 +132,8 @@ class ProfileView extends React.Component {
               </div>
             </div>
           </div>
+        </div>
+        <div className={styles.view__content}>
           <div className={styles.buttons__container}>
             <div className={styles.buttons}>
               {isOwner &&

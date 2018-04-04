@@ -12,10 +12,14 @@ namespace MovieTime.Web.TrackedMovies
     public class TrackService : ITrackService
     {
         private readonly ITrackRepository _trackRepository;
+        private readonly IMovieRespository _movieRepository;
+        private readonly IUserRepository _userRepository;
         
-        public TrackService(ITrackRepository trackRepository)
+        public TrackService(ITrackRepository trackRepository, IMovieRespository movieRepository, IUserRepository userRepository)
         {
             _trackRepository = trackRepository;
+            _movieRepository = movieRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<bool> TrackMovie(TrackedMovie model)
@@ -56,6 +60,18 @@ namespace MovieTime.Web.TrackedMovies
 
             var result = await _trackRepository.Update(track);
             return result;
+        }
+
+        public async Task<bool> MovieExist(string movieId)
+        {
+            var countMatches = await _movieRepository.CountMatch(x => x.Id == movieId);
+            return countMatches > 0;
+        }
+
+        public async Task<bool> UserExist(string userId)
+        {
+            var countMatches = await _userRepository.CountMatch(x => x.Id == userId);
+            return countMatches > 0;
         }
     }
 }
