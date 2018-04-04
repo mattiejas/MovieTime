@@ -55,6 +55,18 @@ class ProfileView extends React.Component {
       });
       this.props.getUser(nextProps.match.params.id);
     }
+
+    if (this.props.match.params.id !== nextProps.match.params.id) {
+      getTrackedMoviesByUser(nextProps.match.params.id)
+        .then((response) => {
+          const watchedMovies = response.filter(x => x.watched).slice(0, 4);
+          const unwatchedMovies = response.filter(x => !x.watched).slice(0, 4);
+          this.setState({
+            watchedMovies,
+            unwatchedMovies,
+          });
+        });
+    }
   }
 
   onEdit() {
