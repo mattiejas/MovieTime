@@ -23,12 +23,14 @@ class Home extends React.Component {
   render() {
     return (
       <div className={styles.view}>
-        <div className={styles.background} />
-        <div className={styles.content}>
+        <div className={styles.background}>
           <div className={styles.header}>
             <h1>MovieTime</h1>
-            <p>Because there a so many good movies and there is so little time</p>
+            <h3>Because there are <span>SO MANY</span> good movies.</h3>
+            <p>Track the movies you <span>(want to)</span> watch(ed) and share your reactions with a movie loving community.</p>
           </div>
+        </div>
+        <div className={styles.content}>
           <ListWidget movies={this.state.trending} title="Trending" />
           <ListWidget movies={this.state.recentlyTracked} title="Recently Tracked" />
         </div>
