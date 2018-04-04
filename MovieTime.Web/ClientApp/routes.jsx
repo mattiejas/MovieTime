@@ -70,6 +70,7 @@ class Routes extends React.Component {
       isAuthenticated: PropTypes.bool,
       authenticateById: PropTypes.func.isRequired,
       unauthenticate: PropTypes.func.isRequired,
+      history: PropTypes.objectOf(PropTypes.any).isRequired,
     };
 
     static defaultProps = {
@@ -80,7 +81,10 @@ class Routes extends React.Component {
       auth.onAuthStateChanged((user) => {
         if (user) {
           this.props.authenticateById(user.uid, () => {
-            registerAfterGoogleSignIn(user).then(() => this.props.authenticateById(user.uid));
+            registerAfterGoogleSignIn(user)
+              .then(() => this.props.authenticateById(user.uid))
+              .then(() =>
+                this.props.history.push(`/users/${user.uid}`));
           });
         } else {
           this.props.unauthenticate();
