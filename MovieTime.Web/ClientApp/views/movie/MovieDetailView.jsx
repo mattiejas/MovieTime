@@ -164,6 +164,9 @@ class MovieDetailView extends React.Component {
                   <MoviePoster source={poster} alt={`${title} poster`} />
                 </Placeholder>
               }
+              {poster === 'N/A' &&
+                <img src="/assets/poster-placeholder.jpg" alt={title} className={styles['fallback-image']} />
+              }
             </div>
             <div className="*column">
               <div className={styles.view__content__heading}>
