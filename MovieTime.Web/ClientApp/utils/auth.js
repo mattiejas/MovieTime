@@ -80,13 +80,6 @@ export async function removeUser(password) {
   await removeUserFromFirebase(password);
 }
 
-export async function newGoogleLoginHappened() {
-  const provider = new firebase.auth.GoogleAuthProvider();
-  await firebase
-    .auth()
-    .signInWithRedirect(provider);
-}
-
 export async function registerAfterGoogleSignIn(user) {
   if (user.providerData[0].providerId === 'google.com') {
     const first = user.displayName.substring(0, user.displayName.indexOf(' '));
@@ -100,4 +93,11 @@ export async function registerAfterGoogleSignIn(user) {
 
     await registerWithBackEnd(person, token);
   }
+}
+
+export async function newGoogleLoginHappened() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  await firebase
+    .auth()
+    .signInWithRedirect(provider);
 }
