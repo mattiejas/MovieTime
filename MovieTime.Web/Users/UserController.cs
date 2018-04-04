@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +8,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.KeyVault.Models;
 using MovieTime.Web.Auth;
+using MovieTime.Web.Comments;
+using MovieTime.Web.TrackedMovies;
+using MovieTime.Web.TrackedMovies.Models;
 using MovieTime.Web.Users.Models;
+using MovieTime.Web.Users.Models.GDPR;
 using Serilog;
 
 namespace MovieTime.Web.Users
@@ -16,12 +21,16 @@ namespace MovieTime.Web.Users
     public class UserController : Controller
     {
         private readonly IUserService _userService;
+        private readonly ITrackService _trackService;
+        private readonly ICommentService _commentService;
         private readonly IMapper _mapper;
         private const string GetUserRoute = "GetUser";
 
-        public UserController(IUserService userService, IMapper mapper)
+        public UserController(IUserService userService, ITrackService trackService, ICommentService commentService, IMapper mapper)
         {
             _userService = userService;
+            _trackService = trackService;
+            _commentService = commentService;
             _mapper = mapper;
         }
 
@@ -58,6 +67,35 @@ namespace MovieTime.Web.Users
             var routeValue = new {id = user.Id};
 
             return CreatedAtRoute(GetUserRoute, routeValue, userToReturn);
+        }
+
+        [HttpGet("info")]
+        public async Task<IActionResult> GetAllUserInformation()
+        {
+            //Todo: Firebase stores information like created date. I don't know how to retrieve those information.
+            
+            var userIdFromToken = this.User.GetUserId();
+            if (userIdFromToken == null) return Unauthorized();
+
+            var userExists = await _userService.UserExist(userIdFromToken);
+            if (!userExists) return NotFound();
+
+            var trackedMovies = await _trackService.GetTrackedMoviesByUser(userIdFromToken);
+            var writtenComments = await _commentService.AllCommentsByUser(userIdFromToken);
+            var user = await _userService.GetUser(userIdFromToken);
+
+            var trackedMoviesToReturn = _mapper.Map<ICollection<TrackedMovie>, List<MovieTrackGdprDto>>(trackedMovies);
+            var writtenCommentsToReturn = _mapper.Map<ICollection<Comment>, List<MovieCommentGdprDto>>(writtenComments);
+            var userToReturn = _mapper.Map<User, UserGdprDto>(user);
+            
+            var bundledInfoToReturn = new UserAllDataGetDto()
+            {
+                User = userToReturn,
+                TrackedMovies = trackedMoviesToReturn,
+                Comments = writtenCommentsToReturn
+            };
+            
+            return Ok(bundledInfoToReturn);
         }
 
         [HttpPut("{id}")]
