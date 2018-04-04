@@ -7,7 +7,7 @@ namespace MovieTime.Web.ThirdPartyServices
 {
     public interface IThirdPartyMovieRepository
     {
-        Task<SearchResultsModel> GetMoviesByTitle(string title, int page=1);
+        Task<SearchResultsModel> GetMoviesByTitle(string title, int page = 1);
         Task<Movie> GetMovieById(string id);
         Task<Movie> GetMovieByTitle(string title);
     }

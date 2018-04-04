@@ -9,7 +9,7 @@
   width: calc(100% - 40px);
   height: 35px;
   margin: 20px;
-  padding: 0 15px;
+  padding: 0 0 0 15px;
 
   .search-input {
     color: $font-color;
@@ -17,7 +17,6 @@
     width: 100%;
     height: 35px;
     padding: 0;
-    border: 0;
     &:focus {
       box-shadow: none !important;
     }
@@ -28,10 +27,14 @@
     }
   }
 
-  button {
+  .button {
     border: 0;
     display: inline-block;
     height: 35px;
+    box-shadow: none;
+    border-left: 1px solid darken($button-default-color, 5);
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
     .search-icon {
       display: block;
       color: $secondary-color;

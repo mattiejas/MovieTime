@@ -14,7 +14,7 @@ namespace MovieTime.Tests.Movies
 
     public class OmdbRepositoryTest
     {
-        private readonly IThirdPartyMovieRepository _movieRepository;
+        private IThirdPartyMovieRepository _movieRepository;
 
         public OmdbRepositoryTest()
         {

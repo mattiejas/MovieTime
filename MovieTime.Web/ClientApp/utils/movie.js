@@ -19,11 +19,11 @@ export function untrackMovie(movieId) {
 
 export function isMovieTracked(userId, movieId) {
   return getTokenAndRequestHeader()
-    .then(requestHeader => fetch(`/api/tracked/movie/${movieId}`, {
+    .then(requestHeader => betterFetch(`/api/tracked/movie/${movieId}`, {
       method: 'get',
       headers: requestHeader,
     }))
-    .then(response => response.json());
+    .then(response => ({ ...response, id: movieId }));
 }
 
 export function getCommentsOnMovie(movieId) {
@@ -32,6 +32,14 @@ export function getCommentsOnMovie(movieId) {
       method: 'get',
       headers: requestHeader,
     }));
+}
+
+export function getMovieById(id) {
+  return betterFetch(`/api/movies/${id}`);
+}
+
+export function searchMovies(q) {
+  return fetch(`/api/movies/search/${q}`).then(response => response.json());
 }
 
 export function getCommentsByUser(userId) {

@@ -22,18 +22,20 @@ class ListWidget extends React.Component {
     if (this.props.movies.length === 0) {
       return null;
     }
+    const { length } = this.props.movies;
+    const movies = this.props.movies.slice(0, 4);
     return (
       <div className={styles.wrapper}>
         <h4>{this.props.title}</h4>
         <div className={styles['list-widget']}>
-          {this.props.movies.map((element, index) => {
-            if (this.props.movies.length > 4 && index === 3) {
+          {movies.map((element, index) => {
+            if (length > 4 && index === 3) {
               return (<MoviePoster
                 key={`movie-${element.title}`}
                 className={cn(styles.poster, styles['last-poster'])}
                 source={element.poster}
                 alt={`${element.title} poster`}
-                onClick={() => this.onClick('/list')}
+                onClick={() => this.onClick(`/list?userId=${this.props.userId}&type=${this.props.type}`)}
               />
               );
             }
@@ -42,7 +44,7 @@ class ListWidget extends React.Component {
               className={styles.poster}
               source={element.poster}
               alt={`${element.title} poster`}
-              onClick={() => this.onClick(`/movies/${element.title}`)}
+              onClick={() => this.onClick(`/movies/${element.movieId}`)}
             />);
           })}
         </div>
@@ -55,6 +57,13 @@ ListWidget.propTypes = {
   movies: PropTypes.arrayOf(PropTypes.any).isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
   title: PropTypes.string.isRequired,
+  userId: PropTypes.string,
+  type: PropTypes.string,
+};
+
+ListWidget.defaultProps = {
+  userId: '',
+  type: '',
 };
 
 export default withRouter(ListWidget);
