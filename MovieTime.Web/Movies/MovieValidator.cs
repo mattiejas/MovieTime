@@ -1,7 +1,11 @@
-﻿namespace MovieTime.Web.Movies
+﻿using FluentValidation;
+using MovieTime.Web.Movies.Models;
+
+namespace MovieTime.Web.Movies
 {
-    public class MovieValidator
+    public class MovieValidator : AbstractValidator<Movie>
     {
+//        public Movie
         
     }
 }
