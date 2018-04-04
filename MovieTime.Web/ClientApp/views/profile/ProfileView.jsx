@@ -33,8 +33,8 @@ class ProfileView extends React.Component {
     this.props.getUser(id).then(() => {
       getTrackedMoviesByUser(id)
         .then((response) => {
-          const watchedMovies = response.filter(x => x.watched).slice(0, 4);
-          const unwatchedMovies = response.filter(x => !x.watched).slice(0, 4);
+          const watchedMovies = response.filter(x => x.watched).slice(0, 5);
+          const unwatchedMovies = response.filter(x => !x.watched).slice(0, 5);
           this.setState({
             watchedMovies,
             unwatchedMovies,
@@ -126,14 +126,14 @@ class ProfileView extends React.Component {
           <div className={styles.content}>
             <ListWidget
               title="Wants to watch"
-              type="TO_WATCH"
+              type="to_watch"
               userId={id}
               movies={this.state.unwatchedMovies}
               history={this.props.history}
             />
             <ListWidget
               title="Has watched"
-              type="WATCHED"
+              type="watched"
               userId={id}
               movies={this.state.watchedMovies}
               history={this.props.history}

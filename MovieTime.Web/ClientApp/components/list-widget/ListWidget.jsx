@@ -27,7 +27,7 @@ class ListWidget extends React.Component {
         <h4>{this.props.title}</h4>
         <div className={styles['list-widget']}>
           {this.props.movies.map((element, index) => {
-            if (index === 3) {
+            if (this.props.movies.length > 4 && index === 3) {
               return (<MoviePoster
                 key={`movie-${element.title}`}
                 className={cn(styles.poster, styles['last-poster'])}
