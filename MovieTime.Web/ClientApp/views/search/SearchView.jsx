@@ -7,7 +7,6 @@ import Table from '../../components/table/Table';
 
 import styles from './SearchView.scss';
 import { searchMovies } from '../../utils/movie';
-import Button from '../../components/button/Button';
 
 class SearchView extends React.Component {
   static propTypes = {
@@ -107,17 +106,17 @@ class SearchView extends React.Component {
         this.setPage(page, _.map(data, movie => SearchView.responseToMovieMapping(movie)), true);
 
         // if there a no results any more
-        if (data.length < 10) {
-          this.setState({
-            movies: {
-              ...this.state.movies,
-              [this.state.movies.length + 1]: [{
-                id: null,
-                title: <span className={styles['no-results']}>No results found</span>,
-              }],
-            },
-          });
-        }
+        // if (data.length < 10) {
+        //   this.setState({
+        //     movies: {
+        //       ...this.state.movies,
+        //       [this.state.movies.length + 1]: [{
+        //         id: null,
+        //         title: <span className={styles['no-results']}>No results found</span>,
+        //       }],
+        //     },
+        //   });
+        // }
       });
   }
 
@@ -141,12 +140,23 @@ class SearchView extends React.Component {
           </div>
         </div>
         <div className={styles.view__content} ref={(content) => { this.content = content; }}>
-          <Table
-            headers={headers}
-            rows={movies}
-            onRowClick={(e, m) => this.onClick(e, m)}
-          />
-          <Button className={styles.next} onClick={() => this.nextPage()}>Next Page</Button>
+          {movies.length === 0 &&
+            // <span className={styles['no-results']}>No results found</span>
+            <Table
+              headers={headers}
+              rows={[{
+                id: null,
+                title: <span className={styles['no-results']}>No results found</span>,
+              }]}
+            />
+          }
+          {movies.length > 0 &&
+            <Table
+              headers={headers}
+              rows={movies}
+              onRowClick={(e, m) => this.onClick(e, m)}
+            />
+          }
         </div>
       </div>
     );
