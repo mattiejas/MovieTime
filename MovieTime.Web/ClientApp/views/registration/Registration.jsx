@@ -53,17 +53,19 @@ class Registration extends React.Component {
         isLoading: true,
       });
 
-      register(person).then((response) => {
-        if (!response.success) {
-          this.setState({
-            fieldError: response.message,
-            isLoading: false,
-          });
-        } else {
-          logout();
-          this.props.history.push('/login', { afterRegister: true });
-        }
-      });
+      register(person)
+        .then((response) => {
+          if (!response.success) {
+            this.setState({
+              fieldError: response.message,
+              isLoading: false,
+            });
+          } else {
+            logout().then(() => {
+              this.props.history.push('/login', { afterRegister: true });
+            });
+          }
+        });
     }
 
     onInputChange(e, error) {
