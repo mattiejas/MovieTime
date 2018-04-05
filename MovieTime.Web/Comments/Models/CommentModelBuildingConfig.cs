@@ -27,7 +27,6 @@ namespace MovieTime.Web.Comments.Models
             comment.Property(c => c.Value).HasMaxLength(2000).IsRequired();
             comment.Property(c => c.Date).IsRequired();
             comment.Property(c => c.MovieId).IsRequired();
-            comment.Property(c => c.UserId).IsRequired();
         }
     }
 }
