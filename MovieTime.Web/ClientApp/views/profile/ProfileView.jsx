@@ -1,11 +1,16 @@
-import React from 'react';
+import FileSaver from 'file-saver';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import React from 'react';
+import moment from 'moment';
+import _ from 'lodash';
+import humanize from 'humanize-duration';
+import XLSX from 'xlsx';
 
 import { updateUser, getUser } from '../../modules/users';
 import { authenticateById } from '../../modules/auth';
 
-import { getTrackedMoviesByUser } from '../../utils/user';
+import { getTrackedMoviesByUser, downloadUserData } from '../../utils/user';
 
 import ListWidget from '../../components/list-widget/ListWidget';
 import Placeholder from '../../components/placeholder/Placeholder';
@@ -17,6 +22,37 @@ import styles from './ProfileView.scss';
 import CommentSection from '../../components/comments/CommentSection';
 
 class ProfileView extends React.Component {
+  static downloadInformation() {
+    downloadUserData()
+      .then((data) => {
+        const workbook = XLSX.utils.book_new();
+
+        Object.keys(data).forEach((key) => {
+          let table;
+          let worksheet;
+          if (key === 'user') {
+            table = [
+              Object.keys(data[key]),
+              Object.values(data[key]),
+            ];
+            worksheet = XLSX.utils.aoa_to_sheet(table);
+          } else if (data[key].length > 0) {
+            const header = Object.keys(data[key][0]);
+            table = [header];
+            data[key].forEach(row => table.push(Object.values(row)));
+            worksheet = XLSX.utils.aoa_to_sheet(table);
+          }
+
+          console.log(table);
+          if (worksheet) {
+            XLSX.utils.book_append_sheet(workbook, worksheet, key);
+          }
+        });
+
+        XLSX.writeFile(workbook, 'user_data.xlsb');
+      });
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -33,8 +69,8 @@ class ProfileView extends React.Component {
     this.props.getUser(id).then(() => {
       getTrackedMoviesByUser(id)
         .then((response) => {
-          const watchedMovies = response.filter(x => x.watched).slice(0, 4);
-          const unwatchedMovies = response.filter(x => !x.watched).slice(0, 4);
+          const watchedMovies = response.filter(x => x.watched);
+          const unwatchedMovies = response.filter(x => !x.watched);
           this.setState({
             watchedMovies,
             unwatchedMovies,
@@ -75,6 +111,7 @@ class ProfileView extends React.Component {
     });
   }
 
+
   onDiscard() {
     this.setState({
       isEditing: false,
@@ -94,6 +131,9 @@ class ProfileView extends React.Component {
     const { isOwner, isLoading } = this.state;
     const { firstName, lastName } = this.props.user;
     const { id } = this.props.match.params;
+
+    let duration = moment.duration(_.reduce(this.state.watchedMovies, (sum, mv) => sum + mv.runTime, 0), 'minutes');
+    duration = humanize(duration, { conjunction: ' and ', serialComma: false });
 
     return (
       <div className={styles.view}>
@@ -116,7 +156,7 @@ class ProfileView extends React.Component {
                 <Placeholder isReady={!isLoading}>
                   <h1>{`${firstName} ${lastName}`}</h1>
                   <h3>
-                    has watched ... movies worthy of ... hours and ... minutes
+                    spent {duration} watching movies
                   </h3>
                 </Placeholder>
               </div>
@@ -134,16 +174,24 @@ class ProfileView extends React.Component {
               >
                 Edit
               </Button>}
+              { isOwner &&
+              <Button icon="download" dark onClick={() => ProfileView.downloadInformation()}>
+                Download my information
+              </Button>}
             </div>
           </div>
           <div className={styles.content}>
             <ListWidget
               title="Wants to watch"
+              type="to_watch"
+              userId={id}
               movies={this.state.unwatchedMovies}
               history={this.props.history}
             />
             <ListWidget
               title="Has watched"
+              type="watched"
+              userId={id}
               movies={this.state.watchedMovies}
               history={this.props.history}
             />

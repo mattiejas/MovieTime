@@ -9,6 +9,8 @@ using MovieTime.Web.ThirdPartyServices.OMDB.Movies;
 using MovieTime.Web.Users;
 using MovieTime.Web.Users.Models;
 using MovieTime.Web.TrackedMovies.Models;
+using MovieTime.Web.Genres.Models;
+using MovieTime.Web.Users.Models.GDPR;
 
 namespace MovieTime.Web.Utilities
 {
@@ -30,6 +32,9 @@ namespace MovieTime.Web.Utilities
             
             CreateMap<MovieCreateDto, Movie>();
 
+            CreateMap<ShortMovieModel, ShortMovieDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ImdbId));
+                
             CreateMap<UserCreateDto, User>();
             CreateMap<UserUpdateDto, User>();
             CreateMap<UserGetDto, User>();
@@ -45,11 +50,18 @@ namespace MovieTime.Web.Utilities
             CreateMap<TrackedMoviesGetDto, TrackedMovie>()
                 .ForPath(dest => dest.Movie.Title, opt => opt.MapFrom(src => src.Title))
                 .ForPath(dest => dest.Movie.Year, opt => opt.MapFrom(src => src.Year))
+                .ForPath(dest => dest.Movie.ImdbRating, opt => opt.MapFrom(src => src.ImdbRating))
                 .ForPath(dest => dest.Movie.RunTimeInMinutes, opt => opt.MapFrom(src => src.RunTime))
                 .ForPath(dest => dest.Movie.Poster, opt => opt.MapFrom(src => src.Poster))
                 .ForPath(dest => dest.Watched, opt => opt.MapFrom(src => src.Watched))
                 .ForPath(dest => dest.CreatedTime, opt => opt.MapFrom(src => src.CreatedTime))
                 .ReverseMap();
+
+            CreateMap<User, UserGdprDto>();
+            CreateMap<Comment, MovieCommentGdprDto>()
+                .ForMember(dest => dest.MovieTitle, opt => opt.MapFrom(src => src.Movie.Title));
+            CreateMap<TrackedMovie, MovieTrackGdprDto>()
+                .ForMember(dest => dest.MovieTitle, opt => opt.MapFrom(src => src.Movie.Title));
         }
     }
 }

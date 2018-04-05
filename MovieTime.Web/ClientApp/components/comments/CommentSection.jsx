@@ -166,7 +166,7 @@ class CommentSection extends React.Component {
                           comment={comment.value}
                           linkTo={this.props.type === 'movie' ?
                             `/users/${comment.user.id}` :
-                            `/movies/${comment.movie.title}`}
+                            `/movies/${comment.movie.id}`}
                           key={key}
                         />))
                   }
