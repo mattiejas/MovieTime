@@ -4,10 +4,9 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import Table from '../../components/table/Table';
-import Icon from '../../components/icon/Icon';
 
 import styles from './SearchView.scss';
-import { searchMovies, /* isMovieTracked, */ trackMovie, untrackMovie, toggleWatchStatus } from '../../utils/movie';
+import { searchMovies } from '../../utils/movie';
 
 class SearchView extends React.Component {
   static propTypes = {
@@ -20,118 +19,105 @@ class SearchView extends React.Component {
     authId: null,
   };
 
-  state = {
-    movies: [],
-  };
+  static responseToMovieMapping = m => ({
+    id: m.id,
+    title: m.title,
+    year: m.year,
+  });
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      movies: {},
+      page: 1,
+      stopRequesting: false,
+    };
+
+    this.onScroll = this.onScroll.bind(this);
+  }
 
   componentDidMount() {
     this.search(this.props.match.params.query);
+    window.addEventListener('scroll', this.onScroll);
   }
 
   componentWillReceiveProps(nextProps) {
     if (!this.props.authId || this.props.match.params.query !== nextProps.match.params.query) {
-      this.search(nextProps.match.params.query);
+      this.search(nextProps.match.params.query, 1);
     }
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.onScroll);
+  }
+
 
   onClick(e, movie) {
     e.stopPropagation();
-    this.props.history.push(`/movies/${movie.id}`);
-  }
-
-  replaceMovie(movie, replacement) {
-    const index = _.findIndex(this.state.movies, m => m.id === movie.id);
-
-    this.setState({
-      movies: [
-        ...this.state.movies.slice(0, index),
-        replacement,
-        ...this.state.movies.slice(index + 1),
-      ],
-    });
-  }
-
-  toggleMovieState(e, movie) {
-    e.stopPropagation();
-
-    if (movie.isTracked && movie.isWatched) {
-      untrackMovie(movie.id).then(() => {
-        const untracked = {
-          ...movie,
-          isTracked: false,
-          isWatched: false,
-        };
-        untracked.watched = <Icon type="plus" onClick={x => this.toggleMovieState(x, untracked)} />;
-        this.replaceMovie(movie, untracked);
-      });
-    } else if (movie.isTracked && !movie.isWatched) {
-      toggleWatchStatus(movie.id).then(() => {
-        const watched = {
-          ...movie,
-          isTracked: true,
-          isWatched: true,
-        };
-        watched.watched = <Icon type="eye-slash" onClick={x => this.toggleMovieState(x, watched)} />;
-        this.replaceMovie(movie, watched);
-      });
-    } else {
-      trackMovie(movie.id).then(() => {
-        const tracked = {
-          ...movie,
-          isTracked: true,
-          isWatched: false,
-        };
-        tracked.watched = <Icon type="eye" onClick={x => this.toggleMovieState(x, tracked)} />;
-        this.replaceMovie(movie, tracked);
-      });
+    if (movie.id) {
+      this.props.history.push(`/movies/${movie.id}`);
     }
   }
 
-  search(query) {
-    searchMovies(query).then((data) => {
-      // when authenticated show track state of the movie
-      // if (this.props.authId) {
-      //   const areMoviedTracked = _.map(data, m => isMovieTracked(this.props.authId, m.id));
-      //   Promise.all(areMoviedTracked).then((tracked) => {
-      //     const movies = [];
-      //     tracked.forEach((t) => {
-      //       movies.push({ ..._.find(data, x => x.id === t.id), ...t });
-      //     });
+  onScroll() {
+    if (this.scrollTimeout) {
+      this.scrollTimeout = clearTimeout(this.scrollTimeout);
+    }
 
-      //     this.setState({
-      //       movies: _.map(movies, m => ({
-      //         id: m.id,
-      //         title: m.title,
-      //         length: m.runTimeInMinutes,
-      //         year: m.year,
-      //         genre: m.genre,
-      //         rating: m.rating,
-      //         watched: (
-      //           <Icon
-      //             // oh baby, it's a double 🤷‍♀️
-      //             // eslint-disable-next-line no-nested-ternary
-      //             type={m.isTracked ? (m.isWatched ? 'eye-slash' : 'eye') : 'plus'}
-      //             onClick={e => this.toggleMovieState(e, m)}
-      //           />
-      //         ),
-      //       })),
-      //     });
-      //   });
+    if ((window.innerHeight + window.scrollY) >= (document.body.scrollHeight - 100)) {
+      if (!this.state.stopRequesting) {
+        this.scrollTimeout = setTimeout(() => this.nextPage(), 500);
+      }
+    }
+  }
 
-      // // don't show track state when not authenticated
-      // } else {
+  setPage(index, content, updatePage = false) {
+    const fetchMoreIfThereIsEnoughSpace = () => {
+      if (this.content && this.content.clientHeight <= window.innerHeight) {
+        this.nextPage();
+      }
+    };
+
+    if (index === 1) {
       this.setState({
-        movies: _.map(data, m => ({
-          id: m.id,
-          title: m.title,
-          length: m.runTimeInMinutes,
-          year: m.year,
-          genre: m.genre,
-          rating: m.rating,
-        })),
+        movies: {
+          [index]: content,
+        },
+        page: updatePage ? index + 1 : this.state.page,
+      }, () => fetchMoreIfThereIsEnoughSpace());
+    } else {
+      this.setState({
+        movies: {
+          ...this.state.movies,
+          [index]: content,
+        },
+        page: updatePage ? index + 1 : this.state.page,
+      }, () => fetchMoreIfThereIsEnoughSpace());
+    }
+  }
+
+  nextPage() {
+    this.search(this.props.match.params.query);
+  }
+
+  search(query, page = this.state.page) {
+    searchMovies(query, page)
+      .then((data) => {
+        this.setPage(page, _.map(data, movie => SearchView.responseToMovieMapping(movie)), true);
+
+        // if there a no results any more
+        // if (data.length < 10) {
+        //   this.setState({
+        //     movies: {
+        //       ...this.state.movies,
+        //       [this.state.movies.length + 1]: [{
+        //         id: null,
+        //         title: <span className={styles['no-results']}>No results found</span>,
+        //       }],
+        //     },
+        //   });
+        // }
       });
-      // }
-    });
   }
 
   render() {
@@ -140,20 +126,37 @@ class SearchView extends React.Component {
       year: 'Year',
     };
 
-    // if (this.props.authId) {
-    //   headers.watched = <Icon type="eye" />;
-    // }
+    const pages = Object.keys(this.state.movies);
+    const movies = [];
+    pages.forEach((page) => {
+      movies.push(...this.state.movies[page]);
+    });
 
     return (
       <div>
-        <div className={styles.view__background} />
-        <div className={styles.view__content}>
-          <h4>Search on &#39;{this.props.match.params.query}&#39;</h4>
-          <Table
-            headers={headers}
-            rows={this.state.movies}
-            onRowClick={(e, m) => this.onClick(e, m)}
-          />
+        <div className={styles.view__background}>
+          <div className={styles.container}>
+            <h4>Search on &#39;<span>{this.props.match.params.query}</span>&#39;</h4>
+          </div>
+        </div>
+        <div className={styles.view__content} ref={(content) => { this.content = content; }}>
+          {movies.length === 0 &&
+            // <span className={styles['no-results']}>No results found</span>
+            <Table
+              headers={headers}
+              rows={[{
+                id: null,
+                title: <span className={styles['no-results']}>No results found</span>,
+              }]}
+            />
+          }
+          {movies.length > 0 &&
+            <Table
+              headers={headers}
+              rows={movies}
+              onRowClick={(e, m) => this.onClick(e, m)}
+            />
+          }
         </div>
       </div>
     );

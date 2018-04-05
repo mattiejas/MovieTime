@@ -38,9 +38,8 @@ export function getMovieById(id) {
   return betterFetch(`/api/movies/${id}`);
 }
 
-export function searchMovies(q) {
-  return fetch(`/api/movies/search/${q}`).then(response => response.json());
-}
+export const searchMovies = (q, page = 1) =>
+  betterFetch(`/api/movies/search/${q}/page/${page}`);
 
 export function getCommentsByUser(userId) {
   return getTokenAndRequestHeader()
@@ -70,10 +69,10 @@ export function toggleWatchStatus(movieId) {
 }
 
 export const getMovieByTitle = title =>
-  betterFetch(`/api/movie/title/${title}`);
+  betterFetch(`/api/movies/title/${title}`);
 
 export const getTrendingMovies = count =>
-  betterFetch(`/api/movie/trending/${count}`);
+  betterFetch(`/api/movies/trending/${count}`);
 
 export const getRecentlyTrackedMovies = count =>
-  betterFetch(`/api/movie/trending/tracked/${count}`);
+  betterFetch(`/api/movies/trending/tracked/${count}`);
