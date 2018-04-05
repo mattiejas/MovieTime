@@ -49,7 +49,13 @@ module.exports = (env) => {
         new webpack.DefinePlugin({
           'process.env.NODE_ENV': isDevBuild ? '"development"' : '"production"',
         }),
-      ].concat(isDevBuild ? [] : [new UglifyJsPlugin()]),
+      ].concat(isDevBuild ? [] : [
+        new UglifyJsPlugin(),
+        new webpack.optimize.CommonsChunkPlugin({
+          name: 'vendor',
+          minChunks: Infinity,
+        }),
+      ]),
     },
   ];
 };
