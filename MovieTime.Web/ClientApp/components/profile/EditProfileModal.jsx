@@ -65,6 +65,7 @@ class EditProfileModal extends React.Component {
     removeUser(email, password)
       .then(() => {
         this.props.hideModal();
+        console.log('state', this.state);
         unauthenticate();
       })
       .catch(err => this.setState({ error: err.message }));

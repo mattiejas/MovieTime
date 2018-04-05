@@ -72,12 +72,12 @@ async function removeUserFromBackend() {
   await fetch('/auth/unregister/', {
     method: 'post',
     headers: requestHeader,
-  });
+  }).then(response => console.log('result removeUserFromBackend', response));
 }
 
 export async function removeUser(password) {
   await removeUserFromBackend();
-  await removeUserFromFirebase(password);
+  return removeUserFromFirebase(password);
 }
 
 export async function registerAfterGoogleSignIn(user) {
