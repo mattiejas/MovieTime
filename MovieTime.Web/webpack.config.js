@@ -2,27 +2,20 @@ require('babel-polyfill');
 
 const path = require('path');
 const webpack = require('webpack');
+const merge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = (env) => {
-  // const isDevBuild = (env && env.dev) || (env && !env.prod) || true;
-
-  return {
-    entry: { main: ['babel-polyfill', './ClientApp/boot.jsx'] },
+  const isDevBuild = !env || env.NODE_ENV !== 'production';
+  const dev = {
     devtool: 'inline-source-map',
-    resolve: { extensions: ['.js', '.jsx'] },
-    node: {
-      fs: 'empty',
-      net: 'empty',
-      tls: 'empty',
-      child_process: 'empty',
-    },
     module: {
       rules: [
         {
           enforce: 'pre',
-          test: /\.(js|jsx)$/,
           exclude: /node_modules/,
+          test: /\.(js|jsx)$/,
           loader: 'eslint-loader',
           options: {
             fix: true,
@@ -30,28 +23,12 @@ module.exports = (env) => {
           },
         },
         {
-          test: /\.(js|jsx)$/,
-          include: /ClientApp/,
-          exclude: /(node_modules|bower_components)/,
-          use: [
-            {
-              loader: 'babel-loader',
-              options: {
-                babelrc: false,
-                presets: ['env', 'react'],
-                plugins: [
-                  'transform-class-properties',
-                  'transform-es2015-destructuring',
-                  'transform-object-rest-spread',
-                  'transform-async-to-generator',
-                ],
-              },
-            },
-          ],
+          test: /\.css$/,
+          use: 'css-loader',
         },
         {
           test: /\.scss$/,
-          include: /ClientApp/,
+          exclude: /node_modules/,
           use: [
             {
               loader: 'style-loader',
@@ -80,6 +57,94 @@ module.exports = (env) => {
             },
           ],
         },
+      ],
+    },
+    plugins: [],
+  };
+
+  const prod = {
+    module: {
+      rules: [
+        {
+          test: /\.css$/,
+          use: ExtractTextPlugin.extract({
+            fallback: 'style-loader',
+            use: 'css-loader?minimize',
+          }),
+        },
+        {
+          test: /\.scss$/,
+          exclude: /node_modules/,
+          use: ExtractTextPlugin.extract({
+            fallback: 'style-loader',
+            use: [
+              {
+                loader: 'css-loader',
+                options: {
+                  modules: true,
+                  minimize: true,
+                  importLoaders: 2,
+                },
+              },
+              {
+                loader: 'postcss-loader',
+              },
+              {
+                loader: 'sass-loader',
+              },
+            ],
+          }),
+        },
+      ],
+    },
+    plugins: [
+      new ExtractTextPlugin({
+        filename: '[name].css',
+      }),
+      new webpack.optimize.ModuleConcatenationPlugin(),
+      new UglifyJsPlugin(),
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': '"production"',
+      }),
+      new webpack.optimize.CommonsChunkPlugin({
+        name: 'main',
+        minChunks: Infinity,
+      }),
+    ],
+  };
+
+  return merge({
+    entry: { main: ['babel-polyfill', './ClientApp/boot.jsx'] },
+    devtool: 'inline-source-map',
+    resolve: { extensions: ['.js', '.jsx'] },
+    node: {
+      fs: 'empty',
+      net: 'empty',
+      tls: 'empty',
+      child_process: 'empty',
+    },
+    module: {
+      rules: [
+        {
+          test: /\.(js|jsx)$/,
+          include: /ClientApp/,
+          exclude: /(node_modules|bower_components)/,
+          use: [
+            {
+              loader: 'babel-loader',
+              options: {
+                babelrc: false,
+                presets: ['env', 'react'],
+                plugins: [
+                  'transform-class-properties',
+                  'transform-es2015-destructuring',
+                  'transform-object-rest-spread',
+                  'transform-async-to-generator',
+                ],
+              },
+            },
+          ],
+        },
         {
           test: /\.(png|jpg|jpeg|gif|svg)$/,
           include: /ClientApp/,
@@ -98,5 +163,5 @@ module.exports = (env) => {
       filename: '[name].js',
       publicPath: 'dist/',
     },
-  };
+  }, isDevBuild ? dev : prod);
 };
