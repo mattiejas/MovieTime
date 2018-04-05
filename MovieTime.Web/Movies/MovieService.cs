@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
-using System.Runtime.InteropServices.ComTypes;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
@@ -57,9 +52,8 @@ namespace MovieTime.Web.Movies
                 return movieModel;
             }
 
-             movieModel = await _thirdPartyMovieRepository.GetMovieById(id);
-            await AddMovie(movieModel); // Cache the movie in our database to improve robustness. Todo: temporary
-
+            movieModel = await _thirdPartyMovieRepository.GetMovieById(id);
+            
             // Cache the movie in our database to improve robustness. Todo: temporary
             await AddMovie(movieModel);
 
@@ -74,8 +68,6 @@ namespace MovieTime.Web.Movies
                 movieModel.Poster = await DownloadMoviePoster(movieModel);
                 return movieModel;
             }
-
-            if (movieModel != null) return movieModel;
 
             movieModel = await _thirdPartyMovieRepository.GetMovieByTitle(title);
             if (movieModel != null) movieModel.Poster = await DownloadMoviePoster(movieModel);
