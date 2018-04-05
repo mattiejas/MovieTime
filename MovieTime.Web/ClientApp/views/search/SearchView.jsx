@@ -26,15 +26,20 @@ class SearchView extends React.Component {
     year: m.year,
   });
 
-  state = {
-    movies: {},
-    page: 1,
-    stopRequesting: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      movies: {},
+      page: 1,
+      stopRequesting: false,
+    };
+
+    this.onScroll = this.onScroll.bind(this);
+  }
 
   componentDidMount() {
     this.search(this.props.match.params.query);
-    window.addEventListener('scroll', e => this.onScroll(e));
+    window.addEventListener('scroll', this.onScroll);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -42,6 +47,11 @@ class SearchView extends React.Component {
       this.search(nextProps.match.params.query, 1);
     }
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.onScroll);
+  }
+
 
   onClick(e, movie) {
     e.stopPropagation();
@@ -63,13 +73,19 @@ class SearchView extends React.Component {
   }
 
   setPage(index, content, updatePage = false) {
+    const fetchMoreIfThereIsEnoughSpace = () => {
+      if (this.content && this.content.clientHeight <= window.innerHeight) {
+        this.nextPage();
+      }
+    };
+
     if (index === 1) {
       this.setState({
         movies: {
           [index]: content,
         },
         page: updatePage ? index + 1 : this.state.page,
-      });
+      }, () => fetchMoreIfThereIsEnoughSpace());
     } else {
       this.setState({
         movies: {
@@ -77,7 +93,7 @@ class SearchView extends React.Component {
           [index]: content,
         },
         page: updatePage ? index + 1 : this.state.page,
-      });
+      }, () => fetchMoreIfThereIsEnoughSpace());
     }
   }
 
@@ -89,9 +105,17 @@ class SearchView extends React.Component {
     searchMovies(query, page)
       .then((data) => {
         this.setPage(page, _.map(data, movie => SearchView.responseToMovieMapping(movie)), true);
+
+        // if there a no results any more
         if (data.length < 10) {
           this.setState({
-            stopRequesting: true,
+            movies: {
+              ...this.state.movies,
+              [this.state.movies.length + 1]: [{
+                id: null,
+                title: <span className={styles['no-results']}>No results found</span>,
+              }],
+            },
           });
         }
       });
@@ -109,13 +133,6 @@ class SearchView extends React.Component {
       movies.push(...this.state.movies[page]);
     });
 
-    if (this.state.stopRequesting) {
-      movies.push({
-        id: null,
-        title: <span className={styles['no-results']}>No more results found</span>,
-      });
-    }
-
     return (
       <div>
         <div className={styles.view__background}>
@@ -129,7 +146,7 @@ class SearchView extends React.Component {
             rows={movies}
             onRowClick={(e, m) => this.onClick(e, m)}
           />
-          <Button onClick={() => this.nextPage()}>Next Page</Button>
+          <Button className={styles.next} onClick={() => this.nextPage()}>Next Page</Button>
         </div>
       </div>
     );
