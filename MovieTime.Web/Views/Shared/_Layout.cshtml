@@ -9,6 +9,11 @@
     <base href="~/" />
 
     <link rel="stylesheet" href="~/dist/vendor.css" asp-append-version="true" />
+    @if (hostingEnv.EnvironmentName != "Development")
+    {
+        <link rel="stylesheet" href="~/dist/main.css" asp-append-version="true" />
+    }
+
     @Html.Raw(JavaScriptSnippet.FullScript)
 </head>
 <body>

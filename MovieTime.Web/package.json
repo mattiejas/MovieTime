@@ -3,8 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "vendor": "webpack --config webpack.config.vendor.js && webpack --config webpack.config.js",
-    "webpack": "webpack --config webpack.config.js",
+    "webpack": "webpack --config webpack.config.vendor.js && webpack --config webpack.config.js --env.NODE_ENV='development'",
+    "webpack:prod": "webpack --config webpack.config.vendor.js --env.prod && webpack --config webpack.config.js --env.NODE_ENV='production'",
     "start": "export ASPNETCORE_ENVIRONMENT=Development && dotnet run",
     "start:prod": "export ASPNETCORE_ENVIRONMENT=Production && dotnet run"
   },
@@ -36,13 +36,16 @@
     "jquery": "3.2.1",
     "json-loader": "0.5.4",
     "node-sass": "^4.7.2",
+    "optimize-css-assets-webpack-plugin": "^4.0.0",
     "postcss-loader": "^2.1.0",
     "redux-devtools": "^3.4.1",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.20.2",
+    "uglifyjs-webpack-plugin": "^1.2.4",
     "url-loader": "0.5.9",
-    "webpack": "2.5.1",
-    "webpack-hot-middleware": "2.18.2"
+    "webpack": "^3.4.1",
+    "webpack-hot-middleware": "2.18.2",
+    "webpack-merge": "^4.1.2"
   },
   "dependencies": {
     "babel-runtime": "https://registry.npmjs.org/babel-runtime/-/babel-runtime-6.26.0.tgz",
