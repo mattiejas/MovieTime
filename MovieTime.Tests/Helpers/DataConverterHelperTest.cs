@@ -30,13 +30,13 @@ namespace MovieTime.Tests.Helpers
             {
                 new MovieGenre()
                 {
-                    DbGenreId = "Horror",
-                    DbMovieId = "3"
+                    GenreId = "Horror",
+                    MovieId = "3"
                 },
                 new MovieGenre()
                 {
-                    DbGenreId = "Thriller",
-                    DbMovieId = "3"
+                    GenreId = "Thriller",
+                    MovieId = "3"
                 }
             };
             
@@ -45,11 +45,11 @@ namespace MovieTime.Tests.Helpers
             int counter = 0;
             foreach (var movieGenre in actual)
             {
-                var movieIdExpected = expected[counter].DbMovieId;
-                var genreIdExpected = expected[counter].DbGenreId;
+                var movieIdExpected = expected[counter].MovieId;
+                var genreIdExpected = expected[counter].GenreId;
 
-                var movieIdActual = movieGenre.DbMovieId;
-                var genreIdActual = movieGenre.DbGenreId;
+                var movieIdActual = movieGenre.MovieId;
+                var genreIdActual = movieGenre.GenreId;
 
                 Assert.Equal(movieIdExpected, movieIdActual);
                 Assert.Equal(genreIdExpected, genreIdActual);
@@ -67,8 +67,8 @@ namespace MovieTime.Tests.Helpers
             {
                 new MovieGenre()
                 {
-                    DbGenreId = "HorrorThriller",
-                    DbMovieId = "3"
+                    GenreId = "HorrorThriller",
+                    MovieId = "3"
                 }
             };
             
@@ -77,11 +77,11 @@ namespace MovieTime.Tests.Helpers
             int counter = 0;
             foreach (var movieGenre in actual)
             {
-                var movieIdExpected = expected[counter].DbMovieId;
-                var genreIdExpected = expected[counter].DbGenreId;
+                var movieIdExpected = expected[counter].MovieId;
+                var genreIdExpected = expected[counter].GenreId;
 
-                var movieIdActual = movieGenre.DbMovieId;
-                var genreIdActual = movieGenre.DbGenreId;
+                var movieIdActual = movieGenre.MovieId;
+                var genreIdActual = movieGenre.GenreId;
 
                 Assert.Equal(movieIdExpected, movieIdActual);
                 Assert.Equal(genreIdExpected, genreIdActual);

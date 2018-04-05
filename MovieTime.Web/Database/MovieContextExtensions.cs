@@ -291,35 +291,35 @@ namespace MovieTime.Web.Database
             {
                 new MovieGenre()
                 {
-                    DbMovieId = movies[0].Id,
-                    DbGenreId = genres[3].Name
+                    MovieId = movies[0].Id,
+                    GenreId = genres[3].Name
                 },
                 new MovieGenre()
                 {
-                    DbMovieId = movies[0].Id,
-                    DbGenreId = genres[4].Name
-                },
-
-                new MovieGenre()
-                {
-                    DbMovieId = movies[1].Id,
-                    DbGenreId = genres[3].Name
+                    MovieId = movies[0].Id,
+                    GenreId = genres[4].Name
                 },
 
                 new MovieGenre()
                 {
-                    DbMovieId = movies[2].Id,
-                    DbGenreId = genres[0].Name
+                    MovieId = movies[1].Id,
+                    GenreId = genres[3].Name
+                },
+
+                new MovieGenre()
+                {
+                    MovieId = movies[2].Id,
+                    GenreId = genres[0].Name
                 },
                 new MovieGenre()
                 {
-                    DbMovieId = movies[2].Id,
-                    DbGenreId = genres[1].Name
+                    MovieId = movies[2].Id,
+                    GenreId = genres[1].Name
                 },
                 new MovieGenre()
                 {
-                    DbMovieId = movies[2].Id,
-                    DbGenreId = genres[2].Name
+                    MovieId = movies[2].Id,
+                    GenreId = genres[2].Name
                 },
             };
 

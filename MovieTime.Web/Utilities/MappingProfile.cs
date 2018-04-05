@@ -27,7 +27,7 @@ namespace MovieTime.Web.Utilities
             CreateMap<Movie, MovieGetDto>()
                 .ForMember(dest => dest.ImdbId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Year.Year.ToString()))
-                .ForMember(dest => dest.Genres, opt => opt.MapFrom(x => x.Genres.Select(y => y.DbGenreId).ToList()))
+                .ForMember(dest => dest.Genres, opt => opt.MapFrom(x => x.Genres.Select(y => y.GenreId).ToList()))
                 .ForMember(dest => dest.RunTime, opt => opt.MapFrom(src => src.RunTimeInMinutes));
             
             CreateMap<MovieCreateDto, Movie>();

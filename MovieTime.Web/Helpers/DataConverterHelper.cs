@@ -31,8 +31,8 @@ namespace MovieTime.Web.Helpers
             {
                 movieGenres.Add(new MovieGenre()
                 {
-                    DbGenreId = genre,
-                    DbMovieId = movieId
+                    GenreId = genre,
+                    MovieId = movieId
                 });
             }
 

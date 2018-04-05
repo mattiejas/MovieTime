@@ -14,15 +14,15 @@ namespace MovieTime.Web.Genres.MovieGenreModels
         {
             var movieGenre = builder.Entity<MovieGenre>();
             
-            movieGenre.HasKey(mg => new {mg.DbMovieId, mg.DbGenreId});
+            movieGenre.HasKey(mg => new {mg.MovieId, mg.GenreId});
 
             movieGenre.HasOne(mg => mg.Movie)
                 .WithMany(mv => mv.Genres)
-                .HasForeignKey(mg => mg.DbMovieId);
+                .HasForeignKey(mg => mg.MovieId);
 
             movieGenre.HasOne(mg => mg.Genre)
                 .WithMany(m => m.Movies)
-                .HasForeignKey(mg => mg.DbGenreId);
+                .HasForeignKey(mg => mg.GenreId);
         }
 
         public void MapPropperties(ModelBuilder builder)

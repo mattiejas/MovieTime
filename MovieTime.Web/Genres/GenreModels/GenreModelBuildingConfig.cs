@@ -11,18 +11,16 @@ namespace MovieTime.Web.Genres.GenreModels
             MapPropperties(builder);
         }
 
-        public void MapPropperties(ModelBuilder builder)
-        {
-            var genre = builder.Entity<Genre>();
-
-            genre.Property(g => g.Name).HasMaxLength(100);
-        }
-        
         public void MapRelations(ModelBuilder builder)
         {
             var genre = builder.Entity<Genre>();
 
             genre.HasKey(g => g.Name);
         }
+
+        public void MapPropperties(ModelBuilder builder)
+        {
+        }
+        
     }
 }

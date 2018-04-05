@@ -87,7 +87,7 @@ namespace MovieTime.Web.Movies
 
         private async Task<ICollection<MovieGenre>> AddGenres(Movie movie)
         {
-            var genreIdList = movie.Genres.Select(genre => genre.DbGenreId).ToList();
+            var genreIdList = movie.Genres.Select(genre => genre.GenreId).ToList();
             var genres = new List<Genre>();
 
             foreach (var genreId in genreIdList)
