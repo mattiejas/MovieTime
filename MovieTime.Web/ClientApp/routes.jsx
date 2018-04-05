@@ -17,6 +17,7 @@ import MovieDetailView from './views/movie/MovieDetailView';
 import ListView from './views/list/ListView';
 import Registration from './views/registration/Registration';
 import SearchView from './views/search/SearchView';
+import TermsOfServiceView from './views/tos/TermsOfServiceView';
 
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
   <Route
@@ -52,7 +53,7 @@ const PublicRoute = ({ component: Component, isAuthenticated, ...rest }) => (
     render={props =>
             (isAuthenticated === false
                 ? <Component {...props} />
-        : <Redirect to={props.location.state.from || '/'} />)}
+        : <Redirect to={(props.location && props.location.state && props.location.state.from) ? props.location.state.from : '/'} />)}
   />
 );
 
@@ -98,7 +99,7 @@ class Routes extends React.Component {
         <Layout>
           <Switch>
             <Route exact path="/" component={Home} />
-            <PrivateRoute
+            <Route
               path="/movies/:id"
               isAuthenticated={this.props.isAuthenticated}
               component={MovieDetailView}
@@ -118,6 +119,7 @@ class Routes extends React.Component {
             )}
             />
             <Route path="/list" component={ListView} />
+            <Route path="/termsofservice" component={TermsOfServiceView} />
             <Route path="/search/:query" component={SearchView} />
             <Route path="/users/:id" component={ProfileView} />
             <Route component={NotFoundView} />

@@ -31,7 +31,7 @@ class ListWidget extends React.Component {
           {movies.map((element, index) => {
             if (length > 4 && index === 3) {
               return (<MoviePoster
-                key={`movie-${element.title}`}
+                key={`movie-${element.movieId}`}
                 className={cn(styles.poster, styles['last-poster'])}
                 source={element.poster}
                 alt={`${element.title} poster`}
@@ -40,7 +40,7 @@ class ListWidget extends React.Component {
               );
             }
             return (<MoviePoster
-              key={`movie-${element.title}`}
+              key={`movie-${element.movieId}`}
               className={styles.poster}
               source={element.poster}
               alt={`${element.title} poster`}

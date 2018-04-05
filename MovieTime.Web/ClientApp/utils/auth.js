@@ -17,7 +17,6 @@ const getTokenForCurrentUser = () =>
     (user ? user.getIdToken(true) : null));
 
 function getRequestHeader(token) {
-  console.log(token);
   return {
     Authorization: `Bearer ${token}`,
     'Content-type': 'Application/json',

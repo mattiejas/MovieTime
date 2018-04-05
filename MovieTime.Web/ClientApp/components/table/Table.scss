@@ -14,7 +14,11 @@
     thead {
       border-top-left-radius: 5px;
       border-top-right-radius: 5px;
-      background-color: $font-color-light;
+      //background-color: $font-color-light;
+      background-color: lighten($secondary-color, 40);
+      tr {
+        height: 45px;
+      }
       tr > th {
         padding: 10px;
         font-size: 1.1em;
@@ -36,6 +40,7 @@
 
     tbody {
       tr {
+        height: 40px;
         &:nth-child(2n) {
           background-color: #fafafa;
         }

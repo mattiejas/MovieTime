@@ -30,6 +30,7 @@ class MovieDetailView extends React.Component {
       isWatched: false,
       backgroundColor: null,
       isLoading: true,
+      // eslint-disable-next-line react/no-unused-state
       hasTrackedOnRedirect: false,
     };
 
@@ -63,6 +64,7 @@ class MovieDetailView extends React.Component {
             this.setState({
               isTracking: true,
               isDisabled: false,
+              // eslint-disable-next-line react/no-unused-state
               hasTrackedOnRedirect: true,
             });
           }

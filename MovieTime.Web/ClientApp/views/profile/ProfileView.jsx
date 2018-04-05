@@ -1,7 +1,11 @@
 import FileSaver from 'file-saver';
-import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import React from 'react';
+import moment from 'moment';
+import _ from 'lodash';
+import humanize from 'humanize-duration';
+import XLSX from 'xlsx';
 
 import { updateUser, getUser } from '../../modules/users';
 import { authenticateById } from '../../modules/auth';
@@ -20,9 +24,32 @@ import CommentSection from '../../components/comments/CommentSection';
 class ProfileView extends React.Component {
   static downloadInformation() {
     downloadUserData()
-      .then((responseData) => {
-        const blob = new Blob([JSON.stringify(responseData)], { type: 'application/json' });
-        FileSaver.saveAs(blob);
+      .then((data) => {
+        const workbook = XLSX.utils.book_new();
+
+        Object.keys(data).forEach((key) => {
+          let table;
+          let worksheet;
+          if (key === 'user') {
+            table = [
+              Object.keys(data[key]),
+              Object.values(data[key]),
+            ];
+            worksheet = XLSX.utils.aoa_to_sheet(table);
+          } else if (data[key].length > 0) {
+            const header = Object.keys(data[key][0]);
+            table = [header];
+            data[key].forEach(row => table.push(Object.values(row)));
+            worksheet = XLSX.utils.aoa_to_sheet(table);
+          }
+
+          console.log(table);
+          if (worksheet) {
+            XLSX.utils.book_append_sheet(workbook, worksheet, key);
+          }
+        });
+
+        XLSX.writeFile(workbook, 'user_data.xlsb');
       });
   }
 
@@ -42,8 +69,8 @@ class ProfileView extends React.Component {
     this.props.getUser(id).then(() => {
       getTrackedMoviesByUser(id)
         .then((response) => {
-          const watchedMovies = response.filter(x => x.watched).slice(0, 5);
-          const unwatchedMovies = response.filter(x => !x.watched).slice(0, 5);
+          const watchedMovies = response.filter(x => x.watched);
+          const unwatchedMovies = response.filter(x => !x.watched);
           this.setState({
             watchedMovies,
             unwatchedMovies,
@@ -105,6 +132,9 @@ class ProfileView extends React.Component {
     const { firstName, lastName } = this.props.user;
     const { id } = this.props.match.params;
 
+    let duration = moment.duration(_.reduce(this.state.watchedMovies, (sum, mv) => sum + mv.runTime, 0), 'minutes');
+    duration = humanize(duration, { conjunction: ' and ', serialComma: false });
+
     return (
       <div className={styles.view}>
         <EditProfileModal
@@ -126,7 +156,7 @@ class ProfileView extends React.Component {
                 <Placeholder isReady={!isLoading}>
                   <h1>{`${firstName} ${lastName}`}</h1>
                   <h3>
-                    has watched ... movies worthy of ... hours and ... minutes
+                    spent {duration} watching movies
                   </h3>
                 </Placeholder>
               </div>
@@ -144,9 +174,10 @@ class ProfileView extends React.Component {
               >
                 Edit
               </Button>}
+              { isOwner &&
               <Button icon="download" dark onClick={() => ProfileView.downloadInformation()}>
                 Download my information
-              </Button>
+              </Button>}
             </div>
           </div>
           <div className={styles.content}>

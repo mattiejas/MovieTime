@@ -26,6 +26,7 @@ namespace MovieTime.Web.Movies
         }
 
         [HttpGet("search/{title}")]
+        [HttpGet("search/{title}/page/{page}")]
         public async Task<IActionResult> GetMovies(string title, int page = 1)
         {
             var movieList = await _movieService.GetMoviesByTitle(title, page);
