@@ -1,7 +1,10 @@
 import FileSaver from 'file-saver';
-import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import React from 'react';
+import moment from 'moment';
+import _ from 'lodash';
+import humanize from 'humanize-duration';
 
 import { updateUser, getUser } from '../../modules/users';
 import { authenticateById } from '../../modules/auth';
@@ -42,8 +45,8 @@ class ProfileView extends React.Component {
     this.props.getUser(id).then(() => {
       getTrackedMoviesByUser(id)
         .then((response) => {
-          const watchedMovies = response.filter(x => x.watched).slice(0, 5);
-          const unwatchedMovies = response.filter(x => !x.watched).slice(0, 5);
+          const watchedMovies = response.filter(x => x.watched);
+          const unwatchedMovies = response.filter(x => !x.watched);
           this.setState({
             watchedMovies,
             unwatchedMovies,
@@ -105,6 +108,9 @@ class ProfileView extends React.Component {
     const { firstName, lastName } = this.props.user;
     const { id } = this.props.match.params;
 
+    let duration = moment.duration(_.reduce(this.state.watchedMovies, (sum, mv) => sum + mv.runTime, 0), 'minutes');
+    duration = humanize(duration, { conjunction: ' and ', serialComma: false });
+
     return (
       <div className={styles.view}>
         <EditProfileModal
@@ -126,7 +132,7 @@ class ProfileView extends React.Component {
                 <Placeholder isReady={!isLoading}>
                   <h1>{`${firstName} ${lastName}`}</h1>
                   <h3>
-                    has watched ... movies worthy of ... hours and ... minutes
+                    spent {duration} watching movies
                   </h3>
                 </Placeholder>
               </div>
