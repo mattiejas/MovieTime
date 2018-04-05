@@ -33,7 +33,7 @@ namespace MovieTime.Web.Database
             var modelConfigMapping = GetEntityBuildingConfigs();
             foreach (IEntityModelBuildingConfig modelBuildingConfig in modelConfigMapping)
             {
-                modelBuildingConfig.Map(modelBuilder);
+                modelBuildingConfig.MapRelations(modelBuilder);
             }
         }
 

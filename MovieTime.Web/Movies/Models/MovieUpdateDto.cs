@@ -1,7 +1,10 @@
-﻿namespace MovieTime.Web.Movies.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MovieTime.Web.Movies.Models
 {
-    public class MovieUpdateDto
+    public class MovieUpdateDto : MovieManipulationDto
     {
-        
+        [Required(ErrorMessage = "You should provide IMDB ID")]
+        public string ImdbId { get; set; }
     }
 }
