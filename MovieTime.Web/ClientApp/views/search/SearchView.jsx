@@ -63,13 +63,22 @@ class SearchView extends React.Component {
   }
 
   setPage(index, content, updatePage = false) {
-    this.setState({
-      movies: {
-        ...this.state.movies,
-        [index]: content,
-      },
-      page: updatePage ? index + 1 : this.state.page,
-    });
+    if (index === 1) {
+      this.setState({
+        movies: {
+          [index]: content,
+        },
+        page: updatePage ? index + 1 : this.state.page,
+      });
+    } else {
+      this.setState({
+        movies: {
+          ...this.state.movies,
+          [index]: content,
+        },
+        page: updatePage ? index + 1 : this.state.page,
+      });
+    }
   }
 
   nextPage() {
