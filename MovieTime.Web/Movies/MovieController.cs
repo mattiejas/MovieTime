@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
 using MovieTime.Web.Helpers;
 using MovieTime.Web.Movies.Models;
 using Serilog;
@@ -29,11 +30,20 @@ namespace MovieTime.Web.Movies
         [HttpGet("search/{title}/page/{page}")]
         public async Task<IActionResult> GetMovies(string title, int page = 1)
         {
-            var movieList = await _movieService.GetMoviesByTitle(title, page);
-            
-            if (movieList == null || movieList.Count < 0) return NotFound(new {message = $"Invalid title: {title}"});
-            
-            return Ok(movieList);
+            try
+            {
+                var movieList = await _movieService.GetMoviesByTitle(title, page);
+
+                if (movieList == null || movieList.Count < 0)
+                    return NotFound(new {message = $"Invalid title: {title}"});
+
+                return Ok(movieList);
+            }
+            catch (ArgumentNullException e)
+            {
+                Console.WriteLine(e);
+                return BadRequest(new {message = e.Message});
+            }
         }
 
         [HttpGet("{id}", Name = GetMovieByIdRoute)]
