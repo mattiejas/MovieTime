@@ -11,11 +11,11 @@ using Serilog;
 
 namespace MovieTime.Web.Movies
 {
-    [Route("api/movie")] //todo change movie to movies
+    [Route("api/movies")]
     public class MovieController : Controller
     {
         private const string GetMovieByIdRoute = "GetMovieById";
-        private readonly IMovieService _movieService;
+        private IMovieService _movieService;
         private readonly IMapper _mapper;
 
         public MovieController(IMovieService movieService, IMapper mapper)
@@ -25,9 +25,14 @@ namespace MovieTime.Web.Movies
         }
 
         [HttpGet("search/{title}")]
-        public async Task<IActionResult> GetMovies(string title)
+        [HttpGet("search/{title}/page/{page}")]
+        public async Task<IActionResult> GetMovies(string title, int page = 1)
         {
-            throw new NotImplementedException();
+            var movieList = await _movieService.GetMoviesByTitle(title, page);
+            
+            if (movieList == null || movieList.Count < 0) return NotFound(new {message = $"Invalid title: {title}"});
+            
+            return Ok(movieList);
         }
 
         [HttpGet("{id}", Name = GetMovieByIdRoute)]

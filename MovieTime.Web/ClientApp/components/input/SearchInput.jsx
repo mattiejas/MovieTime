@@ -1,18 +1,17 @@
+import { withRouter } from 'react-router-dom';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
-import Icon from '../icon/Icon';
-
-import history from '../../utils/history';
-
 import styles from './SearchInput.scss';
+import Button from '../button/Button';
 
 class SearchInput extends Component {
   static propTypes = {
     onSearch: PropTypes.func,
     className: PropTypes.string,
     onClick: PropTypes.func,
+    history: PropTypes.objectOf(PropTypes.any).isRequired,
   };
 
   static defaultProps = {
@@ -21,48 +20,65 @@ class SearchInput extends Component {
     onClick: undefined,
   };
 
-  constructor(props) {
-    super(props);
+  state = {
+    query: '',
+  };
 
-    this.state = {
-      searchQuery: '',
-      redirectTo: '',
-    };
-  }
-
-  onChange() {
+  onChange(val) {
     this.setState({
-      searchQuery: this.SearchInput.value,
+      query: val,
     });
   }
 
   onSubmit(e) {
     e.preventDefault();
     if (this.props.onSearch) this.props.onSearch();
-    if (this.state.searchQuery && this.state.searchQuery.length > 1) {
+    if (this.state.query && this.state.query.length > 1) {
+      this.props.history.push(`/search/${this.state.query}`);
       this.setState({
-        redirectTo: `/movies/${this.state.searchQuery}`,
-      }, () => {
-        history.push(this.state.redirectTo);
+        query: '',
       });
+    }
+    this.input.focus();
+  }
+
+  /* Search on Button click and make search small again */
+  onButtonClick(e) {
+    this.input.focus();
+    this.onSubmit(e);
+    if (this.props.onClick) {
+      this.props.onClick(e);
+      this.input.blur();
+    }
+  }
+
+  /* Search on Enter press and make search small again */
+  onKeyPress(e) {
+    if (e.key === 'Enter') {
+      this.onSubmit(e);
+      if (this.props.onClick) {
+        if (this.state.query !== '') {
+          this.props.onClick(e);
+        }
+      }
     }
   }
 
   render() {
     return (
-      <form className={cn(styles['search-form'], this.props.className)} onSubmit={e => this.onSubmit(e)}>
+      <div className={cn(styles['search-form'], this.props.className)}>
         <input
           className={styles['search-input']}
           placeholder="Search..."
-          ref={(input) => { this.SearchInput = input; }}
           onChange={e => this.onChange(e.target.value)}
+          ref={(input) => { this.input = input; }}
+          onKeyPress={e => this.onKeyPress(e)}
+          value={this.state.query}
         />
-        <button onClick={(e) => { if (this.props.onClick) this.props.onClick(e); }}>
-          <Icon className={styles['search-icon']} type="search" />
-        </button>
-      </form>
+        <Button icon="search" className={styles.button} onClick={e => this.onButtonClick(e)} />
+      </div>
     );
   }
 }
 
-export default SearchInput;
+export default withRouter(SearchInput);

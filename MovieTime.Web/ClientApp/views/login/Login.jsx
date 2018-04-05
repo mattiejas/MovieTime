@@ -58,7 +58,7 @@ class Login extends Component {
           });
         }
       })
-      .catch((err) => {
+      .catch(() => {
         this.setState({ error: 'Invalid password or e-mail address. Please try again.' });
       });
   }

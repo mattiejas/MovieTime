@@ -1,10 +1,12 @@
+/* eslint-disable max-len */
+
 import React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 
 import styles from './Table.scss';
 
-const Table = ({ headers, rows }) => (
+const Table = ({ headers, rows, onRowClick }) => (
   <div className={styles['table-wrapper']}>
     <table className={styles.table}>
       <thead>
@@ -17,9 +19,9 @@ const Table = ({ headers, rows }) => (
       <tbody>
         {
           _.map(rows, (row, i) => (
-            <tr key={`table-row--${i}`}>
+            <tr key={`table-row--${i}`} onClick={(e) => { if (onRowClick) onRowClick(e, row); }} style={{ cursor: onRowClick ? 'pointer' : null }}>
               {
-                _.map(row, (item, j) => <td key={`table-data--${j}`}>{item}</td>)
+                _.map(Object.keys(headers), (heading, j) => <td key={`table-data--${j}`}>{row[heading]}</td>)
               }
             </tr>))
         }
@@ -29,8 +31,13 @@ const Table = ({ headers, rows }) => (
 );
 
 Table.propTypes = {
-  headers: PropTypes.arrayOf(PropTypes.node).isRequired,
-  rows: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.node)).isRequired,
+  headers: PropTypes.objectOf(PropTypes.any).isRequired,
+  rows: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired,
+  onRowClick: PropTypes.func,
+};
+
+Table.defaultProps = {
+  onRowClick: undefined,
 };
 
 export default Table;
