@@ -38,9 +38,8 @@ export function getMovieById(id) {
   return betterFetch(`/api/movies/${id}`);
 }
 
-export function searchMovies(q) {
-  return fetch(`/api/movies/search/${q}`).then(response => response.json());
-}
+export const searchMovies = (q, page = 1) =>
+  betterFetch(`/api/movies/search/${q}/page/${page}`);
 
 export function getCommentsByUser(userId) {
   return getTokenAndRequestHeader()
