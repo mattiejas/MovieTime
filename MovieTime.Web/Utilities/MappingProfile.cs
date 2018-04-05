@@ -2,6 +2,7 @@
 using System.Linq;
 using AutoMapper;
 using MovieTime.Web.Comments;
+using MovieTime.Web.Comments.Models;
 using MovieTime.Web.Helpers;
 using MovieTime.Web.Movies.Models;
 using MovieTime.Web.ThirdPartyServices.OMDB.MovieList;
@@ -9,7 +10,6 @@ using MovieTime.Web.ThirdPartyServices.OMDB.Movies;
 using MovieTime.Web.Users;
 using MovieTime.Web.Users.Models;
 using MovieTime.Web.TrackedMovies.Models;
-using MovieTime.Web.Genres.Models;
 using MovieTime.Web.Users.Models.GDPR;
 
 namespace MovieTime.Web.Utilities
@@ -27,7 +27,7 @@ namespace MovieTime.Web.Utilities
             CreateMap<Movie, MovieGetDto>()
                 .ForMember(dest => dest.ImdbId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Year.Year.ToString()))
-                .ForMember(dest => dest.Genres, opt => opt.MapFrom(x => x.Genres.Select(y => y.DbGenreId).ToList()))
+                .ForMember(dest => dest.Genres, opt => opt.MapFrom(x => x.Genres.Select(y => y.GenreId).ToList()))
                 .ForMember(dest => dest.RunTime, opt => opt.MapFrom(src => src.RunTimeInMinutes));
             
             CreateMap<MovieCreateDto, Movie>();

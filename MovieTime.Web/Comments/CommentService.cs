@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using MovieTime.Web.Comments.Models;
 using MovieTime.Web.Movies;
 using MovieTime.Web.Users;
 
@@ -25,6 +27,7 @@ namespace MovieTime.Web.Comments
         
         public async Task<bool> CreateComment(Comment comment)
         {
+            comment.Date = DateTime.Now;
             var c = await _commentRepository.Add(comment);
             return c != null;
         }

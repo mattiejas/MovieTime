@@ -1,26 +1,26 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieTime.Web.Database;
 
-namespace MovieTime.Web.Genres.Models
+namespace MovieTime.Web.Genres.GenreModels
 {
     public class GenreModelBuildingConfig : IEntityModelBuildingConfig
     {
         public void Map(ModelBuilder builder)
         {
-            MapProperties(builder);
-            //MapRelations(builder);
+            MapRelations(builder);
+            MapPropperties(builder);
         }
 
-        public void MapProperties(ModelBuilder builder)
+        public void MapRelations(ModelBuilder builder)
         {
             var genre = builder.Entity<Genre>();
 
             genre.HasKey(g => g.Name);
         }
 
-        public void MapRelations(ModelBuilder builder)
+        public void MapPropperties(ModelBuilder builder)
         {
-           
         }
+        
     }
 }
