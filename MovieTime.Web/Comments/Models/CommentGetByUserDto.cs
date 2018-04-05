@@ -1,7 +1,7 @@
 using System;
 using MovieTime.Web.Movies.Models;
 
-namespace MovieTime.Web.Comments
+namespace MovieTime.Web.Comments.Models
 {
     public class CommentGetByUserDto
     {

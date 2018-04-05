@@ -9,8 +9,8 @@ namespace MovieTime.Web.Users
     {
         Task<ICollection<UserGetDto>> GetAllUsers();
         Task<User> GetUser(string id);
-        Task<bool> UpdateUser(UserUpdateDto user);
-        Task<bool> AddUser(UserCreateDto user);
+        Task<bool> UpdateUser(User user);
+        Task<bool> AddUser(User user);
         Task<bool> UserExist(string id);
         Task<int> RemoveUser(string id);
     }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MovieTime.Web.Helpers;
 using MovieTime.Web.Movies.Models;
 using Serilog;
 
@@ -87,6 +88,11 @@ namespace MovieTime.Web.Movies
 
             var movieExist = await _movieService.MovieExistById(movieCreateDto.ImdbId);
             if (movieExist) return new StatusCodeResult(StatusCodes.Status409Conflict);
+            
+            if (!ModelState.IsValid)
+            {
+                return new UnprocessableEntityObjectResult(ModelState);
+            }
 
             var movie = _mapper.Map<MovieCreateDto, Movie>(movieCreateDto);
             var success = await _movieService.AddMovie(movie);

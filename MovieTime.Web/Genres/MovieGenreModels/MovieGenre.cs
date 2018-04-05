@@ -1,6 +1,7 @@
-﻿using MovieTime.Web.Movies.Models;
+﻿using MovieTime.Web.Genres.GenreModels;
+using MovieTime.Web.Movies.Models;
 
-namespace MovieTime.Web.Genres.Models
+namespace MovieTime.Web.Genres.MovieGenreModels
 {
     public class MovieGenre
     {

@@ -2,6 +2,7 @@
 using System.Linq;
 using AutoMapper;
 using MovieTime.Web.Comments;
+using MovieTime.Web.Comments.Models;
 using MovieTime.Web.Helpers;
 using MovieTime.Web.Movies.Models;
 using MovieTime.Web.ThirdPartyServices.OMDB.MovieList;
@@ -9,7 +10,6 @@ using MovieTime.Web.ThirdPartyServices.OMDB.Movies;
 using MovieTime.Web.Users;
 using MovieTime.Web.Users.Models;
 using MovieTime.Web.TrackedMovies.Models;
-using MovieTime.Web.Genres.Models;
 using MovieTime.Web.Users.Models.GDPR;
 
 namespace MovieTime.Web.Utilities

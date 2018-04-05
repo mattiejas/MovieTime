@@ -1,11 +1,8 @@
-﻿namespace MovieTime.Web.Users
+﻿using MovieTime.Web.Users.Models;
+
+namespace MovieTime.Web.Users
 {
-    public class UserUpdateDto
+    public class UserUpdateDto : UserManipulationDto
     {
-        public string Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public string ImageUrl { get; set; }
     }
 }

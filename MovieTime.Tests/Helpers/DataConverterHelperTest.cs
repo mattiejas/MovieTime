@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using FluentAssertions.Collections;
-using MovieTime.Web.Genres.Models;
+using MovieTime.Web.Genres.MovieGenreModels;
 using MovieTime.Web.Helpers;
 using Xunit;
 

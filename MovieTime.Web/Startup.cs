@@ -1,6 +1,4 @@
 using AutoMapper;
-using FluentValidation;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
@@ -18,7 +16,6 @@ using MovieTime.Web.Utilities;
 using MovieTime.Web.Database;
 using MovieTime.Web.Genres;
 using MovieTime.Web.Movies;
-using MovieTime.Web.Movies.Models;
 using MovieTime.Web.ThirdPartyServices;
 using MovieTime.Web.ThirdPartyServices.OMDB.Movies;
 using MovieTime.Web.Reviews;
@@ -58,9 +55,7 @@ namespace MovieTime.Web
                     true; // do not send default media type if unsupported type is requested
                 setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
                 setupAction.InputFormatters.Add(new XmlDataContractSerializerInputFormatter());
-            }).AddFluentValidation();
-
-            services.AddTransient<IValidator<Movie>, MovieValidator>();
+            });
 
             services.AddAutoMapper();
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info {Title = "MovieTime API", Version = "v1"}); });

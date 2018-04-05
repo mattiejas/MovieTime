@@ -1,7 +1,7 @@
 ﻿using MovieTime.Web.TrackedMovies.Models;
 using System;
 using System.Collections.Generic;
-using MovieTime.Web.Genres.Models;
+using MovieTime.Web.Genres.MovieGenreModels;
 
 namespace MovieTime.Web.Movies.Models
 {

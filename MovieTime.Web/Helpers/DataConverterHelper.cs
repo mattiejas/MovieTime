@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using MovieTime.Web.Genres;
-using MovieTime.Web.Genres.Models;
+using MovieTime.Web.Genres.MovieGenreModels;
 
 namespace MovieTime.Web.Helpers
 {

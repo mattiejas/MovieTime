@@ -5,6 +5,12 @@ namespace MovieTime.Web.TrackedMovies.Models
 {
     public class TrackedMovieModelBuildingConfig : IEntityModelBuildingConfig
     {
+        public void Map(ModelBuilder builder)
+        {
+            MapRelations(builder);
+            MapPropperties(builder);
+        }
+
         public void MapRelations(ModelBuilder builder)
         {
             var trackedMovie = builder.Entity<TrackedMovie>();
@@ -18,6 +24,11 @@ namespace MovieTime.Web.TrackedMovies.Models
             trackedMovie.HasOne(u => u.User)
                 .WithMany(u => u.TrackedMovies)
                 .HasForeignKey(t => t.UserId);
+        }
+
+        public void MapPropperties(ModelBuilder builder)
+        {
+            // There are no propperties that needs to be configured.
         }
     }
 }

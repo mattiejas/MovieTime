@@ -10,6 +10,12 @@ namespace MovieTime.Web.Reviews.Models
 {
     public class ReviewModelBuildingConfig : IEntityModelBuildingConfig
     {
+        public void Map(ModelBuilder builder)
+        {
+            MapRelations(builder);
+            MapPropperties(builder);
+        }
+
         public void MapRelations(ModelBuilder builder)
         {
             var review = builder.Entity<Review>();
@@ -18,6 +24,11 @@ namespace MovieTime.Web.Reviews.Models
 
             review.HasOne(r => r.Movie)
                 .WithMany().HasForeignKey(r => r.MovieId);
+        }
+
+        public void MapPropperties(ModelBuilder builder)
+        {
+            // There are no propperties that needs to be configured.
         }
     }
 }

@@ -1,51 +1,57 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.CodeAnalysis;
-using MovieTime.Web.Auth;
+using MovieTime.Web.Helpers;
 using MovieTime.Web.Users;
 using MovieTime.Web.Users.Models;
 using Serilog;
 
-namespace MovieTime.Web.Controllers
+namespace MovieTime.Web.Auth
 {
     [Authorize]
     [Route("/Auth")]
     public class AuthController : Controller
     {
         private readonly IUserService _userService;
+        private readonly IMapper _mapper;
 
-        public AuthController(IUserService userService) => _userService = userService;
+        public AuthController(IUserService userService, IMapper mapper)
+        {
+            _userService = userService;
+            _mapper = mapper;
+        }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] UserCreateDto userModel)
+        public async Task<IActionResult> Register([FromBody] UserCreateDto userDto)
         {
-            if(userModel == null) 
+            if (userDto == null)
+            {
                 return BadRequest("User data is missing from body");
+            }
             
+            if (!ModelState.IsValid)
+            {
+                return new UnprocessableEntityObjectResult(ModelState);
+            }
+
             Log.Information($"Trying to register the user in the backend.");
             var userIdFromToken = this.User.GetUserId();
             
             if (userIdFromToken == null)
                 return BadRequest("User is not authenticated");
 
+            var userModel = _mapper.Map<UserCreateDto, User>(userDto);
             userModel.Id = userIdFromToken;
-
+            
             if (await _userService.AddUser(userModel))
             {
                 Log.Information($"Succesfully registered the user.");
                 return Ok(new {message = "Succesfully registered the user."});
             }
-            else
-            {
-                Log.Information($"Failed to register the user.");
-                return BadRequest(new {message = "Failed to register the user."});
-            }
+
+            Log.Information($"Failed to register the user.");
+            return BadRequest(new {message = "Failed to register the user."});
         }
 
         [HttpPost("unregister")]
