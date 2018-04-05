@@ -45,7 +45,7 @@ class Navigation extends Component {
 
   handleLogout() {
     logout().then(() => {
-      this.props.history.go('/');
+      this.props.history.push('/');
     });
   }
 
