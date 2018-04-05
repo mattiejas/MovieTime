@@ -2,6 +2,7 @@ import FileSaver from 'file-saver';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import XLSX from 'xlsx';
 
 import { updateUser, getUser } from '../../modules/users';
 import { authenticateById } from '../../modules/auth';
@@ -20,9 +21,32 @@ import CommentSection from '../../components/comments/CommentSection';
 class ProfileView extends React.Component {
   static downloadInformation() {
     downloadUserData()
-      .then((responseData) => {
-        const blob = new Blob([JSON.stringify(responseData)], { type: 'application/json' });
-        FileSaver.saveAs(blob);
+      .then((data) => {
+        const workbook = XLSX.utils.book_new();
+
+        Object.keys(data).forEach((key) => {
+          let table;
+          let worksheet;
+          if (key === 'user') {
+            table = [
+              Object.keys(data[key]),
+              Object.values(data[key]),
+            ];
+            worksheet = XLSX.utils.aoa_to_sheet(table);
+          } else if (data[key].length > 0) {
+            const header = Object.keys(data[key][0]);
+            table = [header];
+            data[key].forEach(row => table.push(Object.values(row)));
+            worksheet = XLSX.utils.aoa_to_sheet(table);
+          }
+
+          console.log(table);
+          if (worksheet) {
+            XLSX.utils.book_append_sheet(workbook, worksheet, key);
+          }
+        });
+
+        XLSX.writeFile(workbook, 'user_data.xlsb');
       });
   }
 
@@ -144,9 +168,10 @@ class ProfileView extends React.Component {
               >
                 Edit
               </Button>}
+              { isOwner &&
               <Button icon="download" dark onClick={() => ProfileView.downloadInformation()}>
                 Download my information
-              </Button>
+              </Button>}
             </div>
           </div>
           <div className={styles.content}>
