@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -130,6 +130,10 @@ class Login extends Component {
                         Sign up with e-mail
                     </Button>
                   </ButtonGroup>
+                  <div className={styles['terms-of-service']}>
+                      Using this service you agree to our&nbsp;
+                    <Link href="/termsofservice" to="/termsofservice">Terms of Service</Link>
+                  </div>
                 </div>
               </div>
             </form>

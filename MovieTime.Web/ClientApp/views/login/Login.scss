@@ -98,6 +98,18 @@
 	}
 }
 
+.terms-of-service {
+	margin : 5px;
+	margin-top: 44px;
+	font-style: italic;
+	font-size: 0.84em;
+	a {
+		color: lighten($secondary-color, 20);
+		text-decoration: underline;
+	}
+
+}
+
 
 @media (min-width: $grid-sm) {
 	.view__content--wrapper {
