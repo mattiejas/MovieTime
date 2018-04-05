@@ -17,6 +17,7 @@ import MovieDetailView from './views/movie/MovieDetailView';
 import ListView from './views/list/ListView';
 import Registration from './views/registration/Registration';
 import SearchView from './views/search/SearchView';
+import TermsOfServiceView from './views/tos/TermsOfServiceView';
 
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
   <Route
@@ -118,6 +119,7 @@ class Routes extends React.Component {
             )}
             />
             <Route path="/list" component={ListView} />
+            <Route path="/termsofservice" component={TermsOfServiceView} />
             <Route path="/search/:query" component={SearchView} />
             <Route path="/users/:id" component={ProfileView} />
             <Route component={NotFoundView} />
