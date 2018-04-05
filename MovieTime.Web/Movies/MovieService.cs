@@ -54,7 +54,6 @@ namespace MovieTime.Web.Movies
 
             movieModel = await _thirdPartyMovieRepository.GetMovieById(id);
             
-            // Cache the movie in our database to improve robustness. Todo: temporary
             await AddMovie(movieModel);
 
             return movieModel;
@@ -72,7 +71,6 @@ namespace MovieTime.Web.Movies
             movieModel = await _thirdPartyMovieRepository.GetMovieByTitle(title);
             if (movieModel != null) movieModel.Poster = await DownloadMoviePoster(movieModel);
 
-            // Cache the movie in our database to improve robustness. Todo: temporary
             await AddMovie(movieModel);
 
             return movieModel;
