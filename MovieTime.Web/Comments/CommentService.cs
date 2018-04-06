@@ -41,7 +41,27 @@ namespace MovieTime.Web.Comments
         public async Task<ICollection<Comment>> AllCommentsForMovie(string movieId)
         {
             var comments = await _commentRepository.FindAll(x => x.Movie.Id == movieId);
+            SetUndefinedUsersToDeleted(comments);
             return comments;
+        }
+
+        private void SetUndefinedUsersToDeleted(ICollection<Comment> comments)
+        {
+            foreach (var comment in comments)
+            {
+                if (comment.User != null) continue;
+                comment.User = new User()
+                {
+                    Email = "Deleted",
+                    FirstName = "User",
+                    Id = "0000000000000000000000000000",
+                    ImageUrl = "Deleted",
+                    LastName = "Deleted",
+                    TrackedMovies = null,
+                    UserName = "Deleted"
+                };
+                comment.UserId = "0000000000000000000000000000";
+            }
         }
     }
 }
