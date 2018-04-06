@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
@@ -159,13 +160,15 @@ class CommentSection extends React.Component {
                         (<Comment
                           title={
                             this.props.type === 'movie' ?
-                            `${comment.user.firstName} ${comment.user.lastName}` :
-                              comment.movie.title
+                              comment.user.id === 'deleted' ?
+                                '[deleted]' : `${comment.user.firstName} ${comment.user.lastName}` :
+                                comment.movie.title
                           }
                           date={moment(comment.date).format('YYYY/MM/DD HH:mm:ss')}
                           comment={comment.value}
                           linkTo={this.props.type === 'movie' ?
-                            `/users/${comment.user.id}` :
+                            comment.user.id === 'deleted' ?
+                            null : `/users/${comment.user.id}` :
                             `/movies/${comment.movie.id}`}
                           key={key}
                         />))

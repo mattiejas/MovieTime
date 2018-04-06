@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 
 import styles from './Home.scss';
 import ListWidget from '../../components/list-widget/ListWidget';
@@ -11,15 +12,19 @@ class Home extends React.Component {
 	};
 
 	componentDidMount() {
-	  getTrendingMovies(4).then(movies =>
-	    this.setState({
-	      trending: movies,
-	    }));
+	  getTrendingMovies(4).then(movies => this.setState({
+	    trending: _.map(movies, m => ({
+	      ...m,
+	      movieId: m.imdbId,
+	    })),
+	  }));
 
-	  getRecentlyTrackedMovies(4).then(movies =>
-	    this.setState({
-	      recentlyTracked: movies,
-	    }));
+	  getRecentlyTrackedMovies(4).then(movies => this.setState({
+	    recentlyTracked: _.map(movies, m => ({
+	      ...m,
+	      movieId: m.imdbId,
+	    })),
+	  }));
 	}
 
 	render() {
@@ -28,12 +33,8 @@ class Home extends React.Component {
     <div className={styles.background}>
       <div className={styles.header}>
         <h1>MovieTime</h1>
-        <h3>
-							Because there are <span>SO MANY</span> good movies.
-        </h3>
-        <p>
-							Track the movies you <span>(want to)</span> watch(ed) and share your reactions with a movie loving community.
-        </p>
+        <h3>Because there are <span>SO MANY</span> good movies.</h3>
+        <p>Track the movies you like and share your reactions with a movie loving community.</p>
       </div>
     </div>
     <div className={styles.content}>
