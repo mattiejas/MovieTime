@@ -1,4 +1,3 @@
-import FileSaver from 'file-saver';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -43,7 +42,6 @@ class ProfileView extends React.Component {
             worksheet = XLSX.utils.aoa_to_sheet(table);
           }
 
-          console.log(table);
           if (worksheet) {
             XLSX.utils.book_append_sheet(workbook, worksheet, key);
           }

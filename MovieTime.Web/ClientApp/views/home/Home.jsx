@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 
 import styles from './Home.scss';
 import ListWidget from '../../components/list-widget/ListWidget';
@@ -12,11 +13,17 @@ class Home extends React.Component {
 
   componentDidMount() {
     getTrendingMovies(4).then(movies => this.setState({
-      trending: movies,
+      trending: _.map(movies, m => ({
+        ...m,
+        movieId: m.imdbId,
+      })),
     }));
 
     getRecentlyTrackedMovies(4).then(movies => this.setState({
-      recentlyTracked: movies,
+      recentlyTracked: _.map(movies, m => ({
+        ...m,
+        movieId: m.imdbId,
+      })),
     }));
   }
 
