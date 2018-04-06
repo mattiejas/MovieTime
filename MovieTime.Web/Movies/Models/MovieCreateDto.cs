@@ -1,26 +1,10 @@
-﻿using MovieTime.Web.Genres;
-using System;
-using System.Collections.Generic;
-using MovieTime.Web.Genres.Models;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MovieTime.Web.Movies.Models
 {
-    public class MovieCreateDto
+    public class MovieCreateDto : MovieManipulationDto
     {
-        public string Title { get; set; }
-        public DateTime Year { get; set; }
-        public double Rated { get; set; }
-        public string Poster { get; set; }
-        public int RunTimeInMinutes { get; set; }
-        public string Writer { get; set; }
-        public string Director { get; set; }
-        public string Actors { get; set; }
-        public string Plot { get; set; }
+        [Required(ErrorMessage = "You should provide IMDB ID")]
         public string ImdbId { get; set; }
-        public ICollection<GenreCreateDto> Genres { get; set; }
-
-        public MovieCreateDto(){
-            Genres = new List<GenreCreateDto>();
-        }
     }
 }

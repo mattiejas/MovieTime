@@ -33,17 +33,15 @@ namespace MovieTime.Web.Users
             return user;
         }
 
-        public async Task<bool> UpdateUser(UserUpdateDto userDto)
+        public async Task<bool> UpdateUser(User user)
         {
-            var user = _mapper.Map<UserUpdateDto, User>(userDto);
             var storedUser = await _userRepository.Update(user, user.Id);
 
             return storedUser != null;
         }
 
-        public async Task<bool> AddUser(UserCreateDto userDto)
+        public async Task<bool> AddUser(User user)
         {
-            var user = _mapper.Map<UserCreateDto, User>(userDto);
             var userIsCreated = await _userRepository.Add(user);
             return userIsCreated;
         }

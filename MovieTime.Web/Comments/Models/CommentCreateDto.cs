@@ -1,12 +1,6 @@
-using System;
-
-namespace MovieTime.Web.Comments
+namespace MovieTime.Web.Comments.Models
 {
-    public class CommentCreateDto
+    public class CommentCreateDto : CommentManipulationDto
     {
-        public string MovieId { get; set; }
-        public string UserId { get; set; }
-        public string Value { get; set; }
-        public DateTime Date { get; set; }
     }
 }

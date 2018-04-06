@@ -1,34 +1,33 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieTime.Web.Database;
 
-namespace MovieTime.Web.Genres.Models
+namespace MovieTime.Web.Genres.MovieGenreModels
 {
     public class MovieGenreModelBuildingConfig : IEntityModelBuildingConfig
     {
         public void Map(ModelBuilder builder)
         {
-            MapProperties(builder);
             MapRelations(builder);
+            MapPropperties(builder);
         }
-
         public void MapRelations(ModelBuilder builder)
         {
             var movieGenre = builder.Entity<MovieGenre>();
+            
+            movieGenre.HasKey(mg => new {mg.MovieId, mg.GenreId});
 
             movieGenre.HasOne(mg => mg.Movie)
                 .WithMany(mv => mv.Genres)
-                .HasForeignKey(mg => mg.DbMovieId);
+                .HasForeignKey(mg => mg.MovieId);
 
             movieGenre.HasOne(mg => mg.Genre)
                 .WithMany(m => m.Movies)
-                .HasForeignKey(mg => mg.DbGenreId);
+                .HasForeignKey(mg => mg.GenreId);
         }
 
-        public void MapProperties(ModelBuilder builder)
+        public void MapPropperties(ModelBuilder builder)
         {
-            var movieGenre = builder.Entity<MovieGenre>();
-
-            movieGenre.HasKey(mg => new {mg.DbMovieId, mg.DbGenreId});
+            // No need to configure properties.
         }
     }
 }

@@ -35,7 +35,7 @@ namespace MovieTime.Web.ThirdPartyServices.OMDB.Movies
 
         public async Task<Movie> GetMovieByTitle(string title)
         {
-            if (string.IsNullOrEmpty(title)) throw new ArgumentNullException("A valid title is needed");
+            if (string.IsNullOrEmpty(title)) throw new ArgumentNullException("A valid title is needed");    
             var request = _clientService.CreateMovieRequest(null, title);
             var response = await _client.ExecuteTaskAsync<OmdbMovieModel>(request);
             if (response.Data.Response == "False") throw new Exception("Empty response for MovieByTitle request");

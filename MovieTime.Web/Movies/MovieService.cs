@@ -8,7 +8,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using MovieTime.Web.Genres;
-using MovieTime.Web.Genres.Models;
+using MovieTime.Web.Genres.GenreModels;
+using MovieTime.Web.Genres.MovieGenreModels;
 using MovieTime.Web.Movies.Models;
 using MovieTime.Web.ThirdPartyServices;
 using MovieTime.Web.ThirdPartyServices.OMDB.MovieList;
@@ -86,7 +87,7 @@ namespace MovieTime.Web.Movies
 
         private async Task<ICollection<MovieGenre>> AddGenres(Movie movie)
         {
-            var genreIdList = movie.Genres.Select(genre => genre.DbGenreId).ToList();
+            var genreIdList = movie.Genres.Select(genre => genre.GenreId).ToList();
             var genres = new List<Genre>();
 
             foreach (var genreId in genreIdList)

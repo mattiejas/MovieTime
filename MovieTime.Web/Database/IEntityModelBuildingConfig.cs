@@ -7,6 +7,6 @@ namespace MovieTime.Web.Database
     {
         void Map(ModelBuilder builder);
         void MapRelations(ModelBuilder builder);
-        void MapProperties(ModelBuilder builder);
+        void MapPropperties(ModelBuilder builder);
     }
 }

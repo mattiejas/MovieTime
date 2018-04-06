@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using MovieTime.Web.Comments.Models;
 using MovieTime.Web.Database;
 
 namespace MovieTime.Web.Comments {

@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.KeyVault.Models;
 using MovieTime.Web.Auth;
 using MovieTime.Web.Comments;
+using MovieTime.Web.Comments.Models;
+using MovieTime.Web.Helpers;
 using MovieTime.Web.TrackedMovies;
 using MovieTime.Web.TrackedMovies.Models;
 using MovieTime.Web.Users.Models;
@@ -47,12 +49,22 @@ namespace MovieTime.Web.Users
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] UserCreateDto user)
+        public async Task<IActionResult> CreateUser([FromBody] UserCreateDto userDto)
         {
-            if (user == null) return BadRequest();
+            if (userDto == null) return BadRequest();
+            
+            if (!ModelState.IsValid)
+            {
+                return new UnprocessableEntityObjectResult(ModelState);
+            }
 
-            var userExist = await _userService.UserExist(user.Id);
+            var userId = this.User.GetUserId();
+
+            var userExist = await _userService.UserExist(userId);
             if (userExist) return new StatusCodeResult(StatusCodes.Status409Conflict);
+
+            var user = _mapper.Map<UserCreateDto, User>(userDto);
+            user.Id = userId;
             
             var success = await _userService.AddUser(user);
             if (!success)
@@ -63,7 +75,7 @@ namespace MovieTime.Web.Users
 
             // According to REST principle, it's a good practice to return the created object and
             // the route you have to call to get the same object.
-            var userToReturn = _mapper.Map<UserCreateDto, UserGetDto>(user);
+            var userToReturn = _mapper.Map<User, UserGetDto>(user);
             var routeValue = new {id = user.Id};
 
             return CreatedAtRoute(GetUserRoute, routeValue, userToReturn);
@@ -98,18 +110,25 @@ namespace MovieTime.Web.Users
             return Ok(bundledInfoToReturn);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser([FromBody] UserUpdateDto user)
+        [HttpPut("{userId}")]
+        public async Task<IActionResult> UpdateUser(string userId, [FromBody] UserUpdateDto userDto)
         {
-            if (user == null) return BadRequest();
+            if (userDto == null) return BadRequest();
 
             var currentUserId = this.User.GetUserId();
-            if(user.Id != currentUserId) 
-                return NotFound(new {message = $"User {user.Id} not allowed to modify {currentUserId}."});
-            
-            var userExist = await _userService.UserExist(user.Id);
-            if (!userExist) 
-                return NotFound(new {message = $"User {user.Id} not found"});
+            if (userId != currentUserId)
+            {
+                return NotFound(new {message = $"User {userId} not allowed to modify {currentUserId}."});
+            }
+
+            var userExist = await _userService.UserExist(userId);
+            if (!userExist)
+            {
+                return NotFound(new {message = $"User {userId} not found"});
+            }
+
+            var user = _mapper.Map<UserUpdateDto, User>(userDto);
+            user.Id = currentUserId;
 
             var success = await _userService.UpdateUser(user);
             if (!success) 

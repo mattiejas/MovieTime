@@ -2,7 +2,7 @@ using System;
 using MovieTime.Web.Movies.Models;
 using MovieTime.Web.Users;
 
-namespace MovieTime.Web.Comments
+namespace MovieTime.Web.Comments.Models
 {
     public class Comment
     {

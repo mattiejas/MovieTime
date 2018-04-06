@@ -6,7 +6,9 @@ using MovieTime.Web.Users;
 using MovieTime.Web.Movies.Models;
 using MovieTime.Web.Genres;
 using MovieTime.Web.Comments;
-using MovieTime.Web.Genres.Models;
+using MovieTime.Web.Comments.Models;
+using MovieTime.Web.Genres.GenreModels;
+using MovieTime.Web.Genres.MovieGenreModels;
 using MovieTime.Web.TrackedMovies.Models;
 
 namespace MovieTime.Web.Database

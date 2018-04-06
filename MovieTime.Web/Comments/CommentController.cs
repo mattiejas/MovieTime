@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using MovieTime.Web.Auth;
+using MovieTime.Web.Comments.Models;
+using MovieTime.Web.Helpers;
 using MovieTime.Web.Movies.Models;
 using MovieTime.Web.Users;
 
@@ -37,18 +39,28 @@ namespace MovieTime.Web.Comments
 
         [HttpPost("movie/{movieId}")]
         public async Task<IActionResult> PostCommentOnMovie(string movieId, [FromBody] CommentCreateDto dto)
-        {
+        {   
             var userId = User.GetUserId();
             if (userId == null)
             {
                 return BadRequest(new {message = "User is not authenticated"});
             }
 
-            dto.MovieId = movieId;
-            dto.UserId = userId;
-            dto.Date = DateTime.Now;
+            if (movieId == null)
+            {
+                return NotFound("Movie not found");
+            }
+            
+            if (!ModelState.IsValid)
+            {
+                return new UnprocessableEntityObjectResult(ModelState);
+            }
 
             var comment = _mapper.Map<CommentCreateDto, Comment>(dto);
+            
+            comment.MovieId = movieId;
+            comment.UserId = userId;
+            
             await _service.CreateComment(comment);
 
             return Ok(new {message = "Comment successfully posted"});

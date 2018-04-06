@@ -7,21 +7,22 @@ namespace MovieTime.Web.Movies.Models
     {
         public void Map(ModelBuilder builder)
         {
-            MapProperties(builder);
             MapRelations(builder);
+            MapPropperties(builder);
         }
 
         public void MapRelations(ModelBuilder builder)
-        {
-            // No relationship with nother entity for now
-        }
-
-        public void MapProperties(ModelBuilder builder)
         {
             var movie = builder.Entity<Movie>();
 
             movie.HasKey(m => m.Id);
             movie.Property(m => m.Id).ValueGeneratedNever();
+        }
+
+        public void MapPropperties(ModelBuilder builder)
+        {
+            var movie = builder.Entity<Movie>();
+
             movie.Property(m => m.Title).IsRequired().HasMaxLength(2000);
             movie.Property(m => m.Year).IsRequired();
             movie.Property(m => m.Poster).IsRequired();

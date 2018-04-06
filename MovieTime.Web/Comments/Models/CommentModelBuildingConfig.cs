@@ -8,22 +8,25 @@ namespace MovieTime.Web.Comments.Models
         public void Map(ModelBuilder builder)
         {
             MapRelations(builder);
-            MapProperties(builder);
+            MapPropperties(builder);
         }
 
         public void MapRelations(ModelBuilder builder)
         {
             var comment = builder.Entity<Comment>();
+            
+            comment.HasKey(c => c.CommentId);
             comment.HasOne(c => c.Movie);
             comment.HasOne(c => c.User);
         }
 
-        public void MapProperties(ModelBuilder builder)
+        public void MapPropperties(ModelBuilder builder)
         {
             var comment = builder.Entity<Comment>();
-            comment.HasKey(c => c.CommentId);
+
+            comment.Property(c => c.Value).HasMaxLength(2000).IsRequired();
             comment.Property(c => c.Date).IsRequired();
-            comment.Property(c => c.Value).IsRequired().HasMaxLength(2000);
+            comment.Property(c => c.MovieId).IsRequired();
         }
     }
 }
