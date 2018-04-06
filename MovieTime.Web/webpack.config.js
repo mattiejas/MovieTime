@@ -7,7 +7,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = (env) => {
-  const isDevBuild = !env || env.NODE_ENV !== 'production';
+  const isDevBuild = !(env && env.prod);
   const dev = {
     devtool: 'inline-source-map',
     module: {

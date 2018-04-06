@@ -3,8 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "webpack": "webpack --config webpack.config.vendor.js && webpack --config webpack.config.js --env.NODE_ENV='development'",
-    "webpack:prod": "webpack --config webpack.config.vendor.js --env.prod && webpack --config webpack.config.js --env.NODE_ENV='production'",
+    "build": "webpack --config webpack.config.vendor.js && webpack --config webpack.config.js",
+    "build:prod": "webpack --config webpack.config.vendor.js --env.prod && webpack --config webpack.config.js --env.prod",
     "start": "export ASPNETCORE_ENVIRONMENT=Development && dotnet run",
     "start:prod": "export ASPNETCORE_ENVIRONMENT=Production && dotnet run"
   },
@@ -43,7 +43,7 @@
     "style-loader": "^0.20.2",
     "uglifyjs-webpack-plugin": "^1.2.4",
     "url-loader": "0.5.9",
-    "webpack": "^3.4.1",
+    "webpack": "^3.11.0",
     "webpack-hot-middleware": "2.18.2",
     "webpack-merge": "^4.1.2"
   },
