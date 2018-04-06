@@ -48,7 +48,7 @@ namespace MovieTime.Web.Comments
 
             if (movieId == null)
             {
-                return NotFound("Movie not found");
+                return NotFound(new { message = "Movie not found" });
             }
             
             if (!ModelState.IsValid)
@@ -69,6 +69,10 @@ namespace MovieTime.Web.Comments
         [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetCommentsByUser(string userId)
         {
+            if (userId == null)
+            {
+                return NotFound();
+            }
             var comments = await _service.AllCommentsByUser(userId);
             var movieComments = _mapper.Map<ICollection<Comment>, List<CommentGetByUserDto>>(comments);
             return Ok(movieComments);
