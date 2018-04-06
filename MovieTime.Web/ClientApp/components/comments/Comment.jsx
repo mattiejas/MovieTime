@@ -9,9 +9,14 @@ const Comment = ({
 }) => (
   <div className={styles.comment}>
     <h3>
-      <Link to={linkTo} href={linkTo}>{title}</Link>
+      {linkTo &&
+        <Link to={linkTo} href={linkTo}>{title}</Link>
+      }
+      {!linkTo &&
+        <span className={styles['no-link']}>{title}</span>
+      }
     </h3>
-    <span>{date}</span>
+    <span className={styles.date}>{date}</span>
     <p>{comment}</p>
   </div>
 );

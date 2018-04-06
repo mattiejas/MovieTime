@@ -9,8 +9,11 @@
     a {
       color: $secondary-color;
     }
+    .no-link {
+      font-style: normal;
+    }
   }
-  span {
+  .date {
     font-size: 0.8em;
     font-style: italic;
     margin-left: 10px;

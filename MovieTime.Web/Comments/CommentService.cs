@@ -50,17 +50,7 @@ namespace MovieTime.Web.Comments
             foreach (var comment in comments)
             {
                 if (comment.User != null) continue;
-                comment.User = new User()
-                {
-                    Email = "Deleted",
-                    FirstName = "User",
-                    Id = "0000000000000000000000000000",
-                    ImageUrl = "Deleted",
-                    LastName = "Deleted",
-                    TrackedMovies = null,
-                    UserName = "Deleted"
-                };
-                comment.UserId = "0000000000000000000000000000";
+                comment.User = new User {Id = "deleted"};
             }
         }
     }
